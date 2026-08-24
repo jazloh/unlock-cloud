@@ -1418,10 +1418,15 @@ function showPuzzlePopup(puzzleId, awardCardId) {
     });
   } else if (puzzle.ui === 'equipment-rack-lock') {
     const upgradedQuests = (cfg.slots || []).filter(s => engine.solvedPuzzles.has(s.quest)).map(s => s.quest);
+    // `observability_card` lets an episode tie the rack's visible numbers to an
+    // item the player actually holds, instead of hardcoding them on per puzzle —
+    // so "no ledger, no numbers" can be the mechanic rather than just flavour.
+    const hasObsCard = cfg.observability_card
+      && (engine.discoveredCards.has(cfg.observability_card) || engine.inventory.includes(cfg.observability_card));
     new EquipmentRackLock(mount, {
       slots: cfg.slots || [],
       upgradedQuests: upgradedQuests,
-      observability: cfg.observability || false,
+      observability: cfg.observability || !!hasObsCard,
       cooldown: cfg.cooldown || 30,
       tiers: cfg.tiers,
       target: cfg.target || 'strides',
