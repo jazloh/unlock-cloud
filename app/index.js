@@ -1409,11 +1409,30 @@ function showPuzzlePopup(puzzleId, awardCardId) {
       onWrong(msg) { onFail(msg); }
     });
   } else if (puzzle.ui === 'deck-battle-lock') {
-    new DeckBattleLock(mount, {
+    // Gold only matters if spending it costs something. `time_penalty_per_gold`
+    // charges the clock for every coin spent past `free_gold`, and
+    // `bankrupt_penalty_seconds` prices the failure that Retry otherwise makes
+    // free. Episodes that set neither behave exactly as before.
+    const rate = cfg.time_penalty_per_gold || 0;
+    const freeGold = cfg.free_gold || 0;
+    const chargeTime = (seconds, reason) => {
+      if (!seconds) return;
+      engine.penaltySeconds += seconds;
+      showToast(`⏱️ −${seconds >= 60 ? `${Math.round(seconds / 60 * 10) / 10} min` : `${seconds}s`} — ${reason}`, true);
+    };
+    const deck = new DeckBattleLock(mount, {
       merchant: cfg.merchant,
       startingDeck: cfg.startingDeck || [],
       gold: cfg.gold || 80,
-      onSubmit() { onSolve(); },
+      onSubmit() {
+        const spent = Math.max(0, (deck.startGold || 0) - deck.gold);
+        const billable = Math.max(0, spent - freeGold);
+        chargeTime(billable * rate, `${spent}g spent haggling`);
+        onSolve();
+      },
+      onLose() {
+        chargeTime(cfg.bankrupt_penalty_seconds || 0, 'the merchants took everything');
+      },
       onWalkAway() { popup.classList.remove('open'); }
     });
   } else if (puzzle.ui === 'equipment-rack-lock') {
