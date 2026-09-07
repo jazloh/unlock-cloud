@@ -24,6 +24,9 @@ class DeckBattleLock {
     this.startGold = opts.gold || 80;
     this.onSubmit = opts.onSubmit || (() => {});
     this.onWalkAway = opts.onWalkAway || (() => {});
+    // Fires once when the purse empties, so the host can charge for the failure.
+    // Retry re-arms it, since a retried battle can go bankrupt again.
+    this.onLose = opts.onLose || (() => {});
     this._init();
   }
 
@@ -78,7 +81,13 @@ class DeckBattleLock {
       setTimeout(() => this.onSubmit(true), 400);
       return;
     }
-    if (this.gold <= 0) { this.gold = 0; this.gameOver = true; this._render(); return; }
+    if (this.gold <= 0) {
+      this.gold = 0;
+      this.gameOver = true;
+      this._render();
+      this.onLose({ spent: this.startGold, bankrupt: true });
+      return;
+    }
 
     this.turn++;
     this._drawHand();
