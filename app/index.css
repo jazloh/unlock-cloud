@@ -241,10 +241,16 @@ header h1::before{content:'FILE·';color:var(--red);opacity:.75;letter-spacing:1
 .iso-info-actions{font-size:14px;color:var(--yellow);margin-bottom:8px}
 .iso-info-btn{padding:8px 20px;border:none;border-radius:2px;background:var(--accent);color:var(--surface);font-size:16px;font-weight:700;cursor:pointer}
 
-/* Mobile: bump the isometric room labels so they stay legible on small screens
-   (the floor spacing is scaled down in JS, so give the labels more breathing room). */
+/* Mobile: the JS shrinks tile *positions* by 0.7x (see renderMap's `S`) but left
+   .iso-tile at a fixed 120px, so tiles overlapped. Shrink the tile and its
+   children by the same 0.7x so spacing and tile size stay in proportion. */
 @media (max-width:500px){
-  .iso-tile .iso-label{font-size:14px;padding:7px 14px}
+  .iso-tile{width:84px;height:84px}
+  .iso-tile .iso-label{bottom:-31px;font-size:14px;padding:7px 14px}
+  .iso-tile .iso-badge{top:4px;right:4px;width:18px;height:18px;font-size:11px}
+  .iso-tile .iso-pin{top:22%;left:22%}
+  .iso-pin-head{width:11px;height:11px}
+  .iso-pin-stick{width:2px;height:25px}
 }
 
 /* ===== Mobile-first 2D flowchart map (map_style: "flow") — case-board pinboard ===== */
