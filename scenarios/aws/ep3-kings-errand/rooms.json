@@ -7,7 +7,7 @@
       "connects_to": [200],
       "unlocked_by": null,
       "unlock_text": "You enter the Throne Room. King Aldric waves you over.",
-      "map_pos": [140, 360]
+      "map_pos": [140, 390]
     },
     {
       "card_id": 200,
@@ -16,7 +16,7 @@
       "connects_to": [300, 500, 400],
       "unlocked_by": { "type": "item", "card_id": 104 },
       "unlock_text": "Pip leads you down the corridor to the Steward's Study.",
-      "map_pos": [140, 230]
+      "map_pos": [140, 260]
     },
     {
       "card_id": 300,
@@ -25,7 +25,7 @@
       "connects_to": [],
       "unlocked_by": { "type": "discovery", "from_room": 200 },
       "unlock_text": "The smell of burnt pastry guides you to the Castle Kitchen.",
-      "map_pos": [0, 230]
+      "map_pos": [0, 260]
     },
     {
       "card_id": 400,
@@ -34,7 +34,7 @@
       "connects_to": [],
       "unlocked_by": { "type": "item", "card_id": 706 },
       "unlock_text": "The Chronicle Hall's heavy doors swing open. Memory crystals glow on the shelves.",
-      "map_pos": [280, 230]
+      "map_pos": [280, 260]
     },
     {
       "card_id": 500,

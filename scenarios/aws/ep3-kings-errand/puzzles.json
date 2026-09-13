@@ -22,10 +22,6 @@
           {
             "label": "Tell me about the Bazaar",
             "response": "The Bedrock Bazaar, in the town square. Merchants sell companions, each with its own talent. Right ally, right errand."
-          },
-          {
-            "label": "What happened to the last Steward?",
-            "response": "Did everything himself. One Soldier for every task. Burned out in a day."
           }
         ],
         "state_lines": [
@@ -62,10 +58,6 @@
           {
             "label": "What's the Knight Rank Chart?",
             "response": "Soldier → Scout → Marshal → Chronicler → Champion. Each rank adds capabilities."
-          },
-          {
-            "label": "Any tips?",
-            "response": "Visit the Bazaar often. The right ally for the job saves gold and time."
           }
         ],
         "state_lines": [
@@ -155,10 +147,6 @@
           {
             "label": "What's the menu order?",
             "response": "Appetizers, then Soup, then Main Course, then Dessert, then Drinks. Sort them right and the menu reveals itself."
-          },
-          {
-            "label": "Can't a Soldier do this?",
-            "response": "I TRIED! It brought me a scroll on pickling turnips. Go to the Bazaar and find brains."
           }
         ],
         "state_lines": [
@@ -195,10 +183,6 @@
           {
             "label": "What are memory crystals?",
             "response": "Each stores a moment — a conversation, a decision, an arrangement. Across sessions, across years. Long-term memory for the realm."
-          },
-          {
-            "label": "How does the timeline work?",
-            "response": "Place the fragments oldest to newest. Get the sequence right and the layout reveals itself."
           }
         ],
         "state_lines": [
@@ -225,15 +209,11 @@
         "lines": [
           {
             "label": "What are these conduits?",
-            "response": "Each is a channel to an external service. Translation goes to Nova Sonic. Trade Ledger to the merchant inventory. Currency Exchange to the treasury. Wire them wrong and you'll be talking to the wrong service."
+            "response": "Each is a channel to an external service. Translation goes to Nova Sonic. Trade Ledger to the merchant inventory. Currency Exchange to the treasury."
           },
           {
             "label": "What's a Scout?",
             "response": "A knight who can pass this Gate and use tools beyond it. A Soldier stays inside the walls."
-          },
-          {
-            "label": "How do I wire them?",
-            "response": "Match each conduit to its correct endpoint. The labels tell you what each one does."
           }
         ],
         "state_lines": [
@@ -402,10 +382,6 @@
           {
             "label": "What's your specialty?",
             "response": "General purpose, multilingual, cheap at 15g. We get the job done."
-          },
-          {
-            "label": "Why no rank requirement?",
-            "response": "Open access! Others demand fancy badges. We demand a firm handshake."
           },
           {
             "label": "Can you help with the kitchen?",
@@ -648,7 +624,7 @@
         "lines": [
           {
             "label": "What do we need from them?",
-            "response": "Spices, silks, fireworks. THREE merchants in turn — spice, silk, then fireworks, each harder. Thirty gold per negotiation. Concede five and nobody minds; concede more and the Steward pays in daylight. Press your argument when their guard is low, keep composure when they grasp for coin. Two cards an exchange."
+            "response": "Spices, silks, fireworks — three merchants, each harder than the last. Thirty gold per negotiation, and every gold over five costs you daylight."
           },
           {
             "label": "Why can't you translate?",
@@ -693,7 +669,7 @@
           },
           {
             "label": "Any tips for the negotiation?",
-            "response": "Never spend a big argument on a raised guard — wasted breath. Wait for the guard to drop, then spend everything. When they lunge for your purse, answer with composure. Our card is worth six arguments — save it for the walls."
+            "response": "Wait for their guard to drop before spending big. Our card is worth six arguments — save it for the walls."
           },
           {
             "label": "Why do you argue?",
@@ -1022,10 +998,6 @@
           {
             "label": "Why do you need the King's Seal?",
             "response": "Venues only accept authorized agents. The Seal proves I act for the crown — with specific permissions and limits."
-          },
-          {
-            "label": "Any booking tips?",
-            "response": "Fire-breathers on the Main Stage — they need space. A bard in the Tavern Corner. Jugglers for the children. Royal Choir for the Grand Finale."
           }
         ],
         "state_lines": []
@@ -1494,25 +1466,25 @@
         ],
         "options": {
           "color": [
-            "crimson",
-            "emerald",
-            "gold",
             "purple",
-            "blue"
+            "gold",
+            "blue",
+            "crimson",
+            "emerald"
           ],
           "material": [
-            "oak",
-            "willow",
-            "iron",
+            "silk",
             "marble",
-            "silk"
+            "oak",
+            "iron",
+            "willow"
           ],
           "style": [
-            "bold",
-            "elegant",
             "neutral",
+            "rustic",
+            "elegant",
             "ornate",
-            "rustic"
+            "bold"
           ]
         },
         "maxAttempts": 5
@@ -1541,11 +1513,11 @@
           },
           {
             "label": "What order do they go in?",
-            "response": "The rack applies each slot in turn, and some MULTIPLY what came before. Plain bonuses first, multipliers last, or you multiply nothing. And gear from an unfinished errand is dead weight — switch it off."
+            "response": "Plain bonuses first, multipliers last — order them wrong and there's nothing to multiply. Switch off gear from unfinished errands."
           },
           {
             "label": "What's the Herald's Ledger?",
-            "response": "Every action recorded — who it talked to, what tools it used, what it decided. Carry it to the rack and you'll see what each slot is worth. Leave it and you're guessing. No Ledger, no accountability."
+            "response": "Every action recorded — who it talked to, what it decided. Carry it to the rack and you'll see what each slot is worth. No Ledger, no accountability."
           },
           {
             "label": "What happens after assembly?",
