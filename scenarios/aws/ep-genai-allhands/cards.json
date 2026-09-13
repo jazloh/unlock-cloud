@@ -33,13 +33,13 @@
       "type": "location",
       "color": "green",
       "title": "Checkpoint",
-      "description": "Two panels left. Any order.",
+      "description": "Two panels left.",
       "image": "assets/checkpoint.png",
       "image_prompt": "Two big rounded arcade-style quiz screens side by side, one glowing warm orange, one glowing warm blue. Strings of warm lights overhead, confetti scattered across the floor, playful colorful stage-light beams. Fun, energetic, welcoming mood. No people, no text, no readable screens.",
       "reveals": [],
       "discoveries": [
         { "card_id": 206, "label": "Spell it out", "puzzle": "word-kiro" },
-        { "card_id": 207, "label": "True or false", "puzzle": "pillar-agentcore" }
+        { "card_id": 207, "label": "True or false", "puzzle": "pillar-agentcore", "requires_item": 206 }
       ],
       "visible_to": "all",
       "room": "checkpoint"
