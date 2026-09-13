@@ -113,6 +113,10 @@ let timerInterval = null;
 let currentPuzzleId = null;
 let activePuzzlePopupId = null;
 let activePuzzleAward = null;
+// Reel-drag locks (4digits-lock, word-lock) rebuild from scratch every time
+// the popup opens, so a mid-drag accidental close would otherwise lose
+// whatever the player already dialed in. Keyed by puzzleId.
+const puzzleLockState = {};
 let lastEvent = null;
 
 // ── Role system ("Choose Your Role") ──
@@ -1172,8 +1176,11 @@ function showPuzzlePopup(puzzleId, awardCardId) {
     }
   } else if (puzzle.ui === '4digits-lock') {
     new DigitLock(mount, {
+      initial: puzzleLockState[puzzleId],
+      onChange(digits) { puzzleLockState[puzzleId] = digits; },
       onSubmit(code) {
         if (code === cfg.answer) {
+          delete puzzleLockState[puzzleId];
           onSolve();
         } else {
           onFail('Wrong combination. Try again.');
@@ -1249,10 +1256,17 @@ function showPuzzlePopup(puzzleId, awardCardId) {
       onWrong(msg) { onFail(msg); }
     });
   } else if (puzzle.ui === 'word-lock') {
+    const saved = puzzleLockState[puzzleId];
     new WordLock(mount, {
       answer: cfg.answer || cfg.solution,
       alphabet: cfg.alphabet || null,
-      onSubmit(word, correct) { correct ? onSolve() : onFail('Wrong word. Try again.'); }
+      savedReels: saved?.reelChars,
+      initial: saved?.selected,
+      onChange(state) { puzzleLockState[puzzleId] = state; },
+      onSubmit(word, correct) {
+        if (correct) { delete puzzleLockState[puzzleId]; onSolve(); }
+        else onFail('Wrong word. Try again.');
+      }
     });
   } else if (puzzle.ui === 'timeline-lock') {
     new TimelineLock(mount, {
@@ -1737,6 +1751,16 @@ function closePopup() {
 
 function closePuzzlePopup() {
   document.getElementById('puzzle-popup').classList.remove('open');
+}
+
+// On touch devices, a click is synthesized at wherever the finger lifted —
+// not where it started. A reel-drag (4digits-lock, word-lock) that overshoots
+// the popup card ends on the backdrop, so the backdrop's dismiss-on-click
+// fires mid-drag. The lock components set this flag for one tick after any
+// drag that moved, so that single synthesized click gets swallowed here.
+function closePuzzlePopupBackdrop() {
+  if (window.__resolveSuppressBackdropClick) return;
+  closePuzzlePopup();
 }
 
 // --- Tools screen ---

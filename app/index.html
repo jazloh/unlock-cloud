@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
 <title>re:Solve</title>
-<link rel="stylesheet" href="index.css?v=7">
+<link rel="stylesheet" href="index.css?v=8">
 </head>
 <body>
 <!--
@@ -147,7 +147,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   </div>
 </div>
 
-<div id="puzzle-popup" onclick="closePuzzlePopup()">
+<div id="puzzle-popup" onclick="closePuzzlePopupBackdrop()">
   <div class="puzzle-popup-card" onclick="event.stopPropagation()">
     <button class="panel-close" style="float:right;margin:-8px -8px 0 0" onclick="closePuzzlePopup()"><svg style="width:16px;height:16px"><use href="#icon-close"/></svg></button>
     <h3 id="puzzle-popup-title"></h3>
@@ -176,68 +176,68 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
 <div id="toast"></div>
 
-<script src="engine.js?v=7"></script>
-<script src="puzzle/base64-decoder.js?v=7"></script>
-<script src="puzzle/word-lock.js?v=7"></script>
-<script src="puzzle/sequence-lock.js?v=7"></script>
-<script src="puzzle/jigsaw-lock.js?v=7"></script>
-<script src="puzzle/wire-lock.js?v=7"></script>
-<script src="puzzle/morse-lock.js?v=7"></script>
-<script src="puzzle/4digits-lock.js?v=7"></script>
-<script src="puzzle/slider-lock.js?v=7"></script>
-<script src="puzzle/rotation-lock.js?v=7"></script>
-<script src="puzzle/log-lock.js?v=7"></script>
-<script src="puzzle/keypad-lock.js?v=7"></script>
-<script src="puzzle/sg-lock.js?v=7"></script>
-<script src="puzzle/policy-lock.js?v=7"></script>
-<script src="puzzle/npc-dialog.js?v=7"></script>
-<script src="puzzle/sort-lock.js?v=7"></script>
-<script src="puzzle/maze-lock.js?v=7"></script>
-<script src="puzzle/jar-fill-lock.js?v=7"></script>
-<script src="puzzle/crowd-counter-lock.js?v=7"></script>
-<script src="puzzle/crowd-seating-lock.js?v=7"></script>
-<script src="puzzle/offering-table-lock.js?v=7"></script>
-<script src="puzzle/bread-break-lock.js?v=7"></script>
-<script src="puzzle/match-lock.js?v=7"></script>
-<script src="puzzle/timeline-lock.js?v=7"></script>
-<script src="puzzle/path-lock.js?v=7"></script>
-<script src="puzzle/chain-lock.js?v=7"></script>
-<script src="puzzle/key-lock.js?v=7"></script>
-<script src="puzzle/pillar-lock.js?v=7"></script>
-<script src="puzzle/rank-lock.js?v=7"></script>
-<script src="puzzle/scroll-lock.js?v=7"></script>
-<script src="puzzle/bazaar-lock.js?v=7"></script>
-<script src="puzzle/deck-battle-lock.js?v=7"></script>
-<script src="puzzle/equipment-rack-lock.js?v=7"></script>
-<script src="puzzle/arch-lock.js?v=7"></script>
-<script src="puzzle/prompt-lock.js?v=7"></script>
-<script src="puzzle/booking-run-lock.js?v=7"></script>
-<script src="puzzle/image-prompt-lock.js?v=7"></script>
-<script src="puzzle/witness-lock.js?v=7"></script>
-<script src="puzzle/evidence-board-lock.js?v=7"></script>
-<script src="puzzle/grinder-lock.js?v=7"></script>
-<script src="puzzle/stock-memory-lock.js?v=7"></script>
-<script src="puzzle/spelling-lock.js?v=7"></script>
-<script src="puzzle/evidence-lock.js?v=7"></script>
-<script src="puzzle/milk-jug-lock.js?v=7"></script>
-<script src="puzzle/cascade-lock.js?v=7"></script>
-<script src="puzzle/cafe-order-lock.js?v=7"></script>
-<script src="puzzle/spec-lock.js?v=7"></script>
-<script src="puzzle/context-lock.js?v=7"></script>
-<script src="puzzle/blueprint-lock.js?v=7"></script>
-<script src="puzzle/pipe-lock.js?v=7"></script>
-<script src="puzzle/defuse-lock.js?v=7"></script>
-<script src="puzzle/dial-lock.js?v=7"></script>
-<script src="puzzle/craft-lock.js?v=7"></script>
-<script src="puzzle/trap-disarm-lock.js?v=7"></script>
-<script src="puzzle/push-luck-lock.js?v=7"></script>
-<script src="puzzle/wager-lock.js?v=7"></script>
-<script src="puzzle/auction-lock.js?v=7"></script>
-<script src="puzzle/decay-lock.js?v=7"></script>
-<script src="puzzle/fog-map-lock.js?v=7"></script>
-<script src="puzzle/deduction-grid-lock.js?v=7"></script>
-<script src="puzzle/streak-lock.js?v=7"></script>
-<script src="puzzle/traffic-lane-lock.js?v=7"></script>
-<script src="index.js?v=7" charset="utf-8"></script>
+<script src="engine.js?v=8"></script>
+<script src="puzzle/base64-decoder.js?v=8"></script>
+<script src="puzzle/word-lock.js?v=8"></script>
+<script src="puzzle/sequence-lock.js?v=8"></script>
+<script src="puzzle/jigsaw-lock.js?v=8"></script>
+<script src="puzzle/wire-lock.js?v=8"></script>
+<script src="puzzle/morse-lock.js?v=8"></script>
+<script src="puzzle/4digits-lock.js?v=8"></script>
+<script src="puzzle/slider-lock.js?v=8"></script>
+<script src="puzzle/rotation-lock.js?v=8"></script>
+<script src="puzzle/log-lock.js?v=8"></script>
+<script src="puzzle/keypad-lock.js?v=8"></script>
+<script src="puzzle/sg-lock.js?v=8"></script>
+<script src="puzzle/policy-lock.js?v=8"></script>
+<script src="puzzle/npc-dialog.js?v=8"></script>
+<script src="puzzle/sort-lock.js?v=8"></script>
+<script src="puzzle/maze-lock.js?v=8"></script>
+<script src="puzzle/jar-fill-lock.js?v=8"></script>
+<script src="puzzle/crowd-counter-lock.js?v=8"></script>
+<script src="puzzle/crowd-seating-lock.js?v=8"></script>
+<script src="puzzle/offering-table-lock.js?v=8"></script>
+<script src="puzzle/bread-break-lock.js?v=8"></script>
+<script src="puzzle/match-lock.js?v=8"></script>
+<script src="puzzle/timeline-lock.js?v=8"></script>
+<script src="puzzle/path-lock.js?v=8"></script>
+<script src="puzzle/chain-lock.js?v=8"></script>
+<script src="puzzle/key-lock.js?v=8"></script>
+<script src="puzzle/pillar-lock.js?v=8"></script>
+<script src="puzzle/rank-lock.js?v=8"></script>
+<script src="puzzle/scroll-lock.js?v=8"></script>
+<script src="puzzle/bazaar-lock.js?v=8"></script>
+<script src="puzzle/deck-battle-lock.js?v=8"></script>
+<script src="puzzle/equipment-rack-lock.js?v=8"></script>
+<script src="puzzle/arch-lock.js?v=8"></script>
+<script src="puzzle/prompt-lock.js?v=8"></script>
+<script src="puzzle/booking-run-lock.js?v=8"></script>
+<script src="puzzle/image-prompt-lock.js?v=8"></script>
+<script src="puzzle/witness-lock.js?v=8"></script>
+<script src="puzzle/evidence-board-lock.js?v=8"></script>
+<script src="puzzle/grinder-lock.js?v=8"></script>
+<script src="puzzle/stock-memory-lock.js?v=8"></script>
+<script src="puzzle/spelling-lock.js?v=8"></script>
+<script src="puzzle/evidence-lock.js?v=8"></script>
+<script src="puzzle/milk-jug-lock.js?v=8"></script>
+<script src="puzzle/cascade-lock.js?v=8"></script>
+<script src="puzzle/cafe-order-lock.js?v=8"></script>
+<script src="puzzle/spec-lock.js?v=8"></script>
+<script src="puzzle/context-lock.js?v=8"></script>
+<script src="puzzle/blueprint-lock.js?v=8"></script>
+<script src="puzzle/pipe-lock.js?v=8"></script>
+<script src="puzzle/defuse-lock.js?v=8"></script>
+<script src="puzzle/dial-lock.js?v=8"></script>
+<script src="puzzle/craft-lock.js?v=8"></script>
+<script src="puzzle/trap-disarm-lock.js?v=8"></script>
+<script src="puzzle/push-luck-lock.js?v=8"></script>
+<script src="puzzle/wager-lock.js?v=8"></script>
+<script src="puzzle/auction-lock.js?v=8"></script>
+<script src="puzzle/decay-lock.js?v=8"></script>
+<script src="puzzle/fog-map-lock.js?v=8"></script>
+<script src="puzzle/deduction-grid-lock.js?v=8"></script>
+<script src="puzzle/streak-lock.js?v=8"></script>
+<script src="puzzle/traffic-lane-lock.js?v=8"></script>
+<script src="index.js?v=8" charset="utf-8"></script>
 </body>
 </html>

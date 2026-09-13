@@ -13,7 +13,8 @@ class DigitLock {
   constructor(container, opts = {}) {
     this.container = container;
     this.onSubmit = opts.onSubmit || (() => {});
-    this.digits = [0, 0, 0, 0];
+    this.onChange = opts.onChange || null;
+    this.digits = Array.isArray(opts.initial) ? [...opts.initial] : [0, 0, 0, 0];
     this._render();
   }
 
@@ -87,13 +88,14 @@ class DigitLock {
 
   _attachDrag(reel, strip, index) {
     const CELL_H = 48;
-    let dragging = false, startY = 0, startOffset = 0, currentOffset = 0;
+    let dragging = false, moved = false, startY = 0, startOffset = 0, currentOffset = 0;
     let velocity = 0, lastY = 0, lastTime = 0, animFrame = null;
 
     const getY = (e) => (e.touches ? e.touches[0].clientY : e.clientY);
 
     const onStart = (e) => {
       dragging = true;
+      moved = false;
       startY = getY(e);
       startOffset = currentOffset;
       velocity = 0;
@@ -101,12 +103,17 @@ class DigitLock {
       lastTime = Date.now();
       if (animFrame) cancelAnimationFrame(animFrame);
       reel.classList.add('dlock-dragging');
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('touchmove', onMove, { passive: false });
+      window.addEventListener('mouseup', onEnd);
+      window.addEventListener('touchend', onEnd);
     };
 
     const onMove = (e) => {
       if (!dragging) return;
       e.preventDefault();
       const y = getY(e);
+      if (Math.abs(y - startY) > 4) moved = true;
       const now = Date.now();
       const dt = now - lastTime;
       if (dt > 0) velocity = (y - lastY) / dt;
@@ -120,6 +127,17 @@ class DigitLock {
       if (!dragging) return;
       dragging = false;
       reel.classList.remove('dlock-dragging');
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('touchmove', onMove, { passive: false });
+      window.removeEventListener('mouseup', onEnd);
+      window.removeEventListener('touchend', onEnd);
+      // A swipe that overshoots the popup card lands the touchend on the
+      // backdrop, which synthesizes a click there and closes the popup.
+      // Swallow that one click so mid-drag doesn't blow away progress.
+      if (moved) {
+        window.__resolveSuppressBackdropClick = true;
+        setTimeout(() => { window.__resolveSuppressBackdropClick = false; }, 0);
+      }
       // Momentum
       const decel = () => {
         if (Math.abs(velocity) < 0.01) { snap(); return; }
@@ -141,14 +159,11 @@ class DigitLock {
       strip.style.transition = 'transform 0.2s ease-out';
       strip.style.transform = `translateY(${target}px)`;
       setTimeout(() => { strip.style.transition = ''; }, 200);
+      if (this.onChange) this.onChange([...this.digits]);
     };
 
     reel.addEventListener('mousedown', onStart);
     reel.addEventListener('touchstart', onStart, { passive: true });
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, { passive: false });
-    window.addEventListener('mouseup', onEnd);
-    window.addEventListener('touchend', onEnd);
 
     // Store snap fn for reset
     strip._snap = () => { currentOffset = 0; snap(); };

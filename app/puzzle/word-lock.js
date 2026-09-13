@@ -18,8 +18,13 @@ class WordLock {
     this.answer = opts.alphabet ? (opts.answer || '') : (opts.answer || '').toUpperCase();
     this.alphabet = opts.alphabet || null;
     this.onSubmit = opts.onSubmit || (() => {});
-    this.reelChars = this._buildReels();
-    this.selected = new Array(this.answer.length).fill(0);
+    this.onChange = opts.onChange || null;
+    // _buildReels() randomly subsets decoys, so it reshuffles differently on
+    // every call — a caller resuming a saved attempt must pass back the exact
+    // reels it was given before, not just the selected indices, or a
+    // remembered decoy letter can vanish from the new shuffle entirely.
+    this.reelChars = opts.savedReels || this._buildReels();
+    this.selected = Array.isArray(opts.initial) ? [...opts.initial] : new Array(this.answer.length).fill(0);
     this._render();
   }
 
@@ -156,13 +161,14 @@ class WordLock {
   /* ── Drag / Touch ───────────────────────────────── */
 
   _attachDrag(reel, strip, index, count, CELL_H) {
-    let dragging = false, startY = 0, startOffset = 0, currentOffset = 0;
+    let dragging = false, moved = false, startY = 0, startOffset = 0, currentOffset = 0;
     let velocity = 0, lastY = 0, lastTime = 0, animFrame = null;
 
     const getY = (e) => (e.touches ? e.touches[0].clientY : e.clientY);
 
     const onStart = (e) => {
       dragging = true;
+      moved = false;
       startY = getY(e);
       startOffset = currentOffset;
       velocity = 0;
@@ -170,12 +176,17 @@ class WordLock {
       lastTime = Date.now();
       if (animFrame) cancelAnimationFrame(animFrame);
       reel.classList.add('wlock-dragging');
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('touchmove', onMove, { passive: false });
+      window.addEventListener('mouseup', onEnd);
+      window.addEventListener('touchend', onEnd);
     };
 
     const onMove = (e) => {
       if (!dragging) return;
       e.preventDefault();
       const y = getY(e);
+      if (Math.abs(y - startY) > 4) moved = true;
       const now = Date.now();
       const dt = now - lastTime;
       if (dt > 0) velocity = (y - lastY) / dt;
@@ -189,6 +200,17 @@ class WordLock {
       if (!dragging) return;
       dragging = false;
       reel.classList.remove('wlock-dragging');
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('touchmove', onMove, { passive: false });
+      window.removeEventListener('mouseup', onEnd);
+      window.removeEventListener('touchend', onEnd);
+      // A swipe that overshoots the popup card lands the touchend on the
+      // backdrop, which synthesizes a click there and closes the popup.
+      // Swallow that one click so mid-drag doesn't blow away progress.
+      if (moved) {
+        window.__resolveSuppressBackdropClick = true;
+        setTimeout(() => { window.__resolveSuppressBackdropClick = false; }, 0);
+      }
       const decel = () => {
         if (Math.abs(velocity) < 0.01) { snap(); return; }
         velocity *= 0.92;
@@ -208,14 +230,11 @@ class WordLock {
       strip.style.transition = 'transform 0.2s ease-out';
       strip.style.transform = `translateY(${target}px)`;
       setTimeout(() => { strip.style.transition = ''; }, 200);
+      if (this.onChange) this.onChange({ reelChars: this.reelChars, selected: [...this.selected] });
     };
 
     reel.addEventListener('mousedown', onStart);
     reel.addEventListener('touchstart', onStart, { passive: true });
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, { passive: false });
-    window.addEventListener('mouseup', onEnd);
-    window.addEventListener('touchend', onEnd);
 
     strip._snap = () => { currentOffset = 0; snap(); };
   }
