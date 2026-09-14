@@ -71,5 +71,7 @@
       "label": "AWS Frontier Agents",
       "url": "https://aws.amazon.com/ai/frontier-agents"
     }
-  }
+  },
+  "map_style": "flow",
+  "has_narration_audio": false
 }

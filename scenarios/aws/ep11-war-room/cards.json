@@ -408,7 +408,7 @@
       "color": "green",
       "title": "Resolved",
       "description": "The bridge quiets — spend back to normal, key killed, secret gone, tighter IAM in place. The VP: \"Three agents each caught what the others missed — but it took a human to connect them. Thanks for jumping on.\" You drop off the call.",
-      "image": "assets/resolved.png",
+      "image": "assets/ending-success.png",
       "image_prompt": "The calm end of an incident: a single person seen from BEHIND (back view, facing away), relaxed at a control desk facing a video wall of flattened calm graphs. Warm resolution glow, dark palette with orange and teal accents, cinematic, no visible face, no text no words no letters no logos",
       "reveals": [
         601

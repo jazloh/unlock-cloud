@@ -183,7 +183,7 @@
       "card_ref": 202,
       "description": "Confirm what broke",
       "config": {
-        "prompt": "The DevOps Agent's console shows the captured log stream. Select the lines that reveal the leaked key hammering Amazon Bedrock (leave the normal and unrelated lines alone).",
+        "prompt": "Tap the TWO suspicious lines (select both) — the leaked key hammering Amazon Bedrock. Leave the normal lines alone.",
         "lines": [
           {
             "text": "11:02:10 INFO  health-check ok — api-gateway (ap-southeast-1)",
@@ -289,24 +289,29 @@
             "hint": "Subtract the batch job's expected 1,200 from the 42,000 observed."
           },
           {
-            "type": "string",
-            "narrative": "CloudTrail shows every one of those fraudulent calls was signed by the same identity. The dashboard first pointed a finger at the nightly batch job — but its volume is normal and expected.",
+            "type": "choice",
+            "narrative": "CloudTrail shows every one of those fraudulent calls was signed by the same identity. The dashboard first blamed the nightly batch job — but its volume is normal.",
             "detail": "Same signer on every anomalous call",
-            "prompt": "Who is the true root-cause owner? (the leaked access key, or the batch job?)",
-            "answer": "leaked access key",
-            "accept": [
-              "leaked access key",
-              "the leaked access key",
-              "leaked key",
-              "access key",
-              "the leaked key",
-              "leaked credential",
-              "leaked credentials"
+            "prompt": "Who's the root-cause owner?",
+            "options": [
+              {
+                "label": "The leaked access key",
+                "correct": true
+              },
+              {
+                "label": "The nightly batch job",
+                "correct": false
+              },
+              {
+                "label": "An expired TLS certificate",
+                "correct": false
+              }
             ],
-            "hint": "The batch job is a distractor — its volume never changed. Follow the signer."
+            "hint": "The batch job's volume never changed. Follow the signer."
           }
         ],
-        "high_contrast": true
+        "high_contrast": true,
+        "completeMessage": "Root cause: 40,800 fraudulent Bedrock calls — all signed by the leaked access key, not the batch job."
       },
       "hints": [
         "Start with the arithmetic: observed minus expected.",

@@ -314,6 +314,15 @@ function setNarrative(key) {
   currentNarrativeKey = key;
   document.getElementById('narrative-bar').classList.add('active');
   document.getElementById('narrative-panel').classList.remove('open');
+  // The "Replay" button replays narration AUDIO (assets/voice/*.wav). Episodes
+  // without narration audio should hide it (otherwise it looks broken — a click
+  // that does nothing). Opt-in: hide only when meta explicitly says no audio.
+  // Default (flag absent) keeps the button, so existing episodes are unchanged.
+  const playBtn = document.getElementById('nar-play-btn');
+  if (playBtn) {
+    const hasAudio = !(engine.meta && engine.meta.has_narration_audio === false);
+    playBtn.style.display = hasAudio ? '' : 'none';
+  }
   renderNarrativeText();
 }
 

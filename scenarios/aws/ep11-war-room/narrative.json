@@ -87,7 +87,7 @@
         }
       ],
       "audio": null,
-      "image": "assets/resolved.png"
+      "image": "assets/ending-success.png"
     },
     "failure": {
       "segments": [
