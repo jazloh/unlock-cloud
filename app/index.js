@@ -1027,6 +1027,7 @@ function showPuzzlePopup(puzzleId, awardCardId) {
     new LogLock(mount, {
       lines,
       prompt: cfg.prompt || 'Select the lines containing critical data',
+      highContrast: !!cfg.high_contrast,
       onSubmit() { onSolve(); }
     });
   } else if (puzzle.ui === 'terminal-lock') {
@@ -1271,6 +1272,7 @@ function showPuzzlePopup(puzzleId, awardCardId) {
   } else if (puzzle.ui === 'timeline-lock') {
     new TimelineLock(mount, {
       events: cfg.events, answer: cfg.answer,
+      enhanced: !!cfg.enhanced,
       onSubmit(correct) { correct ? onSolve() : onFail('Wrong timeline. Check the sequence.'); }
     });
   } else if (puzzle.ui === 'path-lock') {
@@ -1356,20 +1358,37 @@ function showPuzzlePopup(puzzleId, awardCardId) {
       onSubmit(correct) { correct ? onSolve() : onFail('Wrong pillar. Think about what each statement achieves.'); }
     });
   } else if (puzzle.ui === 'npc-dialog') {
+    const isDecision = !!cfg.decision;
+    // End Conversation button (created first so callbacks can toggle it)
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'btn btn-primary';
+    closeBtn.style.cssText = 'width:100%;margin-top:12px';
+    closeBtn.textContent = isDecision ? 'End Conversation' : 'End Conversation';
     new NpcDialog(mount, {
       name: cfg.name,
       portrait: cfg.portrait,
       greeting: cfg.greeting,
       lines: cfg.lines || [],
       state_lines: cfg.state_lines || [],
-      hasCard(id) { return engine.visibleCards.has(id) || engine.discoveredCards.has(id); }
+      decision: isDecision,
+      hasCard(id) { return engine.visibleCards.has(id) || engine.discoveredCards.has(id); },
+      // Decision mode only: wrong advice costs time (scoped to this puzzle,
+      // does NOT touch other episodes — they don't pass decision:true).
+      onWrong() {
+        SFX.wrong();
+        engine.penalties++;
+        engine.penaltySeconds += (cfg.wrong_penalty_seconds || 30);
+        if (engine.onLeaderboardEvent) engine.onLeaderboardEvent('penalty', { seconds: (cfg.wrong_penalty_seconds || 30), reason: 'wrong_advice', puzzleId });
+        showToast('⚠️ The VP pushes back — reconsider your advice.', true);
+      },
+      onCorrect() {
+        closeBtn.disabled = false;
+        closeBtn.style.opacity = '1';
+      }
     });
-    // Closing the NPC dialog marks the puzzle as solved
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'btn btn-primary';
-    closeBtn.style.cssText = 'width:100%;margin-top:12px';
-    closeBtn.textContent = 'End Conversation';
-    closeBtn.onclick = () => onSolve();
+    // In decision mode, lock "End Conversation" until the right call is made.
+    if (isDecision) { closeBtn.disabled = true; closeBtn.style.opacity = '0.5'; }
+    closeBtn.onclick = () => { if (!closeBtn.disabled) onSolve(); };
     mount.appendChild(closeBtn);
   } else if (puzzle.ui === 'audio-player') {
     const wrap = document.createElement('div');

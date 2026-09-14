@@ -1,0 +1,17 @@
+{
+  "base_score": 50,
+  "time_bonus_per_minute": 3,
+  "hint_penalty": -1,
+  "wrong_combination_penalty": -2,
+  "lore_bonus": 2,
+  "lore_ids": [101, 106, 201, 301, 401, 501, 601],
+  "all_lore_bonus": 5,
+  "all_lore_bonus_note": "Booth scoring is deliberately generous — a wrong validation is a soft penalty and never hard-blocks progression (walk-ups must always finish). Bonuses reward reading the War Room Intel and viewing every 'You just learned' card.",
+  "stars": [
+    { "min": 62, "stars": 5 },
+    { "min": 52, "stars": 4 },
+    { "min": 40, "stars": 3 },
+    { "min": 25, "stars": 2 },
+    { "min": 0, "stars": 1 }
+  ]
+}

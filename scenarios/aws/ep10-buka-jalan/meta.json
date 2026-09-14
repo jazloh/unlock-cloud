@@ -1,0 +1,78 @@
+{
+  "id": "ep10-buka-jalan",
+  "title": "Buka Jalan",
+  "episode": 10,
+  "arc": "AIDLC",
+  "category": "aws",
+  "cover": "assets/cover.png",
+  "background": "assets/background.png",
+  "description": "Kuala Lumpur's worst traffic jam just crashed your ride-hailing app. Ship the fix before rush hour ends. Discover the AI-powered express lane — or navigate every turn yourself.",
+  "difficulty": {
+    "tier": 2,
+    "label": "Intermediate"
+  },
+  "duration_minutes": 45,
+  "players": {
+    "min": 1,
+    "max": 1000,
+    "recommended": 1
+  },
+  "aws_topics": [
+    "AI-DLC",
+    "Adaptive Workflows",
+    "AI Coding Agents",
+    "Context Management",
+    "Parallel Construction",
+    "Human-in-the-Loop",
+    "Dual-Loop Verification"
+  ],
+  "mechanics_taught": [
+    "word-lock",
+    "context-lock",
+    "spec-lock",
+    "defuse-lock",
+    "blueprint-lock",
+    "npc-dialog",
+    "timeline-lock",
+    "match-lock",
+    "traffic-lane-lock"
+  ],
+  "version": "0.1",
+  "roles": true,
+  "start_button": "Enter the Sesak",
+  "lore_label": "Intel Card",
+  "end_title": "Traffic Cleared",
+  "learning_recap": {
+    "title": "🧠 What You Just Learned",
+    "cycle": [
+      {
+        "stage": "INCEPTION",
+        "note": "AI assesses scope"
+      },
+      {
+        "stage": "CONSTRUCTION",
+        "note": "Parallel Bolts (hours)"
+      },
+      {
+        "stage": "OPERATIONS",
+        "note": "Auto-verify + ship"
+      },
+      {
+        "stage": "LEARN",
+        "note": "Rules persist for next time"
+      }
+    ],
+    "benefits": [
+      "AI proposes, you validate",
+      "Right-sized process (adapt!)",
+      "Parallel Bolts = hours, not weeks",
+      "Dual-loop: AI verifies AI first",
+      "Every decision audited",
+      "System learns — effort goes DOWN"
+    ],
+    "link": {
+      "label": "Try it: awslabs/aidlc-workflows",
+      "url": "https://github.com/awslabs/aidlc-workflows"
+    }
+  }
+}

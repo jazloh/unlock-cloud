@@ -792,3 +792,70 @@ describe('EP7 — Macet', () => {
     assertCompleted(engine);
   });
 });
+
+
+// ============================================================
+// EP11 — War Room @ Tech Summit (booth walk-up, linear 100→600)
+// ============================================================
+describe('EP11 — War Room @ Tech Summit', () => {
+  let engine;
+  before(async () => { engine = await createEngine('ep11-war-room'); engine.start(); });
+
+  test('War Room: read intel, meet agents, proceed to DevOps console', () => {
+    assert.equal(engine.currentRoom, 100);
+    discover(engine, 101, 'The Call');            // lore
+    discover(engine, 106, 'Three Agents');        // lore
+    discover(engine, 102, 'VP role select');      // NPC card — now mandatory, gates room 200
+    solvePuzzle(engine, 'npc-vp', null, 'VP role select');   // NPC (mandatory)
+    discover(engine, 200, 'DevOps console');      // proceed (requires_item: [102])
+    assert.ok(engine.unlockedRooms.includes(200), 'DevOps console should be unlocked');
+  });
+
+  test('DevOps console: solve log-lock → confirm, advise VP go/no-go → DevOps Finding, proceed to Security', () => {
+    engine.navigateToRoom(200);
+    assert.equal(engine.currentRoom, 200);
+    discover(engine, 201, 'DevOps Agent Brief');
+    solvePuzzle(engine, 'log-devops', 202, 'Log Stream Confirmed');   // investigate puzzle → intermediate
+    // VP decision beat (npc-dialog, SOFT): pick the correct advisory option → awards the finding
+    discover(engine, 210, 'VP go/no-go (DevOps)');
+    solvePuzzle(engine, 'npc-decision-devops', 205, 'DevOps Finding');
+    assert.ok(engine.inventory.includes(205), 'DevOps Finding should be in inventory');
+    discover(engine, 300, 'Security console');
+    assert.ok(engine.unlockedRooms.includes(300), 'Security console should be unlocked');
+  });
+
+  test('Security console: solve timeline-lock → order, advise VP which fix → Security Finding, proceed to FinOps', () => {
+    engine.navigateToRoom(300);
+    assert.equal(engine.currentRoom, 300);
+    solvePuzzle(engine, 'timeline-security', 302, 'Intrusion Timeline Reconstructed');
+    // VP decision beat: advise the scoped fix → awards the finding
+    discover(engine, 310, 'VP which fix (Security)');
+    solvePuzzle(engine, 'npc-decision-security', 305, 'Security Finding');
+    assert.ok(engine.inventory.includes(305), 'Security Finding should be in inventory');
+    discover(engine, 400, 'FinOps console');
+    assert.ok(engine.unlockedRooms.includes(400), 'FinOps console should be unlocked');
+  });
+
+  test('FinOps console: solve evidence-lock → trace, advise VP owner → FinOps Finding, proceed to Synthesis', () => {
+    engine.navigateToRoom(400);
+    assert.equal(engine.currentRoom, 400);
+    discover(engine, 401, 'FinOps Agent Brief');
+    solvePuzzle(engine, 'evidence-finops', 402, 'Spend Traced to Source');
+    // VP decision beat: advise the leaked access key → awards the finding
+    discover(engine, 410, 'VP name the owner (FinOps)');
+    solvePuzzle(engine, 'npc-decision-finops', 405, 'FinOps Finding');
+    assert.ok(engine.inventory.includes(405), 'FinOps Finding should be in inventory');
+    discover(engine, 500, 'Synthesis');
+    assert.ok(engine.unlockedRooms.includes(500), 'Synthesis should be unlocked');
+  });
+
+  test('Synthesis: chain all three findings via cascade-lock → Incident Resolved (ending)', () => {
+    engine.navigateToRoom(500);
+    assert.equal(engine.currentRoom, 500);
+    discover(engine, 501, 'The Big Screen');
+    // Finale consumes all three findings (they are present in inventory)
+    solvePuzzle(engine, 'cascade-synthesis', 599, 'Incident Resolved');
+    assert.ok(engine.unlockedRooms.includes(600), 'Resolved room should be unlocked');
+    assertCompleted(engine);
+  });
+});

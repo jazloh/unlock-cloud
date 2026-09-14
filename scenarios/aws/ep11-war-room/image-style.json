@@ -1,0 +1,12 @@
+{
+  "style_prefix": "Modern AWS war-room / operations-center illustration, Conrad Singapore Orchard hotel breakout-room vibe, dark control-room palette with orange and teal accents, high contrast, booth-friendly and mobile-first, game card art.",
+  "style_prefix_location": "Modern AWS war-room / operations-center illustration, Conrad Singapore Orchard hotel breakout-room vibe, dark control-room palette with orange and teal accents, wide angle, isometric, high contrast, booth-friendly and mobile-first, game card art.",
+  "style_prefix_item": "Modern AWS ops-center illustration, single object on a clean dark surface, orange and teal accents, close-up, high contrast, game card art.",
+  "style_prefix_object": "Modern AWS ops-center illustration, single glowing console or agent icon on a dark surface, orange and teal accents, close-up, high contrast, game card art.",
+  "palette": ["#FF9900", "#232F3E", "#0D1424", "#1AB7C6", "#E0E6F0"],
+  "mood": "Urgent but controlled — a calm-under-pressure incident war room",
+  "references": "AWS operations center, dark NOC video walls, glowing dashboards, hotel breakout room, incident response",
+  "negative_prompt": "no text, no words, no letters, no numbers, no logos, watermark, blurry, low quality, ugly, realistic photo, UI chrome",
+  "aspect_ratio": "16:9",
+  "aspect_ratio_cover": "3:4"
+}

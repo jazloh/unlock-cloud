@@ -1,0 +1,1316 @@
+{
+  "locale": "id",
+  "label": "Bahasa Melayu",
+  "flag": "🇮🇩",
+  "meta": {
+    "title": "Buka Jalan",
+    "description": "Sesak terparah Kuala Lumpur baru saja bikin aplikasi ride-hailing kau crash. Ship perbaikannya sebelum jam sibuk selesai. Temukan lorong ekspres berbasis AI — atau navigasi setiap tikungan sendiri.",
+    "start_button": "Masuk ke Sesak",
+    "end_title": "Sesak Terurai",
+    "lore_label": "Kartu Intel"
+  },
+  "ui": {
+    "map": "Peta",
+    "interact": "Interaksi",
+    "tools": "Alat",
+    "hints": "Petunjuk",
+    "hint": "Petunjuk",
+    "start": "Mulai",
+    "score": "Skor",
+    "time_remaining": "Waktu Tersisa",
+    "send_to_golem": "Kirim ke Golem",
+    "lore_collected": "Intel Terkumpul",
+    "items_collected": "Item Terkumpul",
+    "puzzles_solved": "Puzzle Terselesaikan"
+  },
+  "narrative": {
+    "intro": {
+      "segments": [
+        {
+          "index": 0,
+          "text": "Kuala Lumpur, jam 7 pagi. Jalan Tun Razak tak bergerak. 500 ribu commuter tengok phone — 'ETA TIDAK TERSEDIA.'"
+        },
+        {
+          "index": 1,
+          "text": "Aplikasi kau down. Mobil kau stuck. Tapi laptop kau terbuka."
+        },
+        {
+          "index": 2,
+          "text": "KRITIS: routing engine tumbang setelah 400.000 pengguna simultan. Semua ETA offline."
+        },
+        {
+          "index": 3,
+          "text": "Di suatu tempat di codebase itu ada solusinya — dan di suatu tempat di jalanan ini ada lorong yang lebih cepat. Selamat datang di sesak."
+        }
+      ]
+    },
+    "mid_event": {
+      "segments": [
+        {
+          "index": 0,
+          "text": "Zona konstruksi. Entah kau nyetir sendiri atau Kiro, AI assistant kau, yang menavigasi — perbaikannya tetap harus BENAR."
+        },
+        {
+          "index": 1,
+          "text": "AI mempercepat. Kamu memvalidasi. Keputusan akhir tetap ada di tangan kau."
+        }
+      ]
+    },
+    "ending": {
+      "success": {
+        "segments": [
+          {
+            "index": 0,
+            "text": "Deploy selesai. Versi 1430. Routing engine sehat. 500.000 ETA pulih."
+          },
+          {
+            "index": 1,
+            "text": "Sistem online. Bagaimanapun kau sampai di sini — setiap tikungan manual, atau Kiro mengusulkan sementara kau memutuskan — perbaikannya live dan sesak mulai terurai."
+          },
+          {
+            "index": 2,
+            "text": "Parallel Bolts tuntas. Manusia menyetujui di setiap gate. Dan saya sudah merekam aturan-aturan kau untuk lain kali."
+          },
+          {
+            "index": 3,
+            "text": "Kamu tak melewatkan kualitas. Kamu tak melewatkan berpikir. Kamu cuma punya opsi partner cerdas yang mengusulkan sementara kau memutuskan. Adaptif. Cerdas. Human-led. Itulah AIDLC. Selamat, developer."
+          }
+        ]
+      },
+      "failure": {
+        "segments": [
+          {
+            "index": 0,
+            "text": "Deadline terlewat. Board meeting sedang berlangsung. Routing engine masih degraded."
+          },
+          {
+            "index": 1,
+            "text": "Waktu habis sebelum perbaikannya live. Lalu lintas di luar juga masih diam."
+          },
+          {
+            "index": 2,
+            "text": "Tapi kau sudah belajar rutenya — kau men-scope perbaikannya, ketemu Kiro, dan tahu di mana express lane dimulai. Lain kali, bayangkan punya Kiro dari tikungan pertama."
+          },
+          {
+            "index": 3,
+            "text": "Besok, boss. Besok kita ambil lorong ekspres."
+          }
+        ]
+      }
+    }
+  },
+  "rooms": {
+    "100": {
+      "unlock_text": "Lalu lintas tak gerak 20 menit. phone kau menyala merah."
+    },
+    "200": {
+      "unlock_text": "Kamu buka laptop. Sebuah gerbang tol memblokir jalan di depan."
+    },
+    "800": {
+      "unlock_text": "Pak Ali lambaikan tangan mengajak kau mampir ke mamaknya untuk teh tarik cepat."
+    },
+    "300": {
+      "unlock_text": "Tanda tol berubah hijau. Sebuah overpass lebar menjulang di depan."
+    },
+    "900": {
+      "unlock_text": "Lalu lintas berhenti total. Log crash berserakan di layar kau."
+    },
+    "600": {
+      "unlock_text": "Gerbang LRT terbuka ke aspal yang kosong dan mulus."
+    },
+    "400": {
+      "unlock_text": "Crane dan cone. Terminal coding kau menunggu di meja darurat."
+    },
+    "500": {
+      "unlock_text": "Scanner dan lampu berkedip memblokir lorong di depan."
+    },
+    "1000": {
+      "unlock_text": "Perbaikan sudah live — tapi Kiro ingin belajar dari keputusan-keputusan kau."
+    },
+    "700": {
+      "unlock_text": "GoLancar HQ. Peta menunggu untuk menyala kembali."
+    }
+  },
+  "cards": {
+    "100": {
+      "title": "The Gridlock",
+      "description": "Di dalam kereta Grab di Jalan Tun Razak. Myvi membunyikan klakson, motor menyalip. phone kau meledak — routing engine GoLancar crash. 500 ribu pengguna terlantar. Pemandu menoleh: 'Sesak, boss. Bisa lama... kecuali kau tahu jalan pintas.'"
+    },
+    "101": {
+      "title": "Alert Crash",
+      "description": "KRITIS: routing engine tumbang setelah 400 ribu pengguna simultan. Setiap ETA offline — buat developer, sebuah null pointer; buat bisnis, 500 ribu perjalanan berhenti sekaligus."
+    },
+    "102": {
+      "title": "Pak Din (Pemandu Grab)",
+      "description": "Pemandu kau, kena sesak yang sama dan khawatir soal ratingnya. Penuh kebijaksanaan Kuala Lumpur — dan tips soal lorong yang lebih cepat, kalau kau boleh cari kartu LRT-nya."
+    },
+    "103": {
+      "title": "Laptop",
+      "description": "Laptop kerja kau — repo sudah di-clone, editor terbuka, incident channel ribut. Semua yang kau butuhkan untuk ship perbaikan, tepat di kursi belakang. → Kamu akan butuh ini untuk mengakses sistem tol di depan."
+    },
+    "200": {
+      "title": "Requirements Tollbooth",
+      "description": "Sebuah plaza tol jalan tol. Papan digital: 'DEFINISIKAN PERBAIKAN KAMU UNTUK LANJUT.' Lajur biasa sudah antre. Paling kiri: lorong khusus LRT, kosong. Pedagang mamak lambai. Papan kecil di simpang menyala: '💡 Kamu boleh pindah lorong kapan saja — tak ada yang hilang dari apa yang sudah kau buat.'"
+    },
+    "201": {
+      "title": "Laporan Crash",
+      "description": "Dampak terbatas hanya di service routing — matching dan ETA bergantung padanya; storage dan payment sehat. Perbaiki kegagalannya, tambahkan graceful degradation. Jangan bangun ulang yang tak rusak."
+    },
+    "202": {
+      "title": "Pak Ali (Pedagang Mamak)",
+      "description": "Pedagang mamak di plaza tol yang keponakannya guna AI assistant, Kiro. Tunjukkan pemikiran adaptif dan fokus, dan dia akan bagi kau kartu LRT ke lorong ekspres."
+    },
+    "203": {
+      "title": "Scope Perbaikan Terdefinisi",
+      "description": "Kamu mengejanya: S-C-O-P-E. Papan berubah hijau — 'Hanya perbaikan routing. Tidak ada rewrite, tak ada migrasi.' On-ramp overpass terbuka. Batas pekerjaan sudah ditetapkan."
+    },
+    "204": {
+      "title": "Lajur LRT",
+      "description": "Lajur ekspres terbuka. Aspal kosong terhampar di depan sementara yang lain merangkak. Sebuah papan berbunyi: 'AI NAVIGATOR AKTIF — KIRO SIAP.'"
+    },
+    "205": {
+      "title": "Root Cause yang Pasti",
+      "description": "Cross-reference antara alert crash dan laporan menunjukkan baris tepatnya: sebuah null yang tak dijaga saat routing pool jenuh di atas 400 ribu. Sekarang kau tahu persis apa yang harus diperbaiki."
+    },
+    "206": {
+      "title": "AI Assistant Aktif",
+      "description": "Kamu memuat terminal LRT di laptop. Kiro, AI assistant kau, booting: 'Konteks diterima. Saya boleh mengusulkan rencana kapanpun kau siap.'"
+    },
+    "250": {
+      "title": "Kartu LRT",
+      "description": "Kartu LRT TransKuala Lumpur dari Pak Ali. Membuka Express Lane — rute AI Navigator di mana Kiro mengusulkan dan kau memutuskan. → Gunakan ini untuk membuka lorong ekspres AI Navigator daripada mendesain semuanya sendiri."
+    },
+    "207": {
+      "title": "Dokumen Scope",
+      "description": "Definisi scope satu halaman yang jelas. → Kamu akan butuh ini untuk memvalidasi usulan si AI."
+    },
+    "208": {
+      "title": "Papan Pindah Lajur",
+      "description": "💡 Kamu boleh pindah lorong kapan saja — tak ada yang hilang dari apa yang sudah kau buat. Ambil overpass dan desain manual, atau ambil kartu LRT untuk lorong ekspres AI. Kedua jalan sampai ke perbaikan yang sama, dan pekerjaan yang sudah kau selesaikan tetap terbawa. Pilih kecepatan yang cocok; kau tak pernah terkunci."
+    },
+    "304": {
+      "title": "Blueprint Arsitektur",
+      "description": "Sebuah arsitektur yang didesain penuh dengan tangan. Menyeluruh dan lengkap. → Dibutuhkan untuk melacak crash di Log Jam di depan."
+    },
+    "903": {
+      "title": "Timeline Crash",
+      "description": "Urutan crash lengkap, direkonstruksi manual — deploy, spike, overload, kegagalan, cascade. → Dibutuhkan untuk memulai konstruksi."
+    },
+    "606": {
+      "title": "Ringkasan Konteks",
+      "description": "Ringkasan konteks yang dianalisis AI — pembacaan Kiro atas crash. → Bawa ini untuk masuk kembali ke Construction Lane."
+    },
+    "406": {
+      "title": "Spec Tervalidasi",
+      "description": "Spesifikasi yang disetujui manusia. AI mengusulkan, kau memvalidasi. → Dibutuhkan untuk verifikasi."
+    },
+    "407": {
+      "title": "Laporan Triage",
+      "description": "Tugas tersortir: AI menangani, kau memutuskan, sisanya di-skip. → Bukti kau paham workflow-nya."
+    },
+    "504": {
+      "title": "Stempel Kualitas",
+      "description": "Dual-loop terverifikasi. Sensor lulus. Reviewer lulus. KAMU meluluskannya. → Dibutuhkan untuk masuk ke Learning Loop."
+    },
+    "1003": {
+      "title": "Aturan Pembelajaran",
+      "description": "Aturan-aturan yang di-encode untuk lain kali. Sistem baru saja jadi lebih pintar. → Deploy dengan percaya diri."
+    },
+    "800": {
+      "title": "The Mamak",
+      "description": "Mamak pinggir jalan Pak Ali. Commuter yang terperangkap bertukar cerita sambil minum dan maggi. Sebuah whiteboard berisi catatan-catatan dari developer yang pernah terperangkap di sini."
+    },
+    "801": {
+      "title": "Whiteboard Mamak",
+      "description": "Tim yang pakai AI assistant seperti Kiro melaporkan waktu perbaikan turun dari berhari-hari jadi berjam-jam. Resepnya: proses yang tepat ukuran, parallel Bolts, dan verifikasi AI sebelum human gate."
+    },
+    "802": {
+      "title": "Sesama Commuter",
+      "description": "Developer dari perusahaan lain, juga terperangkap sesak. Dia pakai AI Navigator di insiden terakhirnya dan senang berbagi bagaimana rasanya."
+    },
+    "803": {
+      "title": "TV Mamak",
+      "description": "Berita lokal: 'Outage GoLancar bikin commuter seluruh kota terlantar.' Jam di pojok terus berdetak. Semua orang di mamak sekali-sekala melirik ke arah kau."
+    },
+    "300": {
+      "title": "Architecture Overpass",
+      "description": "Overpass raksasa. Kamu mendesain seluruh perbaikan sendiri — setiap komponen, setiap koneksi. Di bawah, sebuah bus LRT melaju. Seorang penumpang sudah coding."
+    },
+    "301": {
+      "title": "Arsitektur Terdesain",
+      "description": "Kamu menata seluruh jalur dengan tangan dan mengecek setiap koneksi. Pekerjaan yang solid — hanya butuh fokus dan waktu. Jalan di depan terbuka."
+    },
+    "302": {
+      "title": "Jendela Bus",
+      "description": "Lewat jendela — seorang developer dengan AI assistant, Kiro, sudah lewat tahap ini. AI membuat draf; manusia menunjuk dan menyetujui. Hanya bagian yang butuh pertimbangan manusia yang tersisa untuk manusia."
+    },
+    "303": {
+      "title": "Exit Overpass — Kartu LRT",
+      "description": "Sebuah halte LRT ada di bawah ramp, dengan kartu cadangan di pagar. Nggak pernah terlambat mencoba lorong ekspres — tak ada yang hilang kalau kau pindah."
+    },
+    "900": {
+      "title": "The Log Jam",
+      "description": "Lalu lintas berhenti total. Untuk maju, kau melacak persis apa yang salah — langkah demi langkah, event demi event. Log crash berserakan di layar kau seperti puing di jalan."
+    },
+    "901": {
+      "title": "Timeline Terlacak",
+      "description": "Event demi event, crash-nya jadi masuk akal: deploy, spike, overload, kegagalan, cascade. Pekerjaan menyeluruh — sepenuhnya dilakukan dengan tangan."
+    },
+    "902": {
+      "title": "Pelacakan Manual",
+      "description": "Kiro melakukan analisis ini dalam hitungan detik dengan men-scan workspace. Mengerjakannya manual itu menyeluruh — tapi memakan waktu."
+    },
+    "600": {
+      "title": "The Express Lane",
+      "description": "Lajur LRT TransKuala Lumpur — kosong, mulus, cepat. Kiro, AI assistant kau, menyala: 'Konteks dimuat. Rencana siap. Setujui atau sesuaikan?' Ini AI mengusulkan. Kamu memutuskan."
+    },
+    "601": {
+      "title": "Konteks Diberikan",
+      "description": "Kamu memberikan Kiro persis apa yang dibutuhkan crash dan menahan yang berisik. Usulan langsung terfokus. Konteks yang tepat masuk, rencana yang tepat keluar."
+    },
+    "602": {
+      "title": "Rencana Bolt Disetujui",
+      "description": "Kamu menyetujui rencananya: B-O-L-T-S. Tiga unit independen di-dispatch paralel. Berjam-jam, bukan berminggu-minggu, karena mereka jalan bersamaan. LRT mengantar kau ke Construction Lane."
+    },
+    "603": {
+      "title": "Parallel Bolts",
+      "description": "Tiga Bolt jalan sekaligus: Cache fix (2j), Route patch (3j), Load test (1j). Elapsed: 3 jam — bukan 9. Unit independen jalan bersamaan, bukan satu demi satu."
+    },
+    "604": {
+      "title": "Jejak Audit",
+      "description": "Setiap usulan tercatat. Setiap persetujuan ber-timestamp. Kiro bergerak cepat, tapi tak ada yang dilakukannya tak kelihatan dan tak ada yang lanjut tanpa 'ya' dari manusia yang tercatat."
+    },
+    "400": {
+      "title": "Construction Lane",
+      "description": "Zona konstruksi. Terminal siap. Layar menampilkan: 'SPEC SIAP — VALIDASI.' Entah kau mendesainnya sendiri atau AI yang mengusulkannya — kau tetap hakim terakhirnya."
+    },
+    "401": {
+      "title": "Spec Tervalidasi",
+      "description": "Kamu menyetujui item yang benar dan menolak scope creep. Yang tersisa persis pas. Kamu adalah gate-nya, dan kau menahan garisnya."
+    },
+    "405": {
+      "title": "Pekerjaan Ter-triage",
+      "description": "Kamu memilah pekerjaannya: AI mengambil yang rutin, kau memegang keputusan berat, dan yang bising di-skip. Effort yang tepat ukuran untuk perbaikan yang ber-scope."
+    },
+    "402": {
+      "title": "Rencana Testing",
+      "description": "Sensor otomatis akan memverifikasi regresi dan error. Tapi menyetujui logika-nya? Itu kau. Kecepatan datang dari mesin; pertimbangan tetap manusia."
+    },
+    "403": {
+      "title": "Kiro (AI Assistant)",
+      "description": "Kiro, AI development assistant kau, terproyeksi di atas meja. Dia memimpin tim agent spesialis, mengusulkan lewat parallel Bolts, dan tak pernah lanjut tanpa persetujuan kau."
+    },
+    "500": {
+      "title": "Verification Checkpoint",
+      "description": "Checkpoint otomatis. Sensor men-scan. Reviewer menandai. Tiga lapis sebelum keputusan akhir kau. Papan: 'TIDAK ADA KODE YANG SHIP TANPA VERIFIKASI — DAN TANPA KAMU.'"
+    },
+    "501": {
+      "title": "Sensor Dual-Loop",
+      "description": "Layer 1 (sensor deterministik) selesai. Layer 2 (reviewer AI) selesai. Dua pengecekan mesin diselesaikan sebelum apa pun sampai ke Layer 3: KAMU."
+    },
+    "502": {
+      "title": "Isu Ditangani",
+      "description": "Tiga isu nyata diperbaiki sebelum cascade; flag kosmetik diabaikan — itu bukan bug. Agent reviewer jadi hijau. Satu gate tersisa: kau."
+    },
+    "503": {
+      "title": "Disetujui untuk Ship",
+      "description": "Sensor lulus. Reviewer menyetujui. Kamu mengetik kata terakhir — S-H-I-P — human gate. Tercatat dengan nama dan timestamp kau."
+    },
+    "1000": {
+      "title": "The Learning Loop",
+      "description": "Perbaikan ter-deploy — tapi prosesnya tak berhenti di shipping. Kiro bertanya: 'Aturan apa yang harus saya ingat untuk lain kali?' Setiap koreksi menjadi aturan permanen. Di dinding, spanduk berbunyi: 'SISTEM MENYESUAIKAN KEDALAMAN PROSESNYA DENGAN SETIAP MASALAH.'"
+    },
+    "1001": {
+      "title": "Sistem Diajarkan",
+      "description": "Setiap keputusan kau menjadi aturan yang Kiro simpan. Ajarkan sekali, dan tak perlu dijelaskan ulang. Bolt berikutnya mulai lebih pintar."
+    },
+    "1002": {
+      "title": "Ringkasan Pembelajaran",
+      "description": "Ajarkan sekali, jangan pernah jelaskan ulang. Setiap koreksi menjadi memori hierarkis yang sistem pakai lagi. Tata kelola dan kecepatan, bersamaan."
+    },
+    "1004": {
+      "title": "Adaptif by Design",
+      "description": "Spanduk itu mengeja seluruh filosofinya: sistem menyesuaikan kedalaman prosesnya dengan setiap masalah. Perbaikan kecil dapat sentuhan ringan; yang berisiko dapat gate penuh. Nggak memaksakan satu proses kaku — melainkan beradaptasi. Ingat kata itu. Itulah satu hal yang setiap aturan yang baru kau ajarkan miliki bersama."
+    },
+    "700": {
+      "title": "Deployment Terminal",
+      "description": "GoLancar HQ. Layar besar menyala: 500 ribu ETA pulih. Lalu lintas mengalir. Kamu berhasil."
+    },
+    "701": {
+      "title": "Command Terakhir",
+      "description": "Satu kata untuk ship — kata yang mendefinisikan semua yang kau pelajari: ADAPT. Kamu meng-commit-nya, dan routing engine restart bersih. Di seluruh Kuala Lumpur, ETA berkedip kembali ke hidup."
+    },
+    "702": {
+      "title": "Sesak Terurai",
+      "description": "500 ribu perjalanan tersambung kembali sebelum jam sibuk berakhir. Bagaimanapun kau sampai di sini — setiap tikungan manual, atau Kiro mengusulkan sementara kau memutuskan — perbaikannya benar, terverifikasi, dan tercatat. Selamat, developer. Sesaknya mulai terurai."
+    }
+  },
+  "puzzles": {
+    "npc-pakdedi": {
+      "description": "Pak Din — Pemandu Grab Kamu",
+      "config_overrides": {
+        "greeting": "Alamak, sesak banget! Tun Razak memang macam ni. Kamu IT kan? Aplikasi saya juga tak ada ETA. Fix la, boss!",
+        "lines": [
+          {
+            "label": "Apa yang terjadi?",
+            "response": "Nggak ada ETA, tak ada rute. Sudah 3 penumpang cancel. Rating saya turun! Cepetin fix boleh tak?"
+          },
+          {
+            "label": "Tahu rute yang lebih cepat?",
+            "response": "Dua opsi: jalan biasa — setiap lampu, setiap tikungan, kau navigasi sendiri. Atau... LRT. Lajur khusus, jalan kosong. Butuh kartu LRT. Tanya Pak Ali di mamak tol."
+          },
+          {
+            "label": "Ada yang spesial di LRT?",
+            "response": "Ada navigasi AI di dalam! Pemandu tak mikir rute — komputer nyaranin, pemandu setuju. Sistem yang sangat pintar."
+          },
+          {
+            "label": "Oke, ayo jalan",
+            "response": "Semoga lancar boss! Gerbang tol di depan. Apapun rutenya — cepat ya?"
+          }
+        ]
+      }
+    },
+    "npc-pakbudi": {
+      "description": "Pak Ali — Pedagang Mamak di Plaza Tol",
+      "config_overrides": {
+        "greeting": "Developer ya? Mau teh tarik? Keponakan saya pakai metode baru — AI assistant, Kiro. Kayak punya teman satu tim yang pintar. Mau kartu LRT?",
+        "lines": [
+          {
+            "label": "Cerita dong metode keponakan Bapak",
+            "response": "Namanya AIDLC. AI menganalisis semuanya, terus MENGUSULKAN fix. Tapi keponakan tetap yang memutuskan. AI tak pernah jalan sendiri. 'AI menyarankan, saya menyetujui.' Cepat karena AI yang kerjain prep-nya."
+          },
+          {
+            "label": "Bedanya apa?",
+            "response": "Tanpa Kiro: kumpulkan semua sendiri, desain sendiri, bangun step demi step. Nggak salah! Tapi lama. Dengan Kiro: AI mengumpulkan dan mengusulkan. Kamu berpikir dan menyetujui. Kualitas sama — waktu lebih sedikit."
+          },
+          {
+            "label": "Kasih dong kartu LRT-nya",
+            "response": "Pertama: untuk crash INI — redesign penuh end-to-end... atau cukup perbaiki yang rusak? Kalau scope-nya fokus, AI boleh sangat presisi."
+          },
+          {
+            "label": "Cukup perbaiki yang rusak — scope fokus",
+            "response": "Nah gitu! Berpikir adaptif. Nih — kartu LRT. Express lane sudah ada Kiro yang siap. Selamat jalan!"
+          },
+          {
+            "label": "Saya perlu review semuanya penuh",
+            "response": "Juga oke! Menyeluruh itu terhormat. Lajur standar di depan. Kalau nanti berubah pikiran — ada on-ramp dari overpass."
+          }
+        ],
+        "state_lines": [
+          {
+            "requires_card": 250,
+            "label": "Mabagi kartunya!",
+            "response": "Sama-sama! Ingat: AI mengusulkan, KAMU memutuskan. Ini tetap fix kau — cuma dengan asisten yang sangat pintar."
+          }
+        ]
+      }
+    },
+    "npc-commuter": {
+      "description": "Sesama Commuter",
+      "config_overrides": {
+        "greeting": "Kamu dev GoLancar ya? Ha — bulan lalu saya di posisi kau. Aplikasi beda, panik sama. Kiro — AI assistant itu — yang selamatin saya.",
+        "lines": [
+          {
+            "label": "Rasanya gimana?",
+            "response": "Dia mengusulkan rencana dalam hitungan detik. Saya bilang tak ke separuhnya, fix scope-nya, setujui sisanya. Rasanya bukan seperti coding sendirian — lebih seperti memimpin tim kecil."
+          },
+          {
+            "label": "Ada saran?",
+            "response": "Kasih konteks yang tepat dan tak lebih. Dan jangan pernah skip review kau sendiri — AI itu cepat, tapi kau yang bertanggung jawab."
+          }
+        ]
+      }
+    },
+    "wordlock-scope": {
+      "description": "Definisikan scope perbaikan",
+      "config_overrides": {
+        "title": "Apa yang harus kau definisikan pertama kali?",
+        "title_builder": "Laporan crash bilang 'scope dampak: routing only.' Ejakan.",
+        "title_planner": "Sebelum memperbaiki apa pun — definisikan _____ dari masalahnya. (5 huruf)",
+        "title_strategist": "Apa batas dampak bisnisnya? (5 huruf)",
+        "learning_card": "🧠 Adaptive Depth — AIDLC menyesuaikan ukuran proses. Perbaikan kecil = proses kecil. Kamu baru saja mendefinisikan scope yang fokus daripada analisis penuh."
+      }
+    },
+    "blueprint-arch": {
+      "description": "Desain jalur perbaikan",
+      "config_overrides": {
+        "title": "Desain jalur perbaikan",
+        "title_builder": "Tempatkan setiap komponen dalam urutan yang benar (⚠️ adalah yang rusak).",
+        "title_planner": "Susun alurnya dalam urutan (langkah ⚠️ adalah tempat rusaknya).",
+        "title_strategist": "Taruh langkah-langkah proses dalam urutan (langkah ⚠️ gagal).",
+        "layers": [
+          {
+            "id": "p1",
+            "label": "Langkah 1",
+            "icon": "1️⃣",
+            "color": "#FF6B35"
+          },
+          {
+            "id": "p2",
+            "label": "Langkah 2",
+            "icon": "2️⃣",
+            "color": "#F6A700"
+          },
+          {
+            "id": "p3",
+            "label": "Langkah 3",
+            "icon": "3️⃣",
+            "color": "#1A936F"
+          },
+          {
+            "id": "p4",
+            "label": "Langkah 4",
+            "icon": "4️⃣",
+            "color": "#004E89"
+          },
+          {
+            "id": "p5",
+            "label": "Langkah 5",
+            "icon": "5️⃣",
+            "color": "#2D3047"
+          }
+        ],
+        "components_builder": [
+          {
+            "id": "lb",
+            "label": "Load Balancer",
+            "icon": "🌐",
+            "layer": "p1",
+            "hint": "Membagi trafik masuk — selalu pertama"
+          },
+          {
+            "id": "cache",
+            "label": "Cache Layer",
+            "icon": "⚡",
+            "layer": "p2",
+            "hint": "Melayani rute panas sebelum engine"
+          },
+          {
+            "id": "routing",
+            "label": "Routing Engine ⚠️",
+            "icon": "🧭",
+            "layer": "p3",
+            "hint": "Tempat crash terjadi"
+          },
+          {
+            "id": "queue",
+            "label": "Message Queue",
+            "icon": "📨",
+            "layer": "p4",
+            "hint": "Menyerap overflow setelah routing"
+          },
+          {
+            "id": "db",
+            "label": "Database",
+            "icon": "🗄️",
+            "layer": "p5",
+            "hint": "Menyimpan hasilnya terakhir"
+          }
+        ],
+        "components_planner": [
+          {
+            "id": "lb",
+            "label": "Request Pengguna",
+            "icon": "🙋",
+            "layer": "p1",
+            "hint": "Alur dimulai dari pengguna"
+          },
+          {
+            "id": "cache",
+            "label": "Cek Data Tersimpan",
+            "icon": "⚡",
+            "layer": "p2",
+            "hint": "Cari jawaban cepat yang tersimpan dulu"
+          },
+          {
+            "id": "routing",
+            "label": "Kalkulasi Rute ⚠️",
+            "icon": "🧭",
+            "layer": "p3",
+            "hint": "Di sinilah rusaknya"
+          },
+          {
+            "id": "queue",
+            "label": "Antre Update",
+            "icon": "📨",
+            "layer": "p4",
+            "hint": "Antrekan update-nya"
+          },
+          {
+            "id": "db",
+            "label": "Konfirmasi Hasil",
+            "icon": "✅",
+            "layer": "p5",
+            "hint": "Catat dan konfirmasi terakhir"
+          }
+        ],
+        "components_strategist": [
+          {
+            "id": "lb",
+            "label": "Input Customer",
+            "icon": "🙋",
+            "layer": "p1",
+            "hint": "Semuanya dimulai dari customer"
+          },
+          {
+            "id": "cache",
+            "label": "Lookup Cepat",
+            "icon": "⚡",
+            "layer": "p2",
+            "hint": "Lookup cepat sebelum kerja berat"
+          },
+          {
+            "id": "routing",
+            "label": "Kalkulasi Inti ⚠️",
+            "icon": "🧭",
+            "layer": "p3",
+            "hint": "Langkah yang gagal"
+          },
+          {
+            "id": "queue",
+            "label": "Proses Antrean",
+            "icon": "📨",
+            "layer": "p4",
+            "hint": "Tangani backlog-nya"
+          },
+          {
+            "id": "db",
+            "label": "Catat Hasil",
+            "icon": "✅",
+            "layer": "p5",
+            "hint": "Catat outcome-nya terakhir"
+          }
+        ],
+        "falseOutputs": {
+          "p1": "Alurnya tak mulai di situ — langkah pertama adalah titik masuk.",
+          "p2": "Bukan langkah kedua — itu lookup cepat sebelum kerja inti.",
+          "p3": "Langkah tengah adalah kalkulasi inti (yang ⚠️).",
+          "p4": "Langkah keempat menangani antrean/backlog, setelah kerja inti.",
+          "p5": "Langkah terakhir mencatat hasilnya."
+        }
+      }
+    },
+    "timeline-crash": {
+      "description": "Lacak apa yang terjadi",
+      "config_overrides": {
+        "title": "Lacak apa yang terjadi",
+        "title_builder": "Susun event crash dalam urutan kejadiannya.",
+        "title_planner": "Taruh tahapan insiden dalam urutan.",
+        "title_strategist": "Urutkan event bisnis sesuai yang terjadi.",
+        "events_builder": [
+          {
+            "id": "a",
+            "label": "Deploy v2.3.1 (13:00)"
+          },
+          {
+            "id": "b",
+            "label": "Trafik lonjak ke 450K (13:12)"
+          },
+          {
+            "id": "c",
+            "label": "Memory overflow terpicu (13:14)"
+          },
+          {
+            "id": "d",
+            "label": "Null pointer di routing (13:14)"
+          },
+          {
+            "id": "e",
+            "label": "Cascade — semua ETA offline (13:15)"
+          }
+        ],
+        "events_planner": [
+          {
+            "id": "a",
+            "label": "Versi baru rilis (13:00)"
+          },
+          {
+            "id": "b",
+            "label": "Jumlah pengguna melewati ambang (13:12)"
+          },
+          {
+            "id": "c",
+            "label": "Sistem kelebihan beban (13:14)"
+          },
+          {
+            "id": "d",
+            "label": "Fitur inti rusak (13:14)"
+          },
+          {
+            "id": "e",
+            "label": "Semua pengguna terdampak (13:15)"
+          }
+        ],
+        "events_strategist": [
+          {
+            "id": "a",
+            "label": "Update produk live (13:00)"
+          },
+          {
+            "id": "b",
+            "label": "Peak demand melampaui kapasitas (13:12)"
+          },
+          {
+            "id": "c",
+            "label": "Sistem mencapai titik pecah (13:14)"
+          },
+          {
+            "id": "d",
+            "label": "Service inti gagal (13:14)"
+          },
+          {
+            "id": "e",
+            "label": "500K customer kehilangan layanan (13:15)"
+          }
+        ]
+      }
+    },
+    "ctx-aidlc": {
+      "description": "Kasih makan Kiro",
+      "config_overrides": {
+        "agentName": "Kiro",
+        "title": "Kasih makan AI assistant, Kiro",
+        "title_builder": "Beri AI input yang tepat. Terlalu banyak noise = output salah.",
+        "title_planner": "Pilih info yang dibutuhkan AI. Sisihkan noise-nya.",
+        "title_strategist": "Pilih input yang penting. Buang gangguannya.",
+        "learning_card": "🧠 Manajemen Konteks — Kamu baru saja melakukan yang AIDLC lakukan: memberi AI hanya yang relevan. Konteks tepat = output tepat. AIDLC menyebut ini Workspace Detection.",
+        "documents_builder": [
+          {
+            "id": "crash",
+            "label": "crash-report.md",
+            "icon": "🚨",
+            "desc": "Null pointer di routing saat >400K pengguna",
+            "tokens": 400,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada laporan crash — apa yang gagal?"
+          },
+          {
+            "id": "arch",
+            "label": "architecture.md",
+            "icon": "🏗️",
+            "desc": "Arsitektur service saat ini",
+            "tokens": 600,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada arsitektur — nebak topologi."
+          },
+          {
+            "id": "logs",
+            "label": "error-logs-2h.log",
+            "icon": "📈",
+            "desc": "Log error, 2 jam terakhir",
+            "tokens": 300,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada log terbaru — jalan buta."
+          },
+          {
+            "id": "limits",
+            "label": "concurrency.conf",
+            "icon": "⚙️",
+            "desc": "Konfigurasi konkurensi (max_users)",
+            "tokens": 300,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada konfig limit — tak boleh menalar soal kapasitas."
+          },
+          {
+            "id": "scope",
+            "label": "scope-note.md",
+            "icon": "🎯",
+            "desc": "Scope perbaikan: routing only",
+            "tokens": 200,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada scope — AI mau perbaiki semuanya."
+          },
+          {
+            "id": "marketing",
+            "label": "q4-marketing.pptx",
+            "icon": "📣",
+            "desc": "Roadmap marketing Q4",
+            "tokens": 500,
+            "status": "poison",
+            "poisonLine": "❌ Nyuntikkan tujuan marketing ke fix crash — noise!"
+          },
+          {
+            "id": "handbook",
+            "label": "handbook.pdf",
+            "icon": "📕",
+            "desc": "Buku panduan karyawan (200 halaman)",
+            "tokens": 900,
+            "status": "poison",
+            "poisonLine": "❌ Ngutip handbook 200 halaman — murni noise!"
+          },
+          {
+            "id": "allcode",
+            "label": "repo-since-2019.git",
+            "icon": "🗂️",
+            "desc": "Riwayat repo penuh sejak 2019",
+            "tokens": 1200,
+            "status": "poison",
+            "poisonLine": "❌ Enam tahun commit — dokumen relevan tenggelam!"
+          }
+        ],
+        "documents_planner": [
+          {
+            "id": "incident",
+            "label": "Laporan insiden",
+            "icon": "🚨",
+            "desc": "Apa yang gagal dan di mana",
+            "tokens": 400,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada laporan insiden — apa yang rusak?"
+          },
+          {
+            "id": "journey",
+            "label": "Peta user journey",
+            "icon": "🗺️",
+            "desc": "Alur pengguna yang terdampak",
+            "tokens": 600,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada journey map — alur mana yang rusak?"
+          },
+          {
+            "id": "qa",
+            "label": "Log kegagalan QA",
+            "icon": "🧪",
+            "desc": "Test yang gagal terkini",
+            "tokens": 300,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada log QA — test apa yang gagal?"
+          },
+          {
+            "id": "sla",
+            "label": "Target SLA",
+            "icon": "⏱️",
+            "desc": "Komitmen waktu respons",
+            "tokens": 300,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada target SLA — apa standarnya?"
+          },
+          {
+            "id": "scope",
+            "label": "Scope fix: fitur ETA saja",
+            "icon": "🎯",
+            "desc": "Batas perbaikan",
+            "tokens": 200,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada scope — semuanya jadi target."
+          },
+          {
+            "id": "backlog",
+            "label": "Backlog produk lengkap",
+            "icon": "📚",
+            "desc": "300 item tak nyambung",
+            "tokens": 500,
+            "status": "poison",
+            "poisonLine": "❌ Dump seluruh backlog — noise!"
+          },
+          {
+            "id": "holiday",
+            "label": "Kalender libur tim",
+            "icon": "📆",
+            "desc": "Siapa cuti",
+            "tokens": 400,
+            "status": "poison",
+            "poisonLine": "❌ Tanggal libur tak akan perbaiki crash — noise!"
+          },
+          {
+            "id": "org",
+            "label": "Struktur organisasi (semua dept)",
+            "icon": "🏢",
+            "desc": "Struktur perusahaan",
+            "tokens": 900,
+            "status": "poison",
+            "poisonLine": "❌ Struktur org tak relevan buat fix ini — noise!"
+          }
+        ],
+        "documents_strategist": [
+          {
+            "id": "outage",
+            "label": "Ringkasan outage",
+            "icon": "🚨",
+            "desc": "Apa yang down sekarang",
+            "tokens": 400,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada ringkasan outage — apa yang down?"
+          },
+          {
+            "id": "impact",
+            "label": "Data dampak customer",
+            "icon": "👥",
+            "desc": "500K terdampak",
+            "tokens": 600,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada data dampak — seberapa parah?"
+          },
+          {
+            "id": "avail",
+            "label": "Ketersediaan tim",
+            "icon": "🧑‍🤝‍🧑",
+            "desc": "Siapa boleh bertindak sekarang",
+            "tokens": 300,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada ketersediaan — siapa yang boleh bantu?"
+          },
+          {
+            "id": "budget",
+            "label": "Batas SLA / budget",
+            "icon": "💰",
+            "desc": "Batas respons",
+            "tokens": 300,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada batasan — apa limit-nya?"
+          },
+          {
+            "id": "scope",
+            "label": "Scope fix: pulihkan ETA saja",
+            "icon": "🎯",
+            "desc": "Batas perbaikan",
+            "tokens": 200,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ Nggak ada scope — semuanya di meja."
+          },
+          {
+            "id": "competitor",
+            "label": "Press release kompetitor",
+            "icon": "📰",
+            "desc": "PR tak nyambung",
+            "tokens": 400,
+            "status": "poison",
+            "poisonLine": "❌ PR kompetitor tak akan perbaiki outage — noise!"
+          },
+          {
+            "id": "reno",
+            "label": "Rencana renovasi kantor",
+            "icon": "🏗️",
+            "desc": "Proyek fasilitas",
+            "tokens": 500,
+            "status": "poison",
+            "poisonLine": "❌ Rencana renovasi tak relevan — noise!"
+          },
+          {
+            "id": "annual",
+            "label": "Laporan keuangan tahunan",
+            "icon": "📊",
+            "desc": "Financials akhir tahun",
+            "tokens": 900,
+            "status": "poison",
+            "poisonLine": "❌ Laporan tahunan tak akan bantu di sini — noise!"
+          }
+        ]
+      }
+    },
+    "wordlock-bolts": {
+      "description": "Unit kerja paralel AIDLC",
+      "config_overrides": {
+        "title": "Unit kerja paralel AIDLC disebut ___",
+        "title_builder": "Unit eksekusi paralel yang jalan bersamaan disebut B_____",
+        "title_planner": "Tugas paralel time-boxed — bukan sprint, tapi B_____",
+        "title_strategist": "3 B_____ paralel × 3 jam = total 3 jam, bukan 9",
+        "learning_card": "🧠 Bolts — AIDLC mengukur pekerjaan dalam Bolts: unit fokus berjam-jam yang jalan paralel. 3 Bolts × 3 jam = 3 jam elapsed, bukan 9."
+      }
+    },
+    "npc-rina": {
+      "description": "Kiro — AI Assistant Kamu",
+      "config_overrides": {
+        "greeting": "Saya Kiro, AI assistant kau. Saya sudah memecah perbaikannya jadi 3 parallel Bolts. Tapi saya butuh persetujuan KAMU sebelum apa pun berjalan.",
+        "lines": [
+          {
+            "label": "Apa 3 Bolts-nya?",
+            "response": "Bolt 1: perbaiki isu inti (2j). Bolt 2: tambahkan pengaman (2j). Bolt 3: verifikasi di bawah beban (1j). Paralel: total 2 jam — bukan 5 sekuensial."
+          },
+          {
+            "label": "Kenapa butuh persetujuan saya?",
+            "response": "Saya mengusulkan, kau memutuskan. Selalu. Saya mungkin salah menyarankan scope, kelewat constraint yang hanya KAMU tahu, atau over-engineer. Audit mencatat setiap usulan dan setiap keputusan."
+          },
+          {
+            "label": "Kalau usulan kau salah?",
+            "response": "Tolak saja! Saya akan usulkan lagi dengan masukan kau. Loop-nya: saya usulkan → kau review → setuju atau redirect. Selalu keputusan kau."
+          },
+          {
+            "label": "Kualitasnya bagaimana?",
+            "response": "Dua layer mesin dulu: sensor menangkap isu, agent reviewer mengevaluasi logika. Baru KAMU — human gate. Ini disebut dual-loop."
+          },
+          {
+            "label": "Siapa lagi di tim?",
+            "response": "14 agent spesialis — security, arsitektur, QA. Mereka menyelesaikan isu di antara mereka sendiri dan hanya mengeskalasi keputusan ke kau. Kamu memimpin tim, bukan mengasuhnya."
+          }
+        ]
+      }
+    },
+    "triage-lanes": {
+      "description": "Alihkan pekerjaan ke lorong yang tepat",
+      "config_overrides": {
+        "title": "Sortir setiap tugas: AI menanganinya, kau memutuskan, atau di-skip.",
+        "title_builder": "Tugas mana yang AI boleh jalankan, mana yang butuh kau, mana yang di-skip?",
+        "title_planner": "Sortir pekerjaan: AI-otomatis, human-decide, atau di luar scope.",
+        "title_strategist": "Rutekan setiap item: AI eksekusi, kau menyetujui, atau di-skip.",
+        "learning_card": "🧠 Adaptive Composition — Nggak setiap tugas butuh kau, dan tak semuanya masuk. AI menjalankan yang rutin (inner loop), kau yang memegang keputusan berat (outer loop), dan kau skip yang tak dibutuhkan perbaikan ini.",
+        "tasks_builder": [
+          {
+            "id": "t1",
+            "label": "Generate boilerplate null-check",
+            "lane": "ai"
+          },
+          {
+            "id": "t2",
+            "label": "Jalankan test suite otomatis",
+            "lane": "ai"
+          },
+          {
+            "id": "t3",
+            "label": "Setujui scope perbaikan",
+            "lane": "human"
+          },
+          {
+            "id": "t4",
+            "label": "Sign off deploy produksi",
+            "lane": "human"
+          },
+          {
+            "id": "t5",
+            "label": "Tulis ulang seluruh routing engine",
+            "lane": "skip"
+          },
+          {
+            "id": "t6",
+            "label": "Migrasi ke database baru",
+            "lane": "skip"
+          }
+        ],
+        "tasks_planner": [
+          {
+            "id": "t1",
+            "label": "Auto-generate test case",
+            "lane": "ai"
+          },
+          {
+            "id": "t2",
+            "label": "Draf release notes",
+            "lane": "ai"
+          },
+          {
+            "id": "t3",
+            "label": "Setujui acceptance criteria",
+            "lane": "human"
+          },
+          {
+            "id": "t4",
+            "label": "Buat keputusan go / no-go",
+            "lane": "human"
+          },
+          {
+            "id": "t5",
+            "label": "Redesign seluruh user journey",
+            "lane": "skip"
+          },
+          {
+            "id": "t6",
+            "label": "Rencanakan ulang seluruh roadmap",
+            "lane": "skip"
+          }
+        ],
+        "tasks_strategist": [
+          {
+            "id": "t1",
+            "label": "Kompilasi metrik dampak",
+            "lane": "ai"
+          },
+          {
+            "id": "t2",
+            "label": "Draf update status",
+            "lane": "ai"
+          },
+          {
+            "id": "t3",
+            "label": "Setujui budget remediasi",
+            "lane": "human"
+          },
+          {
+            "id": "t4",
+            "label": "Putuskan komunikasi ke customer",
+            "lane": "human"
+          },
+          {
+            "id": "t5",
+            "label": "Akuisisi kompetitor",
+            "lane": "skip"
+          },
+          {
+            "id": "t6",
+            "label": "Rebranding perusahaan",
+            "lane": "skip"
+          }
+        ]
+      }
+    },
+    "spec-validate": {
+      "description": "AI mengusulkan ini. Kamu memvalidasinya.",
+      "config_overrides": {
+        "title": "AI mengusulkan ini. Kamu memvalidasinya.",
+        "agentName": "Kiro",
+        "title_builder": "Setujui item level-kode yang benar. Tolak scope creep.",
+        "title_planner": "Setujui requirement yang benar. Tolak scope creep.",
+        "title_strategist": "Setujui outcome yang benar. Tolak scope creep.",
+        "learning_card": "🧠 AI Mengusulkan, Manusia Memvalidasi — AI menghasilkan spec itu. KAMU menangkap scope creep-nya. Di AIDLC, AI tak pernah ship tanpa persetujuan kau.",
+        "falseOutputs": [
+          "Itu scope creep — perbaikannya fokus, bukan rebuild.",
+          "Tolak. 'Tulis ulang/redesign/rebuild semuanya' di luar scope.",
+          "CTO mengirim pesan: \"Nggak ada waktu untuk rebuild platform. Perbaiki crash-nya.\"",
+          "Itu di luar masalah sebenarnya. Cocokkan dengan requirement asli."
+        ],
+        "rounds_builder": [
+          {
+            "vibe": "Perbaiki crash routing GoLancar",
+            "chaosOutputs": [
+              "🔧 Mengusulkan menulis ulang seluruh routing engine",
+              "🗄️ Mengusulkan migrasi ke platform database baru",
+              "🌈 Melempar redesign dashboard yang tak ada yang minta"
+            ],
+            "spec": [
+              {
+                "label": "Perbaikan Inti",
+                "prompt": "Perubahan inti adalah untuk ___"
+              },
+              {
+                "label": "Ketahanan",
+                "prompt": "Untuk degrade dengan mulus, tambahkan ___"
+              },
+              {
+                "label": "Pengaman",
+                "prompt": "Untuk melindungi dari overload, tambahkan ___"
+              },
+              {
+                "label": "Verifikasi",
+                "prompt": "Sebelum ship, tambahkan ___"
+              }
+            ],
+            "correctScene": [
+              "🧭 Routing null-safe",
+              "🛡️ Circuit breaker",
+              "🚦 Rate limiting di 500K",
+              "✅ Test konkurensi"
+            ]
+          }
+        ],
+        "rounds_planner": [
+          {
+            "vibe": "Perbaiki outage ETA",
+            "chaosOutputs": [
+              "🔧 Mengusulkan redesign seluruh user journey",
+              "🧪 Mengusulkan ganti framework testing di tengah insiden",
+              "🌈 Menambahkan fitur baru yang tak nyambung"
+            ],
+            "spec": [
+              {
+                "label": "Perbaikan Inti",
+                "prompt": "Perubahan inti adalah untuk ___"
+              },
+              {
+                "label": "Fallback",
+                "prompt": "Saat ETA tak tersedia, ___"
+              },
+              {
+                "label": "Pengaman",
+                "prompt": "Untuk menangkap overload lebih awal, tambahkan ___"
+              },
+              {
+                "label": "Verifikasi",
+                "prompt": "Sebelum rilis, tambahkan ___"
+              }
+            ],
+            "correctScene": [
+              "📱 Tampilan ETA diperbaiki",
+              "💬 Pesan fallback",
+              "🔔 Alert 80% kapasitas",
+              "✅ Test skenario beban"
+            ]
+          }
+        ],
+        "rounds_strategist": [
+          {
+            "vibe": "Pulihkan layanan untuk 500K pengguna",
+            "chaosOutputs": [
+              "🔧 Mengusulkan membangun ulang seluruh produk",
+              "🏢 Mengusulkan mengakuisisi kompetitor",
+              "🌈 Menambahkan taruhan strategis yang tak nyambung"
+            ],
+            "spec": [
+              {
+                "label": "Outcome Inti",
+                "prompt": "Outcome inti adalah untuk ___"
+              },
+              {
+                "label": "Ketahanan",
+                "prompt": "Untuk menangani peak berikutnya, tambahkan ___"
+              },
+              {
+                "label": "Pengaman",
+                "prompt": "Untuk bertindak sebelum rusak, tambahkan ___"
+              },
+              {
+                "label": "Verifikasi",
+                "prompt": "Sebelum go-live, ___"
+              }
+            ],
+            "correctScene": [
+              "🟢 ETA pulih",
+              "🌊 Penanganan overflow",
+              "🔔 Alert kapasitas dini",
+              "✅ Terverifikasi jam sibuk"
+            ]
+          }
+        ]
+      }
+    },
+    "defuse-bugs": {
+      "description": "Sensor menandai isu — perbaiki yang benar-benar isu",
+      "config_overrides": {
+        "title": "Sensor menandai 4 isu. Perbaiki yang benar-benar isu.",
+        "title_builder": "3 bug kritis. 1 kosmetik. Perbaiki yang beneran.",
+        "title_planner": "3 mengganggu pengguna. 1 kosmetik. Perbaiki yang penting.",
+        "title_strategist": "3 memukul revenue/kepercayaan. 1 kosmetik. Perbaiki yang penting.",
+        "learning_card": "🧠 Verifikasi Dual-Loop — Sensor menemukan bug-bug itu otomatis (inner loop). Kamu yang memutuskan fix-nya (outer loop). Kecepatan DAN kualitas.",
+        "tasks_builder": [
+          {
+            "id": "w1",
+            "type": "toggle",
+            "label": "Tambahkan null check di user.location",
+            "answer": true
+          },
+          {
+            "id": "w2",
+            "type": "toggle",
+            "label": "Perbaiki race condition di invalidasi cache",
+            "answer": true
+          },
+          {
+            "id": "w3",
+            "type": "toggle",
+            "label": "Naikkan timeout dari 300ms jadi 3000ms",
+            "answer": true
+          },
+          {
+            "id": "w4",
+            "type": "toggle",
+            "label": "Warnai ulang tombol dashboard #FF6B35 (kosmetik)",
+            "answer": false
+          }
+        ],
+        "tasks_planner": [
+          {
+            "id": "w1",
+            "type": "toggle",
+            "label": "Pengguna tanpa lokasi tak dapat ETA",
+            "answer": true
+          },
+          {
+            "id": "w2",
+            "type": "toggle",
+            "label": "10% pengguna dapat ETA basi/salah",
+            "answer": true
+          },
+          {
+            "id": "w3",
+            "type": "toggle",
+            "label": "Request lambat di-drop, bukan di-queue",
+            "answer": true
+          },
+          {
+            "id": "w4",
+            "type": "toggle",
+            "label": "Tombol laporan sedikit misalign (kosmetik)",
+            "answer": false
+          }
+        ],
+        "tasks_strategist": [
+          {
+            "id": "w1",
+            "type": "toggle",
+            "label": "Revenue: pengguna tanpa-ETA tak boleh booking",
+            "answer": true
+          },
+          {
+            "id": "w2",
+            "type": "toggle",
+            "label": "Kepercayaan: 10% perjalanan dapat ETA salah",
+            "answer": true
+          },
+          {
+            "id": "w3",
+            "type": "toggle",
+            "label": "Churn: pengguna jam sibuk di-drop",
+            "answer": true
+          },
+          {
+            "id": "w4",
+            "type": "toggle",
+            "label": "Ukuran font laporan internal (kosmetik)",
+            "answer": false
+          }
+        ]
+      }
+    },
+    "wordlock-ship": {
+      "description": "Human gate",
+      "config_overrides": {
+        "title": "Sensor lulus. Reviewer menyetujui. Keputusan akhir kau:",
+        "title_builder": "Kode terverifikasi. Test hijau. Satu kata untuk deploy fix ini.",
+        "title_planner": "Semua acceptance criteria terpenuhi. Gate rilis-nya KAMU.",
+        "title_strategist": "Risiko dinilai. Kualitas dikonfirmasi. Apa keputusan kau?"
+      }
+    },
+    "match-learn": {
+      "description": "Ajarkan sistem: cocokkan setiap keputusan dengan aturannya",
+      "config_overrides": {
+        "title": "Ajarkan sistem: cocokkan setiap keputusan dengan aturannya",
+        "learning_card": "🧠 Learning Loop — Kamu baru saja mengajarkan sistem aturan untuk lain kali. Setiap Bolt bikin yang berikutnya lebih pintar. Ajarkan sekali, jangan pernah jelaskan ulang.",
+        "pairs": [
+          [
+            "Scope fokus (bukan redesign penuh)",
+            "Aturan: scope bug routing ke level-service"
+          ],
+          [
+            "Memilih hanya konteks yang relevan",
+            "Aturan: sertakan hanya input terkait crash"
+          ],
+          [
+            "Menolak scope creep di spec",
+            "Aturan: tandai item di luar scope terdefinisi"
+          ],
+          [
+            "Perbaiki isu nyata, abaikan kosmetik",
+            "Aturan: prioritaskan fungsional di atas kosmetik"
+          ]
+        ]
+      }
+    },
+    "wordlock-adapt": {
+      "description": "Command terakhir",
+      "config_overrides": {
+        "title": "Prinsip inti AIDLC: _____ terhadap masalah.",
+        "title_builder": "Apa yang AIDLC lakukan yang proses kaku tak? Ia _____ terhadap masalah.",
+        "title_planner": "AIDLC menyesuaikan ukuran proses. Satu kata: ia _____ terhadap tantangan.",
+        "title_strategist": "Berbeda dari pendekatan fixed, AIDLC _____ workflow-nya ke situasi.",
+        "learning_card": "🧠 Prinsip Inti — AIDLC BERADAPTASI. Ia menyesuaikan lebar, dalam, dan kecepatan workflow untuk mencocokkan masalah. Perbaikan kecil = proses kecil. Fitur kompleks = ketegasan penuh. Kamu baru saja mengalami pengembangan adaptif. Bawa pulang."
+      }
+    }
+  },
+  "title": "Buka Jalan",
+  "description": "Kesesakan teruk KL baru je crash app ride-hailing kau. Ship the fix sebelum jam sibuk habis. Temui express lane berkuasa AI — atau navigate setiap tikungan sendiri.",
+  "start_button": "Buka Jalan!",
+  "end_title": "Sesak Terurai"
+}
