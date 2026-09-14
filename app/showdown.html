@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
+<title>Showdown — re:Solve</title>
+
+<!-- index.css ships the CSS variables, fonts and the puzzle-component styles
+     (kpdlk / wordlk / pillk / wglk …). showdown.css layers the dark game-shell
+     theme + screen-flow chrome on top, matching puzzle-test-showdown.html. -->
+<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="showdown.css">
+</head>
+<body>
+<div class="sd-app" id="sd-app">
+
+  <!-- ══════════════════ SCREEN 1 · JOIN ══════════════════ -->
+  <section class="sd-screen" id="screen-join" aria-label="Join session">
+    <div class="sd-card sd-join-card">
+      <div class="sd-logo">⚔️</div>
+      <h1 class="sd-title">Showdown</h1>
+      <p class="sd-tagline">Quiz battle · 3–5 players · fastest correct wins</p>
+
+      <form id="join-form" class="sd-form" novalidate>
+        <label class="sd-label" for="join-name">Your name</label>
+        <input class="sd-input" id="join-name" type="text" autocomplete="off"
+               maxlength="20" placeholder="e.g. Alex" required>
+
+        <label class="sd-label" for="join-code">Session code</label>
+        <input class="sd-input sd-input--code" id="join-code" type="text"
+               autocomplete="off" maxlength="6" placeholder="6-char code"
+               inputmode="latin" required>
+
+        <button class="sd-btn sd-btn--primary" id="join-btn" type="submit">Join Session</button>
+        <div class="sd-error-msg" id="join-error" role="alert"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ══════════════════ SCREEN 2 · LOBBY ══════════════════ -->
+  <section class="sd-screen" id="screen-lobby" aria-label="Lobby" hidden>
+    <div class="sd-card">
+      <div class="sd-code-banner">
+        <span class="sd-code-label">Session code</span>
+        <span class="sd-code-value" id="lobby-code">------</span>
+        <span class="sd-code-hint">Share this so others can join</span>
+      </div>
+
+      <div class="sd-lobby-status" id="lobby-status">Waiting for players…</div>
+
+      <ul class="sd-player-list" id="lobby-players"></ul>
+
+      <button class="sd-btn sd-btn--primary" id="ready-btn" type="button">I'm Ready</button>
+      <p class="sd-hint" id="lobby-hint">The battle begins when everyone is ready (min 3 players).</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════ SCREEN 3 · VOTE ══════════════════ -->
+  <section class="sd-screen" id="screen-vote" aria-label="Vote on category" hidden>
+    <div class="sd-card">
+      <div class="sd-vote-head">
+        <h2 class="sd-subtitle">Vote a category</h2>
+        <div class="sd-timer" id="vote-timer" aria-live="polite" aria-label="Time remaining to vote">
+          <svg class="sd-timer-ring" viewBox="0 0 48 48" aria-hidden="true">
+            <circle class="sd-timer-ring-bg" cx="24" cy="24" r="21"></circle>
+            <circle class="sd-timer-ring-fg" cx="24" cy="24" r="21"></circle>
+          </svg>
+          <span class="sd-timer-num" id="vote-timer-num">30</span>
+        </div>
+      </div>
+      <p class="sd-hint">Tap one. Highest votes wins — ties broken randomly.</p>
+
+      <div class="sd-cat-grid" id="vote-grid"></div>
+
+      <div class="sd-vote-empty" id="vote-empty" hidden>
+        No categories available right now. Please wait for the host.
+      </div>
+    </div>
+
+    <!-- Winning-category reveal overlay -->
+    <div class="sd-reveal" id="vote-reveal" hidden>
+      <div class="sd-reveal-inner">
+        <div class="sd-reveal-label">Winning category</div>
+        <div class="sd-reveal-icon" id="reveal-icon">🤖</div>
+        <div class="sd-reveal-name" id="reveal-name">Agentic AI</div>
+        <div class="sd-reveal-go">Get ready…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ SCREEN 4 · PLAY ══════════════════ -->
+  <section class="sd-screen sd-screen--play" id="screen-play" aria-label="Play" hidden>
+    <header class="sd-play-bar">
+      <div class="sd-progress">
+        <span id="play-progress-text">Puzzle 1 of 5</span>
+        <div class="sd-progress-track"><div class="sd-progress-fill" id="play-progress-fill"></div></div>
+      </div>
+      <div class="sd-play-stats">
+        <span class="sd-stat"><span class="sd-stat-label">Time</span><span class="sd-stat-val" id="play-timer">00:00</span></span>
+        <span class="sd-stat"><span class="sd-stat-label">Penalties</span><span class="sd-stat-val sd-stat-val--warn" id="play-penalties">0</span></span>
+      </div>
+    </header>
+
+    <!-- Live opponent progress (populated by polling; hidden until data arrives) -->
+    <div class="sd-progress-panel" id="play-progress-panel" role="status" aria-live="polite" aria-label="Other players' progress" hidden></div>
+
+    <div class="sd-puzzle-wrap">
+      <div class="sd-question" id="play-question"></div>
+      <div class="sd-puzzle-mount" id="play-mount"></div>
+      <div class="sd-play-log" id="play-log" aria-live="polite"></div>
+    </div>
+
+    <div class="sd-solved-flash" id="play-solved-flash">🔓 Solved!</div>
+  </section>
+
+  <!-- ══════════════════ SCREEN 5 · RESULTS ══════════════════ -->
+  <section class="sd-screen" id="screen-results" aria-label="Results" hidden>
+    <!-- CSS-only confetti; pieces injected on final results for the winner -->
+    <div class="sd-confetti" id="sd-confetti" aria-hidden="true"></div>
+
+    <div class="sd-card">
+      <div class="sd-results-crown" id="results-crown">🏆</div>
+      <h2 class="sd-subtitle sd-subtitle--center" id="results-headline">Results</h2>
+
+      <!-- Current player's score breakdown -->
+      <div class="sd-your-results" id="results-yours" hidden>
+        <span class="sd-your-results-label">Your Results</span>
+        <span class="sd-your-results-line" id="results-yours-line">—</span>
+        <span class="sd-your-results-stars" id="results-yours-stars" aria-label="Star rating"></span>
+      </div>
+
+      <ol class="sd-leaderboard" id="results-board"></ol>
+      <div class="sd-results-status" id="results-status"></div>
+
+      <div class="sd-results-actions">
+        <button class="sd-btn sd-btn--primary" id="results-share" type="button">📋 Share result</button>
+        <button class="sd-btn sd-btn--ghost" id="results-again" type="button">Play again</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Transient "someone finished!" toasts stack here -->
+<div class="sd-toast-host" id="sd-toast-host" aria-live="polite" aria-atomic="false"></div>
+
+<!-- The 5 Showdown quiz-lock puzzle components (global classes) -->
+<script src="puzzle/keypad-lock.js"></script>
+<script src="puzzle/word-lock.js"></script>
+<script src="puzzle/pillar-lock.js"></script>
+<script src="puzzle/spelling-lock.js"></script>
+<script src="puzzle/wager-lock.js"></script>
+
+<!-- Game flow + UI logic -->
+<script src="showdown.js" charset="utf-8"></script>
+</body>
+</html>

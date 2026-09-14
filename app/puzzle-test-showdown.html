@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Showdown Mode — Puzzle Tests</title>
+
+<!-- index.css is loaded per convention (CSS variables / fonts). It ships a light
+     "Mission Dossier" palette, so the dark :root below intentionally overrides it
+     to match the dark theme the puzzle components are designed for. -->
+<link rel="stylesheet" href="index.css">
+<style>
+/* Dark-theme override (same palette the other puzzle-test-*.html pages use) */
+:root{--bg:#0a0e17;--surface:#141b2d;--border:#1e2a45;--text:#e0e6f0;--muted:#7a8ba8;--accent:#3b82f6;--green:#22c55e;--red:#ef4444;--yellow:#eab308}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow-y:auto}
+body{display:flex;flex-direction:column;align-items:center;padding:24px 16px 64px;gap:20px}
+
+h1{font-size:18px;letter-spacing:1px;text-align:center}
+h1 .sub{display:block;font-size:12px;color:var(--muted);font-weight:400;text-transform:uppercase;letter-spacing:2px;margin-top:6px}
+
+/* ── Tab bar ─────────────────────────────── */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%;max-width:520px;position:relative;z-index:100}
+.tab{padding:9px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.tab:hover{border-color:var(--accent)}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ── Panel ───────────────────────────────── */
+.panel{display:none;width:100%;max-width:460px;flex-direction:column;gap:14px;position:relative;z-index:1;overflow:hidden}
+.panel.active{display:flex}
+
+.q-head{padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px}
+.q-head .q-kind{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px}
+.q-head .q-text{font-size:15px;font-weight:600;line-height:1.5}
+
+.mount{min-height:60px}
+
+/* ── Status row ──────────────────────────── */
+.status{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.penalty{font-size:13px;color:var(--muted)}
+.penalty strong{color:var(--red);font-size:16px}
+.solved{font-size:13px;font-weight:700;color:var(--green);opacity:0;transition:opacity .3s;letter-spacing:1px}
+.solved.on{opacity:1}
+.reset-btn{padding:8px 18px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.reset-btn:hover{border-color:var(--accent)}
+.reset-btn:active{transform:scale(.96)}
+
+/* ── Config preview ──────────────────────── */
+details{width:100%;border:1px solid var(--border);border-radius:8px;background:var(--surface);overflow:hidden}
+summary{cursor:pointer;padding:10px 14px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);user-select:none}
+details pre{margin:0;padding:0 14px 14px;font-family:ui-monospace,'SF Mono',Consolas,monospace;font-size:12px;color:var(--text);white-space:pre-wrap;word-break:break-word;line-height:1.5}
+.log{font-size:11px;color:var(--muted);min-height:16px;text-align:center;font-family:ui-monospace,monospace}
+</style>
+</head>
+<body>
+  <h1>⚔️ Showdown Mode
+    <span class="sub">5 Quiz-Lock Puzzle Types</span>
+  </h1>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div id="panels"></div>
+
+  <!-- All 5 Showdown puzzle scripts -->
+  <script src="puzzle/keypad-lock.js"></script>
+  <script src="puzzle/word-lock.js"></script>
+  <script src="puzzle/pillar-lock.js"></script>
+  <script src="puzzle/spelling-lock.js"></script>
+  <script src="puzzle/wager-lock.js"></script>
+
+  <script>
+  /*
+   * Each entry mirrors one puzzle in docs/quiz-mode-puzzle-config-example.json.
+   * `config` is the exact `config` block the backend delivers per puzzle.
+   * `init(mount, hooks)` constructs the component, wiring:
+   *    hooks.onWrong(msg)  -> increments the on-screen penalty count
+   *    hooks.onSolved()    -> lights the SOLVED indicator
+   */
+  const PUZZLES = [
+    {
+      key: 'keypad',
+      tab: '1 · Keypad',
+      kind: 'keypad-lock',
+      question: 'In what year was Amazon Q Developer first announced?',
+      config: {
+        answer: '2025',
+        falseOutputs: ['Access denied. That vault belongs to a different era.']
+      },
+      init(mount, hooks) {
+        return new KeypadLock(mount, {
+          answer: this.config.answer,
+          falseOutputs: this.config.falseOutputs,
+          onSubmit: () => hooks.onSolved(),
+          onWrong: (msg) => hooks.onWrong(msg)
+        });
+      }
+    },
+    {
+      key: 'word',
+      tab: '2 · Word',
+      kind: 'word-lock',
+      question: "What 7-letter word means 'a sudden change of course in thought or action'?",
+      config: {
+        answer: 'TANGENT'
+      },
+      init(mount, hooks) {
+        return new WordLock(mount, {
+          answer: this.config.answer,
+          onSubmit: (word, correct) => {
+            if (correct) hooks.onSolved();
+            else hooks.onWrong('Wrong word: ' + word);
+          }
+        });
+      }
+    },
+    {
+      key: 'pillar',
+      tab: '3 · Pillar (T/F)',
+      kind: 'pillar-lock',
+      question: 'Sort each statement into True or False.',
+      config: {
+        pillars: ['True', 'False'],
+        statements: [
+          { text: 'Amazon S3 provides virtually unlimited storage capacity.', answer: 'True' },
+          { text: 'AWS Lambda functions can run for a maximum of 5 minutes.', answer: 'False' },
+          { text: 'Amazon DynamoDB is a relational database service.', answer: 'False' },
+          { text: 'Amazon CloudFront is a content delivery network (CDN).', answer: 'True' }
+        ]
+      },
+      init(mount, hooks) {
+        return new PillarLock(mount, {
+          pillars: this.config.pillars,
+          statements: this.config.statements,
+          onSubmit: () => hooks.onSolved(),
+          // pillar-lock self-resets on a wrong pass; onWrong is wired for
+          // forward-compatibility with the engine's penalty helper.
+          onWrong: (msg) => hooks.onWrong(msg)
+        });
+      }
+    },
+    {
+      key: 'spelling',
+      tab: '4 · Spelling',
+      kind: 'spelling-lock',
+      question: 'Unscramble each AWS service name.',
+      config: {
+        title: 'SPELL IT OUT',
+        pool: ['DYNAMODB', 'CLOUDFRONT', 'LAMBDA'],
+        pickCount: 3,
+        sequential: true,
+        scrambleLetters: true
+      },
+      init(mount, hooks) {
+        return new SpellingLock(mount, {
+          title: this.config.title,
+          pool: this.config.pool,
+          pickCount: this.config.pickCount,
+          sequential: this.config.sequential,
+          scrambleLetters: this.config.scrambleLetters,
+          onSubmit: () => hooks.onSolved(),
+          onWrong: (msg) => hooks.onWrong(msg)
+        });
+      }
+    },
+    {
+      key: 'wager',
+      tab: '5 · Wager',
+      kind: 'wager-lock',
+      question: 'Reach the target score. Answer each question to bank points.',
+      config: {
+        target: 6,
+        questions: [
+          { question: 'Which attack floods a server with traffic to take it offline?', options: ['DDoS', 'SQLi', 'XSS', 'CSRF'], answer: 'DDoS' },
+          { question: "What does '2FA' stand for?", options: ['Two-Factor Authentication', 'Two-File Access', 'Firewall Auth', 'Full Feature Access'], answer: 'Two-Factor Authentication' },
+          { question: 'Which AWS service provides managed DDoS protection?', options: ['Shield', 'WAF', 'GuardDuty', 'Inspector'], answer: 'Shield' },
+          { question: 'What does IAM stand for?', options: ['Identity and Access Management', 'Internet Access Monitor', 'Internal Auth Module', 'Integrated App Manager'], answer: 'Identity and Access Management' },
+          { question: 'Which encryption standard does AWS KMS use?', options: ['AES-256', 'RSA-128', 'MD5', 'SHA-1'], answer: 'AES-256' },
+          { question: 'What is the principle of granting minimum necessary permissions called?', options: ['Least privilege', 'Zero trust', 'Defense in depth', 'Separation of duties'], answer: 'Least privilege' }
+        ],
+        stakes: [
+          { label: 'Confident', wager: 1, penalty: 0, color: '#eab308', showOptions: 4 }
+        ],
+        revealAnswerOnWrong: false
+      },
+      init(mount, hooks) {
+        return new WagerLock(mount, {
+          target: this.config.target,
+          questions: this.config.questions,
+          stakes: this.config.stakes,
+          revealAnswerOnWrong: this.config.revealAnswerOnWrong,
+          onSubmit: () => hooks.onSolved(),
+          onWrong: (msg) => hooks.onWrong(msg)
+        });
+      }
+    }
+  ];
+
+  const tabsEl = document.getElementById('tabs');
+  const panelsEl = document.getElementById('panels');
+  const state = {}; // key -> { penalty, els, def }
+
+  function buildPanel(def) {
+    const panel = document.createElement('div');
+    panel.className = 'panel';
+    panel.dataset.key = def.key;
+
+    panel.innerHTML = `
+      <div class="q-head">
+        <div class="q-kind">${def.kind}</div>
+        <div class="q-text">${def.question}</div>
+      </div>
+      <div class="mount"></div>
+      <div class="log"></div>
+      <div class="status">
+        <span class="penalty">Penalties: <strong>0</strong></span>
+        <span class="solved">✅ SOLVED</span>
+        <button class="reset-btn" type="button">↻ Reset</button>
+      </div>
+      <details>
+        <summary>Showdown config (as delivered by backend)</summary>
+        <pre>${escapeHtml(JSON.stringify(def.config, null, 2))}</pre>
+      </details>`;
+
+    const els = {
+      mount: panel.querySelector('.mount'),
+      log: panel.querySelector('.log'),
+      penalty: panel.querySelector('.penalty strong'),
+      solved: panel.querySelector('.solved'),
+      reset: panel.querySelector('.reset-btn')
+    };
+    state[def.key] = { penalty: 0, els, def, instance: null };
+
+    els.reset.addEventListener('click', () => mountPuzzle(def.key));
+    panelsEl.appendChild(panel);
+    return panel;
+  }
+
+  function mountPuzzle(key) {
+    const s = state[key];
+    s.penalty = 0;
+    s.els.penalty.textContent = '0';
+    s.els.solved.classList.remove('on');
+    s.els.log.textContent = '';
+    s.els.mount.innerHTML = '';
+
+    const hooks = {
+      onWrong(msg) {
+        s.penalty++;
+        s.els.penalty.textContent = String(s.penalty);
+        s.els.log.textContent = msg ? '⚠ ' + msg : '⚠ wrong answer';
+      },
+      onSolved() {
+        s.els.solved.classList.add('on');
+        s.els.log.textContent = '🔓 onSubmit fired — puzzle solved';
+      }
+    };
+    s.instance = s.def.init(s.els.mount, hooks);
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  }
+
+  function selectTab(key) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.key === key));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.dataset.key === key));
+  }
+
+  // Build tabs + panels
+  PUZZLES.forEach((def, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab';
+    btn.type = 'button';
+    btn.dataset.key = def.key;
+    btn.textContent = def.tab;
+    btn.addEventListener('click', () => selectTab(def.key));
+    tabsEl.appendChild(btn);
+
+    buildPanel(def);
+    mountPuzzle(def.key);
+    if (i === 0) selectTab(def.key);
+  });
+  </script>
+</body>
+</html>

@@ -23,6 +23,7 @@ class PillarLock {
     this.pillars = opts.pillars || [];
     this.statements = opts.statements || [];
     this.onSubmit = opts.onSubmit || (() => {});
+    this.onWrong = opts.onWrong || null;
     this.current = 0;
     this.answers = [];
     this._render();
@@ -100,6 +101,7 @@ class PillarLock {
     } else {
       this.statusEl.textContent = `❌ ${score}/${this.statements.length} correct — try again`;
       this.cardEl.textContent = 'Review and retry';
+      if (this.onWrong) this.onWrong('Wrong — some statements are incorrect. Try again.');
       setTimeout(() => this.reset(), 2000);
     }
   }

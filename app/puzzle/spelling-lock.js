@@ -4,6 +4,7 @@ class SpellingLock {
     this.cfg = opts.config || opts;
     this.onSubmit = opts.onSubmit;
     this.onWrong = opts.onWrong;
+    this.title = opts.config?.title || opts.title || "TODAY'S SPECIALS";
     if (this.cfg.pool) {
       const pool = [...this.cfg.pool];
       const pick = this.cfg.pickCount || 3;
@@ -65,7 +66,7 @@ class SpellingLock {
     }).join('');
     const poolHtml = this.pool.map(p => `<button class="splk-letter${usedSet.has(p.i) ? ' used' : ''}" data-idx="${p.i}" data-ch="${p.ch}">${p.ch}</button>`).join('');
     this.el.innerHTML = `<div class="splk-wrap"><div class="splk-board">
-      <div class="splk-count">TODAY'S SPECIALS (${this.current + 1}/${this.words.length})</div>
+      <div class="splk-count">${this.title} (${this.current + 1}/${this.words.length})</div>
       <div class="splk-slots">${slotsHtml}</div>
       <div class="splk-pool">${poolHtml}</div>
       <div class="splk-actions"><button class="splk-action" id="splk-undo">↩ Undo</button><button class="splk-action" id="splk-clear">✕ Clear</button></div>
