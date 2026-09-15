@@ -1,0 +1,125 @@
+{
+  "voices": {
+    "narrator": {
+      "voice_id": "Joanna",
+      "role": "Story narrator — warm, urgent"
+    },
+    "vp": {
+      "voice_id": "Matthew",
+      "role": "VP of Engineering — steady under pressure"
+    },
+    "devops": {
+      "voice_id": "Brian",
+      "role": "AWS DevOps Agent — operational, precise"
+    },
+    "security": {
+      "voice_id": "Kendra",
+      "role": "AWS Security Agent (Continuum) — measured"
+    },
+    "finops": {
+      "voice_id": "Ivy",
+      "role": "AWS FinOps Agent — analytical, calm"
+    }
+  },
+  "intro": {
+    "segments": [
+      {
+        "voice": "narrator",
+        "text": "APJC Tech Summit, Conrad Singapore Orchard. Between sessions, your phone buzzes.",
+        "pause_after_ms": 800
+      },
+      {
+        "voice": "vp",
+        "text": "It's the VP of Engineering at a customer you're working with. We're under attack. A leaked credential is running fraudulent Amazon Bedrock inference at scale, and the bill is climbing by the minute.",
+        "pause_after_ms": 1000,
+        "emphasis": "strong"
+      },
+      {
+        "voice": "narrator",
+        "text": "You try to loop in a colleague — everyone's tied up in sessions across the summit. It's you.",
+        "pause_after_ms": 800
+      },
+      {
+        "voice": "vp",
+        "text": "I've got three AWS frontier agents already working it inside our environment. I don't need you on the keyboard — I need your judgment. Join the war room. Discover it, fix it, prevent it."
+      }
+    ],
+    "audio": null
+  },
+  "mid_event": {
+    "trigger_time_remaining": 420,
+    "segments": [
+      {
+        "voice": "narrator",
+        "text": "Two consoles down, one to go. Each agent found a piece — none of them sees the whole picture.",
+        "pause_after_ms": 700
+      },
+      {
+        "voice": "vp",
+        "text": "That's what you're here for. Put it together."
+      }
+    ],
+    "audio": null
+  },
+  "ending": {
+    "success": {
+      "segments": [
+        {
+          "voice": "devops",
+          "text": "Prevention spec approved — tighter IAM and an SCP so a leaked key can't call Bedrock at scale. With the key deactivated, the retry storm is stopping and spend is returning to baseline.",
+          "pause_after_ms": 1000,
+          "emphasis": "strong"
+        },
+        {
+          "voice": "security",
+          "text": "Fix PR merged — the hardcoded secret my code review found is gone; credentials now load from an IAM role and Secrets Manager. The exposure is closed.",
+          "pause_after_ms": 900
+        },
+        {
+          "voice": "finops",
+          "text": "Cost anomaly resolved. Root cause and owner reported. Least-privilege and an SCP will stop a leaked key from scaling Bedrock again.",
+          "pause_after_ms": 900
+        },
+        {
+          "voice": "narrator",
+          "text": "You didn't fix this alone — and neither could any single agent. Frontier managed agents handled the depth in each discipline. It took your human judgment to guide them and connect the dots across all three. That cross-discipline read is exactly what frontier agents still need from a human.",
+          "pause_after_ms": 700
+        }
+      ],
+      "audio": null,
+      "image": "assets/ending-success.png"
+    },
+    "failure": {
+      "segments": [
+        {
+          "voice": "vp",
+          "text": "The clock beat us this round — the spend kept climbing before we locked in the resolution.",
+          "pause_after_ms": 1000,
+          "emphasis": "strong"
+        },
+        {
+          "voice": "narrator",
+          "text": "But you saw how it works: DevOps traces and acts on approval, Security's code review finds and fixes the secret, FinOps investigates and reports — and a human connects all three. Next walk-up, you'll be faster.",
+          "pause_after_ms": 700
+        }
+      ],
+      "audio": null
+    }
+  },
+  "failure": {
+    "segments": [
+      {
+        "voice": "vp",
+        "text": "The clock beat us this round — the spend kept climbing before we locked in the resolution.",
+        "pause_after_ms": 1000,
+        "emphasis": "strong"
+      },
+      {
+        "voice": "narrator",
+        "text": "But you saw how it works: DevOps traces and acts on approval, Security's code review finds and fixes the secret, FinOps investigates and reports — and a human connects all three. Next walk-up, you'll be faster.",
+        "pause_after_ms": 700
+      }
+    ],
+    "audio": null
+  }
+}

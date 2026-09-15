@@ -1,0 +1,642 @@
+{
+  "cards": [
+    {
+      "id": 100,
+      "type": "location",
+      "color": "green",
+      "title": "The Gridlock",
+      "description": "Inside a Grab car on Jalan Tun Razak. Myvi cutting lanes, motorcycles weaving. Your phone explodes — GoLancar's routing engine crashed. 500K users stranded. The driver turns: 'Sesak gila, boss. Boleh lama ni... unless you tau shortcut.'",
+      "image": "assets/the-gridlock.png",
+      "image_prompt": "Interior of a Grab car stuck in a Kuala Lumpur traffic jam on Jalan Tun Razak, motorcycle and e-hailing motorcycles weaving between bumpers, a stressed developer holding a phone full of red alerts, warm sunset tones with neon accents, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 101, "label": "Check your phone" },
+        { "card_id": 102, "label": "Talk to the driver 🚗", "puzzle": "npc-pakdedi" },
+        { "card_id": 103, "label": "Open your laptop" },
+        { "card_id": 200, "label": "Head to the tollbooth", "requires_item": [103], "consumes_item": [103] }
+      ],
+      "visible_to": "all",
+      "room": "the-gridlock"
+    },
+    {
+      "id": 101,
+      "type": "lore",
+      "color": "purple",
+      "title": "Crash Alert",
+      "description": "CRITICAL: routing engine failed past 400K concurrent users. Every ETA is offline — for developers, a null pointer; for the business, 500K rides frozen at once.",
+      "image": "assets/card-crash-report.png",
+      "image_prompt": "A phone lock screen full of red CRITICAL alerts and a stack trace, urgent glow, single object on dark background",
+      "visible_to": "all",
+      "room": "the-gridlock"
+    },
+    {
+      "id": 102,
+      "type": "tool",
+      "color": "orange",
+      "title": "Pak Din (Grab Driver)",
+      "description": "Your driver, stuck in the same sesak and worried about his rating. Full of Kuala Lumpur wisdom — and a tip about a faster lane, if you can find the LRT card.",
+      "image_prompt": "A friendly middle-aged Malaysian ride-hailing driver turning from the front seat with a warm grin, car interior at dusk, single character portrait",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-gridlock"
+    },
+    {
+      "id": 103,
+      "type": "item",
+      "color": "red",
+      "title": "Laptop",
+      "description": "Your work laptop — repo cloned, editor open, incident channel buzzing. Everything you need to ship a fix, right here in the back seat. → You'll need this to access the toll system ahead.",
+      "image": "assets/card-laptop.png",
+      "image_prompt": "An open developer laptop covered in stickers showing a code editor and an incident channel, glowing screen, single object on dark background",
+      "visible_to": "all",
+      "room": "the-gridlock"
+    },
+
+    {
+      "id": 200,
+      "type": "location",
+      "color": "green",
+      "title": "Requirements Tollbooth",
+      "description": "A highway toll plaza. Digital signs: 'DEFINE YOUR FIX TO PROCEED.' Regular lanes are queued. Far left: a LRT-only lane, empty. A mamak vendor waves you over. A smaller sign glows above the fork: '💡 You can switch lanes anytime — nothing you've done is lost.'",
+      "image": "assets/requirements-tollbooth.png",
+      "image_prompt": "A highway toll plaza at dusk with digital lane signs reading DEFINE YOUR FIX, long queues in the regular lanes and an empty far-left LRT-only lane, a mamak coffee stall beside the barrier, warm sunset palette with neon, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 201, "label": "Read the crash report" },
+        { "card_id": 208, "label": "Read the lane-switch sign 💡" },
+        { "card_id": 202, "label": "Talk to Pak Ali ☕", "puzzle": "npc-pakbudi" },
+        { "card_id": 203, "label": "Standard toll lane", "puzzle": "wordlock-scope" },
+        { "card_id": 204, "label": "Look at the LRT lane", "requires_item": [250] },
+        { "card_id": 800, "label": "Visit the mamak" },
+        { "card_id": 300, "label": "Take the overpass", "requires_item": [203] },
+        { "card_id": 600, "label": "Enter the LRT lane", "requires_item": [203, 250], "consumes_item": [250] }
+      ],
+      "visible_to": "all",
+      "room": "requirements-tollbooth"
+    },
+    {
+      "id": 201,
+      "type": "lore",
+      "color": "purple",
+      "title": "Crash Report",
+      "description": "Impact is scoped to the routing service only — matching and ETAs depend on it; storage and payments are healthy. Fix the failure, add graceful degradation. Don't rebuild what isn't broken.",
+      "image_prompt": "A detailed incident report on a laptop screen with a service dependency diagram and the word SCOPED highlighted, single object on dark background",
+      "visible_to": "all",
+      "room": "requirements-tollbooth"
+    },
+    {
+      "id": 202,
+      "type": "tool",
+      "color": "orange",
+      "title": "Pak Ali (Mamak Vendor)",
+      "description": "Toll-plaza mamak vendor whose nephew swears by an AI assistant, Kiro. Show adaptive, focused thinking and he'll hand you a LRT pass to the express lane.",
+      "image_prompt": "A cheerful Malaysian mamak coffee vendor leaning over his stall beside a toll barrier, holding up a RapidKL LRT pass, warm evening light with neon, single character portrait",
+      "reveals": [250],
+      "visible_to": "all",
+      "room": "requirements-tollbooth"
+    },
+    {
+      "id": 203,
+      "type": "event",
+      "color": "yellow",
+      "title": "Fix Scope Defined",
+      "description": "You spell it out: S-C-O-P-E. The sign turns green — 'Routing fix only. No rewrites, no migrations.' The overpass on-ramp opens. The boundary of the work is set.",
+      "reveals": [207],
+      "visible_to": "all",
+      "room": "requirements-tollbooth"
+    },
+    {
+      "id": 204,
+      "type": "object",
+      "color": "blue",
+      "title": "The LRT Lane",
+      "description": "The express lane is open. Empty asphalt stretches ahead while everyone else crawls. A sign reads: 'AI NAVIGATOR ACTIVE — KIRO READY.'",
+      "image_prompt": "An empty RapidKL LRT express lane stretching ahead beside crawling traffic, an overhead sign reading AI NAVIGATOR ACTIVE, motion blur, single object on dark background",
+      "visible_to": "all",
+      "room": "requirements-tollbooth"
+    },
+    {
+      "id": 205,
+      "type": "object",
+      "color": "blue",
+      "title": "Exact Root Cause",
+      "description": "Cross-referencing the crash alert with the report pinpoints the line: an unguarded null when the routing pool saturates past 400K. Now you know exactly what to fix.",
+      "image_prompt": "A code diff highlighting a single null-dereference line with a red marker, single object on dark background",
+      "visible_to": "all",
+      "room": "requirements-tollbooth"
+    },
+    {
+      "id": 206,
+      "type": "event",
+      "color": "yellow",
+      "title": "AI Assistant Activated",
+      "description": "You load the LRT terminal on your laptop. Kiro, your AI assistant, boots up: 'Context received. I can propose a plan whenever you're ready.'",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "requirements-tollbooth"
+    },
+    {
+      "id": 250,
+      "type": "item",
+      "color": "red",
+      "title": "LRT Pass",
+      "description": "A RapidKL LRT pass from Pak Ali. It opens the Express Lane — the AI Navigator route where Kiro proposes and you decide. → Use this to unlock the AI Navigator express lane instead of designing everything by hand.",
+      "image": "assets/card-brt-pass.png",
+      "image_prompt": "A blue RapidKL LRT transit pass card with a bus logo and a magnetic stripe, single object on dark background",
+      "visible_to": "all",
+      "room": "requirements-tollbooth"
+    },
+    {
+      "id": 207,
+      "type": "item",
+      "color": "red",
+      "title": "Scope Document",
+      "description": "A clear one-page scope definition. → You'll need this to validate the AI's proposal.",
+      "image": "assets/scope-document.png",
+      "image_prompt": "A single-page scope document with a highlighted boundary box, single object on dark background",
+      "visible_to": "all",
+      "room": "requirements-tollbooth"
+    },
+    {
+      "id": 208,
+      "type": "lore",
+      "color": "purple",
+      "title": "Lane-Switch Sign",
+      "description": "💡 You can switch lanes anytime — nothing you've done is lost. Take the overpass and design by hand, or grab a LRT pass for the AI express lane. Both roads reach the same fix, and any work you've already done carries over. Pick the pace that fits; you're never locked in.",
+      "image_prompt": "A friendly illuminated highway gantry sign above a forking road reading YOU CAN SWITCH LANES ANYTIME, an arrow curving between a manual overpass and an express LRT lane, warm reassuring glow, single object on dark background",
+      "visible_to": "all",
+      "room": "requirements-tollbooth"
+    },
+    {
+      "id": 304,
+      "type": "item",
+      "color": "red",
+      "title": "Architecture Blueprint",
+      "description": "A fully hand-designed architecture. Thorough and complete. → Needed to trace the crash in the Log Jam ahead.",
+      "image": "assets/architecture-blueprint.png",
+      "image_prompt": "A rolled architecture blueprint with layered diagrams, single object on dark background",
+      "visible_to": "all",
+      "room": "architecture-overpass"
+    },
+    {
+      "id": 903,
+      "type": "item",
+      "color": "red",
+      "title": "Crash Timeline",
+      "description": "The full crash sequence, reconstructed by hand — deploy, spike, overload, failure, cascade. → Needed to start construction.",
+      "image": "assets/crash-timeline.png",
+      "image_prompt": "A reconstructed incident timeline with ordered event markers, single object on dark background",
+      "visible_to": "all",
+      "room": "the-log-jam"
+    },
+    {
+      "id": 606,
+      "type": "item",
+      "color": "red",
+      "title": "Context Brief",
+      "description": "AI-analyzed context summary — Kiro's read on the crash. → Present this to merge back onto the Construction Lane.",
+      "image": "assets/context-brief.png",
+      "image_prompt": "A concise AI-generated context brief with key facts highlighted, single object on dark background",
+      "visible_to": "all",
+      "room": "express-lane"
+    },
+    {
+      "id": 406,
+      "type": "item",
+      "color": "red",
+      "title": "Validated Spec",
+      "description": "Human-approved specification. The AI proposed, you validated. → Required for verification.",
+      "image": "assets/validated-spec.png",
+      "image_prompt": "An approved specification document with a green human-approval stamp, single object on dark background",
+      "visible_to": "all",
+      "room": "construction-lane"
+    },
+    {
+      "id": 407,
+      "type": "item",
+      "color": "red",
+      "title": "Triage Report",
+      "description": "Tasks sorted: AI handles, you decide, skip the rest. → Proves you understand the workflow.",
+      "image": "assets/triage-report.png",
+      "image_prompt": "A triage report with three labeled columns for AI, human, and skip, single object on dark background",
+      "visible_to": "all",
+      "room": "construction-lane"
+    },
+    {
+      "id": 504,
+      "type": "item",
+      "color": "red",
+      "title": "Quality Stamp",
+      "description": "Dual-loop verified. Sensors passed. Reviewer passed. YOU passed it. → Required to enter the Learning Loop.",
+      "image": "assets/quality-stamp.png",
+      "image_prompt": "A glowing green quality-approved stamp, single object on dark background",
+      "visible_to": "all",
+      "room": "verification-checkpoint"
+    },
+    {
+      "id": 1003,
+      "type": "item",
+      "color": "red",
+      "title": "Learning Rules",
+      "description": "Encoded rules for next time. The system just got smarter. → Deploy with confidence.",
+      "image": "assets/learning-rules.png",
+      "image_prompt": "A rule ledger card glowing with saved entries, single object on dark background",
+      "visible_to": "all",
+      "room": "the-learning-loop"
+    },
+
+    {
+      "id": 800,
+      "type": "location",
+      "color": "green",
+      "title": "The Mamak",
+      "description": "Pak Ali's roadside mamak. Stranded commuters swap stories over teh tarik and maggi. A whiteboard holds notes from developers who've been stuck here before.",
+      "image": "assets/the-mamak.png",
+      "image_prompt": "A cozy Malaysian roadside mamak food stall at dusk with commuters sharing teh tarik and maggi, a whiteboard covered in developer notes, a small TV, warm neon glow, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 801, "label": "Read the whiteboard" },
+        { "card_id": 802, "label": "Talk to another commuter 🧑", "puzzle": "npc-commuter" },
+        { "card_id": 803, "label": "Check the TV" }
+      ],
+      "visible_to": "all",
+      "room": "the-mamak"
+    },
+    {
+      "id": 801,
+      "type": "lore",
+      "color": "purple",
+      "title": "Mamak Whiteboard",
+      "description": "Teams using an AI assistant like Kiro report fix times dropping from days to hours. The recipe: right-sized process, parallel Bolts, and AI verification before the human gate.",
+      "image_prompt": "A mamak whiteboard covered in handwritten notes and arrows about faster fixes, single object on dark background",
+      "visible_to": "all",
+      "room": "the-mamak"
+    },
+    {
+      "id": 802,
+      "type": "tool",
+      "color": "orange",
+      "title": "Fellow Commuter",
+      "description": "A developer from another company, also stuck in the sesak. She used the AI Navigator on her last incident and is happy to share what it was like.",
+      "image_prompt": "A relaxed Malaysian developer sitting at a mamak table with a coffee and a laptop, gesturing as she tells a story, single character portrait",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-mamak"
+    },
+    {
+      "id": 803,
+      "type": "lore",
+      "color": "purple",
+      "title": "Mamak TV",
+      "description": "Local news: 'GoLancar outage strands commuters citywide.' The clock in the corner keeps ticking. Everyone in the mamak glances at you.",
+      "image_prompt": "A small mamak TV showing a breaking-news banner about a ride-hailing outage, single object on dark background",
+      "visible_to": "all",
+      "room": "the-mamak"
+    },
+
+    {
+      "id": 300,
+      "type": "location",
+      "color": "green",
+      "title": "Architecture Overpass",
+      "description": "A massive overpass. You design the full fix yourself — every component, every connection. Below, a LRT bus glides past. A passenger is already coding.",
+      "image": "assets/architecture-overpass.png",
+      "image_prompt": "A wide highway overpass at dusk with architecture blueprints pinned across concrete pillars, a developer studying them, a RapidKL bus gliding below with a passenger coding, warm and cool contrast, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 301, "label": "Study the blueprints", "puzzle": "blueprint-arch" },
+        { "card_id": 302, "label": "Watch the LRT bus" },
+        { "card_id": 303, "label": "Overpass exit ramp", "requires_item": [301] },
+        { "card_id": 600, "label": "Take the LRT on-ramp", "requires_item": [250], "consumes_item": [250] },
+        { "card_id": 900, "label": "Continue to the log jam", "requires_item": [304], "consumes_item": [304] }
+      ],
+      "visible_to": "all",
+      "room": "architecture-overpass"
+    },
+    {
+      "id": 301,
+      "type": "event",
+      "color": "yellow",
+      "title": "Architecture Designed",
+      "description": "You lay out the whole path by hand and check every connection. Solid work — it just took focus and time. The road forward opens.",
+      "reveals": [304],
+      "visible_to": "all",
+      "room": "architecture-overpass"
+    },
+    {
+      "id": 302,
+      "type": "lore",
+      "color": "purple",
+      "title": "The Bus Window",
+      "description": "Through the window — a developer with an AI assistant, Kiro, already past this stage. The AI drafts; the human points and approves. Only the parts that need human judgment are left to the human.",
+      "image_prompt": "A view through a bus window of a developer collaborating with a glowing AI assistant projecting architecture diagrams, single object on dark background",
+      "visible_to": "all",
+      "room": "architecture-overpass"
+    },
+    {
+      "id": 303,
+      "type": "event",
+      "color": "yellow",
+      "title": "Overpass Exit — LRT Pass",
+      "description": "A LRT stop sits at the bottom of the ramp, with a spare pass on the railing. It's never too late to try the express lane — nothing you've done is lost by switching.",
+      "reveals": [250],
+      "visible_to": "all",
+      "room": "architecture-overpass"
+    },
+
+    {
+      "id": 900,
+      "type": "location",
+      "color": "green",
+      "title": "The Log Jam",
+      "description": "Traffic completely stopped. To move forward, you trace exactly what went wrong — step by step, event by event. The crash logs are scattered across your screen like debris on the road.",
+      "image": "assets/the-log-jam.png",
+      "image_prompt": "A completely gridlocked Kuala Lumpur intersection at dusk with scattered glowing log fragments overlaid like debris, a developer piecing together a timeline, warm and cool contrast, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 901, "label": "Analyze the crash timeline", "puzzle": "timeline-crash" },
+        { "card_id": 902, "label": "Check timestamps" },
+        { "card_id": 400, "label": "Continue to construction", "requires_item": [903], "consumes_item": [903] }
+      ],
+      "visible_to": "all",
+      "room": "the-log-jam"
+    },
+    {
+      "id": 901,
+      "type": "event",
+      "color": "yellow",
+      "title": "Timeline Traced",
+      "description": "Event by event, the crash makes sense: deploy, spike, overload, failure, cascade. Thorough work — done entirely by hand.",
+      "reveals": [903],
+      "visible_to": "all",
+      "room": "the-log-jam"
+    },
+    {
+      "id": 902,
+      "type": "lore",
+      "color": "purple",
+      "title": "Manual Tracing",
+      "description": "Kiro does this analysis in seconds by scanning the workspace. Doing it by hand is thorough — but time-consuming.",
+      "image_prompt": "A screen comparing a slow manual log trace with an instant AI workspace scan, single object on dark background",
+      "visible_to": "all",
+      "room": "the-log-jam"
+    },
+
+    {
+      "id": 600,
+      "type": "location",
+      "color": "green",
+      "title": "The Express Lane",
+      "description": "The RapidKL LRT lane — empty, smooth, fast. Kiro, your AI assistant, lights up: 'Context loaded. Plan ready. Approve or adjust?' This is AI proposing. You deciding.",
+      "image": "assets/express-lane.png",
+      "image_prompt": "The interior of a RapidKL LRT bus gliding down an empty express lane while traffic crawls alongside, a laptop showing a glowing AI assistant, Kiro, with a plan, fast motion streaks, warm and cool contrast, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 601, "label": "Review AI's proposal", "puzzle": "ctx-aidlc" },
+        { "card_id": 602, "label": "Start the Bolt", "puzzle": "wordlock-bolts", "requires_item": [601] },
+        { "card_id": 603, "label": "Watch the parallel build" },
+        { "card_id": 604, "label": "Read the audit trail" },
+        { "card_id": 400, "label": "Exit to construction", "requires_item": [602, 606], "consumes_item": [606] }
+      ],
+      "visible_to": "all",
+      "room": "express-lane"
+    },
+    {
+      "id": 601,
+      "type": "event",
+      "color": "yellow",
+      "title": "Context Provided",
+      "description": "You feed Kiro exactly what the crash needs and hold back the noise. The proposal snaps into focus. Right context in, right plan out.",
+      "reveals": [606],
+      "visible_to": "all",
+      "room": "express-lane"
+    },
+    {
+      "id": 602,
+      "type": "event",
+      "color": "yellow",
+      "title": "Bolt Plan Approved",
+      "description": "You approve the plan: B-O-L-T-S. Three independent units dispatched in parallel. Hours, not weeks, because they run concurrently. The LRT drops you at the Construction Lane.",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "express-lane"
+    },
+    {
+      "id": 603,
+      "type": "lore",
+      "color": "purple",
+      "title": "Parallel Bolts",
+      "description": "A bolt is an independent unit of work that Kiro executes in parallel — 3 bolts running simultaneously means 3 hours, not 9. Here, three Bolts run at once: Cache fix (2h), Route patch (3h), Load test (1h). Because they run concurrently, elapsed time is 3 hours — the longest Bolt — not the 6 you'd wait for running them one after another.",
+      "image_prompt": "A dashboard showing three parallel build lanes labeled Bolt 1, 2, 3 each with an hours-based progress bar, single object on dark background",
+      "visible_to": "all",
+      "room": "express-lane"
+    },
+    {
+      "id": 604,
+      "type": "lore",
+      "color": "purple",
+      "title": "The Audit Trail",
+      "description": "Every proposal logged. Every approval timestamped. Kiro moves fast, but nothing it does is invisible and nothing proceeds without a recorded human 'yes.'",
+      "image_prompt": "An audit-trail ledger listing AI proposals and timestamped human approvals, secure aesthetic, single object on dark background",
+      "visible_to": "all",
+      "room": "express-lane"
+    },
+
+    {
+      "id": 400,
+      "type": "location",
+      "color": "green",
+      "title": "Construction Lane",
+      "description": "A construction zone. Terminal ready. Screen shows: 'SPEC READY — VALIDATE.' Whether you designed it yourself or the AI proposed it — you're the final judge.",
+      "image": "assets/construction-lane.png",
+      "image_prompt": "A roadside construction zone rebuilding a Kuala Lumpur highway, a makeshift coding terminal between orange traffic cones, a screen reading SPEC READY VALIDATE, cranes and scaffolding, warm dusk lighting, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 403, "label": "Talk to Kiro 🤖", "puzzle": "npc-rina" },
+        { "card_id": 402, "label": "Read the test plan" },
+        { "card_id": 405, "label": "Triage the work", "puzzle": "triage-lanes" },
+        { "card_id": 401, "label": "Review the spec", "puzzle": "spec-validate", "requires_item": [207], "consumes_item": [207] },
+        { "card_id": 500, "label": "Proceed to verification", "requires_item": [406, 407], "consumes_item": [406, 407] }
+      ],
+      "visible_to": "all",
+      "room": "construction-lane"
+    },
+    {
+      "id": 401,
+      "type": "event",
+      "color": "yellow",
+      "title": "Spec Validated",
+      "description": "You approve the good items and reject the scope creep. What remains is exactly right. You were the gate, and you held the line.",
+      "reveals": [406],
+      "visible_to": "all",
+      "room": "construction-lane"
+    },
+    {
+      "id": 405,
+      "type": "event",
+      "color": "yellow",
+      "title": "Work Triaged",
+      "description": "You sorted the work: the AI takes the routine, you keep the judgment calls, and the noise gets skipped. Right-sized effort for a scoped fix.",
+      "reveals": [407],
+      "visible_to": "all",
+      "room": "construction-lane"
+    },
+    {
+      "id": 402,
+      "type": "lore",
+      "color": "purple",
+      "title": "The Test Plan",
+      "description": "Automated sensors will verify regressions and errors. But approving the logic? That's you. Speed comes from the machine; judgment stays human.",
+      "image_prompt": "A test plan on a monitor with automated sensor checks and a human approval checkbox, single object on dark background",
+      "visible_to": "all",
+      "room": "construction-lane"
+    },
+    {
+      "id": 403,
+      "type": "tool",
+      "color": "orange",
+      "title": "Kiro (AI Assistant)",
+      "description": "Kiro, your AI development assistant, projected over the desk. It leads a team of specialist agents, proposes in parallel Bolts, and never proceeds without your approval.",
+      "image_prompt": "A friendly holographic AI assistant named Kiro projected above a coding desk, soft glowing blue, gesturing at parallel task streams, single character portrait",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "construction-lane"
+    },
+
+    {
+      "id": 500,
+      "type": "location",
+      "color": "green",
+      "title": "Verification Checkpoint",
+      "description": "An automated checkpoint. Sensors scan. A reviewer flags. Three layers before your final call. Sign: 'NO CODE SHIPS WITHOUT VERIFICATION — AND WITHOUT YOU.'",
+      "image": "assets/verification-checkpoint.png",
+      "image_prompt": "A road checkpoint at night with automated scanner gantries, green and red lights above each lane, a sign reading NO CODE SHIPS WITHOUT VERIFICATION AND WITHOUT YOU, cool blue lighting with warm accents, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 501, "label": "Run sensors" },
+        { "card_id": 502, "label": "Fix flagged issues", "puzzle": "defuse-bugs" },
+        { "card_id": 503, "label": "Final approval", "puzzle": "wordlock-ship", "requires_item": [502] },
+        { "card_id": 1000, "label": "Proceed to the learning loop", "requires_item": [503, 504], "consumes_item": [504] }
+      ],
+      "visible_to": "all",
+      "room": "verification-checkpoint"
+    },
+    {
+      "id": 501,
+      "type": "lore",
+      "color": "purple",
+      "title": "Dual-Loop Sensors",
+      "description": "Layer 1 (deterministic sensors) complete. Layer 2 (AI reviewer) complete. Two machine checks resolved before anything reaches Layer 3: YOU.",
+      "image_prompt": "A checkpoint console showing two automated verification layers passing and a third labeled HUMAN, single object on dark background",
+      "visible_to": "all",
+      "room": "verification-checkpoint"
+    },
+    {
+      "id": 502,
+      "type": "event",
+      "color": "yellow",
+      "title": "Issues Addressed",
+      "description": "Three real issues fixed before they cascade; the cosmetic flag ignored — it was never a bug. The reviewer agent goes green. One gate remains: you.",
+      "reveals": [504],
+      "visible_to": "all",
+      "room": "verification-checkpoint"
+    },
+    {
+      "id": 503,
+      "type": "event",
+      "color": "yellow",
+      "title": "Approved to Ship",
+      "description": "Sensors passed. Reviewer approved. You type the final word — S-H-I-P — the human gate. Logged with your name and the timestamp.",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "verification-checkpoint"
+    },
+
+    {
+      "id": 1000,
+      "type": "location",
+      "color": "green",
+      "title": "The Learning Loop",
+      "description": "Fix deployed — but the process doesn't end at shipping. Kiro asks: 'What rules should I remember for next time?' Each correction becomes a permanent rule. On the wall, a banner reads: 'THE SYSTEM ADAPTS ITS PROCESS DEPTH TO MATCH EACH PROBLEM.'",
+      "image": "assets/the-learning-loop.png",
+      "image_prompt": "A calm debrief space overlooking clearing Kuala Lumpur traffic, a glowing AI assistant, Kiro, recording rules into a memory ledger while a developer nods, warm hopeful lighting, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 1001, "label": "Teach the system", "puzzle": "match-learn" },
+        { "card_id": 1002, "label": "Read the summary" },
+        { "card_id": 1004, "label": "Read the wall banner" },
+        { "card_id": 700, "label": "Proceed to deployment", "requires_item": [1003], "consumes_item": [1003] }
+      ],
+      "visible_to": "all",
+      "room": "the-learning-loop"
+    },
+    {
+      "id": 1001,
+      "type": "event",
+      "color": "yellow",
+      "title": "System Taught",
+      "description": "Each decision you made becomes a rule Kiro keeps. Teach it once, and it never needs re-explaining. The next Bolt starts smarter.",
+      "reveals": [1003],
+      "visible_to": "all",
+      "room": "the-learning-loop"
+    },
+    {
+      "id": 1002,
+      "type": "lore",
+      "color": "purple",
+      "title": "Learning Summary",
+      "description": "Teach once, never re-explain. Every correction becomes hierarchical memory the system reuses. Governance and speed, together.",
+      "image_prompt": "A memory ledger filling with rules derived from human decisions, glowing entries, single object on dark background",
+      "visible_to": "all",
+      "room": "the-learning-loop"
+    },
+    {
+      "id": 1004,
+      "type": "lore",
+      "color": "purple",
+      "title": "Adaptive by Design",
+      "description": "The banner spells out the whole philosophy: the system adapts its process depth to match each problem. A tiny fix gets a light touch; a risky one gets the full gate. It doesn't force one rigid process — it adapts. Remember that word. It's the one thing every rule you just taught has in common.",
+      "image_prompt": "A glowing wall banner reading THE SYSTEM ADAPTS ITS PROCESS DEPTH TO MATCH EACH PROBLEM above a dial that scales process depth up and down, single object on dark background",
+      "visible_to": "all",
+      "room": "the-learning-loop"
+    },
+
+    {
+      "id": 700,
+      "type": "location",
+      "color": "green",
+      "title": "Deployment Terminal",
+      "description": "GoLancar HQ. The big screen lights up: 500K ETAs restored. Traffic flowing. You did it.",
+      "image": "assets/deployment-terminal.png",
+      "image_prompt": "A gleaming GoLancar HQ terminal at golden hour with a huge screen showing Kuala Lumpur's map reconnecting, a deployment keypad console, traffic flowing again outside, triumphant warm lighting, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 701, "label": "Enter the final command", "puzzle": "wordlock-adapt" }
+      ],
+      "visible_to": "all",
+      "room": "deployment-terminal"
+    },
+    {
+      "id": 701,
+      "type": "event",
+      "color": "yellow",
+      "is_ending": true,
+      "title": "Final Command",
+      "description": "One word to ship — the word that defines everything you learned: ADAPT. You commit it, and the routing engine restarts clean. Across Kuala Lumpur, ETAs flicker back to life.",
+      "reveals": [702],
+      "visible_to": "all",
+      "room": "deployment-terminal"
+    },
+    {
+      "id": 702,
+      "type": "event",
+      "color": "yellow",
+      "title": "Traffic Cleared",
+      "description": "500K rides reconnected before rush hour ended. However you got here — every turn by hand, or Kiro proposing while you decided — the fix was right, verified, and logged. Selamat, developer. The sesak is clearing.",
+      "is_ending": true,
+      "reveals": [],
+      "visible_to": "all",
+      "room": "deployment-terminal"
+    }
+  ]
+}

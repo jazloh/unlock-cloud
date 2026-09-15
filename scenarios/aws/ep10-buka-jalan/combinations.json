@@ -1,0 +1,11 @@
+{
+  "combinations": [
+    {
+      "card_a": 101,
+      "card_b": 201,
+      "result_card": 205,
+      "type": "item_object",
+      "description": "Cross-reference crash alert with system report — pinpoint root cause"
+    }
+  ]
+}

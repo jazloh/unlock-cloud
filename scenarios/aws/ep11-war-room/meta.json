@@ -1,0 +1,77 @@
+{
+  "id": "ep11-war-room",
+  "title": "War Room @ Tech Summit",
+  "episode": 11,
+  "arc": "Frontier Agents",
+  "category": "aws",
+  "cover": "assets/cover.png",
+  "background": "assets/war-room.png",
+  "description": "You're at the Tech Summit when a customer's VP calls — leaked credentials are running fraudulent Amazon Bedrock inference and the bill is spiking. Join the war-room bridge and advise three AWS frontier agents. Discover, fix, prevent.",
+  "difficulty": {
+    "tier": 1,
+    "label": "Booth (walk-up)"
+  },
+  "duration_minutes": 15,
+  "players": {
+    "min": 1,
+    "max": 1000,
+    "recommended": 1
+  },
+  "aws_topics": [
+    "AWS DevOps Agent",
+    "AWS Security Agent (Continuum)",
+    "AWS FinOps Agent",
+    "Amazon Bedrock",
+    "Incident Response",
+    "Cost Anomaly Detection",
+    "CloudTrail",
+    "AWS Secrets Manager",
+    "IAM"
+  ],
+  "mechanics_taught": [
+    "log-lock",
+    "timeline-lock",
+    "evidence-lock",
+    "cascade-lock",
+    "npc-dialog"
+  ],
+  "version": "0.1",
+  "start_button": "Join the War Room",
+  "lore_label": "War Room Intel",
+  "end_title": "Incident Resolved",
+  "learning_recap": {
+    "title": "🧠 What You Just Learned",
+    "cycle": [
+      {
+        "stage": "DISCOVER",
+        "note": "AWS DevOps Agent — automated root-cause on operational events"
+      },
+      {
+        "stage": "PROVE",
+        "note": "AWS Security Agent (Continuum) — proof-based exploit + fix PR"
+      },
+      {
+        "stage": "ATTRIBUTE",
+        "note": "AWS FinOps Agent — cost anomaly + CloudTrail + owner"
+      },
+      {
+        "stage": "DECIDE",
+        "note": "You connect the dots across all three"
+      }
+    ],
+    "benefits": [
+      "Frontier agents handle the depth in each discipline",
+      "Only the DevOps Agent acts live in the environment (with approval)",
+      "Security (Continuum) proves & fixes the code — not live IAM",
+      "FinOps investigates & reports — no kill-switch",
+      "Human judgment guided the agents and connected all three",
+      "You read the incident through disciplines beyond your own"
+    ],
+    "link": {
+      "label": "AWS Frontier Agents",
+      "url": "https://aws.amazon.com/ai/frontier-agents"
+    }
+  },
+  "map_style": "flow",
+  "has_narration_audio": false
+}

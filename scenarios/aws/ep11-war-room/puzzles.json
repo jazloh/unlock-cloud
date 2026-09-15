@@ -1,0 +1,416 @@
+{
+  "puzzles": [
+    {
+      "id": "npc-devops",
+      "type": "tool",
+      "ui": "npc-dialog",
+      "card_ref": 103,
+      "description": "AWS DevOps Agent",
+      "config": {
+        "name": "AWS DevOps Agent",
+        "portrait": "🔧",
+        "greeting": "I run ops. When alarms fire, I do root-cause on the events and can run fixes — with your approval — in your environment.",
+        "lines": [
+          {
+            "label": "What do you do here?",
+            "response": "I investigate the moment an alert lands, and I can run or revert a fix. I work through Slack and ServiceNow."
+          },
+          {
+            "label": "Do you act on your own?",
+            "response": "No — I propose, a human approves. I'm the only agent here that acts live, so that gate matters."
+          },
+          {
+            "label": "What will you recommend?",
+            "response": "First, your team kills the leaked key — it's live until they do. Then I recommend tightening to least-privilege and an SCP so a leaked key can't call Bedrock at scale — your team (or Kiro) implements it. I investigate and root-cause; I can't touch IAM."
+          }
+        ]
+      },
+      "hints": [],
+      "mandatory": false
+    },
+    {
+      "id": "npc-security",
+      "type": "tool",
+      "ui": "npc-dialog",
+      "card_ref": 104,
+      "description": "AWS Security Agent (Continuum)",
+      "config": {
+        "name": "AWS Security Agent (Continuum)",
+        "portrait": "🛡",
+        "greeting": "I secure apps across the lifecycle — I'm now AWS Continuum. Here, my code review found the hardcoded secret and staged a fix PR.",
+        "lines": [
+          {
+            "label": "What can you do?",
+            "response": "Pen testing (OWASP Top-10 + business logic), code review with fix-PRs, STRIDE threat modeling, and design review."
+          },
+          {
+            "label": "Can you revoke the leaked key?",
+            "response": "No — that's the honest boundary. I fix the code — find the secret, stage the PR. Revoking the live key is your team + the DevOps fix."
+          },
+          {
+            "label": "What's the fix?",
+            "response": "Remove the secret, rotate it, load creds from an IAM role or Secrets Manager. I staged it as a PR — approve the scoped fix, not a patch."
+          }
+        ]
+      },
+      "hints": [],
+      "mandatory": false
+    },
+    {
+      "id": "npc-finops",
+      "type": "tool",
+      "ui": "npc-dialog",
+      "card_ref": 105,
+      "description": "AWS FinOps Agent",
+      "config": {
+        "name": "AWS FinOps Agent",
+        "portrait": "💰",
+        "greeting": "I'm built on Amazon Bedrock. I catch cost anomalies and investigate the spend — I don't stop it.",
+        "lines": [
+          {
+            "label": "What do you do here?",
+            "response": "I tie the Bedrock spike to CloudTrail, name the change and the owner, and report to Jira and Slack."
+          },
+          {
+            "label": "Can you stop the bleeding?",
+            "response": "No kill-switch. I investigate and report — killing the leaked key stops the spend; least-privilege + an SCP keeps it from recurring."
+          },
+          {
+            "label": "Anything else?",
+            "response": "I also answer cost questions, run scheduled reports, and surface savings from Cost Optimization Hub and Compute Optimizer. Today, it's attribution."
+          }
+        ]
+      },
+      "hints": [],
+      "mandatory": false
+    },
+    {
+      "id": "npc-decision-devops",
+      "type": "tool",
+      "ui": "npc-dialog",
+      "card_ref": 205,
+      "description": "Advise the VP — go / no-go",
+      "config": {
+        "name": "VP of Engineering",
+        "portrait": "👤",
+        "greeting": "The agent's root-caused it and has a prevention spec ready. On a live leaked-key incident, what do we do first — and in what order?",
+        "lines": [
+          {
+            "label": "Advise: kill the leaked key first, then have the agent recommend tighter IAM (least-privilege + SCP).",
+            "response": "That's the call — team kills the key, then the DevOps Agent's prevention spec (least-privilege + an SCP) gets implemented. Good.",
+            "correct": true
+          },
+          {
+            "label": "Advise: apply a fix first, kill the key later.",
+            "response": "The key's live until we kill it — that's the first thing that stops the bleeding. Reconsider.",
+            "correct": false
+          },
+          {
+            "label": "Tell the agent to act on its own, no approval needed.",
+            "response": "No — it acts only on a human go. That gate's the point.",
+            "correct": false
+          }
+        ],
+        "decision": true,
+        "wrong_penalty_seconds": 30
+      },
+      "hints": [],
+      "mandatory": true,
+      "success_card": 205
+    },
+    {
+      "id": "npc-decision-security",
+      "type": "tool",
+      "ui": "npc-dialog",
+      "card_ref": 305,
+      "description": "Advise the VP — which fix to approve",
+      "config": {
+        "name": "VP of Engineering",
+        "portrait": "👤",
+        "greeting": "Continuum's code review found the secret and staged a fix PR. Which do we approve?",
+        "lines": [
+          {
+            "label": "Advise: the scoped fix — remove the secret, rotate it, move to IAM role / Secrets Manager.",
+            "response": "Agreed — that closes it for good.",
+            "correct": true
+          },
+          {
+            "label": "Advise: the quick patch — just comment out the exposed line for now.",
+            "response": "That leaves the secret in history — exactly what Continuum flagged. Reconsider.",
+            "correct": false
+          }
+        ],
+        "decision": true,
+        "wrong_penalty_seconds": 30
+      },
+      "hints": [],
+      "mandatory": true,
+      "success_card": 305
+    },
+    {
+      "id": "npc-decision-finops",
+      "type": "tool",
+      "ui": "npc-dialog",
+      "card_ref": 405,
+      "description": "Advise the VP — name the owner",
+      "config": {
+        "name": "VP of Engineering",
+        "portrait": "👤",
+        "greeting": "So who owns this — where do I point the team?",
+        "lines": [
+          {
+            "label": "Advise: the leaked access key — every fraudulent call is signed by it.",
+            "response": "That's it — every bad call is signed by that key.",
+            "correct": true
+          },
+          {
+            "label": "Advise: the nightly batch job, it's the biggest line item.",
+            "response": "The batch job never changed — it's a distractor. Follow the signer, not the line item.",
+            "correct": false
+          }
+        ],
+        "decision": true,
+        "wrong_penalty_seconds": 30
+      },
+      "hints": [],
+      "mandatory": true,
+      "success_card": 405
+    },
+    {
+      "id": "log-devops",
+      "type": "log-lock",
+      "ui": "log-lock",
+      "card_ref": 202,
+      "description": "Confirm what broke",
+      "config": {
+        "prompt": "Tap the TWO suspicious lines (select both) — the leaked key hammering Amazon Bedrock. Leave the normal lines alone.",
+        "lines": [
+          {
+            "text": "11:02:10 INFO  health-check ok — api-gateway (ap-southeast-1)",
+            "correct": false
+          },
+          {
+            "text": "11:02:11 INFO  autoscaling group web-tier desired=3 running=3",
+            "correct": false
+          },
+          {
+            "text": "11:02:12 INFO  nightly-batch job started — expected InvokeModel volume",
+            "correct": false
+          },
+          {
+            "text": "11:02:13 ERROR bedrock:InvokeModel retry storm — access key AKIA…K7Q looping 412 req/s",
+            "correct": true
+          },
+          {
+            "text": "11:02:13 WARN  checkout-service returned 500 (unrelated deploy warning)",
+            "correct": false
+          },
+          {
+            "text": "11:02:14 ERROR bedrock:InvokeModel — same access key AKIA…K7Q, 400+ concurrent from unknown subnet",
+            "correct": true
+          },
+          {
+            "text": "11:02:15 INFO  s3 lifecycle transition completed — logs bucket",
+            "correct": false
+          }
+        ],
+        "high_contrast": true
+      },
+      "hints": [
+        "Two lines are the real signal. Look for the same principal hitting Amazon Bedrock over and over.",
+        "The nightly-batch line and the checkout 500 are distractors — normal or unrelated.",
+        "Select both ERROR lines that name the looping access key AKIA…K7Q on bedrock:InvokeModel."
+      ],
+      "mandatory": true,
+      "success_card": 202
+    },
+    {
+      "id": "timeline-security",
+      "type": "timeline-lock",
+      "ui": "timeline-lock",
+      "card_ref": 302,
+      "description": "Reconstruct the intrusion",
+      "config": {
+        "title": "Order the evidence — Continuum's code findings + CloudTrail's runtime record",
+        "answer": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "events": [
+          {
+            "id": "a",
+            "label": "Access key hardcoded in the application code",
+            "time": "T-9d"
+          },
+          {
+            "id": "b",
+            "label": "Code pushed to a public repo — secret now in commit history",
+            "time": "T-6d"
+          },
+          {
+            "id": "c",
+            "label": "CloudTrail: first unauthorized bedrock:InvokeModel from unknown network",
+            "time": "T-2h"
+          },
+          {
+            "id": "d",
+            "label": "CloudTrail: fraudulent Bedrock inference at scale",
+            "time": "T-40m"
+          }
+        ],
+        "enhanced": true
+      },
+      "hints": [
+        "The secret has to exist before anyone can steal it. Start at the code.",
+        "Committed → scraped → first misuse → abuse at scale. Tap 'Check timestamps' if stuck.",
+        "Order: committed to repo → scraped from history → first InvokeModel → inference at scale."
+      ],
+      "mandatory": true,
+      "success_card": 302
+    },
+    {
+      "id": "evidence-finops",
+      "type": "evidence-lock",
+      "ui": "evidence-lock",
+      "card_ref": 402,
+      "description": "Trace the spend to its source",
+      "config": {
+        "hintsAfterAttempts": 2,
+        "completeTitle": "📋 Root Cause + Owner Confirmed",
+        "steps": [
+          {
+            "type": "number",
+            "narrative": "The nightly batch job normally issues 1,200 Amazon Bedrock InvokeModel calls per hour. Cost Anomaly Detection recorded 42,000 calls in the last hour.",
+            "detail": "42,000 total this hour",
+            "prompt": "How many InvokeModel calls are unaccounted-for (fraudulent)?",
+            "answer": 40800,
+            "hint": "Subtract the batch job's expected 1,200 from the 42,000 observed."
+          },
+          {
+            "type": "choice",
+            "narrative": "CloudTrail shows every one of those fraudulent calls was signed by the same identity. The dashboard first blamed the nightly batch job — but its volume is normal.",
+            "detail": "Same signer on every anomalous call",
+            "prompt": "Who's the root-cause owner?",
+            "options": [
+              {
+                "label": "The leaked access key",
+                "correct": true
+              },
+              {
+                "label": "The nightly batch job",
+                "correct": false
+              },
+              {
+                "label": "An expired TLS certificate",
+                "correct": false
+              }
+            ],
+            "hint": "The batch job's volume never changed. Follow the signer."
+          }
+        ],
+        "high_contrast": true,
+        "completeMessage": "Root cause: 40,800 fraudulent Bedrock calls — all signed by the leaked access key, not the batch job."
+      },
+      "hints": [
+        "Start with the arithmetic: observed minus expected.",
+        "The batch job's volume is unchanged — it can't be the cause of a spike.",
+        "40,800 fraudulent calls, all signed by the leaked access key."
+      ],
+      "mandatory": true,
+      "success_card": 402
+    },
+    {
+      "id": "cascade-synthesis",
+      "type": "cascade-lock",
+      "ui": "cascade-lock",
+      "card_ref": 599,
+      "description": "Chain the findings into the root-cause story",
+      "config": {
+        "cupNames": [
+          "DevOps",
+          "Security",
+          "FinOps"
+        ],
+        "pauseBetweenSteps": 2500,
+        "steps": [
+          {
+            "question": "Chain the findings. What was the ROOT CAUSE all three agents converged on?",
+            "options": [
+              "A leaked AWS access key hardcoded in the application code",
+              "A volumetric DDoS against the load balancer",
+              "An expired TLS certificate on the API gateway"
+            ],
+            "answer": 0,
+            "wrong": [
+              "",
+              "The alarms show a credential-abuse pattern, not network flooding. Continuum's code review found a hardcoded secret.",
+              "No TLS error in the chain — Continuum's code review found the root cause: a hardcoded secret."
+            ],
+            "after": "Security (Continuum) found it: a hardcoded secret in the code, staged as a fix PR."
+          },
+          {
+            "question": "What did that leaked key ENABLE?",
+            "options": [
+              "Fraudulent large-scale Amazon Bedrock inference",
+              "A crypto-miner spun up on EC2",
+              "Bulk data exfiltration from S3"
+            ],
+            "answer": 0,
+            "wrong": [
+              "",
+              "The spend and the log storm are both Bedrock InvokeModel — not EC2 compute.",
+              "The anomaly is Bedrock inference volume, not S3 egress."
+            ],
+            "after": "DevOps traced the operational blast; FinOps traced the runaway spend — same Bedrock abuse."
+          },
+          {
+            "question": "How is the incident actually STOPPED?",
+            "options": [
+              "The team deactivates the leaked key first, then acts on the DevOps Agent's approved prevention step (tighter IAM) on your go",
+              "The FinOps Agent flips a kill-switch on the spend",
+              "The Security Agent revokes the live IAM credential"
+            ],
+            "answer": 0,
+            "wrong": [
+              "",
+              "FinOps investigates and reports — it has no kill-switch.",
+              "Continuum fixes the code and proves exploitability — it does not revoke live IAM."
+            ],
+            "after": "Honest asymmetry: only DevOps acts live. Security and FinOps prove and report — you made the call."
+          },
+          {
+            "question": "What PREVENTS a recurrence?",
+            "options": [
+              "Load secrets from an IAM role / AWS Secrets Manager, and tighten to least-privilege + an SCP so a leaked key can't call Bedrock at scale",
+              "Delete the application repository",
+              "Turn off Amazon Bedrock for everyone"
+            ],
+            "answer": 0,
+            "wrong": [
+              "",
+              "Deleting the repo destroys the work, not the risk — remove the secret and rotate instead.",
+              "Disabling Bedrock punishes every legitimate workload — fix the credential handling instead."
+            ],
+            "after": "Prevention locked in: no retrievable secret, and a leaked key can't scale Bedrock again."
+          }
+        ],
+        "onComplete": {
+          "emojis": "🔧🛡️💰",
+          "text": "You didn't fix this alone — and neither could any single agent.",
+          "subtext": "Frontier managed agents handled the depth in each discipline. Your human judgment guided them and connected the dots across all three."
+        },
+        "shuffle_options": true
+      },
+      "hints": [
+        "Walk the chain the three findings tell: how they got in → what it enabled → how it stops → how to prevent it.",
+        "Remember each agent's honest boundary: only DevOps acts live in the environment.",
+        "Root cause = leaked key in code; enabled fraudulent Bedrock inference; stopped by the approved DevOps mitigation; prevented with Secrets Manager/IAM + least-privilege & an SCP."
+      ],
+      "mandatory": true,
+      "success_card": 599,
+      "isFinal": true
+    }
+  ]
+}

@@ -21,6 +21,7 @@ class LogLock {
     this.lines = opts.lines || [];
     this.prompt = opts.prompt || 'Select the relevant log lines';
     this.onSubmit = opts.onSubmit || (() => {});
+    this.highContrast = !!opts.highContrast;
     this.selected = new Set();
     this._render();
   }
@@ -28,12 +29,17 @@ class LogLock {
   _render() {
     this.container.innerHTML = '';
     const wrap = document.createElement('div');
-    wrap.className = 'loglk';
+    wrap.className = 'loglk' + (this.highContrast ? ' loglk-hc' : '');
 
     const promptEl = document.createElement('div');
     promptEl.className = 'loglk-prompt';
     promptEl.textContent = this.prompt;
     wrap.appendChild(promptEl);
+
+    this.countEl = document.createElement('div');
+    this.countEl.className = 'loglk-count';
+    this.countEl.textContent = 'Tap the suspicious log lines to select them';
+    wrap.appendChild(this.countEl);
 
     const logBox = document.createElement('div');
     logBox.className = 'loglk-box';
@@ -41,6 +47,10 @@ class LogLock {
     this.lines.forEach((line, i) => {
       const el = document.createElement('div');
       el.className = 'loglk-line';
+      const check = document.createElement('span');
+      check.className = 'loglk-check';
+      check.textContent = '✓';
+      el.appendChild(check);
       const num = document.createElement('span');
       num.className = 'loglk-num';
       num.textContent = i + 1;
@@ -76,6 +86,10 @@ class LogLock {
   _toggle(i) {
     if (this.selected.has(i)) { this.selected.delete(i); this.lineEls[i].classList.remove('loglk-selected'); }
     else { this.selected.add(i); this.lineEls[i].classList.add('loglk-selected'); }
+    if (this.countEl) {
+      const n = this.selected.size;
+      this.countEl.textContent = n ? `${n} line${n>1?'s':''} selected — tap “Analyze” when ready` : 'Tap the suspicious log lines to select them';
+    }
   }
 
   _test() {
@@ -103,8 +117,13 @@ class LogLock {
 .loglk-box{background:#0c0c0c;border:1px solid #1e2a45;border-radius:8px;padding:8px;max-height:200px;overflow-y:auto;font-family:'Courier New',monospace;font-size:11px}
 .loglk-line{display:flex;gap:8px;padding:4px 6px;border-radius:4px;cursor:pointer;transition:background .15s;border:1px solid transparent}
 .loglk-line:hover{background:rgba(59,130,246,.05)}
-.loglk-line.loglk-selected{background:rgba(59,130,246,.1);border-color:#3b82f6}
-.loglk-line.loglk-correct{background:rgba(34,197,94,.1);border-color:#22c55e}
+.loglk-line.loglk-selected{background:rgba(59,130,246,.22);border-color:#3b82f6;box-shadow:inset 0 0 0 1px #3b82f6}
+.loglk-line.loglk-selected .loglk-text{color:#dbeafe}
+.loglk-line.loglk-correct{background:rgba(34,197,94,.18);border-color:#22c55e}
+.loglk-check{color:transparent;min-width:14px;flex-shrink:0;font-weight:800;transition:color .12s}
+.loglk-line.loglk-selected .loglk-check{color:#3b82f6}
+.loglk-line.loglk-correct .loglk-check{color:#22c55e}
+.loglk-count{font-size:12px;color:#3b82f6;font-weight:600;text-align:center;min-height:16px}
 .loglk-num{color:#1e2a45;min-width:20px;text-align:right;flex-shrink:0}
 .loglk-text{color:#7a8ba8;word-break:break-all}
 .loglk-err{color:#ef4444}
@@ -115,6 +134,17 @@ class LogLock {
 .loglk-btn{padding:12px 28px;border:none;border-radius:8px;background:#3b82f6;color:#fff;font-size:14px;font-weight:600;cursor:pointer;align-self:center}
 .loglk-btn:active{opacity:.7}
 .loglk-status{font-size:13px;color:#7a8ba8;text-align:center;min-height:18px}
+/* High-contrast selection (opt-in via highContrast:true) — ep11 */
+.loglk-hc .loglk-box{padding:10px}
+.loglk-hc .loglk-line{padding:9px 10px;margin:3px 0;border-width:2px;border-radius:8px}
+.loglk-hc .loglk-line:hover{background:rgba(59,130,246,.12)}
+.loglk-hc .loglk-line.loglk-selected{background:rgba(59,130,246,.38);border-color:#60a5fa;box-shadow:0 0 0 2px rgba(96,165,250,.55),0 4px 14px rgba(59,130,246,.4);border-left:5px solid #60a5fa}
+.loglk-hc .loglk-line.loglk-selected .loglk-text{color:#fff}
+.loglk-hc .loglk-line.loglk-selected .loglk-num{color:#bfdbfe}
+.loglk-hc .loglk-check{min-width:18px;font-size:13px}
+.loglk-hc .loglk-line.loglk-selected .loglk-check{color:#fff;text-shadow:0 0 6px rgba(96,165,250,.9)}
+.loglk-hc .loglk-line.loglk-correct{background:rgba(34,197,94,.34);border-color:#4ade80;border-left:5px solid #4ade80}
+.loglk-hc .loglk-line.loglk-correct .loglk-text{color:#fff}
 `;
     document.head.appendChild(s);
   }

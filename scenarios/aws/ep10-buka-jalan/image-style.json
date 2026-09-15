@@ -1,0 +1,11 @@
+{
+  "style_prefix": "Malaysian urban illustration, Kuala Lumpur evening rush hour, warm sunset tones, traffic jam aesthetic, e-hailing motorcycles and TransKuala Lumpur buses, neon Bahasa Melayu signage, game card art.",
+  "style_prefix_location": "Malaysian urban illustration, Kuala Lumpur evening rush hour, warm sunset tones, traffic jam aesthetic, e-hailing motorcycles and TransKuala Lumpur buses, neon Bahasa Melayu signage, wide angle, isometric, game card art.",
+  "style_prefix_item": "Malaysian urban illustration, single object on a clean surface, warm sunset tones, subtle neon accents, close-up, game card art.",
+  "style_prefix_object": "Malaysian urban illustration, single interactive element or console, warm sunset tones, subtle neon accents, close-up, game card art.",
+  "palette": ["#FF6B35", "#004E89", "#1A936F", "#F6F7EB", "#2D3047"],
+  "mood": "Urgent but vibrant — Kuala Lumpur evening rush hour energy",
+  "references": "Southeast Asian city illustration, e-hailing motorcycles, TransKuala Lumpur buses, mamak food stalls, Tun Razak road at sunset",
+  "negative_prompt": "text, words, letters, numbers, watermark, blurry, low quality, ugly, realistic photo, UI elements",
+  "aspect_ratio": "16:9"
+}
