@@ -1433,6 +1433,9 @@ function showPuzzlePopup(puzzleId, awardCardId) {
       if (!seconds) return;
       engine.penaltySeconds += seconds;
       showToast(`⏱️ −${seconds >= 60 ? `${Math.round(seconds / 60 * 10) / 10} min` : `${seconds}s`} — ${reason}`, true);
+      // Only worth flagging to the leaderboard when the player finished the
+      // negotiation nearly broke — comfortable haggling shouldn't page as a penalty.
+      if (deck.gold < 20 && engine.onLeaderboardEvent) engine.onLeaderboardEvent('penalty', { seconds, reason, puzzleId });
     };
     const deck = new DeckBattleLock(mount, {
       merchant: cfg.merchant,
@@ -1456,15 +1459,20 @@ function showPuzzlePopup(puzzleId, awardCardId) {
     // so "no ledger, no numbers" can be the mechanic rather than just flavour.
     const hasObsCard = cfg.observability_card
       && (engine.discoveredCards.has(cfg.observability_card) || engine.inventory.includes(cfg.observability_card));
+    const targetLabel = cfg.target || 'strides';
+    const targetTier = (cfg.tiers || []).find(t => t.label.toLowerCase() === targetLabel.toLowerCase());
+    const targetMin = targetTier ? targetTier.min : 0;
     new EquipmentRackLock(mount, {
       slots: cfg.slots || [],
       upgradedQuests: upgradedQuests,
       observability: cfg.observability || !!hasObsCard,
       cooldown: cfg.cooldown || 30,
       tiers: cfg.tiers,
-      target: cfg.target || 'strides',
+      target: targetLabel,
       onSubmit() { onSolve(); },
-      onDeploy() {}
+      // Each deploy that lands below the target tier is a failed attempt,
+      // same as a wrong answer elsewhere — flag it to the leaderboard.
+      onDeploy(tier) { if (tier.min < targetMin) onFail(`${tier.icon} ${tier.label} — below target`); }
     });
   } else if (puzzle.ui === 'arch-lock') {
     new ArchLock(mount, {
