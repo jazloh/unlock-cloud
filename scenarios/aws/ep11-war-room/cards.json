@@ -1,0 +1,431 @@
+{
+  "cards": [
+    {
+      "id": 100,
+      "type": "location",
+      "color": "green",
+      "title": "War Room",
+      "description": "Tech Summit, Conrad Singapore. Your phone buzzes — the VP of a customer you've backed for years. Leaked credentials are running fraudulent Amazon Bedrock inference, and the bill is spiking. She pulls you onto the war-room video bridge — her team's already on it, running three AWS frontier agents in their environment. Your job: advise the response. Discover, fix, prevent.",
+      "image": "assets/war-room.png",
+      "image_prompt": "A single person seen from BEHIND (back view, facing away), silhouetted at a control desk facing a large video wall of glowing world-map dashboards and data panels in an incident war room. Warm amber desk under-glow, dark control-room palette with orange and teal accents, cinematic, no visible face, no text no words no letters no logos",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 101,
+          "label": "Read the VP's message"
+        },
+        {
+          "card_id": 106,
+          "label": "Three agents, one incident"
+        },
+        {
+          "card_id": 103,
+          "label": "Meet the AWS DevOps Agent 🔧",
+          "puzzle": "npc-devops"
+        },
+        {
+          "card_id": 104,
+          "label": "Meet the AWS Security Agent (Continuum) 🛡",
+          "puzzle": "npc-security"
+        },
+        {
+          "card_id": 105,
+          "label": "Meet the AWS FinOps Agent 💰",
+          "puzzle": "npc-finops"
+        },
+        {
+          "card_id": 200,
+          "label": "Step up to the DevOps console"
+        }
+      ],
+      "visible_to": "all",
+      "room": "war-room"
+    },
+    {
+      "id": 101,
+      "type": "lore",
+      "color": "purple",
+      "title": "The Call",
+      "description": "The VP — a customer you've supported for years: \"You know our setup better than anyone on the AWS side, so I want you on this. Leaked key, fraudulent Bedrock inference, spend going vertical. I don't need your hands — I need your judgment. My team shares each agent's console; you tell me whether to act. Stay with us.\"",
+      "image_prompt": "A phone lock screen showing an urgent incoming call and a red alert banner, dark palette with orange glow, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "war-room"
+    },
+    {
+      "id": 106,
+      "type": "lore",
+      "color": "purple",
+      "title": "Three Agents, One Incident",
+      "description": "The team's running three AWS frontier agents (some in preview), each doing only what AWS says it does:\n🔧 DevOps — investigates ops events, runs fixes with approval.\n🛡 Security (Continuum) — code review finds the secret, ships a fix PR; no live IAM.\n💰 FinOps — investigates spend, reports; no kill-switch.\nNo one agent sees it all — that's you.",
+      "image_prompt": "Three glowing console panels side by side labeled by colored icons — a wrench, a shield, a coin — connected by a faint human silhouette at the center, dark control-room palette, single composition on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "war-room"
+    },
+    {
+      "id": 103,
+      "type": "tool",
+      "color": "orange",
+      "title": "AWS DevOps Agent",
+      "description": "The operations agent. Runs root-cause analysis on operational events and executes fixes — with approval — in the customer's environment. It's the only one of the three that acts live.",
+      "image": "assets/agent-devops.png",
+      "image_prompt": "A glowing wrench-and-gear agent icon hovering over an operations dashboard with waveform graphs, teal and orange accents, single icon-style card on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "war-room"
+    },
+    {
+      "id": 104,
+      "type": "tool",
+      "color": "orange",
+      "title": "AWS Security Agent (Continuum)",
+      "description": "The app-security agent, now AWS Continuum. Pen testing, code review, threat modeling, design review. Here, its code review found the hardcoded secret and staged a fix PR. It fixes CODE; it does not revoke live IAM.",
+      "image": "assets/agent-security.png",
+      "image_prompt": "A glowing shield agent icon over a code diff and an exploit-path graph, teal and orange accents, single icon-style card on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "war-room"
+    },
+    {
+      "id": 105,
+      "type": "tool",
+      "color": "orange",
+      "title": "AWS FinOps Agent",
+      "description": "The cost agent, built on Amazon Bedrock. Catches cost anomalies, ties the spike to CloudTrail, names the cause and owner, and reports to Jira/Slack. It investigates and reports — no kill-switch.",
+      "image": "assets/agent-finops.png",
+      "image_prompt": "A glowing coin-and-chart agent icon over a cost anomaly spike graph, teal and orange accents, single icon-style card on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "war-room"
+    },
+    {
+      "id": 200,
+      "type": "location",
+      "color": "green",
+      "title": "DevOps Console",
+      "description": "🔧 The DevOps Agent's console is up on the bridge — it ran root-cause the moment alarms fired. Read the log to confirm what broke — then advise: do we act on its fix?",
+      "image": "assets/devops-station.png",
+      "image_prompt": "A shared-screen view on an incident call: a scrolling operations log stream and a request-spike waveform on a large dark panel. absolutely no people, no faces, no human figures, no portraits, no video-call face tiles, teal and orange accents, isometric digital illustration, no text no words no letters no logos",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 201,
+          "label": "Read the DevOps Agent brief"
+        },
+        {
+          "card_id": 202,
+          "label": "Scan the operational log stream",
+          "puzzle": "log-devops"
+        },
+        {
+          "card_id": 210,
+          "label": "Advise the VP: the go / no-go call 👤",
+          "puzzle": "npc-decision-devops",
+          "requires_item": [
+            202
+          ]
+        },
+        {
+          "card_id": 300,
+          "label": "Proceed to the Security console",
+          "requires_item": [
+            205
+          ]
+        }
+      ],
+      "visible_to": "all",
+      "room": "devops-station"
+    },
+    {
+      "id": 201,
+      "type": "lore",
+      "color": "purple",
+      "title": "DevOps Agent Brief",
+      "description": "DevOps Agent console: \"Root cause — a leaked key is driving a Bedrock retry storm. Your team kills the key first; that stops the bleeding. Then I recommend tightening to least-privilege and an SCP so a leaked key can't call Bedrock at scale — your team implements it. I can't touch IAM.\"",
+      "image_prompt": "An operations agent brief panel with a highlighted anomalous request loop on a graph, teal and orange accents, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "devops-station"
+    },
+    {
+      "id": 202,
+      "type": "lore",
+      "color": "purple",
+      "title": "Log Stream Confirmed",
+      "description": "You spotted the two signal lines — the same leaked key (AKIA…K7Q) looping Bedrock calls. Root cause confirmed; the rest is noise. The agent has a mitigation plan but needs a human go. Your call?",
+      "image_prompt": "A captured operations log stream with two anomalous lines highlighted in orange, teal accents, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "devops-station"
+    },
+    {
+      "id": 210,
+      "type": "tool",
+      "color": "orange",
+      "title": "VP — Go / No-Go (DevOps)",
+      "description": "A live leaked-key incident. The agent acts only on your go — what should happen first, and in what order?",
+      "image_prompt": "A composed VP of engineering at the operations console awaiting a decision, headset on, warm key light, single character portrait on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "devops-station"
+    },
+    {
+      "id": 205,
+      "type": "item",
+      "color": "red",
+      "title": "DevOps Finding — mitigation guided",
+      "description": "Your advice to the VP: kill the leaked key first, then act on the DevOps Agent's prevention spec — tighter IAM (least-privilege + an SCP). The team kills the key and implements it. → Take this to synthesis.",
+      "image_prompt": "A glowing evidence chip labeled by a wrench icon, teal and orange accents, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "devops-station"
+    },
+    {
+      "id": 300,
+      "type": "location",
+      "color": "green",
+      "title": "Security Console (Continuum)",
+      "description": "🛡 The Security Agent (Continuum) console is up — code review found the hardcoded secret, fix PR staged. Order the events, then advise: approve the scoped fix, or a quick patch that leaves the secret exposed?",
+      "image": "assets/security-station.png",
+      "image_prompt": "A shared-screen view on an incident call: a code diff beside a glowing exploit-path graph and a staged pull request on a dark panel. absolutely no people, no faces, no human figures, no portraits, no video-call face tiles, teal and orange accents, isometric digital illustration, no text no words no letters no logos",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 301,
+          "label": "Read the Security Agent brief"
+        },
+        {
+          "card_id": 302,
+          "label": "Reconstruct the intrusion timeline",
+          "puzzle": "timeline-security"
+        },
+        {
+          "card_id": 310,
+          "label": "Advise the VP: which fix to approve 👤",
+          "puzzle": "npc-decision-security",
+          "requires_item": [
+            302
+          ]
+        },
+        {
+          "card_id": 400,
+          "label": "Proceed to the FinOps console",
+          "requires_item": [
+            305
+          ]
+        }
+      ],
+      "visible_to": "all",
+      "room": "security-station"
+    },
+    {
+      "id": 301,
+      "type": "lore",
+      "color": "purple",
+      "title": "Security Agent Brief",
+      "description": "Security Agent (Continuum): \"My code review found the hardcoded secret and staged a fix PR — remove it, rotate it, load creds from an IAM role or Secrets Manager. I fix the code; I don't revoke the live key — your team and the DevOps fix handle that.\"",
+      "image_prompt": "An application-security agent brief panel with a staged fix pull request beside a proof-based exploit-path graph, teal and orange accents, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "security-station"
+    },
+    {
+      "id": 302,
+      "type": "lore",
+      "color": "purple",
+      "title": "Intrusion Timeline Reconstructed",
+      "description": "You ordered the evidence: secret hardcoded → pushed to a public repo → first misuse → abuse at scale. Continuum's code review found the hardcoded secret and staged the fix PR; CloudTrail supplied the runtime timeline. Two fixes on the table — which do we approve?",
+      "image_prompt": "A reconstructed intrusion timeline with four ordered nodes glowing left to right, teal and orange accents, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "security-station"
+    },
+    {
+      "id": 310,
+      "type": "tool",
+      "color": "orange",
+      "title": "VP — Which Fix (Security)",
+      "description": "Continuum's code review found the secret and staged a fix PR. Advise: the scoped fix, or a quick cosmetic patch? (Continuum fixes code; it can't revoke the live key.)",
+      "image_prompt": "A composed VP of engineering at the security console weighing a pull request, headset on, warm key light, single character portrait on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "security-station"
+    },
+    {
+      "id": 305,
+      "type": "item",
+      "color": "red",
+      "title": "Security Finding — secret found & fix ready",
+      "description": "Your advice: approve the scoped fix — remove the secret, rotate it, move to an IAM role / Secrets Manager (not a patch that leaves it exposed). Continuum fixes the code; the team handles the live key. → Take this to synthesis.",
+      "image_prompt": "A glowing evidence chip labeled by a shield icon, teal and orange accents, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "security-station"
+    },
+    {
+      "id": 400,
+      "type": "location",
+      "color": "green",
+      "title": "FinOps Console",
+      "description": "💰 The FinOps Agent's console is up — it caught the cost anomaly and tied the spike to CloudTrail. Work the numbers, then advise who owns this. (Hint: it's not the nightly batch job.)",
+      "image": "assets/finops-station.png",
+      "image_prompt": "A shared-screen view on an incident call: a steep cost-anomaly spike graph and a CloudTrail correlation panel on a dark screen. absolutely no people, no faces, no human figures, no portraits, no video-call face tiles, teal and orange accents, isometric digital illustration, no text no words no letters no logos",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 401,
+          "label": "Read the FinOps Agent brief"
+        },
+        {
+          "card_id": 402,
+          "label": "Trace the spend to its source",
+          "puzzle": "evidence-finops"
+        },
+        {
+          "card_id": 410,
+          "label": "Advise the VP: name the owner 👤",
+          "puzzle": "npc-decision-finops",
+          "requires_item": [
+            402
+          ]
+        },
+        {
+          "card_id": 500,
+          "label": "Proceed to the synthesis screen",
+          "requires_item": [
+            405
+          ]
+        }
+      ],
+      "visible_to": "all",
+      "room": "finops-station"
+    },
+    {
+      "id": 401,
+      "type": "lore",
+      "color": "purple",
+      "title": "FinOps Agent Brief",
+      "description": "FinOps Agent: \"Cost anomaly on Bedrock spend. CloudTrail shows the same identity signs every bad call. The nightly batch job is normal — a distractor. I've named the cause and owner and reported to Slack/Jira. I don't stop spend — killing the key does; least-privilege + an SCP keeps it from recurring.\"",
+      "image_prompt": "A cost investigation report panel with a spike graph and a CloudTrail correlation callout, teal and orange accents, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "finops-station"
+    },
+    {
+      "id": 402,
+      "type": "lore",
+      "color": "purple",
+      "title": "Spend Traced to Source",
+      "description": "You worked it: of 42,000 Bedrock calls this hour, 40,800 are fraudulent — all signed by the same key. The batch job never moved. So who owns this?",
+      "image_prompt": "A steep cost anomaly spike beside a CloudTrail signer callout, teal and orange accents, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "finops-station"
+    },
+    {
+      "id": 410,
+      "type": "tool",
+      "color": "orange",
+      "title": "VP — Name the Owner (FinOps)",
+      "description": "The dashboard first blamed the nightly batch job. Advise where to point the team: the leaked key, or the batch job? (The agent reports; it has no kill-switch.)",
+      "image_prompt": "A composed VP of engineering at the cost console awaiting an attribution call, headset on, warm key light, single character portrait on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "finops-station"
+    },
+    {
+      "id": 405,
+      "type": "item",
+      "color": "red",
+      "title": "FinOps Finding — root cause + owner identified",
+      "description": "Your advice: the fraudulent spend traces to the leaked key, not the batch job. The agent's report — cause and owner — is confirmed and sent to the team. → Take this to synthesis.",
+      "image_prompt": "A glowing evidence chip labeled by a coin icon, teal and orange accents, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "finops-station"
+    },
+    {
+      "id": 500,
+      "type": "location",
+      "color": "green",
+      "title": "Synthesis",
+      "description": "The VP puts all three findings on screen: DevOps, Security, FinOps. \"Tie it together — the whole story — and tell me how we resolve it and stop it recurring.\" Each agent saw one slice. You see all three.",
+      "image": "assets/synthesis.png",
+      "image_prompt": "A large war-room video wall showing three converging investigation threads meeting at a single root-cause node, a human silhouette at the console below, dramatic teal and orange glow, isometric digital illustration, no text no words no letters no logos",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 501,
+          "label": "Read the big-screen summary"
+        },
+        {
+          "card_id": 599,
+          "label": "Reconstruct the root-cause story",
+          "puzzle": "cascade-synthesis",
+          "requires_item": [
+            205,
+            305,
+            405
+          ],
+          "consumes_item": [
+            205,
+            305,
+            405
+          ]
+        }
+      ],
+      "visible_to": "all",
+      "room": "synthesis"
+    },
+    {
+      "id": 501,
+      "type": "lore",
+      "color": "purple",
+      "title": "The Big Screen",
+      "description": "Three threads, one chain: leaked key → fraudulent Bedrock inference → alarms + runaway cost. DevOps traced the blast, Continuum found the secret in code, FinOps named the owner. Now confirm the fix and the prevention.",
+      "image_prompt": "A war-room wall diagram of three lines converging into one causal chain, glowing nodes, dark palette with orange accents, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "synthesis"
+    },
+    {
+      "id": 599,
+      "type": "event",
+      "color": "yellow",
+      "is_ending": true,
+      "title": "Incident Resolved",
+      "description": "You tie it together: the leaked key drove fraudulent Bedrock inference, setting off the alarms and the cost spike. The team kills the key first; Continuum's PR removes the secret from the code; the DevOps Agent's prevention spec — least-privilege + an SCP — is implemented so it can't recur; and the spend settles. The graphs flatten. You didn't fix it alone — and neither could any single agent.",
+      "reveals": [
+        600
+      ],
+      "visible_to": "all",
+      "room": "synthesis"
+    },
+    {
+      "id": 600,
+      "type": "location",
+      "color": "green",
+      "title": "Resolved",
+      "description": "The bridge quiets — spend back to normal, key killed, secret gone, tighter IAM in place. The VP: \"Three agents each caught what the others missed — but it took a human to connect them. Thanks for jumping on.\" You drop off the call.",
+      "image": "assets/ending-success.png",
+      "image_prompt": "The calm end of an incident: a single person seen from BEHIND (back view, facing away), relaxed at a control desk facing a video wall of flattened calm graphs. Warm resolution glow, dark palette with orange and teal accents, cinematic, no visible face, no text no words no letters no logos",
+      "reveals": [
+        601
+      ],
+      "visible_to": "all",
+      "room": "resolved"
+    },
+    {
+      "id": 601,
+      "type": "lore",
+      "color": "purple",
+      "title": "Debrief",
+      "description": "You didn't fix it alone — and neither could any single agent. 🔧 DevOps, 🛡 Security (Continuum), and 💰 FinOps each caught what the others missed. The agents go deep in their lane; it took your judgment to connect all three. That cross-discipline read is exactly what frontier agents still need from a human.\nLearn more: aws.amazon.com/ai/frontier-agents",
+      "image_prompt": "A debrief card with three colored icons — wrench, shield, coin — resolving into a single check, warm calm palette, single object on dark background, no text no words no letters no logos",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "resolved"
+    }
+  ]
+}

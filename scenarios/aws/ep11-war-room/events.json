@@ -1,0 +1,59 @@
+{
+  "timed_events": [
+    {
+      "id": "TE-01",
+      "time_remaining": 600,
+      "message": "📈 Cost Anomaly Detection: Amazon Bedrock spend still climbing.",
+      "type": "story",
+      "voice": "finops"
+    },
+    {
+      "id": "TE-02",
+      "time_remaining": 420,
+      "message": "📟 VP: 'Two findings in — put it together on the big screen.'",
+      "type": "alarm",
+      "voice": "vp"
+    },
+    {
+      "id": "TE-03",
+      "time_remaining": 180,
+      "message": "📟 VP: 'The clock's against us — confirm the resolution.'",
+      "type": "alarm",
+      "voice": "vp"
+    }
+  ],
+  "triggered_events": [
+    {
+      "id": "devops-found",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "log-devops",
+      "result_card": 205,
+      "message": "DevOps Finding secured — mitigation guided. On to the Security console.",
+      "type": "reveal"
+    },
+    {
+      "id": "security-found",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "timeline-security",
+      "result_card": 305,
+      "message": "Security Finding secured — secret found in code, fix PR ready. On to the FinOps console.",
+      "type": "reveal"
+    },
+    {
+      "id": "finops-found",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "evidence-finops",
+      "result_card": 405,
+      "message": "FinOps Finding secured — root cause and owner confirmed. On to the big screen.",
+      "type": "reveal"
+    },
+    {
+      "id": "resolved",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "cascade-synthesis",
+      "result_card": 599,
+      "message": "Findings chained. The incident is resolved — and prevention is locked in.",
+      "type": "ending"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "rooms": [
+    {
+      "card_id": 100,
+      "name": "The Gridlock",
+      "description": "Stuck on Jalan Tun Razak — the incident begins",
+      "connects_to": [200],
+      "unlocked_by": null,
+      "unlock_text": "Traffic hasn't moved in 20 minutes. Your phone lights up red.",
+      "map_pos": [1080, 1080]
+    },
+    {
+      "card_id": 200,
+      "name": "Requirements Tollbooth",
+      "description": "Define your fix to proceed — or take the express LRT lane",
+      "connects_to": [300, 600, 800],
+      "unlocked_by": { "type": "item", "card_id": 103 },
+      "unlock_text": "You open your laptop. A toll plaza blocks the road ahead.",
+      "map_pos": [720, 1080]
+    },
+    {
+      "card_id": 800,
+      "name": "The Mamak",
+      "description": "Optional roadside stop — teh tarik, stories, and bonus intel",
+      "connects_to": [200],
+      "unlocked_by": { "type": "discovery", "from_room": 200 },
+      "unlock_text": "Pak Ali waves you over to his mamak for a quick teh tarik.",
+      "map_pos": [1080, 720]
+    },
+    {
+      "card_id": 300,
+      "name": "Architecture Overpass",
+      "description": "Manual navigation — design every component yourself",
+      "connects_to": [900, 600],
+      "unlocked_by": { "type": "puzzle", "puzzle_id": "wordlock-scope" },
+      "unlock_text": "The toll sign turns green. A wide overpass rises ahead.",
+      "map_pos": [360, 1080]
+    },
+    {
+      "card_id": 900,
+      "name": "The Log Jam",
+      "description": "Manual navigation — trace the crash timeline by hand",
+      "connects_to": [400],
+      "unlocked_by": { "type": "puzzle", "puzzle_id": "blueprint-arch" },
+      "unlock_text": "Traffic stops dead. The crash logs scatter across your screen.",
+      "map_pos": [360, 720]
+    },
+    {
+      "card_id": 600,
+      "name": "The Express Lane",
+      "description": "AI Navigator (AIDLC) — Kiro proposes, you decide",
+      "connects_to": [400],
+      "unlocked_by": { "type": "item", "card_id": 250 },
+      "unlock_text": "The LRT gate opens onto empty, fast asphalt.",
+      "map_pos": [1080, 360]
+    },
+    {
+      "card_id": 400,
+      "name": "Construction Lane",
+      "description": "Both paths converge — validate the spec and build",
+      "connects_to": [500],
+      "unlocked_by": { "type": "discovery", "from_room": 900 },
+      "unlock_text": "Cranes and cones. Your coding terminal waits on a makeshift desk.",
+      "map_pos": [720, 360]
+    },
+    {
+      "card_id": 500,
+      "name": "Verification Checkpoint",
+      "description": "Dual-loop sensors, reviewer, and the final human gate",
+      "connects_to": [1000],
+      "unlocked_by": { "type": "puzzle", "puzzle_id": "spec-validate" },
+      "unlock_text": "Scanners and blinking lights block the lane ahead.",
+      "map_pos": [360, 360]
+    },
+    {
+      "card_id": 1000,
+      "name": "The Learning Loop",
+      "description": "Teach the system — each decision becomes a rule",
+      "connects_to": [700],
+      "unlocked_by": { "type": "puzzle", "puzzle_id": "wordlock-ship" },
+      "unlock_text": "The fix is live — but Kiro wants to learn from your calls.",
+      "map_pos": [180, 180]
+    },
+    {
+      "card_id": 700,
+      "name": "Deployment Terminal",
+      "description": "The finish line — ship it to production",
+      "connects_to": [],
+      "unlocked_by": { "type": "puzzle", "puzzle_id": "match-learn" },
+      "unlock_text": "GoLancar HQ. The map is waiting to light back up.",
+      "map_pos": [0, 0]
+    }
+  ]
+}

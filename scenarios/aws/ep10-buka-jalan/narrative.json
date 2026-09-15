@@ -1,0 +1,48 @@
+{
+  "voices": {
+    "narrator": { "voice_id": "Joanna", "role": "Story narrator — warm, urgent" },
+    "system": { "voice_id": "Matthew", "role": "System alerts — cold, clinical" },
+    "cto": { "voice_id": "Brian", "role": "CTO — stressed, demanding" },
+    "dedi": { "voice_id": "Kevin", "role": "Pak Din, Grab driver — cheerful" },
+    "kiro": { "voice_id": "Ivy", "role": "Kiro, AI assistant — calm, precise" }
+  },
+  "intro": {
+    "segments": [
+      { "voice": "narrator", "text": "Kuala Lumpur, 7 AM. Jalan Tun Razak doesn't move. 500K commuters stare at phones — 'NO ETA.'", "pause_after_ms": 1000 },
+      { "voice": "narrator", "text": "Your app is down. Your car is stuck. But your laptop is open.", "pause_after_ms": 800 },
+      { "voice": "system", "text": "CRITICAL: routing engine failed past 400,000 concurrent users. All ETAs offline.", "pause_after_ms": 1200, "emphasis": "strong" },
+      { "voice": "narrator", "text": "Somewhere in that codebase is a fix — and somewhere on this road is a faster lane. Welcome to the sesak." }
+    ],
+    "audio": null
+  },
+  "mid_event": {
+    "trigger_time_remaining": 1350,
+    "segments": [
+      { "voice": "narrator", "text": "Construction zone. Whether you drove here yourself or Kiro, your AI assistant, navigated — the fix still needs to be RIGHT.", "pause_after_ms": 800 },
+      { "voice": "kiro", "text": "AI accelerates. You validate. The final call is always yours.", "pause_after_ms": 600 }
+    ],
+    "audio": null
+  },
+  "ending": {
+    "success": {
+      "segments": [
+        { "voice": "system", "text": "Deploy complete. Version 1430. Routing engine healthy. 500,000 ETAs restored.", "pause_after_ms": 1000, "emphasis": "strong" },
+        { "voice": "narrator", "text": "Systems online. However you got here — every turn by hand, or Kiro proposing while you decided — the fix is live and the sesak is clearing.", "pause_after_ms": 800 },
+        { "voice": "kiro", "text": "Parallel Bolts complete. Human approved at every gate. And I've recorded your rules for next time.", "pause_after_ms": 800 },
+        { "voice": "narrator", "text": "You didn't skip quality. You didn't skip thinking. You just had the option of a smart partner proposing while you decided. Adaptive. Intelligent. Human-led. That's AIDLC. Selamat, developer.", "pause_after_ms": 600 }
+      ],
+      "audio": null,
+      "image": "assets/ending-express.png",
+      "image_manual": "assets/ending-manual.png"
+    },
+    "failure": {
+      "segments": [
+        { "voice": "system", "text": "Deadline exceeded. Board meeting in progress. Routing engine still degraded.", "pause_after_ms": 1000, "emphasis": "strong" },
+        { "voice": "narrator", "text": "The clock ran out before the fix went live. The traffic outside hasn't moved either.", "pause_after_ms": 800 },
+        { "voice": "narrator", "text": "But you learned the route — you scoped the fix, met Kiro, and found where the express lane starts. Next time, imagine having Kiro from the first turn.", "pause_after_ms": 600 },
+        { "voice": "dedi", "text": "Tomorrow, boss. Tomorrow we take the express lane.", "pause_after_ms": 600 }
+      ],
+      "audio": null
+    }
+  }
+}

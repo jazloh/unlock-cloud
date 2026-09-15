@@ -1,0 +1,20 @@
+{
+  "base_score": 60,
+  "time_bonus_per_minute": 1,
+  "hint_penalty": -2,
+  "wrong_combination_penalty": -3,
+  "lore_bonus": 3,
+  "lore_ids": [101, 201, 302, 402, 501, 603, 604, 801, 803, 902, 1002],
+  "all_lore_bonus": 5,
+  "lore_bonus_shared_required": [101, 201, 402, 501, 801, 803, 1002],
+  "lore_bonus_aidlc_required": [101, 201, 402, 501, 801, 803, 1002, 603, 604],
+  "lore_bonus_manual_required": [101, 201, 402, 501, 801, 803, 1002, 302, 902],
+  "all_lore_bonus_note": "Award all_lore_bonus if the player read every lore card available on their chosen path. Use lore_bonus_aidlc_required for the Express/AIDLC route and lore_bonus_manual_required for the Manual route. Path-exclusive cards not on the taken route (e.g. 302/902 for AIDLC, 603/604 for Manual) are not required.",
+  "stars": [
+    { "min": 85, "stars": 5 },
+    { "min": 70, "stars": 4 },
+    { "min": 45, "stars": 3 },
+    { "min": 25, "stars": 2 },
+    { "min": 0, "stars": 1 }
+  ]
+}

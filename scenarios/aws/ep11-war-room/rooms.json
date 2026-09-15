@@ -1,0 +1,101 @@
+{
+  "rooms": [
+    {
+      "card_id": 100,
+      "name": "War Room",
+      "description": "Conrad Singapore Orchard breakout room — the incident begins",
+      "connects_to": [
+        200
+      ],
+      "unlocked_by": null,
+      "unlock_text": "Your phone buzzes on the summit floor. It's the VP.",
+      "map_pos": [
+        40,
+        380
+      ]
+    },
+    {
+      "card_id": 200,
+      "name": "DevOps Console",
+      "description": "🔧 AWS DevOps Agent — discover what broke",
+      "connects_to": [
+        300
+      ],
+      "unlocked_by": {
+        "type": "discovery",
+        "from_room": 100
+      },
+      "unlock_text": "You pull up a chair at the operational console.",
+      "map_pos": [
+        140,
+        300
+      ]
+    },
+    {
+      "card_id": 300,
+      "name": "Security Console (Continuum)",
+      "description": "🛡 AWS Security Agent (Continuum) — discover how they got in",
+      "connects_to": [
+        400
+      ],
+      "unlocked_by": {
+        "type": "discovery",
+        "from_room": 200
+      },
+      "unlock_text": "The DevOps Finding in hand, you slide to the security console.",
+      "map_pos": [
+        240,
+        220
+      ]
+    },
+    {
+      "card_id": 400,
+      "name": "FinOps Console",
+      "description": "💰 AWS FinOps Agent — discover what it's costing and who owns it",
+      "connects_to": [
+        500
+      ],
+      "unlocked_by": {
+        "type": "discovery",
+        "from_room": 300
+      },
+      "unlock_text": "Secret found in code, you turn to the cost console.",
+      "map_pos": [
+        340,
+        140
+      ]
+    },
+    {
+      "card_id": 500,
+      "name": "Synthesis",
+      "description": "🎯 The big screen — chain all three findings into the root-cause story",
+      "connects_to": [
+        600
+      ],
+      "unlocked_by": {
+        "type": "discovery",
+        "from_room": 400
+      },
+      "unlock_text": "Three findings on the table. The big screen waits.",
+      "map_pos": [
+        200,
+        60
+      ]
+    },
+    {
+      "card_id": 600,
+      "name": "Resolved",
+      "description": "Incident closed — debrief and takeaway",
+      "connects_to": [],
+      "unlocked_by": {
+        "type": "discovery",
+        "from_room": 500
+      },
+      "unlock_text": "The graphs flatten. The room exhales.",
+      "map_pos": [
+        40,
+        20
+      ]
+    }
+  ]
+}

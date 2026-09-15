@@ -7,6 +7,7 @@ class EvidenceLock {
     this.steps = this.cfg.steps;
     this.step = 0;
     this.attempts = 0;
+    this.highContrast = !!this.cfg.high_contrast;
     this._injectStyles();
     this._render();
   }
@@ -32,7 +33,29 @@ class EvidenceLock {
 .evlk-complete{background:#1a3320;border:2px solid #2ecc71;border-radius:10px;padding:1.2rem;text-align:center}
 .evlk-complete-title{font-size:1rem;color:#2ecc71;margin-bottom:10px}
 .evlk-evidence{text-align:left;font-size:12px;color:#ccc;line-height:1.6}
-.evlk-evidence div{border-left:3px solid;padding-left:10px;margin-bottom:6px}`;
+.evlk-evidence div{border-left:3px solid;padding-left:10px;margin-bottom:6px}
+/* High-contrast readability (opt-in via config.high_contrast) — ep11 on light theme */
+.evlk-hc .evlk-narrative{background:rgba(20,27,45,.06);color:#243044;font-style:normal;border-left-color:#d97a00}
+.evlk-hc .evlk-detail{color:#b45f00}
+.evlk-hc .evlk-prompt{color:#1c2740;font-weight:600}
+.evlk-hc .evlk-hint{color:#5a4a2a}
+.evlk-hc .evlk-num{background:#fff;border-color:#d97a00;color:#7a3e00}
+.evlk-hc .evlk-num.evlk-str{color:#1c2740}
+/* #2 wider inputs (ep11 high-contrast) so long values like 40800 aren't clipped */
+.evlk-hc .evlk-num{width:160px;font-size:1.2rem}
+.evlk-hc .evlk-num.evlk-str{width:min(300px,86vw)}
+/* #3 choice options (opt-in type:'choice') */
+.evlk-choices{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.evlk-choice{display:block;width:100%;text-align:left;padding:12px 14px;border:2px solid var(--border,#444);border-radius:8px;background:var(--surface,#2a2a4e);color:var(--text,#eee);font-size:14px;cursor:pointer;transition:all .12s}
+.evlk-choice:hover{border-color:#f39c12}
+.evlk-choice:active{transform:scale(.99)}
+.evlk-choice.wrong{border-color:#e74c3c;background:rgba(231,76,60,.12);animation:evlk-sh .4s}
+.evlk-choice.correct{border-color:#2ecc71;background:rgba(46,204,113,.16);font-weight:700}
+@keyframes evlk-sh{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.evlk-hc .evlk-choice{background:#fff;border-color:#d9d2c2;color:#1c2740}
+.evlk-hc .evlk-choice:hover{border-color:#d97a00}
+.evlk-hc .evlk-choice.correct{border-color:#2e9b5b;background:rgba(46,155,91,.14)}
+.evlk-hc .evlk-choice.wrong{border-color:#d64533;background:rgba(214,69,51,.10)}`;
     document.head.appendChild(s);
   }
   _render() {
@@ -45,12 +68,12 @@ class EvidenceLock {
         const body = this.cfg.completeMessage
           ? `<div class="evlk-evidence"><div style="border-color:#2ecc71">${this.cfg.completeMessage}</div></div>`
           : `<div class="evlk-evidence">${this.steps.map(s => `<div style="border-color:#2ecc71">${(s.narrative || s.narration || '')} → <strong>${s.answer}</strong></div>`).join('')}</div>`;
-        this.el.innerHTML = `<div class="evlk-wrap"><div class="evlk-complete">
+        this.el.innerHTML = `<div class="evlk-wrap${this.highContrast ? " evlk-hc" : ""}"><div class="evlk-complete">
           <div class="evlk-complete-title">${title}</div>
           ${body}
         </div></div>`;
       } else {
-        this.el.innerHTML = `<div class="evlk-wrap"><div class="evlk-complete">
+        this.el.innerHTML = `<div class="evlk-wrap${this.highContrast ? " evlk-hc" : ""}"><div class="evlk-complete">
           <div class="evlk-complete-title">📋 Evidence Board — Complete</div>
           <div class="evlk-evidence">
             <div style="border-color:#2ecc71">25 cups used (full sleeve — empty)</div>
@@ -67,12 +90,39 @@ class EvidenceLock {
     const st = this.steps[this.step];
     const narrative = st.narrative || st.narration || '';
     const promptText = st.prompt || st.question || '';
-    const isString = typeof st.answer === 'string';
     const progress = this.steps.map((_, i) => `<div class="evlk-bar${i < this.step ? ' done' : i === this.step ? ' active' : ''}"></div>`).join('');
+
+    // #3 CHOICE mode (opt-in via step.type === 'choice'): tap an option.
+    // Options are shuffled each render so the correct one isn't always first.
+    if (st.type === 'choice' && Array.isArray(st.options)) {
+      if (!st._order) {
+        const idx = st.options.map((_, i) => i);
+        for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+        st._order = idx;
+      }
+      const choicesHtml = st._order.map(oi => {
+        const opt = st.options[oi];
+        const label = (typeof opt === 'string') ? opt : opt.label;
+        return `<button class="evlk-choice" data-oi="${oi}">${label}</button>`;
+      }).join('');
+      this.el.innerHTML = `<div class="evlk-wrap${this.highContrast ? " evlk-hc" : ""}">
+        <div class="evlk-progress">${progress}</div>
+        <div class="evlk-narrative">${narrative}${st.detail ? `<div class="evlk-detail">${st.detail}</div>` : ''}</div>
+        <div class="evlk-input">
+          <div class="evlk-prompt">${promptText}</div>
+          <div class="evlk-choices">${choicesHtml}</div>
+          <div class="evlk-hint" id="evlk-hint"></div>
+        </div>
+      </div>`;
+      this.el.querySelectorAll('.evlk-choice').forEach(b => b.addEventListener('click', () => this._checkChoice(+b.dataset.oi, b)));
+      return;
+    }
+
+    const isString = typeof st.answer === 'string';
     const inputHtml = isString
       ? `<input type="text" class="evlk-num evlk-str" id="evlk-inp" autocomplete="off" autocapitalize="off" spellcheck="false">`
       : `<input type="number" class="evlk-num" id="evlk-inp">`;
-    this.el.innerHTML = `<div class="evlk-wrap">
+    this.el.innerHTML = `<div class="evlk-wrap${this.highContrast ? " evlk-hc" : ""}">
       <div class="evlk-progress">${progress}</div>
       <div class="evlk-narrative">${narrative}${st.detail ? `<div class="evlk-detail">${st.detail}</div>` : ''}</div>
       <div class="evlk-input">
@@ -109,6 +159,24 @@ class EvidenceLock {
       setTimeout(() => inp.classList.remove('wrong'), 400);
       if (this.attempts >= (this.cfg.hintsAfterAttempts || 2) && st.hint) {
         this.el.querySelector('#evlk-hint').textContent = '💡 ' + st.hint;
+      }
+      if (this.onWrong) this.onWrong('Wrong. Try again.');
+    }
+  }
+  _checkChoice(oi, btn) {
+    const st = this.steps[this.step];
+    // correct index: prefer st.answer (number index), else option.correct===true
+    let correctIdx = (typeof st.answer === 'number') ? st.answer
+      : st.options.findIndex(o => o && typeof o === 'object' && o.correct);
+    if (oi === correctIdx) {
+      if (btn) btn.classList.add('correct');
+      this.attempts = 0;
+      setTimeout(() => { this.step++; this._render(); }, 250);
+    } else {
+      this.attempts++;
+      if (btn) { btn.classList.add('wrong'); setTimeout(() => btn.classList.remove('wrong'), 450); }
+      if (this.attempts >= (this.cfg.hintsAfterAttempts || 2) && st.hint) {
+        const h = this.el.querySelector('#evlk-hint'); if (h) h.textContent = '💡 ' + st.hint;
       }
       if (this.onWrong) this.onWrong('Wrong. Try again.');
     }
