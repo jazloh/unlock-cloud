@@ -1398,7 +1398,18 @@ function showPuzzlePopup(puzzleId, awardCardId) {
         failMsg: Object.entries(q.results || {}).filter(([,v]) => v.tier === 'fail').map(([,v]) => v.message)[0] || 'This merchant cannot handle this task.'
       })),
       onSubmit() { onSolve(); },
-      onWrong(msg) { onFail(msg); }
+      // Over budget is a real cost, not just a wrong pick — charge clock time,
+      // same weight as other "misjudged the resources" penalties in this episode.
+      onWrong(msg) {
+        if (msg === 'Over budget') {
+          engine.penaltySeconds += 30;
+          engine.penalties++;
+          showToast('⏱️ −30s — over budget, renegotiate your hires', true);
+          if (engine.onLeaderboardEvent) engine.onLeaderboardEvent('penalty', { seconds: 30, reason: 'bazaar_over_budget', puzzleId });
+        } else {
+          onFail(msg);
+        }
+      }
     });
   } else if (puzzle.ui === 'scroll-lock') {
     new ScrollLock(mount, {

@@ -203,18 +203,23 @@ class DeckBattleLock {
       // Result
       const res = document.createElement('div');
       res.className = 'dblk-result';
-      if (this.conviction >= this.merchant.conviction) {
+      const won = this.conviction >= this.merchant.conviction;
+      if (won) {
         res.innerHTML = `<div class="dblk-win">✅ Convinced! Trade secured. Gold remaining: ${this.gold}g</div>`;
       } else if (this.gold <= 0) {
         res.innerHTML = `<div class="dblk-lose">❌ Bankrupt! The merchants took everything.</div>`;
       } else {
         res.innerHTML = `<div class="dblk-walk">🚪 You bow and leave. Come back with a stronger deck.</div>`;
       }
-      const retry = document.createElement('button');
-      retry.className = 'dblk-btn-sec';
-      retry.textContent = '↻ Retry';
-      retry.addEventListener('click', () => this.reset());
-      res.appendChild(retry);
+      // Retry would let the player restart a puzzle that's already about to close
+      // and hand its reward — the win path is on its way out, not replayable.
+      if (!won) {
+        const retry = document.createElement('button');
+        retry.className = 'dblk-btn-sec';
+        retry.textContent = '↻ Retry';
+        retry.addEventListener('click', () => this.reset());
+        res.appendChild(retry);
+      }
       wrap.appendChild(res);
     }
 
