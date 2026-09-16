@@ -1,0 +1,17 @@
+{
+  "timed_events": [
+    { "id": "TE-01", "time_remaining": 2100, "message": "📱 CTO: 'Any update? Users switching to competitors.'", "type": "story", "voice": "cto" },
+    { "id": "TE-02", "time_remaining": 1200, "message": "📱 '#GoLancarDown' trending #1 on X Malaysia.", "type": "penalty" },
+    { "id": "TE-03", "time_remaining": 420, "message": "📱 CTO: 'Board meeting in 7 minutes. Fix live, or we explain why not.'", "type": "alarm", "voice": "cto" }
+  ],
+  "triggered_events": [
+    { "id": "scope-defined", "trigger": "puzzle_solved", "puzzle_id": "wordlock-scope", "result_card": 203, "message": "Fix scope defined. The overpass on-ramp opens.", "type": "reveal" },
+    { "id": "arch-done", "trigger": "puzzle_solved", "puzzle_id": "blueprint-arch", "result_card": 301, "message": "Architecture designed. You spot a LRT on-ramp — it's never too late to switch lanes.", "type": "reveal" },
+    { "id": "timeline-done", "trigger": "puzzle_solved", "puzzle_id": "timeline-crash", "result_card": 901, "message": "Crash timeline traced by hand. On to construction.", "type": "reveal" },
+    { "id": "context-ready", "trigger": "puzzle_solved", "puzzle_id": "ctx-aidlc", "result_card": 601, "message": "Context provided. Kiro's proposal snaps into focus.", "type": "reveal" },
+    { "id": "spec-ok", "trigger": "puzzle_solved", "puzzle_id": "spec-validate", "result_card": 401, "message": "Spec validated. Scope creep rejected.", "type": "reveal" },
+    { "id": "bugs-fixed", "trigger": "puzzle_solved", "puzzle_id": "defuse-bugs", "result_card": 502, "message": "Real issues fixed, cosmetic flag ignored. Reviewer goes green.", "type": "reveal" },
+    { "id": "taught", "trigger": "puzzle_solved", "puzzle_id": "match-learn", "result_card": 1001, "message": "Rules recorded. The next Bolt starts smarter.", "type": "reveal" },
+    { "id": "deployed", "trigger": "puzzle_solved", "puzzle_id": "wordlock-adapt", "result_card": 701, "message": "ADAPT — committed. The fix ships and ETAs light up across Kuala Lumpur.", "type": "ending" }
+  ]
+}

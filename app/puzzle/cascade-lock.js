@@ -6,6 +6,23 @@ class CascadeLock {
     this.onWrong = opts.onWrong;
     this.cupNames = this.cfg.cupNames;
     this.steps = this.cfg.steps;
+    // Opt-in: shuffle each step's options so the correct answer isn't always
+    // first. Default OFF — other episodes keep their original option order.
+    if (this.cfg.shuffle_options) {
+      this.steps = this.steps.map(st => {
+        if (!Array.isArray(st.options) || st.options.length < 2) return st;
+        const idx = st.options.map((_, i) => i);
+        for (let i = idx.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [idx[i], idx[j]] = [idx[j], idx[i]];
+        }
+        const newOptions = idx.map(i => st.options[i]);
+        const newAnswer = idx.indexOf(st.answer);
+        let newWrong = st.wrong;
+        if (Array.isArray(st.wrong)) newWrong = idx.map(i => st.wrong[i]);
+        return { ...st, options: newOptions, answer: newAnswer, wrong: newWrong };
+      });
+    }
     this.pause = this.cfg.pauseBetweenSteps || 3000;
     this.step = 0;
     this.waiting = false;

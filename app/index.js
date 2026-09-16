@@ -314,6 +314,15 @@ function setNarrative(key) {
   currentNarrativeKey = key;
   document.getElementById('narrative-bar').classList.add('active');
   document.getElementById('narrative-panel').classList.remove('open');
+  // The "Replay" button replays narration AUDIO (assets/voice/*.wav). Episodes
+  // without narration audio should hide it (otherwise it looks broken — a click
+  // that does nothing). Opt-in: hide only when meta explicitly says no audio.
+  // Default (flag absent) keeps the button, so existing episodes are unchanged.
+  const playBtn = document.getElementById('nar-play-btn');
+  if (playBtn) {
+    const hasAudio = !(engine.meta && engine.meta.has_narration_audio === false);
+    playBtn.style.display = hasAudio ? '' : 'none';
+  }
   renderNarrativeText();
 }
 
@@ -1027,6 +1036,7 @@ function showPuzzlePopup(puzzleId, awardCardId) {
     new LogLock(mount, {
       lines,
       prompt: cfg.prompt || 'Select the lines containing critical data',
+      highContrast: !!cfg.high_contrast,
       onSubmit() { onSolve(); }
     });
   } else if (puzzle.ui === 'terminal-lock') {
@@ -1271,6 +1281,7 @@ function showPuzzlePopup(puzzleId, awardCardId) {
   } else if (puzzle.ui === 'timeline-lock') {
     new TimelineLock(mount, {
       events: cfg.events, answer: cfg.answer,
+      enhanced: !!cfg.enhanced,
       onSubmit(correct) { correct ? onSolve() : onFail('Wrong timeline. Check the sequence.'); }
     });
   } else if (puzzle.ui === 'path-lock') {
@@ -1356,20 +1367,37 @@ function showPuzzlePopup(puzzleId, awardCardId) {
       onSubmit(correct) { correct ? onSolve() : onFail('Wrong pillar. Think about what each statement achieves.'); }
     });
   } else if (puzzle.ui === 'npc-dialog') {
+    const isDecision = !!cfg.decision;
+    // End Conversation button (created first so callbacks can toggle it)
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'btn btn-primary';
+    closeBtn.style.cssText = 'width:100%;margin-top:12px';
+    closeBtn.textContent = isDecision ? 'End Conversation' : 'End Conversation';
     new NpcDialog(mount, {
       name: cfg.name,
       portrait: cfg.portrait,
       greeting: cfg.greeting,
       lines: cfg.lines || [],
       state_lines: cfg.state_lines || [],
-      hasCard(id) { return engine.visibleCards.has(id) || engine.discoveredCards.has(id); }
+      decision: isDecision,
+      hasCard(id) { return engine.visibleCards.has(id) || engine.discoveredCards.has(id); },
+      // Decision mode only: wrong advice costs time (scoped to this puzzle,
+      // does NOT touch other episodes — they don't pass decision:true).
+      onWrong() {
+        SFX.wrong();
+        engine.penalties++;
+        engine.penaltySeconds += (cfg.wrong_penalty_seconds || 30);
+        if (engine.onLeaderboardEvent) engine.onLeaderboardEvent('penalty', { seconds: (cfg.wrong_penalty_seconds || 30), reason: 'wrong_advice', puzzleId });
+        showToast('⚠️ The VP pushes back — reconsider your advice.', true);
+      },
+      onCorrect() {
+        closeBtn.disabled = false;
+        closeBtn.style.opacity = '1';
+      }
     });
-    // Closing the NPC dialog marks the puzzle as solved
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'btn btn-primary';
-    closeBtn.style.cssText = 'width:100%;margin-top:12px';
-    closeBtn.textContent = 'End Conversation';
-    closeBtn.onclick = () => onSolve();
+    // In decision mode, lock "End Conversation" until the right call is made.
+    if (isDecision) { closeBtn.disabled = true; closeBtn.style.opacity = '0.5'; }
+    closeBtn.onclick = () => { if (!closeBtn.disabled) onSolve(); };
     mount.appendChild(closeBtn);
   } else if (puzzle.ui === 'audio-player') {
     const wrap = document.createElement('div');
@@ -1398,7 +1426,18 @@ function showPuzzlePopup(puzzleId, awardCardId) {
         failMsg: Object.entries(q.results || {}).filter(([,v]) => v.tier === 'fail').map(([,v]) => v.message)[0] || 'This merchant cannot handle this task.'
       })),
       onSubmit() { onSolve(); },
-      onWrong(msg) { onFail(msg); }
+      // Over budget is a real cost, not just a wrong pick — charge clock time,
+      // same weight as other "misjudged the resources" penalties in this episode.
+      onWrong(msg) {
+        if (msg === 'Over budget') {
+          engine.penaltySeconds += 30;
+          engine.penalties++;
+          showToast('⏱️ −30s — over budget, renegotiate your hires', true);
+          if (engine.onLeaderboardEvent) engine.onLeaderboardEvent('penalty', { seconds: 30, reason: 'bazaar_over_budget', puzzleId });
+        } else {
+          onFail(msg);
+        }
+      }
     });
   } else if (puzzle.ui === 'scroll-lock') {
     new ScrollLock(mount, {
@@ -1433,6 +1472,9 @@ function showPuzzlePopup(puzzleId, awardCardId) {
       if (!seconds) return;
       engine.penaltySeconds += seconds;
       showToast(`⏱️ −${seconds >= 60 ? `${Math.round(seconds / 60 * 10) / 10} min` : `${seconds}s`} — ${reason}`, true);
+      // Only worth flagging to the leaderboard when the player finished the
+      // negotiation nearly broke — comfortable haggling shouldn't page as a penalty.
+      if (deck.gold < 20 && engine.onLeaderboardEvent) engine.onLeaderboardEvent('penalty', { seconds, reason, puzzleId });
     };
     const deck = new DeckBattleLock(mount, {
       merchant: cfg.merchant,
@@ -1456,15 +1498,20 @@ function showPuzzlePopup(puzzleId, awardCardId) {
     // so "no ledger, no numbers" can be the mechanic rather than just flavour.
     const hasObsCard = cfg.observability_card
       && (engine.discoveredCards.has(cfg.observability_card) || engine.inventory.includes(cfg.observability_card));
+    const targetLabel = cfg.target || 'strides';
+    const targetTier = (cfg.tiers || []).find(t => t.label.toLowerCase() === targetLabel.toLowerCase());
+    const targetMin = targetTier ? targetTier.min : 0;
     new EquipmentRackLock(mount, {
       slots: cfg.slots || [],
       upgradedQuests: upgradedQuests,
       observability: cfg.observability || !!hasObsCard,
       cooldown: cfg.cooldown || 30,
       tiers: cfg.tiers,
-      target: cfg.target || 'strides',
+      target: targetLabel,
       onSubmit() { onSolve(); },
-      onDeploy() {}
+      // Each deploy that lands below the target tier is a failed attempt,
+      // same as a wrong answer elsewhere — flag it to the leaderboard.
+      onDeploy(tier) { if (tier.min < targetMin) onFail(`${tier.icon} ${tier.label} — below target`); }
     });
   } else if (puzzle.ui === 'arch-lock') {
     new ArchLock(mount, {

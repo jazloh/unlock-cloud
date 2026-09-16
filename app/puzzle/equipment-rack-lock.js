@@ -96,6 +96,11 @@ class EquipmentRackLock {
     title.textContent = "Champion's Equipment Rack";
     wrap.appendChild(title);
 
+    const legend = document.createElement('div');
+    legend.className = 'eqrk-legend';
+    legend.textContent = 'Drag a slot to reorder it, or tap one then tap another to swap positions. Toggle ON/OFF to enable or disable a slot.';
+    wrap.appendChild(legend);
+
     // Status bar
     this.statusEl = document.createElement('div');
     this.statusEl.className = 'eqrk-status';
@@ -251,6 +256,7 @@ class EquipmentRackLock {
     s.textContent = `
 .eqrk{display:flex;flex-direction:column;gap:12px;padding:16px 0;max-width:420px;margin:0 auto}
 .eqrk-title{font-size:13px;color:var(--muted,#7a8ba8);font-weight:600;text-align:center;text-transform:uppercase;letter-spacing:1px}
+.eqrk-legend{font-size:12px;line-height:1.5;color:var(--muted,#7a8ba8);background:var(--surface,#141b2d);border:1px solid var(--border,#1e2a45);border-radius:8px;padding:8px 10px}
 .eqrk-status{display:flex;justify-content:space-between;padding:8px 12px;background:var(--surface,#141b2d);border-radius:6px;font-size:12px;color:var(--muted,#7a8ba8)}
 .eqrk-stat{display:flex;align-items:center;gap:4px}
 .eqrk-slots{display:flex;flex-direction:column;gap:6px}

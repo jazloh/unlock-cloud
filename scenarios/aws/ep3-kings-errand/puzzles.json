@@ -397,7 +397,7 @@
       "id": "bazaar-recruit",
       "type": "bazaar_lock",
       "card_ref": 605,
-      "description": "Recruit an ally from the Bazaar for the Kitchen archive search",
+      "description": "Recruit allies from the Bazaar for three errands, on a shared 100g budget",
       "ui": "bazaar-lock",
       "config": {
         "budget": 100,
@@ -463,6 +463,56 @@
                 "message": "The polyglot reads the scrolls beautifully in six languages but can't reason about course order."
               }
             }
+          },
+          {
+            "label": "Translate the Foreign Quarter's trade correspondence",
+            "results": {
+              "qwen": {
+                "tier": "gold",
+                "message": "Flawless translation across every dialect at the table."
+              },
+              "nova": {
+                "tier": "silver",
+                "message": "Solid translation, though a few idioms land oddly."
+              },
+              "anthropic": {
+                "tier": "silver",
+                "message": "Reasons out the meaning carefully — accurate, if an expensive way to do it."
+              },
+              "deepseek": {
+                "tier": "bronze",
+                "message": "Translates literally. Technically correct, painfully stiff."
+              },
+              "meta": {
+                "tier": "fail",
+                "message": "Muscles through the letter and garbles it into an accidental insult."
+              }
+            }
+          },
+          {
+            "label": "Debug the ovens' faulty firing sequence",
+            "results": {
+              "deepseek": {
+                "tier": "gold",
+                "message": "Traces the fault to one bad valve in three steps flat."
+              },
+              "anthropic": {
+                "tier": "silver",
+                "message": "Reasons through the whole sequence and finds it — slowly, and at reasoning-model prices."
+              },
+              "nova": {
+                "tier": "bronze",
+                "message": "General fiddling gets the oven working, mostly."
+              },
+              "meta": {
+                "tier": "bronze",
+                "message": "Brute-force wrench work. It fires. Barely."
+              },
+              "qwen": {
+                "tier": "fail",
+                "message": "Fluent in six languages, none of which the oven speaks. It catches fire."
+              }
+            }
           }
         ],
         "tier_effects": {
@@ -472,9 +522,9 @@
         }
       },
       "hints": [
-        "Greta needs someone who can REASON through hundreds of scrolls, not just carry them. Check the stall directory for specialties.",
-        "The Anthropic Pavilion specializes in reasoning and nuance — the best fit, and the priciest at 40g. Qwen's multilingual talent cannot judge course order at all.",
-        "Assign 'Search the recipe archives' to the Anthropic Pavilion for gold tier. Nova Frontier or DeepSeek also succeed at lower tier; Qwen fails."
+        "Three errands, one 100g purse. Match each ally's specialty to the task — the Anthropic Pavilion is strong, but hiring it three times (120g) blows the whole budget.",
+        "Reasoning → Anthropic Pavilion. Multilingual → Qwen Traders. Code/Logic → DeepSeek Caravan. Each is also the cheapest gold-tier fit for its own errand.",
+        "Assign: 'Search the recipe archives' → Anthropic (40g), 'Translate the correspondence' → Qwen (20g), 'Debug the ovens' → DeepSeek (25g). 85g spent, 15g left over as bonus."
       ],
       "mandatory": true
     },

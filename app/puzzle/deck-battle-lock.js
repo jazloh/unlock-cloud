@@ -78,7 +78,8 @@ class DeckBattleLock {
     if (this.conviction >= this.merchant.conviction) {
       this.gameOver = true;
       this._render();
-      setTimeout(() => this.onSubmit(true), 400);
+      // Long enough to read the win banner before the host closes the whole popup.
+      setTimeout(() => this.onSubmit(true), 2200);
       return;
     }
     if (this.gold <= 0) {
@@ -97,7 +98,9 @@ class DeckBattleLock {
   _playCard(i) {
     if (this.gameOver) return;
     if (this.played.includes(i)) { this.played = this.played.filter(p => p !== i); this._render(); return; }
-    if (this.played.length >= 2) return;
+    // Selecting a 3rd card swaps out the oldest pick instead of no-op'ing,
+    // so tapping a different card always feels responsive.
+    if (this.played.length >= 2) this.played.shift();
     this.played.push(i);
     this._render();
   }
@@ -168,7 +171,6 @@ class DeckBattleLock {
       // Hand
       const handEl = document.createElement('div');
       handEl.className = 'dblk-hand';
-      const canPlay = this.played.length < 2;
       this.hand.forEach((c, i) => {
         const isPlayed = this.played.includes(i);
         const typeLabel = c.type === 'both' ? 'Persuasion + Composure' : c.type === 'persuasion' ? 'Persuasion' : 'Composure';
@@ -178,7 +180,7 @@ class DeckBattleLock {
         card.style.borderColor = color;
         card.title = isPlayed ? 'Tap to take this card back' : typeLabel;
         card.innerHTML = `${isPlayed ? '<div class="dblk-card-tag">PLAYED · tap to undo</div>' : ''}<div class="dblk-card-name">${c.name}</div><div class="dblk-card-type">${typeLabel}</div><div class="dblk-card-val" style="color:${color}">${c.type === 'both' ? '🗣️+🛡️ ' + c.value : (c.type === 'persuasion' ? '🗣️ ' : '🛡️ ') + c.value}</div>`;
-        if (isPlayed || canPlay) card.addEventListener('click', () => this._playCard(i));
+        card.addEventListener('click', () => this._playCard(i));
         handEl.appendChild(card);
       });
       wrap.appendChild(handEl);
@@ -201,18 +203,23 @@ class DeckBattleLock {
       // Result
       const res = document.createElement('div');
       res.className = 'dblk-result';
-      if (this.conviction >= this.merchant.conviction) {
+      const won = this.conviction >= this.merchant.conviction;
+      if (won) {
         res.innerHTML = `<div class="dblk-win">✅ Convinced! Trade secured. Gold remaining: ${this.gold}g</div>`;
       } else if (this.gold <= 0) {
         res.innerHTML = `<div class="dblk-lose">❌ Bankrupt! The merchants took everything.</div>`;
       } else {
         res.innerHTML = `<div class="dblk-walk">🚪 You bow and leave. Come back with a stronger deck.</div>`;
       }
-      const retry = document.createElement('button');
-      retry.className = 'dblk-btn-sec';
-      retry.textContent = '↻ Retry';
-      retry.addEventListener('click', () => this.reset());
-      res.appendChild(retry);
+      // Retry would let the player restart a puzzle that's already about to close
+      // and hand its reward — the win path is on its way out, not replayable.
+      if (!won) {
+        const retry = document.createElement('button');
+        retry.className = 'dblk-btn-sec';
+        retry.textContent = '↻ Retry';
+        retry.addEventListener('click', () => this.reset());
+        res.appendChild(retry);
+      }
       wrap.appendChild(res);
     }
 
@@ -247,8 +254,8 @@ class DeckBattleLock {
 .dblk-dmg{color:#6d211b;font-weight:700}
 .dblk-safe{color:#2c4326;font-weight:700}
 .dblk-gain{color:#2c4326;font-weight:700}
-.dblk-hand{display:flex;flex-wrap:wrap;gap:6px}
-.dblk-card{position:relative;flex:1;min-width:80px;padding:8px;background:var(--bg,#0a0e17);border:2px solid var(--border,#1e2a45);border-radius:8px;cursor:pointer;transition:all .15s;text-align:center}
+.dblk-hand{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dblk-card{position:relative;padding:10px 6px;background:var(--bg,#0a0e17);border:2px solid var(--border,#1e2a45);border-radius:8px;cursor:pointer;transition:all .15s;text-align:center}
 .dblk-card:active{transform:scale(.95)}
 .dblk-card.dblk-played{background:var(--surface,#141b2d)}
 .dblk-card-tag{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--accent,#3b82f6);color:#fff;font-size:9px;font-weight:700;letter-spacing:.3px;padding:2px 6px;border-radius:99px;white-space:nowrap}

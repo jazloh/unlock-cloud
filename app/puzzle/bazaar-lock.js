@@ -1,9 +1,9 @@
 /**
  * Bazaar Lock — Marketplace with Gold Economy & Reward Tiers
  *
- * Drag quest scrolls to merchant stalls. Multiple stalls can handle a quest
- * but yield different reward quality. Budget tracks gold; remaining gold
- * counts toward final score.
+ * Tap a quest scroll then tap a merchant stall to send it there. Multiple
+ * stalls can handle a quest but yield different reward quality. Budget
+ * tracks gold; remaining gold counts toward final score.
  *
  * Usage:
  *   new BazaarLock(el, {
@@ -32,6 +32,7 @@ class BazaarLock {
     this.onSubmit = opts.onSubmit || (() => {});
     this.onWrong = opts.onWrong || (() => {});
     this.assignments = {};
+    this._selectedQuest = null;
     this._render();
   }
 
@@ -39,6 +40,11 @@ class BazaarLock {
     this.container.innerHTML = '';
     const w = document.createElement('div');
     w.className = 'bzlk';
+
+    const legend = document.createElement('div');
+    legend.className = 'bzlk-legend';
+    legend.textContent = 'Tap an errand, then tap a stall to send it there. Tap a staffed stall to recall its errand.';
+    w.appendChild(legend);
 
     // Budget bar
     const bw = document.createElement('div');
@@ -67,19 +73,12 @@ class BazaarLock {
     this.questEls = {};
     this.quests.forEach(q => {
       const c = document.createElement('div');
-      c.className = 'bzlk-quest';
-      c.draggable = true;
+      c.className = 'bzlk-quest' + (this._selectedQuest === q.id ? ' bzlk-quest-selected' : '');
       c.dataset.quest = q.id;
       c.innerHTML = `📜 ${q.label}`;
-      c.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', q.id); c.classList.add('bzlk-dragging'); });
-      c.addEventListener('dragend', () => c.classList.remove('bzlk-dragging'));
-      c.addEventListener('touchstart', () => { this._tq = q.id; c.classList.add('bzlk-dragging'); }, { passive: true });
-      c.addEventListener('touchend', e => {
-        c.classList.remove('bzlk-dragging');
-        const t = e.changedTouches[0], el = document.elementFromPoint(t.clientX, t.clientY);
-        const se = el && el.closest('[data-stall]');
-        if (se && this._tq) this._assign(this._tq, se.dataset.stall);
-        this._tq = null;
+      c.addEventListener('click', () => {
+        this._selectedQuest = this._selectedQuest === q.id ? null : q.id;
+        this._updateUI();
       });
       qp.appendChild(c);
       this.questEls[q.id] = c;
@@ -100,10 +99,10 @@ class BazaarLock {
         <div class="bzlk-stall-spec">${st.specialty}</div>
         <div class="bzlk-stall-cost">${st.cost}g</div>
         <div class="bzlk-stall-assigned"></div>`;
-      card.addEventListener('dragover', e => { e.preventDefault(); card.classList.add('bzlk-over'); });
-      card.addEventListener('dragleave', () => card.classList.remove('bzlk-over'));
-      card.addEventListener('drop', e => { e.preventDefault(); card.classList.remove('bzlk-over'); this._assign(e.dataTransfer.getData('text/plain'), st.id); });
-      card.addEventListener('click', () => this._unassignFromStall(st.id));
+      card.addEventListener('click', () => {
+        if (this._selectedQuest) { this._assign(this._selectedQuest, st.id); this._selectedQuest = null; }
+        else this._unassignFromStall(st.id);
+      });
       sr.appendChild(card);
       this.stallEls[st.id] = card;
     });
@@ -175,7 +174,11 @@ class BazaarLock {
 
     // Quest pool
     const assigned = new Set(Object.keys(this.assignments));
-    this.quests.forEach(q => { this.questEls[q.id].classList.toggle('bzlk-placed', assigned.has(q.id)); });
+    this.quests.forEach(q => {
+      this.questEls[q.id].classList.toggle('bzlk-placed', assigned.has(q.id));
+      this.questEls[q.id].classList.toggle('bzlk-quest-selected', this._selectedQuest === q.id);
+    });
+    this.stalls.forEach(st => this.stallEls[st.id].classList.toggle('bzlk-over', !!this._selectedQuest));
   }
 
   _test() {
@@ -253,6 +256,7 @@ class BazaarLock {
     const s = document.createElement('style'); s.id = 'bzlk-css';
     s.textContent = `
 .bzlk{display:flex;flex-direction:column;gap:12px;padding:16px 0;max-width:400px;margin:0 auto}
+.bzlk-legend{font-size:12px;line-height:1.5;color:var(--muted,#7a8ba8);background:var(--surface,#141b2d);border:1px solid var(--border,#1e2a45);border-radius:8px;padding:8px 10px}
 .bzlk-budget-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .bzlk-budget-label{font-size:13px;font-weight:600;color:var(--text,#e0e6f0)}
 .bzlk-budget-bar{flex:1;height:14px;background:var(--surface,#141b2d);border:1px solid var(--border,#1e2a45);border-radius:7px;overflow:hidden;min-width:100px}
@@ -263,11 +267,11 @@ class BazaarLock {
 .bzlk-over-budget-text{color:#ef4444}
 .bzlk-section-label{font-size:11px;color:var(--muted,#7a8ba8);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;width:100%}
 .bzlk-quests{display:flex;flex-wrap:wrap;gap:8px}
-.bzlk-quest{padding:7px 12px;background:var(--surface,#141b2d);border:1px solid #5c4a2a;border-radius:8px;font-size:12px;font-weight:600;color:#d4a853;cursor:grab;user-select:none;-webkit-user-select:none;transition:opacity .2s}
-.bzlk-quest.bzlk-dragging{opacity:.4}
+.bzlk-quest{padding:7px 12px;background:var(--surface,#141b2d);border:1px solid #5c4a2a;border-radius:8px;font-size:12px;font-weight:600;color:#d4a853;cursor:pointer;user-select:none;-webkit-user-select:none;transition:all .2s}
+.bzlk-quest.bzlk-quest-selected{border-color:var(--accent,#3b82f6);background:#1a2a4e;box-shadow:0 0 8px rgba(59,130,246,.3)}
 .bzlk-quest.bzlk-placed{opacity:.25;pointer-events:none}
 .bzlk-stalls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.bzlk-stall{flex:1;min-width:100px;max-width:140px;padding:10px 8px;background:var(--surface,#141b2d);border:2px dashed var(--border,#1e2a45);border-radius:10px;text-align:center;cursor:default;transition:all .2s}
+.bzlk-stall{flex:1;min-width:100px;max-width:140px;padding:10px 8px;background:var(--surface,#141b2d);border:2px dashed var(--border,#1e2a45);border-radius:10px;text-align:center;cursor:pointer;transition:all .2s}
 .bzlk-stall.bzlk-over{border-color:var(--accent,#3b82f6);box-shadow:0 0 10px rgba(59,130,246,.2)}
 .bzlk-stall.bzlk-correct{border-color:#22c55e;border-style:solid}
 .bzlk-stall.bzlk-wrong{animation:bzlk-sh .4s;border-color:#ef4444}

@@ -109,7 +109,7 @@
         { "card_id": 602, "label": "Read the merchant stall directory" },
         { "card_id": 606, "label": "Talk to the Nova Company Clerk", "puzzle": "npc-novaclerk" },
         { "card_id": 604, "label": "Talk to the Meta Captain", "puzzle": "npc-metacaptain" },
-        { "card_id": 605, "label": "Recruit an ally for the Kitchen", "requires_item": [301, 601], "puzzle": "bazaar-recruit" },
+        { "card_id": 605, "label": "Recruit allies at the Bazaar", "requires_item": [301, 601], "puzzle": "bazaar-recruit" },
         { "card_id": 603, "label": "Talk to the Anthropic Scholar", "requires_item": [806], "puzzle": "npc-anthropic" },
         { "card_id": 700, "label": "Go to the Foreign Quarter", "requires_item": [505] },
         { "card_id": 800, "label": "Go to the Entertainment Guild", "requires_item": [706] },

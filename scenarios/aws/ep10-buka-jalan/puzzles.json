@@ -1,0 +1,524 @@
+{
+  "puzzles": [
+    {
+      "id": "npc-pakdedi",
+      "type": "tool",
+      "ui": "npc-dialog",
+      "card_ref": 102,
+      "description": "Pak Din — Your Grab Driver",
+      "config": {
+        "name": "Pak Din",
+        "portrait": "🚗",
+        "greeting": "Aduh, sesak gila! Tun Razak always like this. You IT right? My app also no ETA. Fix lah, boss!",
+        "lines": [
+          { "label": "What happened?", "response": "No ETA, no route. 3 passengers cancel already. My rating drop! Just fix fast can?" },
+          { "label": "Know a faster route?", "response": "Two options: jalan biasa — every light, every turn, you navigate yourself. Or... LRT. Dedicated lane, empty road. Need LRT card. Ask Pak Ali at the toll mamak." },
+          { "label": "What's special about the LRT?", "response": "Got AI navigation inside! Driver doesn't think about route — computer suggest, driver approve. Very smart system." },
+          { "label": "Got it, let's go", "response": "Good luck boss! Toll booth ahead. Whatever route — cepat ya?" }
+        ]
+      },
+      "hints": ["Pak Din mentions a LRT lane with AI navigation"],
+      "mandatory": false
+    },
+    {
+      "id": "npc-pakbudi",
+      "type": "tool",
+      "ui": "npc-dialog",
+      "card_ref": 202,
+      "description": "Pak Ali — Mamak Vendor at Toll Plaza",
+      "config": {
+        "name": "Pak Ali",
+        "portrait": "☕",
+        "greeting": "Developer ya? Mau teh tarik? My nephew uses new method — an AI assistant, Kiro. Like having a smart teammate. Want LRT pass?",
+        "lines": [
+          { "label": "Tell me about your nephew's method", "response": "Called AIDLC. AI analyzes everything, then PROPOSES a fix. But nephew still decides. AI never goes alone. 'AI suggests, I approve.' Fast because AI does prep work." },
+          { "label": "How is that different?", "response": "Without Kiro: gather everything yourself, design yourself, build step by step. Nothing wrong! But takes time. With Kiro: AI gathers and proposes. You think and approve. Same quality — less time." },
+          { "label": "Give me the LRT pass", "response": "First: for THIS crash — full end-to-end redesign... or just fix what broke? If scope is focused, the AI can be laser-precise." },
+          { "label": "Just fix what broke — focused scope", "response": "Exactly! Adaptive thinking. Here — LRT pass. Express lane has Kiro ready. Selamat jalan!", "awards_item": 250 },
+          { "label": "I need to review everything fully", "response": "Also good! Thorough is respectable. Standard lane ahead. If you change mind later — there's an on-ramp from the overpass." }
+        ],
+        "state_lines": [
+          { "requires_card": 250, "label": "Thanks for the pass!", "response": "No problem! Remember: the AI proposes, YOU decide. It's still your fix — just with a very smart assistant." }
+        ]
+      },
+      "hints": ["Talk to Pak Ali and choose 'focused scope' to receive the LRT pass"],
+      "mandatory": false
+    },
+    {
+      "id": "npc-commuter",
+      "type": "tool",
+      "ui": "npc-dialog",
+      "card_ref": 802,
+      "description": "A Fellow Commuter",
+      "config": {
+        "name": "Fellow Commuter",
+        "portrait": "🧑",
+        "greeting": "You're the GoLancar dev? Ha — I was in your seat last month. Different app, same panic. Kiro — the AI assistant — saved me.",
+        "lines": [
+          { "label": "What was it like?", "response": "It proposed a plan in seconds. I said no to half of it, fixed the scope, approved the rest. Felt less like coding alone and more like leading a small team." },
+          { "label": "Any advice?", "response": "Give it the right context and nothing else. And never skip your own review — the AI is fast, but you're the one accountable." }
+        ]
+      },
+      "hints": [],
+      "mandatory": false
+    },
+    {
+      "id": "wordlock-scope",
+      "type": "word-lock",
+      "ui": "word-lock",
+      "card_ref": 203,
+      "description": "Define the fix scope",
+      "config": {
+        "answer": "SCOPE",
+        "case_sensitive": false,
+        "title": "What must you define first?",
+        "title_builder": "What 5-letter word describes the boundary of the problem? The crash report defines it.",
+        "title_planner": "Define the _____ of the problem — the boundary that limits what you'll fix.",
+        "title_strategist": "What's the 5-letter word for the boundary of business impact?",
+        "learning_card": "🧠 Adaptive Depth — In AIDLC, the process depth matches the problem size. A routing-only bug gets a focused fix path, not a full system redesign. The scope you just identified tells Kiro how deep to dig."
+      },
+      "hints": [
+        "5 letters. Starts with S. Defines the boundary.",
+        "💡 Translate: 'Scope' = the boundary of what you'll fix. Not everything — just the relevant part.",
+        "Rhymes with 'hope'"
+      ],
+      "mandatory": true,
+      "success_card": 203
+    },
+    {
+      "id": "blueprint-arch",
+      "type": "blueprint-lock",
+      "ui": "blueprint-lock",
+      "card_ref": 301,
+      "description": "Design the fix path",
+      "config": {
+        "title": "Design the fix path",
+        "title_builder": "Place each component in the correct order (the ⚠️ is the broken one). In this edge-cache topology, requests hit the cache layer before reaching the routing engine — reducing load on the broken component.",
+        "title_planner": "Arrange the flow in order (the ⚠️ step is where it broke).",
+        "title_strategist": "Put the process steps in order (the ⚠️ step failed).",
+        "layers": [
+          { "id": "p1", "label": "Step 1", "icon": "1️⃣", "color": "#FF6B35" },
+          { "id": "p2", "label": "Step 2", "icon": "2️⃣", "color": "#F6A700" },
+          { "id": "p3", "label": "Step 3", "icon": "3️⃣", "color": "#1A936F" },
+          { "id": "p4", "label": "Step 4", "icon": "4️⃣", "color": "#004E89" },
+          { "id": "p5", "label": "Step 5", "icon": "5️⃣", "color": "#2D3047" }
+        ],
+        "components_builder": [
+          { "id": "lb", "label": "Load Balancer", "icon": "🌐", "layer": "p1", "hint": "Distributes incoming traffic — always first" },
+          { "id": "cache", "label": "Cache Layer", "icon": "⚡", "layer": "p2", "hint": "Serves hot routes before the engine" },
+          { "id": "routing", "label": "Routing Engine ⚠️", "icon": "🧭", "layer": "p3", "hint": "Where the crash happens" },
+          { "id": "queue", "label": "Message Queue", "icon": "📨", "layer": "p4", "hint": "Absorbs overflow after routing" },
+          { "id": "db", "label": "Database", "icon": "🗄️", "layer": "p5", "hint": "Stores the result last" }
+        ],
+        "components_planner": [
+          { "id": "lb", "label": "User Request", "icon": "🙋", "layer": "p1", "hint": "The flow starts with the user" },
+          { "id": "cache", "label": "Check Saved Data", "icon": "⚡", "layer": "p2", "hint": "Look for a fast saved answer first" },
+          { "id": "routing", "label": "Calculate Route ⚠️", "icon": "🧭", "layer": "p3", "hint": "Where it broke" },
+          { "id": "queue", "label": "Queue Update", "icon": "📨", "layer": "p4", "hint": "Line up the update" },
+          { "id": "db", "label": "Confirm Result", "icon": "✅", "layer": "p5", "hint": "Record and confirm last" }
+        ],
+        "components_strategist": [
+          { "id": "lb", "label": "Customer Input", "icon": "🙋", "layer": "p1", "hint": "It starts with the customer" },
+          { "id": "cache", "label": "Quick Lookup", "icon": "⚡", "layer": "p2", "hint": "Fast lookup before heavy work" },
+          { "id": "routing", "label": "Core Calculation ⚠️", "icon": "🧭", "layer": "p3", "hint": "The step that failed" },
+          { "id": "queue", "label": "Process Queue", "icon": "📨", "layer": "p4", "hint": "Handle the backlog" },
+          { "id": "db", "label": "Record Result", "icon": "✅", "layer": "p5", "hint": "Record the outcome last" }
+        ],
+        "falseOutputs": {
+          "p1": "The flow doesn't start there — the first step is the entry point.",
+          "p2": "Not the second step — that's the quick lookup before the core work.",
+          "p3": "The middle step is the core calculation (the ⚠️ one).",
+          "p4": "The fourth step handles the queue/backlog, after the core work.",
+          "p5": "The final step records the result."
+        }
+      },
+      "hints": [
+        "Flow goes in order: input → lookup → calculate → queue → store.",
+        "💡 Translate: The ⚠️ marks the broken step. Everything flows through it, in the middle.",
+        "The broken piece sits in the middle (step 3)."
+      ],
+      "mandatory": true,
+      "success_card": 301
+    },
+    {
+      "id": "timeline-crash",
+      "type": "timeline-lock",
+      "ui": "timeline-lock",
+      "card_ref": 901,
+      "description": "Trace what happened",
+      "config": {
+        "title": "Trace what happened",
+        "title_builder": "Arrange the crash events in the order they happened.",
+        "title_planner": "Put the incident stages in order.",
+        "title_strategist": "Order the business events as they unfolded.",
+        "answer": ["a", "b", "c", "d", "e"],
+        "events_builder": [
+          { "id": "a", "label": "Deploy v2.3.1 (13:00)" },
+          { "id": "b", "label": "Traffic spike to 450K (13:12)" },
+          { "id": "c", "label": "Memory overflow triggered (connection pool exhausted) (13:14:20)" },
+          { "id": "d", "label": "Null pointer in routing (dereferenced freed memory from overflow) (13:14:45)" },
+          { "id": "e", "label": "Cascade — all ETAs offline (13:15)" }
+        ],
+        "events_planner": [
+          { "id": "a", "label": "New version released (13:00)" },
+          { "id": "b", "label": "User count exceeds threshold (13:12)" },
+          { "id": "c", "label": "System overloaded (connection pool exhausted) (13:14:20)" },
+          { "id": "d", "label": "Core feature breaks (routing fails from the overload) (13:14:45)" },
+          { "id": "e", "label": "All users affected (13:15)" }
+        ],
+        "events_strategist": [
+          { "id": "a", "label": "Product update went live (13:00)" },
+          { "id": "b", "label": "Peak demand exceeded capacity (13:12)" },
+          { "id": "c", "label": "System hit breaking point (capacity exhausted) (13:14:20)" },
+          { "id": "d", "label": "Core service failed (collapsed under the overload) (13:14:45)" },
+          { "id": "e", "label": "500K customers lost service (13:15)" }
+        ]
+      },
+      "hints": [
+        "Earliest event first. Follow the timestamps.",
+        "💡 Translate: something was released → demand grew → system broke → feature failed → everyone affected.",
+        "The deploy/release always comes first."
+      ],
+      "mandatory": true,
+      "success_card": 901
+    },
+    {
+      "id": "ctx-aidlc",
+      "type": "context-lock",
+      "ui": "context-lock",
+      "card_ref": 601,
+      "description": "Feed Kiro",
+      "config": {
+        "capacity": 2000,
+        "agentName": "Kiro",
+        "title": "Feed the AI assistant, Kiro",
+        "intro": "Kiro builds from whatever context you feed it. Include only documents relevant to the routing bug — irrelevant docs waste the token budget and degrade Kiro's output.",
+        "title_builder": "Give the AI the right inputs. Too much noise = wrong output.",
+        "title_planner": "Select the info the AI needs. Leave out the noise.",
+        "title_strategist": "Pick the inputs that matter. Drop the distractions.",
+        "learning_card": "🧠 Context Management — You just did what AIDLC does: feed the AI only what's relevant. Right context = right output. AIDLC calls this Workspace Detection.",
+        "documents_builder": [
+          { "id": "crash", "label": "crash-report.md", "icon": "🚨", "desc": "Routing null pointer at >400K users", "tokens": 400, "status": "required", "poisonLine": null, "missingLine": "❓ No crash report — what failed?" },
+          { "id": "arch", "label": "architecture.md", "icon": "🏗️", "desc": "Current service architecture", "tokens": 600, "status": "required", "poisonLine": null, "missingLine": "❓ No architecture — guessing the topology." },
+          { "id": "logs", "label": "error-logs-2h.log", "icon": "📈", "desc": "Error logs, last 2 hours", "tokens": 300, "status": "required", "poisonLine": null, "missingLine": "❓ No recent logs — flying blind." },
+          { "id": "limits", "label": "concurrency.conf", "icon": "⚙️", "desc": "Concurrency config (max_users)", "tokens": 300, "status": "required", "poisonLine": null, "missingLine": "❓ No limits config — can't reason about capacity." },
+          { "id": "scope", "label": "scope-note.md", "icon": "🎯", "desc": "Fix scope: routing only", "tokens": 200, "status": "required", "poisonLine": null, "missingLine": "❓ No scope — the AI wants to fix everything." },
+          { "id": "marketing", "label": "q4-marketing.pptx", "icon": "📣", "desc": "Q4 marketing roadmap", "tokens": 500, "status": "poison", "poisonLine": "❌ Injecting marketing goals into a crash fix — noise!" },
+          { "id": "handbook", "label": "handbook.pdf", "icon": "📕", "desc": "Employee handbook (200 pages)", "tokens": 900, "status": "poison", "poisonLine": "❌ Citing the 200-page handbook — pure noise!" },
+          { "id": "allcode", "label": "repo-since-2019.git", "icon": "🗂️", "desc": "Full repo history since 2019", "tokens": 1200, "status": "poison", "poisonLine": "❌ Six years of commits — the relevant docs drown!" }
+        ],
+        "documents_planner": [
+          { "id": "incident", "label": "Incident report", "icon": "🚨", "desc": "What failed and where", "tokens": 400, "status": "required", "poisonLine": null, "missingLine": "❓ No incident report — what's broken?" },
+          { "id": "journey", "label": "User journey map", "icon": "🗺️", "desc": "The affected user flow", "tokens": 600, "status": "required", "poisonLine": null, "missingLine": "❓ No journey map — which flow broke?" },
+          { "id": "qa", "label": "QA failure log", "icon": "🧪", "desc": "Recent failing tests", "tokens": 300, "status": "required", "poisonLine": null, "missingLine": "❓ No QA log — what tests failed?" },
+          { "id": "sla", "label": "SLA targets", "icon": "⏱️", "desc": "Response-time commitments", "tokens": 300, "status": "required", "poisonLine": null, "missingLine": "❓ No SLA targets — what's the bar?" },
+          { "id": "scope", "label": "Fix scope: ETA feature only", "icon": "🎯", "desc": "Boundary of the fix", "tokens": 200, "status": "required", "poisonLine": null, "missingLine": "❓ No scope — everything's in play." },
+          { "id": "backlog", "label": "Full product backlog", "icon": "📚", "desc": "300 unrelated items", "tokens": 500, "status": "poison", "poisonLine": "❌ Dumping the whole backlog — noise!" },
+          { "id": "holiday", "label": "Team holiday calendar", "icon": "📆", "desc": "Who's on leave", "tokens": 400, "status": "poison", "poisonLine": "❌ Holiday dates won't fix a crash — noise!" },
+          { "id": "org", "label": "Org chart (all depts)", "icon": "🏢", "desc": "Company structure", "tokens": 900, "status": "poison", "poisonLine": "❌ Org chart is irrelevant to the fix — noise!" }
+        ],
+        "documents_strategist": [
+          { "id": "outage", "label": "Outage summary", "icon": "🚨", "desc": "What's down right now", "tokens": 400, "status": "required", "poisonLine": null, "missingLine": "❓ No outage summary — what's down?" },
+          { "id": "impact", "label": "Customer impact data", "icon": "👥", "desc": "500K affected", "tokens": 600, "status": "required", "poisonLine": null, "missingLine": "❓ No impact data — how bad is it?" },
+          { "id": "avail", "label": "Team availability", "icon": "🧑‍🤝‍🧑", "desc": "Who can act now", "tokens": 300, "status": "required", "poisonLine": null, "missingLine": "❓ No availability — who can help?" },
+          { "id": "budget", "label": "SLA / budget constraints", "icon": "💰", "desc": "Limits on the response", "tokens": 300, "status": "required", "poisonLine": null, "missingLine": "❓ No constraints — what are the limits?" },
+          { "id": "scope", "label": "Fix scope: restore ETAs only", "icon": "🎯", "desc": "Boundary of the fix", "tokens": 200, "status": "required", "poisonLine": null, "missingLine": "❓ No scope — everything's on the table." },
+          { "id": "competitor", "label": "Competitor press release", "icon": "📰", "desc": "Unrelated PR", "tokens": 400, "status": "poison", "poisonLine": "❌ A competitor's PR won't fix the outage — noise!" },
+          { "id": "reno", "label": "Office renovation plan", "icon": "🏗️", "desc": "Facilities project", "tokens": 500, "status": "poison", "poisonLine": "❌ Renovation plans are irrelevant — noise!" },
+          { "id": "annual", "label": "Annual financial report", "icon": "📊", "desc": "Year-end financials", "tokens": 900, "status": "poison", "poisonLine": "❌ The annual report won't help here — noise!" }
+        ]
+      },
+      "hints": [
+        "Give the AI what's RELEVANT to the crash — not everything you have.",
+        "💡 Translate: 'Context' = the specific info to solve THIS problem. Noise = irrelevant data that confuses.",
+        "Roadmaps, handbooks, backlogs, and org charts won't fix a crash."
+      ],
+      "mandatory": true,
+      "success_card": 601
+    },
+    {
+      "id": "wordlock-bolts",
+      "type": "word-lock",
+      "ui": "word-lock",
+      "card_ref": 602,
+      "description": "AIDLC's parallel work units",
+      "config": {
+        "answer": "BOLTS",
+        "case_sensitive": false,
+        "title": "AIDLC's parallel work units are called ___",
+        "title_builder": "The parallel execution units that run simultaneously are called B_____",
+        "title_planner": "Time-boxed parallel tasks — not sprints, but B_____",
+        "title_strategist": "3 parallel B_____ × 3 hours = 3 hours total, not 9",
+        "learning_card": "🧠 Bolts — AIDLC measures work in Bolts: focused, hours-long units that run in parallel. 3 Bolts × 3 hours = 3 hours elapsed, not 9."
+      },
+      "hints": [
+        "Lore says: 'Work measured in ___ — hours, not weeks.'",
+        "💡 Translate: like lightning-fast focused sprints running in parallel. Plural. Starts with B.",
+        "Rhymes with 'jolts'"
+      ],
+      "mandatory": true,
+      "success_card": 602
+    },
+    {
+      "id": "npc-rina",
+      "type": "tool",
+      "ui": "npc-dialog",
+      "card_ref": 403,
+      "description": "Kiro — Your AI Assistant",
+      "config": {
+        "name": "Kiro",
+        "portrait": "🤖",
+        "greeting": "I'm Kiro, your AI assistant. I've broken the fix into 3 parallel Bolts. But I need YOUR approval before anything runs.",
+        "lines": [
+          { "label": "What are the 3 Bolts?", "response": "Bolt 1: fix the core issue (2h). Bolt 2: add the safety net (2h). Bolt 3: verify under load (1h). In parallel: 2 hours total — not 5 sequential." },
+          { "label": "Why need my approval?", "response": "I propose, you decide. Always. I might suggest wrong scope, miss a constraint only YOU know, or over-engineer. The audit logs every proposal and every decision." },
+          { "label": "What if your proposal is wrong?", "response": "Reject it! I'll re-propose with your feedback. The loop: I propose → you review → approve or redirect. Always your call." },
+          { "label": "What about quality?", "response": "Two machine layers first: sensors catch issues, a reviewer agent evaluates logic. Then YOU — the human gate. It's called the dual-loop." },
+          { "label": "Who else is on the team?", "response": "14 specialist agents — security, architecture, QA. They resolve issues among themselves and only escalate decisions to you. You lead a team, not babysit one." }
+        ]
+      },
+      "hints": [],
+      "mandatory": false
+    },
+    {
+      "id": "triage-lanes",
+      "type": "traffic-lane-lock",
+      "ui": "traffic-lane-lock",
+      "card_ref": 405,
+      "description": "Route the work into lanes",
+      "config": {
+        "title": "Sort each task: AI handles it, you decide, or skip it.",
+        "title_builder": "Which tasks can the AI run, which need you, which to skip?",
+        "title_planner": "Sort the work: AI-automated, human-decided, or out of scope.",
+        "title_strategist": "Route each item: AI executes, you approve, or skip it.",
+        "learning_card": "🧠 Adaptive Composition — Not every task needs you, and not everything belongs. AI runs the routine (inner loop), you make the judgment calls (outer loop), and you skip what this fix doesn't need.",
+        "tasks_builder": [
+          { "id": "t1", "label": "Generate null-check boilerplate", "lane": "ai" },
+          { "id": "t2", "label": "Run the automated test suite", "lane": "ai" },
+          { "id": "t3", "label": "Approve the fix scope", "lane": "human" },
+          { "id": "t4", "label": "Sign off on production deploy", "lane": "human" },
+          { "id": "t5", "label": "Rewrite the whole routing engine", "lane": "skip" },
+          { "id": "t6", "label": "Migrate to a new database", "lane": "skip" }
+        ],
+        "tasks_planner": [
+          { "id": "t1", "label": "Auto-generate test cases", "lane": "ai" },
+          { "id": "t2", "label": "Draft the release notes", "lane": "ai" },
+          { "id": "t3", "label": "Approve acceptance criteria", "lane": "human" },
+          { "id": "t4", "label": "Make the go / no-go call", "lane": "human" },
+          { "id": "t5", "label": "Redesign the whole user journey", "lane": "skip" },
+          { "id": "t6", "label": "Re-plan the entire roadmap", "lane": "skip" }
+        ],
+        "tasks_strategist": [
+          { "id": "t1", "label": "Compile the impact metrics", "lane": "ai" },
+          { "id": "t2", "label": "Draft the status update", "lane": "ai" },
+          { "id": "t3", "label": "Approve the remediation budget", "lane": "human" },
+          { "id": "t4", "label": "Decide customer communications", "lane": "human" },
+          { "id": "t5", "label": "Acquire a competitor", "lane": "skip" },
+          { "id": "t6", "label": "Rebrand the company", "lane": "skip" }
+        ]
+      },
+      "hints": [
+        "AI Lane = routine/automatable. Human Lane = judgment & approval. Skip Lane = not needed for this scoped fix.",
+        "💡 Anything 'rewrite everything' or 'migrate/redesign' is out of scope → Skip. Approvals & sign-offs → Human. Codegen & tests → AI.",
+        "AI: the two generation/testing tasks. Human: the two approval tasks. Skip: the two 'rebuild everything' tasks."
+      ],
+      "mandatory": true,
+      "success_card": 405
+    },
+    {
+      "id": "spec-validate",
+      "type": "spec-lock",
+      "ui": "spec-lock",
+      "card_ref": 401,
+      "description": "AI proposed this. You validate.",
+      "config": {
+        "title": "AI proposed this. You validate.",
+        "agentName": "Kiro",
+        "cliName": "kiro",
+        "title_builder": "Approve correct code-level items. Reject scope creep.",
+        "title_planner": "Approve correct requirements. Reject scope creep.",
+        "title_strategist": "Approve correct outcomes. Reject scope creep.",
+        "learning_card": "🧠 AI Proposes, Human Validates — The AI generated that spec. YOU caught the scope creep. In AIDLC, AI never ships without your approval.",
+        "falseOutputs": [
+          "That's scope creep — the fix is focused, not a rebuild.",
+          "Reject it. 'Rewrite/redesign/rebuild everything' is out of scope.",
+          "The CTO messages: \"No time to rebuild the platform. Fix the crash.\"",
+          "That's beyond the actual problem. Match the real requirement."
+        ],
+        "rounds_builder": [
+          {
+            "vibe": "Fix the GoLancar routing crash",
+            "chaosOutputs": [
+              "🔧 Proposed rewriting the entire routing engine",
+              "🗄️ Proposed migrating to a new database platform",
+              "🌈 Threw in a dashboard redesign nobody asked for"
+            ],
+            "spec": [
+              { "label": "Core Fix", "prompt": "The core change is to ___", "answer": "fix the null pointer when users > 400K", "options": ["fix the null pointer when users > 400K", "Add a monitoring dashboard for all microservices while fixing the crash", "Refactor the connection pooling library to use the latest async patterns"] },
+              { "label": "Resilience", "prompt": "To degrade gracefully, add ___", "answer": "a circuit breaker for graceful degradation", "options": ["a circuit breaker for graceful degradation", "a migration to a new database platform", "a full second data center"] },
+              { "label": "Safeguard", "prompt": "To protect against overload, add ___", "answer": "rate limiting at the 500K threshold", "options": ["rate limiting at the 500K threshold", "a full rewrite of the routing engine", "removal of all limits"] },
+              { "label": "Verification", "prompt": "Before shipping, add ___", "answer": "unit tests for concurrency edge cases", "options": ["unit tests for concurrency edge cases", "nothing — skip tests to save time", "a brand-new testing framework"] }
+            ],
+            "correctScene": ["🧭 Null-safe routing", "🛡️ Circuit breaker", "🚦 Rate limiting at 500K", "✅ Concurrency tests"]
+          }
+        ],
+        "rounds_planner": [
+          {
+            "vibe": "Fix the ETA outage",
+            "chaosOutputs": [
+              "🔧 Proposed redesigning the entire user journey",
+              "🧪 Proposed switching testing frameworks mid-incident",
+              "🌈 Added unrelated new features"
+            ],
+            "spec": [
+              { "label": "Core Fix", "prompt": "The core change is to ___", "answer": "fix ETA display for overloaded periods", "options": ["fix ETA display for overloaded periods", "Add user satisfaction surveys to the recovery flow", "Document all edge cases for the next quarterly review before fixing"] },
+              { "label": "Fallback", "prompt": "When ETA is unavailable, ___", "answer": "show a clear fallback message", "options": ["show a clear fallback message", "redesign every screen", "hide the whole app"] },
+              { "label": "Safeguard", "prompt": "To catch overload early, add ___", "answer": "a monitoring alert at 80% capacity", "options": ["a monitoring alert at 80% capacity", "a full journey redesign", "no monitoring at all"] },
+              { "label": "Verification", "prompt": "Before release, add ___", "answer": "test scenarios for 400K+ concurrent users", "options": ["test scenarios for 400K+ concurrent users", "skip testing to save time", "a new testing framework rollout"] }
+            ],
+            "correctScene": ["📱 ETA display fixed", "💬 Fallback message", "🔔 80% capacity alert", "✅ Load-scenario tests"]
+          }
+        ],
+        "rounds_strategist": [
+          {
+            "vibe": "Restore service for 500K users",
+            "chaosOutputs": [
+              "🔧 Proposed rebuilding the entire product",
+              "🏢 Proposed acquiring a competitor",
+              "🌈 Added unrelated strategic bets"
+            ],
+            "spec": [
+              { "label": "Core Outcome", "prompt": "The core outcome is to ___", "answer": "restore ETAs for 500K affected users", "options": ["restore ETAs for 500K affected users", "Commission a full vendor evaluation before approving the fix", "Schedule a cross-functional offsite to align on long-term architecture"] },
+              { "label": "Resilience", "prompt": "To handle future peaks, add ___", "answer": "automatic capacity overflow handling", "options": ["automatic capacity overflow handling", "a full product rebuild", "no overflow handling"] },
+              { "label": "Safeguard", "prompt": "To act before breaking, add ___", "answer": "an alert before capacity is reached", "options": ["an alert before capacity is reached", "a competitor acquisition", "no early warning"] },
+              { "label": "Verification", "prompt": "Before go-live, ___", "answer": "verify the fix under peak-hour conditions", "options": ["verify the fix under peak-hour conditions", "skip verification to move fast", "rebuild the QA org"] }
+            ],
+            "correctScene": ["🟢 ETAs restored", "🌊 Overflow handling", "🔔 Early capacity alert", "✅ Peak-hour verified"]
+          }
+        ]
+      },
+      "hints": [
+        "Scope is focused. If it says 'rewrite/redesign/rebuild everything' — that's scope creep.",
+        "💡 Translate: 'Scope creep' = trying to solve MORE than the actual problem. Reject anything beyond the fix.",
+        "The obviously-too-big option in each row is the wrong one."
+      ],
+      "mandatory": true,
+      "success_card": 401
+    },
+    {
+      "id": "defuse-bugs",
+      "type": "defuse-lock",
+      "ui": "defuse-lock",
+      "card_ref": 502,
+      "description": "Sensors flagged issues — fix the real ones",
+      "config": {
+        "timeSeconds": 90,
+        "timeSeconds_builder": 90,
+        "timeSeconds_planner": 120,
+        "timeSeconds_strategist": 150,
+        "title": "Sensors flagged 4 issues. Fix the real ones.",
+        "title_builder": "3 are critical bugs. 1 is cosmetic. Fix the real ones.",
+        "title_planner": "3 affect users. 1 is cosmetic. Fix what matters.",
+        "title_strategist": "3 hit revenue/trust. 1 is cosmetic. Fix what matters.",
+        "learning_card": "🧠 Dual-Loop Verification — Sensors found those bugs automatically (inner loop). You decided the fix (outer loop). Speed AND quality.",
+        "tasks_builder": [
+          { "id": "w1", "type": "toggle", "label": "Add null check on user.location", "answer": true },
+          { "id": "w2", "type": "toggle", "label": "Fix race condition in cache invalidation", "answer": true },
+          { "id": "w3", "type": "toggle", "label": "Raise timeout from 300ms to 3000ms", "answer": true },
+          { "id": "w4", "type": "toggle", "label": "Recolor dashboard button #FF6B35 (cosmetic)", "answer": false }
+        ],
+        "tasks_planner": [
+          { "id": "w1", "type": "toggle", "label": "Users without location get no ETA", "answer": true },
+          { "id": "w2", "type": "toggle", "label": "10% of users get stale/wrong ETAs", "answer": true },
+          { "id": "w3", "type": "toggle", "label": "Slow requests dropped instead of queued", "answer": true },
+          { "id": "w4", "type": "toggle", "label": "Report button slightly misaligned (cosmetic)", "answer": false }
+        ],
+        "tasks_strategist": [
+          { "id": "w1", "type": "toggle", "label": "Revenue: no-ETA users can't book", "answer": true },
+          { "id": "w2", "type": "toggle", "label": "Trust: 10% of rides get wrong ETA", "answer": true },
+          { "id": "w3", "type": "toggle", "label": "Churn: peak-hour users dropped", "answer": true },
+          { "id": "w4", "type": "toggle", "label": "Internal report font size (cosmetic)", "answer": false }
+        ]
+      },
+      "hints": [
+        "3 real issues, 1 cosmetic. Focus on what affects USERS.",
+        "💡 Translate: 'Cosmetic' = looks wrong but doesn't break anything. Real bugs affect users/revenue.",
+        "Turn ON the three real fixes; leave the cosmetic one OFF."
+      ],
+      "mandatory": true,
+      "success_card": 502
+    },
+    {
+      "id": "wordlock-ship",
+      "type": "word-lock",
+      "ui": "word-lock",
+      "card_ref": 503,
+      "description": "The human gate",
+      "config": {
+        "answer": "SHIP",
+        "case_sensitive": false,
+        "title": "Sensors passed. Reviewer approved. Your final call:",
+        "title_builder": "Code verified. Tests green. One word deploys this fix.",
+        "title_planner": "All acceptance criteria met. The release gate is YOU.",
+        "title_strategist": "Risk assessed. Quality confirmed. What's your decision?"
+      },
+      "hints": [
+        "4 letters. What you do when it's ready for production.",
+        "Rhymes with 'tip'. Starts with SH.",
+        "💡 This is the human gate. YOU are the final verification layer."
+      ],
+      "mandatory": true,
+      "success_card": 503
+    },
+    {
+      "id": "match-learn",
+      "type": "match-lock",
+      "ui": "match-lock",
+      "card_ref": 1001,
+      "description": "Teach the system: match each decision to its rule",
+      "config": {
+        "title": "Teach the system: match each decision to its rule",
+        "learning_card": "🧠 Learning Loop — You just taught the system rules for next time. Each Bolt makes the next one smarter. Teach once, never re-explain.",
+        "faceUp": true,
+        "cols": 2,
+        "pairs": [
+          ["Focused scope (not full redesign)", "Rule: scope routing bugs to service-level"],
+          ["Selected relevant context only", "Rule: include only crash-related inputs"],
+          ["Rejected scope creep in the spec", "Rule: flag items outside defined scope"],
+          ["Fixed real issues, ignored cosmetic", "Rule: prioritize functional over cosmetic"]
+        ]
+      },
+      "hints": [
+        "Match YOUR decisions to the rules they teach the AI.",
+        "💡 The Learning Loop: each decision becomes a rule for next time. 'Teach once, never re-explain.'",
+        "Each decision has exactly one matching rule."
+      ],
+      "mandatory": true,
+      "success_card": 1001
+    },
+    {
+      "id": "wordlock-adapt",
+      "type": "word-lock",
+      "ui": "word-lock",
+      "card_ref": 701,
+      "description": "The final command",
+      "config": {
+        "answer": "ADAPT",
+        "case_sensitive": false,
+        "title": "The core principle of AIDLC: _____ to the problem.",
+        "title_builder": "What does AIDLC do that rigid processes don't? It _____ to the problem.",
+        "title_planner": "AIDLC right-sizes the process. One word: it _____ to the challenge.",
+        "title_strategist": "Unlike fixed approaches, AIDLC _____ its workflow to the situation.",
+        "learning_card": "🧠 The Core Principle — AIDLC ADAPTS. It adapts workflow breadth, depth, and speed to match the problem. Small fix = small process. Complex feature = full rigor. You just experienced adaptive development. Take it home."
+      },
+      "hints": [
+        "5 letters. Every NPC mentioned this concept — adapting the process to fit the problem.",
+        "The LRT express lane adapted to traffic. AIDLC _____ to complexity.",
+        "Starts with A. The opposite of rigid."
+      ],
+      "mandatory": true,
+      "success_card": 701,
+      "isFinal": true
+    }
+  ]
+}
