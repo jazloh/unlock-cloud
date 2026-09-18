@@ -1,5 +1,5 @@
 {
-  "_comment": "Server-side question bank for Group Quiz Mode, built for AWS Cloud and AI Day Hanoi (Sept 29, 2026, JW Marriott Hotel Hanoi). Server picks question IDs per category based on player vote, then assembles the puzzle config for each lock type (see quiz-mode-puzzle-config-example.json). This file is NOT loaded directly by the client.\n\nCATEGORIES (6 total, confirmed 2026-08-24): aws-core-services, agentic-ai, security, vietnam-aws, startups-innovation, cloud-fundamentals. Each category originally had 81 entries (13 numeric, 13 word, 30 mcq, 25 statement) = 486 total. A 5th type, `spelling` (for spelling-lock, added 2026-08-25 when streak-lock was replaced with spelling-lock in the puzzle lineup), was added per category: 6-12 entries each, 54 total, bringing the grand total to 540. spelling entries were sourced by reusing existing `word` entries that pass a safety filter (letters+spaces only, 5-16 letters excluding spaces) — except aws-core-services, which had ZERO usable `word` entries (all are bare acronyms or contain digits/symbols) and needed 10 newly-authored entries using real AWS service names already referenced elsewhere in that category. This is HALF the original 160-per-category (960 total) target for the original 4 types, per explicit scope reduction agreed with the requester due to fact-exhaustion and verification-cost constraints on categories with limited fresh 2026 source material.\n\nSOURCING: entries with a source field were verified via live web search/fetch on 2026-08-24 against official pages (kiro.dev, aws.amazon.com, press.aboutamazon.com, nist.gov, theneuron.ai re:Invent 2025 recap). Entries with _verified:false are well-established general knowledge (AWS service purposes, port numbers, startup/security/cloud terminology) that were not individually re-verified against a live source in this pass but are standard, safe facts. Spot-check recommended before production use, especially for _verified:false entries.",
+  "_comment": "Server-side question bank for Group Quiz Mode, built for AWS Cloud and AI Day Hanoi (Sept 29, 2026, JW Marriott Hotel Hanoi). Server picks question IDs per category based on player vote, then assembles the puzzle config for each lock type (see quiz-mode-puzzle-config-example.json). This file is NOT loaded directly by the client.\n\nCATEGORIES (7 total, confirmed 2026-09-18): aws-core-services, agentic-ai, security, vietnam-aws, startups-innovation, cloud-fundamentals, FrugalArchitect. The first 6 each originally had 81 entries (13 numeric, 13 word, 30 mcq, 25 statement) = 486 total. A 5th type, `spelling` (for spelling-lock, added 2026-08-25 when streak-lock was replaced with spelling-lock in the puzzle lineup), was added per category: 6-12 entries each, 54 total, bringing that subtotal to 540. spelling entries were sourced by reusing existing `word` entries that pass a safety filter (letters+spaces only, 5-16 letters excluding spaces) — except aws-core-services, which had ZERO usable `word` entries (all are bare acronyms or contain digits/symbols) and needed 10 newly-authored entries using real AWS service names already referenced elsewhere in that category. This is HALF the original 160-per-category (960 total) target for the original 4 types, per explicit scope reduction agreed with the requester due to fact-exhaustion and verification-cost constraints on categories with limited fresh 2026 source material. FrugalArchitect (added 2026-09-18) originally had 81 core entries (13 numeric, 13 word, 30 mcq, 25 statement) plus 9 spelling entries = 90 total. On 2026-09-18 a curation pass dropped entries with long MCQ answer options, single-digit numeric answers, and word/spelling answers that were bare customer/company/product names (see git history for exact IDs removed), leaving 29 mcq, 11 numeric, 10 word, 25 statement, 7 spelling = 82 total, bringing the grand total to 622. Content is drawn from Werner Vogels' 'The Frugal Architect' framework: thefrugalarchitect.com/laws (the Seven Laws), thefrugalarchitect.com/architects, and the AWS re:Invent 2023 keynote where he introduced it (https://www.youtube.com/watch?v=UTRBVPvzt9w — transcript supplied by the requester).\n\nSOURCING: entries with a source field were verified via live web search/fetch on 2026-08-24 against official pages (kiro.dev, aws.amazon.com, press.aboutamazon.com, nist.gov, theneuron.ai re:Invent 2025 recap). Entries with _verified:false are well-established general knowledge (AWS service purposes, port numbers, startup/security/cloud terminology) that were not individually re-verified against a live source in this pass but are standard, safe facts. Spot-check recommended before production use, especially for _verified:false entries. FrugalArchitect entries were verified 2026-09-18 against thefrugalarchitect.com/laws and /architects (live fetch), en.wikipedia.org/wiki/Werner_Vogels, the ACM DOI page for Pereira et al.'s 2017 energy-efficiency paper, and AWS's official re:Invent 2023 announcement recap blog — those entries carry a `source` field with no `_verified:false`. Facts that exist only in the keynote's spoken content (e.g. the specific Nubank ZGC/NVMe/Pix numbers, PBS's 80% figure) could NOT be independently corroborated on any other page during this pass — those carry `source` pointing at the YouTube URL PLUS `_verified: false`, and should be spot-checked against the transcript before production use.",
   "_type_to_lock_mapping": {
     "numeric": "keypad-lock only.",
     "word": "word-lock only. Answers here are 3-6 letters, matched against word-lock's per-position reel constraint — NOT the same pool as 'spelling'.",
@@ -4194,6 +4194,682 @@
         {
           "id": "cloudf-spell-012",
           "answer": "Downtime",
+          "_verified": false
+        }
+      ]
+    },
+    "FrugalArchitect": {
+      "mcq": [
+        {
+          "id": "frugal-mcq-001",
+          "question": "How many 'Laws' does The Frugal Architect framework define?",
+          "answer": "7",
+          "decoys": [
+            "5",
+            "10",
+            "3"
+          ],
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-mcq-002",
+          "question": "Which phase comes first in The Frugal Architect's law grouping?",
+          "answer": "Design",
+          "decoys": [
+            "Measure",
+            "Observe",
+            "Optimize"
+          ],
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-mcq-003",
+          "question": "Which non-functional requirement does Law I say should carry equal weight to security and availability?",
+          "answer": "Cost",
+          "decoys": [
+            "Marketing",
+            "Branding",
+            "Headcount"
+          ],
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-mcq-004",
+          "question": "According to Law II, systems that last align their cost structure to what?",
+          "answer": "The business's revenue-generating dimension",
+          "decoys": [
+            "The engineering team's headcount",
+            "The marketing budget",
+            "The original launch date"
+          ],
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-mcq-005",
+          "question": "Law III states that architecting is fundamentally a series of what?",
+          "answer": "Trade-offs",
+          "decoys": [
+            "Guarantees",
+            "Contracts",
+            "Approvals"
+          ],
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-mcq-006",
+          "question": "Law IV, 'unobserved systems lead to unknown costs,' is illustrated in the keynote using which historical example?",
+          "answer": "Amsterdam houses with hidden vs. visible energy meters",
+          "decoys": [
+            "London Underground fare gates",
+            "New York water metering",
+            "Tokyo train punctuality"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-007",
+          "question": "Which example illustrates Law V (implementing cost controls) via a three-tier criticality model?",
+          "answer": "Amazon retail (search/browse/cart/checkout as Tier 1)",
+          "decoys": [
+            "Netflix's recommendation engine",
+            "Uber's surge pricing",
+            "Zoom's video codecs"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-008",
+          "question": "Law VI states that cost optimization is what kind of process?",
+          "answer": "Incremental",
+          "decoys": [
+            "One-time",
+            "Automatic",
+            "Optional"
+          ],
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-mcq-009",
+          "question": "Which historical figure does Vogels quote for Law VII's warning against 'we've always done it this way'?",
+          "answer": "Grace Hopper",
+          "decoys": [
+            "Ada Lovelace",
+            "Alan Turing",
+            "Margaret Hamilton"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-010",
+          "question": "In what year did Werner Vogels introduce The Frugal Architect?",
+          "answer": "2023",
+          "decoys": [
+            "2019",
+            "2021",
+            "2011"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Werner_Vogels"
+        },
+        {
+          "id": "frugal-mcq-011",
+          "question": "Which AWS keynote event did Werner Vogels use to launch The Frugal Architect?",
+          "answer": "re:Invent",
+          "decoys": [
+            "re:Inforce",
+            "Summit",
+            "AWS Startup Day"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-012",
+          "question": "Which broadcaster's near-collapse during Sesame Street's 40th anniversary streaming led it to migrate to AWS?",
+          "answer": "PBS",
+          "decoys": [
+            "BBC",
+            "NPR",
+            "Discovery"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-013",
+          "question": "By re-architecting onto S3, CloudFront, ECS, and Fargate, PBS cut its streaming costs by roughly what percentage?",
+          "answer": "80%",
+          "decoys": [
+            "20%",
+            "50%",
+            "95%"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-014",
+          "question": "Which file-transfer company is highlighted as a certified B-corp that forecasts and tracks its carbon emissions?",
+          "answer": "WeTransfer",
+          "decoys": [
+            "Dropbox",
+            "Box",
+            "WeWork"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-015",
+          "question": "What third pricing dimension did AWS add to S3 after onboarding early customers, beyond storage and data transfer?",
+          "answer": "Number of requests",
+          "decoys": [
+            "Number of accounts",
+            "Number of regions",
+            "Number of tags"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-016",
+          "question": "Before Firecracker existed, what instance type did AWS use to isolate individual Lambda functions?",
+          "answer": "T2",
+          "decoys": [
+            "T3",
+            "M5",
+            "C5"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-017",
+          "question": "Firecracker's micro-VM technology is built on top of which virtualization technology?",
+          "answer": "KVM",
+          "decoys": [
+            "Xen",
+            "Hyper-V",
+            "VMware ESXi"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-018",
+          "question": "Which AWS serverless container service became possible only after Firecracker was built?",
+          "answer": "Fargate",
+          "decoys": [
+            "ECS",
+            "EKS",
+            "Batch"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-019",
+          "question": "At Nubank, which garbage collector was adopted to fix long stop-the-world pauses in critical microservices?",
+          "answer": "Z Garbage Collector (ZGC)",
+          "decoys": [
+            "G1 Garbage Collector",
+            "CMS Collector",
+            "Shenandoah"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-020",
+          "question": "What is the name of Nubank's canonical append-only database, backed by DynamoDB?",
+          "answer": "Datomic",
+          "decoys": [
+            "Cassandra",
+            "Aurora",
+            "CockroachDB"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-021",
+          "question": "Nubank found that caching with NVMe discs returned how much for every $1 invested, for one critical microservice?",
+          "answer": "$3,500",
+          "decoys": [
+            "$350",
+            "$35",
+            "$35,000"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-022",
+          "question": "What is the name of Brazil's instant, zero-cost, 24/7 interbank payment protocol discussed in the keynote?",
+          "answer": "Pix",
+          "decoys": [
+            "Boleto",
+            "SWIFT",
+            "Zelle"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-023",
+          "question": "What is the mandated maximum latency for a Pix transfer to complete?",
+          "answer": "10 seconds",
+          "decoys": [
+            "1 second",
+            "60 seconds",
+            "24 hours"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-024",
+          "question": "After stabilizing its systems, Nubank's P99 latency SLA decreased by roughly what percentage?",
+          "answer": "92%",
+          "decoys": [
+            "50%",
+            "25%",
+            "99%"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-025",
+          "question": "Which Amazon retail feature moved from Tier 2 to Tier 1 once data showed its absence hurt purchase trust?",
+          "answer": "Customer reviews",
+          "decoys": [
+            "Recommendations",
+            "Similar items",
+            "Best-seller list"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-026",
+          "question": "Per research Vogels cites from INESC/Universidade do Minho, roughly how many times more energy can Python or Ruby use versus C or Rust?",
+          "answer": "50 times",
+          "decoys": [
+            "5 times",
+            "2 times",
+            "500 times"
+          ],
+          "source": "https://dl.acm.org/doi/10.1145/3136014.3136031",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-027",
+          "question": "Which programming language did AWS choose to build Firecracker and large parts of S3, citing both energy efficiency and memory safety?",
+          "answer": "Rust",
+          "decoys": [
+            "Go",
+            "Java",
+            "C#"
+          ],
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-mcq-028",
+          "question": "What new AWS console feature, announced at the same keynote, gives a single view of cost, health, security, and performance per application?",
+          "answer": "myApplications",
+          "decoys": [
+            "AWS Config",
+            "Trusted Advisor",
+            "Systems Manager"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/top-announcements-of-aws-reinvent-2023/"
+        },
+        {
+          "id": "frugal-mcq-029",
+          "question": "Which CloudWatch feature, also announced at that keynote, automatically instruments EKS applications for observability?",
+          "answer": "Application Signals",
+          "decoys": [
+            "Container Insights",
+            "X-Ray",
+            "Contributor Insights"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/top-announcements-of-aws-reinvent-2023/"
+        }
+      ],
+      "numeric": [
+        {
+          "id": "frugal-num-001",
+          "question": "In what year did Werner Vogels introduce The Frugal Architect?",
+          "answer": "2023",
+          "source": "https://en.wikipedia.org/wiki/Werner_Vogels"
+        },
+        {
+          "id": "frugal-num-002",
+          "question": "In what year was the Pereira et al. energy-efficiency-across-programming-languages paper published?",
+          "answer": "2017",
+          "source": "https://dl.acm.org/doi/10.1145/3136014.3136031"
+        },
+        {
+          "id": "frugal-num-003",
+          "question": "In what year did Werner Vogels give his first re:Invent keynote listing tenets for building in the cloud, including 'architect with cost in mind'?",
+          "answer": "2011",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-num-004",
+          "question": "How many tenets did Vogels present at that first re:Invent keynote?",
+          "answer": "12",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-num-005",
+          "question": "By roughly what percentage did PBS cut its streaming costs after re-architecting onto S3, CloudFront, ECS, and Fargate?",
+          "answer": "80",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-num-006",
+          "question": "Across how many pricing dimensions did AWS ultimately price Amazon S3 (storage, transfer, and one more)?",
+          "answer": "3",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-num-007",
+          "question": "What is the maximum latency, in seconds, mandated for a Pix transfer in Brazil to complete?",
+          "answer": "10",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-num-008",
+          "question": "For every $1 Nubank invested in NVMe caching for one critical microservice, how many dollars did it avoid spending?",
+          "answer": "3500",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-num-009",
+          "question": "By roughly what percentage did Nubank's P99 latency SLA decrease after stabilizing its systems?",
+          "answer": "92",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-num-010",
+          "question": "Roughly how many billion US dollars in fees did Nubank's efficiency save its customers in 2022, per the keynote?",
+          "answer": "8",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-num-011",
+          "question": "Per Vogels' citation of Rui Pereira's research, Python or Ruby can use roughly how many times more energy than C or Rust?",
+          "answer": "50",
+          "source": "https://dl.acm.org/doi/10.1145/3136014.3136031",
+          "_verified": false
+        }
+      ],
+      "word": [
+        {
+          "id": "frugal-word-001",
+          "question": "What is the name of the AWS micro-VM technology, built on KVM, that Lambda's compute layer evolved to use?",
+          "answer": "Firecracker",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-word-002",
+          "question": "What serverless container service became possible only after Firecracker was built?",
+          "answer": "Fargate",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-word-003",
+          "question": "Which programming language did AWS choose for Firecracker and large parts of S3, citing energy efficiency and memory safety?",
+          "answer": "Rust",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-word-004",
+          "question": "Which AWS custom processor family does Vogels cite as a way to drive cost down through right-sizing?",
+          "answer": "Graviton",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-word-005",
+          "question": "What word describes maximizing value rather than just minimizing spend, per Law III?",
+          "answer": "Frugality",
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-word-006",
+          "question": "What word, alongside cost, does Vogels say is approximated by AWS's per-resource billing?",
+          "answer": "Sustainability",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-word-007",
+          "question": "What is the name of the self-reinforcing growth loop Jeff Bezos sketched on a napkin, referenced in the keynote?",
+          "answer": "Flywheel",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-word-008",
+          "question": "Which AWS managed caching service does Nubank's Datomic use as an external cache?",
+          "answer": "ElastiCache",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-word-009",
+          "question": "What is the surname of the Amazon CTO who created The Frugal Architect?",
+          "answer": "Vogels",
+          "source": "https://en.wikipedia.org/wiki/Werner_Vogels"
+        },
+        {
+          "id": "frugal-word-010",
+          "question": "Vogels compares S3's evolution to a single-engine plane growing into a fleet of jets. What kind of plane did it start as?",
+          "answer": "Cessna",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        }
+      ],
+      "statement": [
+        {
+          "id": "frugal-stmt-001",
+          "template": "The Frugal Architect codifies Werner Vogels' cost-aware architecture principles into {seven|five} laws.",
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-stmt-002",
+          "template": "The Frugal Architect framework groups its laws into the phases Design, Measure, and {Observe|Deploy}.",
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-stmt-003",
+          "template": "Per Law I, cost and sustainability should be treated as {non-functional requirements|purely optional add-ons} alongside security and availability.",
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-stmt-004",
+          "template": "Law II states that durable systems should align their cost structure to a {business's revenue-generating dimension|fixed hardware budget}.",
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-stmt-005",
+          "template": "Law III states that architecting is fundamentally a series of {trade-offs|guarantees}.",
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-stmt-006",
+          "template": "Law IV warns that {unobserved systems lead to unknown costs|observed systems always cost more}.",
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-stmt-007",
+          "template": "Law V states cost-aware architectures must implement {cost controls|larger data centers}.",
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-stmt-008",
+          "template": "Law VI states that cost optimization is {incremental|a one-time project}.",
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-stmt-009",
+          "template": "Law VII warns against the phrase '{we've always done it this way|let's try something new}' as a sign of unchallenged assumptions.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-010",
+          "template": "The Frugal Architect website is hosted at {thefrugalarchitect.com|frugalarchitecture.aws}.",
+          "source": "https://thefrugalarchitect.com/laws"
+        },
+        {
+          "id": "frugal-stmt-011",
+          "template": "Werner Vogels introduced The Frugal Architect concept in {2023|2019}.",
+          "source": "https://en.wikipedia.org/wiki/Werner_Vogels"
+        },
+        {
+          "id": "frugal-stmt-012",
+          "template": "PBS moved off its own datacenters to AWS after its infrastructure failed during {the 40th anniversary of Sesame Street in 2009|the launch of a new logo in 2015}.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-013",
+          "template": "After re-architecting to stream directly from S3 and CloudFront onto ECS and Fargate, PBS cut streaming costs by roughly {80%|20%}.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-014",
+          "template": "WeTransfer is organized as a certified {B-corp|non-profit foundation} with high environmental and fiscal transparency standards.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-015",
+          "template": "When AWS launched S3, it ultimately priced the service across three dimensions: storage, transfer, and {number of requests|number of accounts}.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-016",
+          "template": "DynamoDB's eventually consistent reads were priced at {half the cost|double the cost} of strongly consistent reads, reflecting the extra quorum work strong consistency requires.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-017",
+          "template": "AWS Lambda originally ran customer functions inside {T2 instances|bare-metal servers} for isolation before Firecracker existed.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-018",
+          "template": "Firecracker is a micro-VM technology built on top of {KVM|Xen} that let AWS run Lambda far more efficiently.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-019",
+          "template": "Firecracker's efficiency gains also made it possible for AWS to later build {Fargate|Redshift}, its serverless container service.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-020",
+          "template": "At Nubank, switching some services to the {Z Garbage Collector (ZGC)|G1 Garbage Collector} reduced worst-case stop-the-world pause length for critical services.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-021",
+          "template": "Nubank found that caching with {NVMe discs|more RAM alone} delivered a roughly 3,500x return for every dollar invested, for one critical microservice.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-022",
+          "template": "Brazil's instant payment system, {Pix|Boleto}, requires transfers to complete within a mandated maximum latency of 10 seconds.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-023",
+          "template": "In Amazon retail's tiering model, {search, browse, shopping cart, and checkout|personalized recommendations} form Tier 1, the components that must always be up.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-024",
+          "template": "Customer reviews were originally Tier 2 at Amazon retail but were promoted to {Tier 1|Tier 3} once data showed offline reviews hurt purchase trust.",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-stmt-025",
+          "template": "Research from INESC/Universidade do Minho found that languages like Python and Ruby can use over {50 times|2 times} more energy than C or Rust for equivalent tasks, per Vogels' citation.",
+          "source": "https://dl.acm.org/doi/10.1145/3136014.3136031",
+          "_verified": false
+        }
+      ],
+      "spelling": [
+        {
+          "id": "frugal-spell-001",
+          "answer": "Firecracker",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-spell-002",
+          "answer": "Fargate",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-spell-003",
+          "answer": "Graviton",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-spell-004",
+          "answer": "Frugality",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-spell-005",
+          "answer": "Sustainability",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-spell-006",
+          "answer": "Flywheel",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
+          "_verified": false
+        },
+        {
+          "id": "frugal-spell-007",
+          "answer": "ElastiCache",
+          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
           "_verified": false
         }
       ]
