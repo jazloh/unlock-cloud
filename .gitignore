@@ -17,3 +17,6 @@ test-results/
 
 # macOS
 .DS_Store
+
+tools/deploy-ep11.sh
+tools/resize-ep11.py
