@@ -1268,6 +1268,12 @@ body:has(#screen-play:not([hidden])) .sd-heatbar.sd-heat-live {
 .sd-theme-light .sd-results-crown,
 .sd-theme-light #results-board .sd-lb-row:nth-child(1) .sd-lb-rank { color: var(--gold-text); }
 
+/* Light-theme AA: the 2nd/3rd rank numerals are silver/bronze — legible on the
+   dark shell but ~1.3:1 on the warm-white light surface. Darken them (keeping
+   the silver/bronze hue family) so the podium ranks pass AA in light mode. */
+.sd-theme-light #results-board .sd-lb-row:nth-child(2) .sd-lb-rank { color: #566072; }
+.sd-theme-light #results-board .sd-lb-row:nth-child(3) .sd-lb-rank { color: #8A4A1C; }
+
 .sd-theme-light .sd-player-ready.is-ready,
 .sd-theme-light .sd-pg-player--me .sd-pg-name,
 .sd-theme-light .sd-solved-word,

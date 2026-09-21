@@ -150,6 +150,11 @@
     { id: 'vietnam-aws',         label: 'Vietnam & AWS',         icon: '🇻🇳' },
     { id: 'startups-innovation', label: 'Startups & Innovation', icon: '🚀' },
     { id: 'cloud-fundamentals',  label: 'Cloud Fundamentals',    icon: '📚' },
+    // 7th live category present in the deployed /showdown/bank (confirmed
+    // 2026-09-22). Registered so a FrugalArchitect win renders a proper label +
+    // icon on the ballot/reveal/share instead of the raw slug. Resolution itself
+    // never depended on this map (it indexes BANK_INDEX[winning_category]).
+    { id: 'FrugalArchitect',     label: 'Frugal Architect',      icon: '💰' },
   ];
   const CAT_BY_ID = Object.fromEntries(CATEGORIES.map(c => [c.id, c]));
 
@@ -162,6 +167,7 @@
     'vietnam-aws': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.8 20.9l1.6-6.8L2.1 9l7-.6L12 2z"/></svg>',
     'startups-innovation': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c3.5 3 5 7 5 11l-2 3H9l-2-3c0-4 1.5-8 5-11z"/><path d="M9 18l3 4 3-4z"/></svg>',
     'cloud-fundamentals': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 2h11v16H7a2 2 0 0 0-2 2V4a2 2 0 0 1 2-2zm0 16h9v2H7a1 1 0 0 1 0-2z"/></svg>',
+    'FrugalArchitect': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3.2c.5 0 .9.4.9.9v.6c1.4.2 2.5 1 2.8 2.2a.9.9 0 0 1-1.7.5c-.2-.6-.9-1-1.9-1-1.1 0-1.8.5-1.8 1.1 0 .5.4.8 1.9 1.1 1.9.4 3.4 1 3.4 2.8 0 1.4-1.1 2.3-2.7 2.5v.6a.9.9 0 0 1-1.8 0v-.6c-1.5-.2-2.6-1-3-2.2a.9.9 0 0 1 1.7-.6c.2.7 1 1.1 2.1 1.1 1.2 0 1.9-.5 1.9-1.1 0-.6-.5-.9-2-1.2-1.8-.4-3.3-1-3.3-2.7 0-1.3 1-2.2 2.6-2.5v-.6c0-.5.4-.9.9-.9z"/></svg>',
   };
   const SD_FLAG_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3v18H3V3h2zm2 0h13l-2.6 4L20 11H7V3z"/></svg>';
   const iconSvg = (id) => SD_ICONS[id] || SD_ICONS.vault;
@@ -196,6 +202,10 @@
     // misc UI
     _lastPulseSec: null,
     _celebrated: false,
+    // play clock (authoritative elapsed_ms, anchored + smoothed between polls)
+    _clockSrvMs: null,
+    _clockAt: 0,
+    _clockShownMs: null,
   };
 
   /* ─────────────────────── Bank index (P0, SSOT §5) ───────────── */
@@ -379,21 +389,29 @@
     // frozen at 100/partial in completed. "You" mirrors real progress.
     const ph = mockPhase();
     const playT = ph.t - (MOCK_SETUP_MS + MOCK_VOTING_MS);
+    const pClamp = Math.max(0, Math.min(playT, MOCK_PLAY_MS));
     const clampPct = (v) => Math.max(0, Math.min(100, Math.round(v)));
     let mePct = 0, alicePct = 0, bobPct = 0;
+    let meMs = 0, aliceMs = 0, bobMs = 0;
     if (stateName === 'in_progress') {
       mePct = clampPct((mockMyCompleted() / MOCK_PUZZLE_COUNT) * 100);
       alicePct = clampPct((playT / MOCK_PLAY_MS) * 120); // Alice pulls ahead
       bobPct   = clampPct((playT / MOCK_PLAY_MS) * 80);
+      // Per-player elapsed_ms (matches live shape). YOUR clock only starts after
+      // the first solve — mirrors the server (elapsed begins at first /progress).
+      meMs = mockMyCompleted() > 0 ? pClamp : 0;
+      aliceMs = pClamp; bobMs = pClamp;
     } else if (stateName === 'completed') {
       mePct = clampPct((mockMyCompleted() / MOCK_PUZZLE_COUNT) * 100);
       alicePct = 100; bobPct = 80; // Bob finishes <100% → DNF row
+      meMs = mockMyCompleted() > 0 ? MOCK_PLAY_MS : 0;
+      aliceMs = MOCK_PLAY_MS; bobMs = MOCK_PLAY_MS;
     }
     const meName = state.displayName || 'You';
     const rows = [
-      { player_id: state.playerId || 'p-you', display_name: meName, seat_number: state.seatNumber || 1, completion_pct: mePct },
-      { player_id: 'p-alice', display_name: 'Alice', seat_number: 2, completion_pct: alicePct },
-      { player_id: 'p-bob',   display_name: 'Bob',   seat_number: 3, completion_pct: bobPct },
+      { player_id: state.playerId || 'p-you', display_name: meName, seat_number: state.seatNumber || 1, completion_pct: mePct, elapsed_ms: meMs },
+      { player_id: 'p-alice', display_name: 'Alice', seat_number: 2, completion_pct: alicePct, elapsed_ms: aliceMs },
+      { player_id: 'p-bob',   display_name: 'Bob',   seat_number: 3, completion_pct: bobPct, elapsed_ms: bobMs },
     ];
     // Server rank order (SSOT §6): by completion desc. Rendered verbatim.
     rows.sort((a, b) => b.completion_pct - a.completion_pct);
@@ -410,8 +428,9 @@
       state: st,
       puzzle_count: MOCK_PUZZLE_COUNT,
       standings: rows,
-      elapsed_ms: st === 'in_progress' || st === 'completed'
-        ? Math.max(0, ph.t - (MOCK_SETUP_MS + MOCK_VOTING_MS)) : 0,
+      // NOTE: no top-level elapsed_ms — the deployed backend carries elapsed_ms
+      // ONLY per row (standings[].elapsed_ms). Matching that here keeps the mock
+      // an honest mirror and exercises the per-player clock path.
     };
     if (st === 'voting') {
       base.categories = MOCK_CATEGORIES;
@@ -455,7 +474,9 @@
     }));
   }
   function mockErr(status, code, message) {
-    return mockJson({ error: { code: code, message: message || code } }, status);
+    // Mirror the deployed FLAT error envelope: {"error":"<string>"} (confirmed
+    // live 2026-09-22), not the older nested {code,message}.
+    return mockJson({ error: message || code }, status);
   }
 
   function mockFetch(url, init) {
@@ -598,10 +619,18 @@
     let data = {};
     try { data = await res.json(); } catch { /* empty / non-json */ }
     if (!res.ok) {
-      const env = data && data.error ? data.error : {};
-      const err = new Error(env.message || ('Request failed (' + res.status + ')'));
+      // Error envelope is a FLAT string on the deployed backend
+      // ({"error":"pin is required and must be a string"}), confirmed live
+      // 2026-09-22. The older doc showed a nested {error:{code,message}}. Accept
+      // BOTH so the real server message always reaches the UI (a flat string was
+      // previously dropped, leaving only a generic "Request failed (400)").
+      let msg = null, code = null;
+      const e = data && data.error;
+      if (typeof e === 'string') { msg = e; }
+      else if (e && typeof e === 'object') { msg = e.message || null; code = e.code || null; }
+      const err = new Error(msg || ('Request failed (' + res.status + ')'));
       err.status = res.status;
-      err.code = env.code || null;
+      err.code = code;
       err.data = data;
       throw err;
     }
@@ -694,6 +723,7 @@
   function stopPollLoop() {
     pollStopped = true;
     if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; }
+    if (typeof stopPlayClock === 'function') stopPlayClock(); // halt the smoothed clock too
   }
   function schedulePoll(delay) {
     if (pollStopped) return;
@@ -1014,7 +1044,11 @@
             resolve();
             return;
           }
-          // session not created yet — keep polling /public.
+          // session not created yet — keep polling /public. Reflect the real
+          // "waiting for the host to start the session" state so the JOIN button
+          // is not a frozen "Joining…" for the whole pre-session wait.
+          const waitBtn = $('join-btn');
+          if (waitBtn) waitBtn.textContent = 'Waiting for host\u2026';
           discoverTimer = setTimeout(attempt, POLL_MS);
         } catch (err) {
           reject(err);
@@ -1261,7 +1295,11 @@
   function enterPlay(standings) {
     if (!playChromeReady) {
       playChromeReady = true;
+      // Fresh play session: reset the clock anchor so a re-entered round (or a
+      // rehydrated resume) starts its monotonic guard clean.
+      state._clockSrvMs = null; state._clockAt = 0; state._clockShownMs = null;
       initPlayChrome();
+      startPlayClock();
     }
     if (!playLoadStarted) {
       playLoadStarted = true;
@@ -1276,6 +1314,10 @@
     if (pen) { const stat = pen.closest('.sd-stat'); if (stat) stat.style.display = 'none'; }
     const q = $('play-question');
     if (q) q.textContent = '';
+    // Clear the HTML placeholder "Puzzle 1 of 5" so a non-5 puzzle_count round
+    // never flashes a wrong count before the first renderPuzzle().
+    const ptext = $('play-progress-text');
+    if (ptext) ptext.textContent = '';
     const mount = $('play-mount');
     if (mount) mount.innerHTML = '<div class="sd-loading">Assembling puzzles\u2026</div>';
   }
@@ -1690,11 +1732,55 @@
   }
 
   function updatePlay(standings) {
-    // Authoritative time is standings.elapsed_ms; the play clock is cosmetic.
-    const timer = $('play-timer');
-    if (timer && standings && standings.elapsed_ms != null) timer.textContent = fmtTime(standings.elapsed_ms);
+    setPlayClockFromServer(myElapsedMs(standings)); // authoritative + smoothed clock
     updateClockHeat(standings);
     renderRace(standings);
+  }
+
+  // Authoritative play time is the CURRENT player's row elapsed_ms — a
+  // PER-PLAYER field inside standings.standings[], NOT a top-level
+  // standings.elapsed_ms. The deployed backend carries NO top-level elapsed_ms
+  // (confirmed live 2026-09-22), so the old top-level read left #play-timer
+  // frozen at 00:00 the entire round. This mirrors how RESULTS resolves
+  // myRow.elapsed_ms. Server elapsed_ms is 0 until the first /progress post, so
+  // 00:00 before the first solve is expected — it advances once progress posts.
+  function myElapsedMs(standings) {
+    const rows = (standings && Array.isArray(standings.standings)) ? standings.standings : null;
+    if (rows && state.playerId) {
+      const me = rows.find((r) => r.player_id === state.playerId);
+      if (me && typeof me.elapsed_ms === 'number') return me.elapsed_ms;
+    }
+    // Fallback only if a future payload ever adds a top-level elapsed_ms.
+    return (standings && typeof standings.elapsed_ms === 'number') ? standings.elapsed_ms : null;
+  }
+
+  /* ── PLAY clock: authoritative elapsed_ms, smoothed between ~1s polls ──
+   * elapsed_ms is authoritative but arrives ~1s apart and can stall to 2–5s
+   * during poll backoff. We anchor the last server value to a wall-clock stamp
+   * and repaint every 250ms so the readout keeps moving instead of freezing,
+   * re-syncing on each fresh server value. Monotonic (never ticks backwards);
+   * never advances while elapsed is 0 (pre-first-solve stays 00:00). */
+  let playClockTimer = null;
+  function setPlayClockFromServer(ms) {
+    if (ms == null) return;
+    if (state._clockSrvMs !== ms) { state._clockSrvMs = ms; state._clockAt = Date.now(); }
+    paintPlayClock();
+  }
+  function paintPlayClock() {
+    const el = $('play-timer');
+    if (!el || state._clockSrvMs == null) return;
+    let ms = state._clockSrvMs;
+    if (ms > 0 && state._clockAt) ms += (Date.now() - state._clockAt); // fill the inter-poll gap
+    if (state._clockShownMs != null && ms < state._clockShownMs) ms = state._clockShownMs; // monotonic
+    state._clockShownMs = ms;
+    el.textContent = fmtTime(ms);
+  }
+  function startPlayClock() {
+    if (playClockTimer) return;
+    playClockTimer = setInterval(paintPlayClock, 250);
+  }
+  function stopPlayClock() {
+    if (playClockTimer) { clearInterval(playClockTimer); playClockTimer = null; }
   }
 
   // Race lanes = puzzle_count dots keyed by player_id (SSOT §6, dev #1). Each
@@ -1816,7 +1902,7 @@
   const END_REASON_COPY = {
     all_completed:     'Every crew cracked the vault.',
     force_completed:   'The host ended the round.',
-    countdown_expired: 'Time\u2019s up \u2014 pencils down.',
+    countdown_expired: 'Time\u2019s up. Pencils down.',
     reset:             'Round reset by the host.',
   };
 
