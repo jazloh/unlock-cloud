@@ -122,10 +122,25 @@
   // Same-origin, versioned bank asset (SSOT §5). Tracks app/VERSION for the
   // ?v= cache-bust convention (NOT bumped by this task — local only).
   const BANK_VERSION = '13';
-  const BANK_URL = 'data/quiz-mode-question-bank.json?v=' + BANK_VERSION;
+  // Relocated under app/showdown/ (2026-09-21): the old app/data/ path was not
+  // reliably present on S3. Local bundle stays the source (NOT the live
+  // /showdown/bank proxy). ?v= cache-buster tracks app/VERSION (not bumped here).
+  const BANK_URL = 'showdown/quiz-mode-question-bank.json?v=' + BANK_VERSION;
 
   // localStorage key for refresh/reconnect recovery (SSOT §7 deviation #5).
   const LS_IDENTITY = 'sd_identity_v2';
+
+  // sessionStorage key for the game_id (CHANGE 3). ?game=<id> from the table QR
+  // is persisted here so it survives in-session navigation; on a later boot with
+  // no ?game= we fall back to this stored value before asking for a table code.
+  const SS_GAME_ID = 'sd_game_id';
+  function persistGameId(id) {
+    if (!id) return;
+    try { sessionStorage.setItem(SS_GAME_ID, id); } catch { /* storage off — non-fatal */ }
+  }
+  function loadGameId() {
+    try { return sessionStorage.getItem(SS_GAME_ID) || null; } catch { return null; }
+  }
 
   // Canonical category list. `id` is what the backend speaks; `label` is shown.
   const CATEGORIES = [
@@ -193,37 +208,101 @@
   let BANK_FLAT = null;   // Map<id, { category, type, entry }>  (convenience)
   let bankReady = null;   // Promise resolving when the bank is indexed
 
+  // Bank-parity fix (Option A): the backend resolves /puzzles picks from the
+  // bank served at [S] /showdown/bank, which carries ALL live categories (7+,
+  // incl. FrugalArchitect). Fetching THAT at boot makes category drift between
+  // the client and backend structurally impossible. The same-origin local
+  // bundle (BANK_URL) stays as the offline/failure fallback — it has the same
+  // JSON shape ({ categories: { <cat>: { <type>: [entries] } }, ... }). MOCK
+  // never touches the network (stays fully offline via the local bundle).
+  const LIVE_BANK_URL = BASE_S + '/showdown/bank';
+  const LIVE_BANK_TIMEOUT_MS = 5000; // cap the boot fetch so a hang falls back
+
+  // Index a parsed bank into BANK / BANK_INDEX / BANK_FLAT. Shared verbatim by
+  // the live and local paths so both sources are indexed identically (the P4
+  // resolver is unchanged and source-agnostic).
+  function indexBank(raw) {
+    BANK = raw;
+    BANK_INDEX = {};
+    BANK_FLAT = new Map();
+    let entries = 0, cats = 0, typeCount = 0;
+    const cats_ = (raw && raw.categories) || {};
+    Object.keys(cats_).forEach((cat) => {
+      BANK_INDEX[cat] = {};
+      cats++;
+      Object.keys(cats_[cat]).forEach((type) => {
+        const arr = cats_[cat][type];
+        if (!Array.isArray(arr)) return;
+        const m = new Map();
+        arr.forEach((entry) => {
+          if (entry && entry.id) {
+            m.set(entry.id, entry);
+            BANK_FLAT.set(entry.id, { category: cat, type, entry });
+            entries++;
+          }
+        });
+        BANK_INDEX[cat][type] = m;
+        typeCount++;
+      });
+    });
+    return { entries, cats, typeCount };
+  }
+
+  // Fetch + parse a bank URL, validating shape. Throws on non-200, non-JSON, or
+  // a bank with no categories (malformed/empty) so the caller can fall back.
+  async function fetchBankJson(url, opts) {
+    const res = await fetch(url, opts);
+    if (!res.ok) throw new Error('bank fetch failed (' + res.status + ')');
+    const raw = await res.json(); // throws on non-JSON / empty body
+    if (!raw || typeof raw !== 'object' || !raw.categories ||
+        typeof raw.categories !== 'object' || !Object.keys(raw.categories).length) {
+      throw new Error('bank malformed or empty');
+    }
+    return raw;
+  }
+
   async function loadBank() {
     if (bankReady) return bankReady;
     bankReady = (async () => {
-      const res = await fetch(BANK_URL);
-      if (!res.ok) throw new Error('bank fetch failed (' + res.status + ')');
-      BANK = await res.json();
-      BANK_INDEX = {};
-      BANK_FLAT = new Map();
-      let entries = 0, cats = 0, typeCount = 0;
-      const cats_ = BANK.categories || {};
-      Object.keys(cats_).forEach((cat) => {
-        BANK_INDEX[cat] = {};
-        cats++;
-        Object.keys(cats_[cat]).forEach((type) => {
-          const arr = cats_[cat][type];
-          if (!Array.isArray(arr)) return;
-          const m = new Map();
-          arr.forEach((entry) => {
-            if (entry && entry.id) {
-              m.set(entry.id, entry);
-              BANK_FLAT.set(entry.id, { category: cat, type, entry });
-              entries++;
-            }
-          });
-          BANK_INDEX[cat][type] = m;
-          typeCount++;
-        });
-      });
-      console.info('[showdown] bank indexed: ' + entries + ' entries across ' +
-        cats + ' categories, ' + typeCount + ' (category,type) buckets');
-      return { entries, cats, typeCount };
+      let raw = null;
+      let usedLive = false;
+
+      // Real (non-mock) boot: try the authoritative live bank first. Any
+      // failure (network error, non-200, malformed/empty JSON, or timeout)
+      // falls through to the local bundle below. MOCK skips this entirely so
+      // the offline walkthrough never hits the network.
+      if (!MOCK) {
+        try {
+          let opts, timer = null;
+          if (typeof AbortController === 'function') {
+            const ac = new AbortController();
+            timer = setTimeout(() => ac.abort(), LIVE_BANK_TIMEOUT_MS);
+            opts = { signal: ac.signal };
+          }
+          try {
+            raw = await fetchBankJson(LIVE_BANK_URL, opts);
+            usedLive = true;
+          } finally {
+            if (timer) clearTimeout(timer);
+          }
+        } catch (e) {
+          console.warn('[showdown] live bank fetch failed (' + (e && e.message) +
+            ') \u2014 falling back to local bundle');
+          raw = null;
+        }
+      }
+
+      // Fallback / mock / offline: the same-origin local bundle (keeps the ?v=
+      // cache-buster). If this ALSO fails, the promise rejects and loadPuzzles
+      // surfaces its normal load-error UI (unchanged behavior).
+      if (!raw) raw = await fetchBankJson(BANK_URL);
+
+      const stats = indexBank(raw);
+      const src = usedLive ? 'live' : (MOCK ? 'local (mock)' : 'local fallback');
+      console.info('[showdown] bank: ' + src);
+      console.info('[showdown] bank indexed: ' + stats.entries + ' entries across ' +
+        stats.cats + ' categories, ' + stats.typeCount + ' (category,type) buckets');
+      return stats;
     })();
     return bankReady;
   }
@@ -736,11 +815,20 @@
     const errEl = $('join-error');
     const btn = $('join-btn');
 
-    // game_id normally arrives from the table QR (?game=<id>). If it's absent we
-    // must NOT disable the form — that dead, un-typeable screen was the reported
-    // bug. Keep name + PIN fully usable, offer an inline "paste your table link /
-    // game code" field, and gate only the claim on resolving a game_id (§9/Q2).
-    if (!state.gameId) {
+    // CHANGE 4: decide which JOIN fields to show.
+    //  • game_id known (URL / sessionStorage / stored identity) → no game-code field.
+    //  • a real stored seat_token for THIS game_id → no PIN field (reuse the seat,
+    //    skip the claim). Net "Play again": only the name field, prefilled.
+    let reusable = getReusableIdentity();
+    if (reusable) {
+      state.seatToken = reusable.seatToken;
+      if (reusable.seatNumber != null) state.seatNumber = reusable.seatNumber;
+      if (reusable.pin) state.pin = reusable.pin;
+      hidePinField();
+      const nameInput = $('join-name');
+      if (nameInput && reusable.displayName && !nameInput.value) nameInput.value = reusable.displayName;
+    } else if (!state.gameId) {
+      // No game_id anywhere → offer the inline table-link/code field (PIN still shown).
       ensureGameCodeField(form);
       if (errEl) errEl.textContent = 'No table code detected. Paste your table link or game code above, or open this page from your table\u2019s QR.';
     }
@@ -750,13 +838,12 @@
       if (errEl) errEl.textContent = '';
 
       const name = $('join-name').value.trim();
-      const pin = $('join-code').value.trim().toUpperCase();
 
-      // Resolve game_id from the URL or, if it was missing, the inline field.
+      // Resolve game_id from the URL/storage or, if it was missing, the inline field.
       if (!state.gameId) {
         const gc = $('join-gamecode');
         const parsed = gc ? extractGameId(gc.value) : null;
-        if (parsed) state.gameId = parsed;
+        if (parsed) { state.gameId = parsed; persistGameId(parsed); }
       }
       if (!state.gameId) {
         if (errEl) errEl.textContent = 'Enter your table link or game code (or open this page from your table\u2019s QR).';
@@ -765,9 +852,17 @@
       }
 
       if (!name) { if (errEl) errEl.textContent = 'Please enter your name.'; return; }
-      if (!PIN_RE.test(pin)) {
-        if (errEl) errEl.textContent = 'PIN must be 6 characters (letters and numbers).';
-        return;
+
+      // Reuse the stored seat (skip claim) ONLY when we truly hold a seat_token
+      // for THIS game; otherwise validate + claim with the PIN as normal.
+      const reusing = !!(state.seatToken && reusable && reusable.gameId === state.gameId);
+      let pin = '';
+      if (!reusing) {
+        pin = $('join-code').value.trim().toUpperCase();
+        if (!PIN_RE.test(pin)) {
+          if (errEl) errEl.textContent = 'PIN must be 6 characters (letters and numbers).';
+          return;
+        }
       }
 
       btn.disabled = true;
@@ -775,16 +870,66 @@
       btn.textContent = 'Joining\u2026';
       try {
         state.displayName = name;
-        state.pin = pin;
-        await runIdentityFlow(name, pin);
+        if (reusing) {
+          // Skip the seat claim — reuse the stored seat_token, then discover + join.
+          persistIdentity();
+          await discoverAndJoin(name);
+        } else {
+          state.pin = pin;
+          await runIdentityFlow(name, pin);
+        }
         // On success, the standings poll loop drives the screen from here.
       } catch (err) {
         if (errEl) errEl.textContent = joinErrorMessage(err);
+        if (reusing) {
+          // The stored seat didn't work (stale/mismatched) — fall back to a
+          // normal PIN claim: reveal the PIN field and clear the reuse flag so
+          // the next submit claims. Never leave a disabled/dead form.
+          reusable = null;
+          state.seatToken = null;
+          unhidePinField();
+          const code = $('join-code'); if (code) code.focus();
+        }
       } finally {
         btn.disabled = false;
         btn.textContent = btnText;
       }
     };
+  }
+
+  // CHANGE 4 helpers ─────────────────────────────────────────────
+  // A reusable identity = a stored seat_token whose gameId matches the current
+  // game_id. Lets "Play again" show only the name field and skip the claim.
+  function getReusableIdentity() {
+    if (!state.gameId) return null;
+    const saved = loadIdentity();
+    if (saved && saved.gameId === state.gameId && saved.seatToken) return saved;
+    return null;
+  }
+  // Hide (never disable) the PIN field + its label. Dropping `required` keeps the
+  // :has(#join-code:valid) arm-glow working with only the name filled.
+  function hidePinField() {
+    const codeInput = $('join-code');
+    if (codeInput) {
+      codeInput.hidden = true;
+      codeInput.removeAttribute('required');
+      codeInput.setAttribute('aria-hidden', 'true');
+      codeInput.tabIndex = -1;
+    }
+    const label = document.querySelector('label[for="join-code"]');
+    if (label) label.hidden = true;
+  }
+  // Restore the PIN field for a normal claim (recovery when a stored seat fails).
+  function unhidePinField() {
+    const codeInput = $('join-code');
+    if (codeInput) {
+      codeInput.hidden = false;
+      codeInput.setAttribute('required', 'required');
+      codeInput.removeAttribute('aria-hidden');
+      codeInput.tabIndex = 0;
+    }
+    const label = document.querySelector('label[for="join-code"]');
+    if (label) label.hidden = false;
   }
 
   // Map claim/players errors to inline copy (SSOT §6/§9).
@@ -954,6 +1099,14 @@
 
   function renderVote(standings) {
     const cats = (standings && Array.isArray(standings.categories)) ? standings.categories : [];
+    // CHANGE 1: set the base VOTE subtitle at render time. Set BEFORE
+    // updateVoteCountdown so that during closing/tally the countdown's
+    // "Tallying votes…" (and the reveal) still win — the new copy never
+    // overwrites it. No em-dash: exact period-separated string.
+    if (!state.revealed) {
+      const headEl = document.querySelector('#screen-vote .sd-vote-head .sd-subtitle');
+      if (headEl) headEl.textContent = 'Pick your target. Choose the topic you know best!';
+    }
     // (Re)build the ballot when the category set changes.
     const key = cats.join(',');
     if (voteBallotIds !== key) {
@@ -1472,7 +1625,7 @@
     if (!mount) return;
     const items = errors.map((e) =>
       '<li>' + escapeHtml(e.category) + ' / ' + escapeHtml(e.type) + ' / ' +
-      escapeHtml(e.id) + ' — ' + escapeHtml(e.reason) + '</li>').join('');
+      escapeHtml(e.id) + ': ' + escapeHtml(e.reason) + '</li>').join('');
     mount.innerHTML = '<div class="sd-error">Some puzzles couldn\u2019t be prepared:' +
       '<ul>' + items + '</ul>' +
       '<button type="button" class="sd-btn sd-btn--primary" id="sd-puzzle-retry">Retry</button></div>';
@@ -1777,10 +1930,34 @@
     setTimeout(() => { btn.textContent = original; }, 1800);
   }
 
-  // Play again → clear identity + reload (cleanest full reset; rejoins at JOIN).
+  // Play again → keep seat_token + game_id so JOIN returns as a name-only form
+  // (CHANGE 4); clear only round-scoped state so tryRehydrate won't resume the
+  // finished session. Falls back to a full clear if no seat is held.
   function playAgain() {
-    clearIdentity();
     stopPollLoop();
+    const saved = loadIdentity() || {};
+    const gameId = saved.gameId != null ? saved.gameId : state.gameId;
+    const seatToken = saved.seatToken != null ? saved.seatToken : state.seatToken;
+    if (gameId && seatToken) {
+      try {
+        localStorage.setItem(LS_IDENTITY, JSON.stringify({
+          gameId: gameId,
+          pin: saved.pin != null ? saved.pin : state.pin,
+          displayName: saved.displayName || state.displayName || '',
+          seatNumber: saved.seatNumber != null ? saved.seatNumber : state.seatNumber,
+          seatToken: seatToken,
+          // round-scoped fields cleared so we rejoin fresh (no resume):
+          sessionId: null, playerId: null, token: null,
+          myVote: null, voteLocked: false,
+        }));
+      } catch { clearIdentity(); }
+      persistGameId(gameId); // keep game_id for the reduced JOIN after reload
+    } else {
+      clearIdentity();
+    }
+    // Reset the mock timeline so an offline ?mock=true walkthrough starts a fresh
+    // round (no-op against the live backend).
+    try { sessionStorage.removeItem('sd_mock_claimAt'); sessionStorage.removeItem('sd_mock_progress'); } catch {}
     location.reload();
   }
 
@@ -1921,8 +2098,16 @@
       };
     }
 
-    // game_id from the table QR (?game=<id>) — SSOT §9/Q2.
-    state.gameId = params.get('game') || null;
+    // game_id from the table QR (?game=<id>) — SSOT §9/Q2. CHANGE 3: persist it
+    // in sessionStorage so it survives in-session navigation; if this boot has
+    // no ?game=, fall back to the stored value before asking for a table code.
+    const urlGameId = params.get('game') || null;
+    if (urlGameId) {
+      state.gameId = urlGameId;
+      persistGameId(urlGameId);
+    } else {
+      state.gameId = loadGameId();
+    }
 
     // P0: fetch + index the question bank at boot (log counts). Non-blocking for
     // JOIN/LOBBY; the P4 resolver awaits bankReady before mounting puzzles.

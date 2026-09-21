@@ -283,20 +283,35 @@ body:has(#screen-play:not([hidden])) .sd-heatbar {
   border-color: var(--signal);
   box-shadow: 0 0 0 3px rgba(255, 153, 0, .3);
 }
-/* Session code drawn as six discrete instrument cells (readout, gold). */
+/* Session code drawn as six discrete instrument cells (readout, gold).
+   CHANGE 5 — cells + character pitch share ONE ch-based unit so each of the six
+   characters stays centered in its cell at any viewport width and in both
+   themes. The field font is monospace (--sd-mono), so 1ch == the glyph advance
+   exactly; a 1ch inter-character gap makes the per-char pitch 2ch, and the cell
+   separators are drawn on that SAME 2ch grid (not a width-relative %). The width
+   is pinned to six cells plus the half-cell the trailing letter-spacing needs,
+   so the block never scroll-drifts when full. This replaces the old fixed-px
+   letter-spacing vs %-width grid, whose advance never matched the cell width. */
 .sd-input--code {
+  font-family: var(--sd-mono);
   text-transform: uppercase;
   text-align: center;
   font-weight: 700;
   font-size: 22px;
-  letter-spacing: 20px;
-  text-indent: 20px;
+  letter-spacing: 1ch;      /* glyph(1ch) + gap(1ch) = 2ch per-char pitch */
+  text-indent: 0.25ch;      /* centers the 12ch text-advance onto the 2ch grid */
+  width: 12.5ch;            /* 6 cells (12ch) + 0.5ch so the trailing gap fits */
+  max-width: 100%;
+  margin-inline: auto;
+  padding-left: 0;
+  padding-right: 0;
   color: var(--gold);
   background:
     var(--ink)
     repeating-linear-gradient(90deg,
-      transparent 0 calc(16.666% - 1px),
-      var(--hairline-2) calc(16.666% - 1px) 16.666%);
+      transparent 0 calc(2ch - 1px),
+      var(--hairline-2) calc(2ch - 1px) 2ch);
+  background-repeat: no-repeat;
   background-size: 100% 100%;
 }
 .sd-input--code::placeholder { letter-spacing: 2px; text-indent: 0; font-size: 15px; }
@@ -1147,7 +1162,8 @@ body:has(#screen-play:not([hidden])) .sd-heatbar.sd-heat-live {
 @media (max-width: 360px) {
   .sd-cat-grid { grid-template-columns: 1fr; }
   .sd-code-value { font-size: 40px; letter-spacing: 7px; }
-  .sd-input--code { letter-spacing: 14px; text-indent: 14px; font-size: 20px; }
+  /* ch-based grid self-scales; only nudge the font down on tiny screens. */
+  .sd-input--code { font-size: 20px; }
 }
 
 /* ── Landscape / short viewports: top-align and cap the wordmark so it never
