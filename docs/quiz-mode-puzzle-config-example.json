@@ -76,9 +76,9 @@
       "type": "quiz_lock",
       "category": "agentic-ai",
       "source_question_ids": [
-        "agentic-spell-002",
-        "agentic-spell-006",
-        "agentic-spell-009"
+        "agentic-spell-001",
+        "agentic-spell-003",
+        "agentic-spell-005"
       ],
       "ui": "spelling-lock",
       "config": {
