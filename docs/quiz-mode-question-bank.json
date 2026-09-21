@@ -4213,17 +4213,6 @@
         },
         {
           "id": "frugal-mcq-002",
-          "question": "Which phase comes first in The Frugal Architect's law grouping?",
-          "answer": "Design",
-          "decoys": [
-            "Measure",
-            "Observe",
-            "Optimize"
-          ],
-          "source": "https://thefrugalarchitect.com/laws"
-        },
-        {
-          "id": "frugal-mcq-003",
           "question": "Which non-functional requirement does Law I say should carry equal weight to security and availability?",
           "answer": "Cost",
           "decoys": [
@@ -4234,7 +4223,7 @@
           "source": "https://thefrugalarchitect.com/laws"
         },
         {
-          "id": "frugal-mcq-004",
+          "id": "frugal-mcq-003",
           "question": "According to Law II, systems that last align their cost structure to what?",
           "answer": "The business's revenue-generating dimension",
           "decoys": [
@@ -4245,7 +4234,7 @@
           "source": "https://thefrugalarchitect.com/laws"
         },
         {
-          "id": "frugal-mcq-005",
+          "id": "frugal-mcq-004",
           "question": "Law III states that architecting is fundamentally a series of what?",
           "answer": "Trade-offs",
           "decoys": [
@@ -4256,7 +4245,7 @@
           "source": "https://thefrugalarchitect.com/laws"
         },
         {
-          "id": "frugal-mcq-006",
+          "id": "frugal-mcq-005",
           "question": "Law IV, 'unobserved systems lead to unknown costs,' is illustrated in the keynote using which historical example?",
           "answer": "Amsterdam houses with hidden vs. visible energy meters",
           "decoys": [
@@ -4268,7 +4257,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-007",
+          "id": "frugal-mcq-006",
           "question": "Which example illustrates Law V (implementing cost controls) via a three-tier criticality model?",
           "answer": "Amazon retail (search/browse/cart/checkout as Tier 1)",
           "decoys": [
@@ -4280,7 +4269,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-008",
+          "id": "frugal-mcq-007",
           "question": "Law VI states that cost optimization is what kind of process?",
           "answer": "Incremental",
           "decoys": [
@@ -4291,7 +4280,7 @@
           "source": "https://thefrugalarchitect.com/laws"
         },
         {
-          "id": "frugal-mcq-009",
+          "id": "frugal-mcq-008",
           "question": "Which historical figure does Vogels quote for Law VII's warning against 'we've always done it this way'?",
           "answer": "Grace Hopper",
           "decoys": [
@@ -4303,18 +4292,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-010",
-          "question": "In what year did Werner Vogels introduce The Frugal Architect?",
-          "answer": "2023",
-          "decoys": [
-            "2019",
-            "2021",
-            "2011"
-          ],
-          "source": "https://en.wikipedia.org/wiki/Werner_Vogels"
-        },
-        {
-          "id": "frugal-mcq-011",
+          "id": "frugal-mcq-009",
           "question": "Which AWS keynote event did Werner Vogels use to launch The Frugal Architect?",
           "answer": "re:Invent",
           "decoys": [
@@ -4326,7 +4304,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-012",
+          "id": "frugal-mcq-010",
           "question": "Which broadcaster's near-collapse during Sesame Street's 40th anniversary streaming led it to migrate to AWS?",
           "answer": "PBS",
           "decoys": [
@@ -4338,7 +4316,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-013",
+          "id": "frugal-mcq-011",
           "question": "By re-architecting onto S3, CloudFront, ECS, and Fargate, PBS cut its streaming costs by roughly what percentage?",
           "answer": "80%",
           "decoys": [
@@ -4350,7 +4328,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-014",
+          "id": "frugal-mcq-012",
           "question": "Which file-transfer company is highlighted as a certified B-corp that forecasts and tracks its carbon emissions?",
           "answer": "WeTransfer",
           "decoys": [
@@ -4362,7 +4340,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-015",
+          "id": "frugal-mcq-013",
           "question": "What third pricing dimension did AWS add to S3 after onboarding early customers, beyond storage and data transfer?",
           "answer": "Number of requests",
           "decoys": [
@@ -4374,7 +4352,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-016",
+          "id": "frugal-mcq-014",
           "question": "Before Firecracker existed, what instance type did AWS use to isolate individual Lambda functions?",
           "answer": "T2",
           "decoys": [
@@ -4386,7 +4364,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-017",
+          "id": "frugal-mcq-015",
           "question": "Firecracker's micro-VM technology is built on top of which virtualization technology?",
           "answer": "KVM",
           "decoys": [
@@ -4398,7 +4376,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-018",
+          "id": "frugal-mcq-016",
           "question": "Which AWS serverless container service became possible only after Firecracker was built?",
           "answer": "Fargate",
           "decoys": [
@@ -4410,7 +4388,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-019",
+          "id": "frugal-mcq-017",
           "question": "At Nubank, which garbage collector was adopted to fix long stop-the-world pauses in critical microservices?",
           "answer": "Z Garbage Collector (ZGC)",
           "decoys": [
@@ -4422,7 +4400,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-020",
+          "id": "frugal-mcq-018",
           "question": "What is the name of Nubank's canonical append-only database, backed by DynamoDB?",
           "answer": "Datomic",
           "decoys": [
@@ -4434,43 +4412,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-021",
-          "question": "Nubank found that caching with NVMe discs returned how much for every $1 invested, for one critical microservice?",
-          "answer": "$3,500",
-          "decoys": [
-            "$350",
-            "$35",
-            "$35,000"
-          ],
-          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
-          "_verified": false
-        },
-        {
-          "id": "frugal-mcq-022",
-          "question": "What is the name of Brazil's instant, zero-cost, 24/7 interbank payment protocol discussed in the keynote?",
-          "answer": "Pix",
-          "decoys": [
-            "Boleto",
-            "SWIFT",
-            "Zelle"
-          ],
-          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
-          "_verified": false
-        },
-        {
-          "id": "frugal-mcq-023",
-          "question": "What is the mandated maximum latency for a Pix transfer to complete?",
-          "answer": "10 seconds",
-          "decoys": [
-            "1 second",
-            "60 seconds",
-            "24 hours"
-          ],
-          "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
-          "_verified": false
-        },
-        {
-          "id": "frugal-mcq-024",
+          "id": "frugal-mcq-019",
           "question": "After stabilizing its systems, Nubank's P99 latency SLA decreased by roughly what percentage?",
           "answer": "92%",
           "decoys": [
@@ -4482,7 +4424,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-025",
+          "id": "frugal-mcq-020",
           "question": "Which Amazon retail feature moved from Tier 2 to Tier 1 once data showed its absence hurt purchase trust?",
           "answer": "Customer reviews",
           "decoys": [
@@ -4494,7 +4436,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-026",
+          "id": "frugal-mcq-021",
           "question": "Per research Vogels cites from INESC/Universidade do Minho, roughly how many times more energy can Python or Ruby use versus C or Rust?",
           "answer": "50 times",
           "decoys": [
@@ -4506,7 +4448,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-027",
+          "id": "frugal-mcq-022",
           "question": "Which programming language did AWS choose to build Firecracker and large parts of S3, citing both energy efficiency and memory safety?",
           "answer": "Rust",
           "decoys": [
@@ -4518,7 +4460,7 @@
           "_verified": false
         },
         {
-          "id": "frugal-mcq-028",
+          "id": "frugal-mcq-023",
           "question": "What new AWS console feature, announced at the same keynote, gives a single view of cost, health, security, and performance per application?",
           "answer": "myApplications",
           "decoys": [
@@ -4529,7 +4471,7 @@
           "source": "https://aws.amazon.com/blogs/aws/top-announcements-of-aws-reinvent-2023/"
         },
         {
-          "id": "frugal-mcq-029",
+          "id": "frugal-mcq-024",
           "question": "Which CloudWatch feature, also announced at that keynote, automatically instruments EKS applications for observability?",
           "answer": "Application Signals",
           "decoys": [
