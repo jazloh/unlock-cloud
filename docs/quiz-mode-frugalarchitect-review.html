@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FrugalArchitect Question Bank Review</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --border: #2a2f3a; --text: #e6e8eb;
+    --muted: #9aa3b2; --accent: #f2a541; --green: #4caf7d; --red: #e0616b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2rem; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  h1 { margin-bottom: .25rem; }
+  .subtitle { color: var(--muted); margin-bottom: 1.5rem; }
+  nav {
+    display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 2rem;
+    position: sticky; top: 0; background: var(--bg); padding: .75rem 0; z-index: 10;
+    border-bottom: 1px solid var(--border);
+  }
+  nav a {
+    color: var(--accent); text-decoration: none; font-size: .85rem;
+    border: 1px solid var(--border); padding: .35rem .7rem; border-radius: 6px;
+  }
+  nav a:hover { background: var(--panel); }
+  section { margin-bottom: 2.5rem; }
+  h2 { font-size: 1.1rem; border-bottom: 2px solid var(--border); padding-bottom: .4rem; }
+  .count { color: var(--muted); font-weight: normal; font-size: .9rem; }
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  th, td { border: 1px solid var(--border); padding: .5rem .6rem; text-align: left; vertical-align: top; }
+  th { background: var(--panel); color: var(--muted); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.id { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); white-space: nowrap; }
+  td.ans { color: var(--green); font-weight: 600; }
+  td.decoys ul { margin: 0; padding-left: 1.1rem; color: var(--muted); }
+  td.letters { color: var(--muted); white-space: nowrap; }
+  .correct { color: var(--green); font-weight: 600; }
+  .wrong { color: var(--red); text-decoration: line-through; opacity: .75; }
+  .sep { color: var(--muted); }
+  a.src { color: var(--accent); text-decoration: none; font-size: .8rem; }
+  a.src:hover { text-decoration: underline; }
+  .verified { color: var(--green); font-size: .75rem; }
+  .unverified { color: var(--red); font-size: .75rem; }
+  td.meta { white-space: nowrap; }
+</style>
+</head>
+<body>
+  <h1>FrugalArchitect — Question Bank Review</h1>
+  <p class="subtitle">Source: docs/quiz-mode-question-bank.json &middot; category <code>FrugalArchitect</code> &middot; 77 entries total &middot; generated for human review, not consumed by the app.</p>
+  <nav><a href="#mcq">Multiple Choice (wager-lock) (24)</a><a href="#numeric">Numeric (keypad-lock) (11)</a><a href="#word">Word (word-lock) (10)</a><a href="#statement">True/False Statement (pillar-lock) (25)</a><a href="#spelling">Spelling (spelling-lock) (7)</a></nav>
+
+    <section id="mcq">
+      <h2>Multiple Choice (wager-lock) <span class="count">(24)</span></h2>
+      <table>
+        <thead><tr><th>ID</th><th>Question</th><th>Answer</th><th>Decoys</th><th>Source</th></tr></thead>
+        <tbody>
+            <tr>
+              <td class="id">frugal-mcq-001</td>
+              <td class="q">How many &#x27;Laws&#x27; does The Frugal Architect framework define?</td>
+              <td class="ans">7</td>
+              <td class="decoys"><ul><li>5</li><li>10</li><li>3</li></ul></td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-002</td>
+              <td class="q">Which non-functional requirement does Law I say should carry equal weight to security and availability?</td>
+              <td class="ans">Cost</td>
+              <td class="decoys"><ul><li>Marketing</li><li>Branding</li><li>Headcount</li></ul></td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-003</td>
+              <td class="q">According to Law II, systems that last align their cost structure to what?</td>
+              <td class="ans">The business&#x27;s revenue-generating dimension</td>
+              <td class="decoys"><ul><li>The engineering team&#x27;s headcount</li><li>The marketing budget</li><li>The original launch date</li></ul></td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-004</td>
+              <td class="q">Law III states that architecting is fundamentally a series of what?</td>
+              <td class="ans">Trade-offs</td>
+              <td class="decoys"><ul><li>Guarantees</li><li>Contracts</li><li>Approvals</li></ul></td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-005</td>
+              <td class="q">Law IV, &#x27;unobserved systems lead to unknown costs,&#x27; is illustrated in the keynote using which historical example?</td>
+              <td class="ans">Amsterdam houses with hidden vs. visible energy meters</td>
+              <td class="decoys"><ul><li>London Underground fare gates</li><li>New York water metering</li><li>Tokyo train punctuality</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-006</td>
+              <td class="q">Which example illustrates Law V (implementing cost controls) via a three-tier criticality model?</td>
+              <td class="ans">Amazon retail (search/browse/cart/checkout as Tier 1)</td>
+              <td class="decoys"><ul><li>Netflix&#x27;s recommendation engine</li><li>Uber&#x27;s surge pricing</li><li>Zoom&#x27;s video codecs</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-007</td>
+              <td class="q">Law VI states that cost optimization is what kind of process?</td>
+              <td class="ans">Incremental</td>
+              <td class="decoys"><ul><li>One-time</li><li>Automatic</li><li>Optional</li></ul></td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-008</td>
+              <td class="q">Which historical figure does Vogels quote for Law VII&#x27;s warning against &#x27;we&#x27;ve always done it this way&#x27;?</td>
+              <td class="ans">Grace Hopper</td>
+              <td class="decoys"><ul><li>Ada Lovelace</li><li>Alan Turing</li><li>Margaret Hamilton</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-009</td>
+              <td class="q">Which AWS keynote event did Werner Vogels use to launch The Frugal Architect?</td>
+              <td class="ans">re:Invent</td>
+              <td class="decoys"><ul><li>re:Inforce</li><li>Summit</li><li>AWS Startup Day</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-010</td>
+              <td class="q">Which broadcaster&#x27;s near-collapse during Sesame Street&#x27;s 40th anniversary streaming led it to migrate to AWS?</td>
+              <td class="ans">PBS</td>
+              <td class="decoys"><ul><li>BBC</li><li>NPR</li><li>Discovery</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-011</td>
+              <td class="q">By re-architecting onto S3, CloudFront, ECS, and Fargate, PBS cut its streaming costs by roughly what percentage?</td>
+              <td class="ans">80%</td>
+              <td class="decoys"><ul><li>20%</li><li>50%</li><li>95%</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-012</td>
+              <td class="q">Which file-transfer company is highlighted as a certified B-corp that forecasts and tracks its carbon emissions?</td>
+              <td class="ans">WeTransfer</td>
+              <td class="decoys"><ul><li>Dropbox</li><li>Box</li><li>WeWork</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-013</td>
+              <td class="q">What third pricing dimension did AWS add to S3 after onboarding early customers, beyond storage and data transfer?</td>
+              <td class="ans">Number of requests</td>
+              <td class="decoys"><ul><li>Number of accounts</li><li>Number of regions</li><li>Number of tags</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-014</td>
+              <td class="q">Before Firecracker existed, what instance type did AWS use to isolate individual Lambda functions?</td>
+              <td class="ans">T2</td>
+              <td class="decoys"><ul><li>T3</li><li>M5</li><li>C5</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-015</td>
+              <td class="q">Firecracker&#x27;s micro-VM technology is built on top of which virtualization technology?</td>
+              <td class="ans">KVM</td>
+              <td class="decoys"><ul><li>Xen</li><li>Hyper-V</li><li>VMware ESXi</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-016</td>
+              <td class="q">Which AWS serverless container service became possible only after Firecracker was built?</td>
+              <td class="ans">Fargate</td>
+              <td class="decoys"><ul><li>ECS</li><li>EKS</li><li>Batch</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-017</td>
+              <td class="q">At Nubank, which garbage collector was adopted to fix long stop-the-world pauses in critical microservices?</td>
+              <td class="ans">Z Garbage Collector (ZGC)</td>
+              <td class="decoys"><ul><li>G1 Garbage Collector</li><li>CMS Collector</li><li>Shenandoah</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-018</td>
+              <td class="q">What is the name of Nubank&#x27;s canonical append-only database, backed by DynamoDB?</td>
+              <td class="ans">Datomic</td>
+              <td class="decoys"><ul><li>Cassandra</li><li>Aurora</li><li>CockroachDB</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-019</td>
+              <td class="q">After stabilizing its systems, Nubank&#x27;s P99 latency SLA decreased by roughly what percentage?</td>
+              <td class="ans">92%</td>
+              <td class="decoys"><ul><li>50%</li><li>25%</li><li>99%</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-020</td>
+              <td class="q">Which Amazon retail feature moved from Tier 2 to Tier 1 once data showed its absence hurt purchase trust?</td>
+              <td class="ans">Customer reviews</td>
+              <td class="decoys"><ul><li>Recommendations</li><li>Similar items</li><li>Best-seller list</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-021</td>
+              <td class="q">Per research Vogels cites from INESC/Universidade do Minho, roughly how many times more energy can Python or Ruby use versus C or Rust?</td>
+              <td class="ans">50 times</td>
+              <td class="decoys"><ul><li>5 times</li><li>2 times</li><li>500 times</li></ul></td>
+              <td class="meta"><a class="src" href="https://dl.acm.org/doi/10.1145/3136014.3136031" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-022</td>
+              <td class="q">Which programming language did AWS choose to build Firecracker and large parts of S3, citing both energy efficiency and memory safety?</td>
+              <td class="ans">Rust</td>
+              <td class="decoys"><ul><li>Go</li><li>Java</li><li>C#</li></ul></td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-023</td>
+              <td class="q">What new AWS console feature, announced at the same keynote, gives a single view of cost, health, security, and performance per application?</td>
+              <td class="ans">myApplications</td>
+              <td class="decoys"><ul><li>AWS Config</li><li>Trusted Advisor</li><li>Systems Manager</li></ul></td>
+              <td class="meta"><a class="src" href="https://aws.amazon.com/blogs/aws/top-announcements-of-aws-reinvent-2023/" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-mcq-024</td>
+              <td class="q">Which CloudWatch feature, also announced at that keynote, automatically instruments EKS applications for observability?</td>
+              <td class="ans">Application Signals</td>
+              <td class="decoys"><ul><li>Container Insights</li><li>X-Ray</li><li>Contributor Insights</li></ul></td>
+              <td class="meta"><a class="src" href="https://aws.amazon.com/blogs/aws/top-announcements-of-aws-reinvent-2023/" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr></tbody>
+      </table>
+    </section>
+    <section id="numeric">
+      <h2>Numeric (keypad-lock) <span class="count">(11)</span></h2>
+      <table>
+        <thead><tr><th>ID</th><th>Question</th><th>Answer</th><th>Source</th></tr></thead>
+        <tbody>
+            <tr>
+              <td class="id">frugal-num-001</td>
+              <td class="q">In what year did Werner Vogels introduce The Frugal Architect?</td>
+              <td class="ans">2023</td>
+              <td class="meta"><a class="src" href="https://en.wikipedia.org/wiki/Werner_Vogels" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-num-002</td>
+              <td class="q">In what year was the Pereira et al. energy-efficiency-across-programming-languages paper published?</td>
+              <td class="ans">2017</td>
+              <td class="meta"><a class="src" href="https://dl.acm.org/doi/10.1145/3136014.3136031" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-num-003</td>
+              <td class="q">In what year did Werner Vogels give his first re:Invent keynote listing tenets for building in the cloud, including &#x27;architect with cost in mind&#x27;?</td>
+              <td class="ans">2011</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-num-004</td>
+              <td class="q">How many tenets did Vogels present at that first re:Invent keynote?</td>
+              <td class="ans">12</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-num-005</td>
+              <td class="q">By roughly what percentage did PBS cut its streaming costs after re-architecting onto S3, CloudFront, ECS, and Fargate?</td>
+              <td class="ans">80</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-num-006</td>
+              <td class="q">Across how many pricing dimensions did AWS ultimately price Amazon S3 (storage, transfer, and one more)?</td>
+              <td class="ans">3</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-num-007</td>
+              <td class="q">What is the maximum latency, in seconds, mandated for a Pix transfer in Brazil to complete?</td>
+              <td class="ans">10</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-num-008</td>
+              <td class="q">For every $1 Nubank invested in NVMe caching for one critical microservice, how many dollars did it avoid spending?</td>
+              <td class="ans">3500</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-num-009</td>
+              <td class="q">By roughly what percentage did Nubank&#x27;s P99 latency SLA decrease after stabilizing its systems?</td>
+              <td class="ans">92</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-num-010</td>
+              <td class="q">Roughly how many billion US dollars in fees did Nubank&#x27;s efficiency save its customers in 2022, per the keynote?</td>
+              <td class="ans">8</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-num-011</td>
+              <td class="q">Per Vogels&#x27; citation of Rui Pereira&#x27;s research, Python or Ruby can use roughly how many times more energy than C or Rust?</td>
+              <td class="ans">50</td>
+              <td class="meta"><a class="src" href="https://dl.acm.org/doi/10.1145/3136014.3136031" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr></tbody>
+      </table>
+    </section>
+    <section id="word">
+      <h2>Word (word-lock) <span class="count">(10)</span></h2>
+      <table>
+        <thead><tr><th>ID</th><th>Question</th><th>Answer</th><th>Source</th></tr></thead>
+        <tbody>
+            <tr>
+              <td class="id">frugal-word-001</td>
+              <td class="q">What is the name of the AWS micro-VM technology, built on KVM, that Lambda&#x27;s compute layer evolved to use?</td>
+              <td class="ans">Firecracker</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-word-002</td>
+              <td class="q">What serverless container service became possible only after Firecracker was built?</td>
+              <td class="ans">Fargate</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-word-003</td>
+              <td class="q">Which programming language did AWS choose for Firecracker and large parts of S3, citing energy efficiency and memory safety?</td>
+              <td class="ans">Rust</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-word-004</td>
+              <td class="q">Which AWS custom processor family does Vogels cite as a way to drive cost down through right-sizing?</td>
+              <td class="ans">Graviton</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-word-005</td>
+              <td class="q">What word describes maximizing value rather than just minimizing spend, per Law III?</td>
+              <td class="ans">Frugality</td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-word-006</td>
+              <td class="q">What word, alongside cost, does Vogels say is approximated by AWS&#x27;s per-resource billing?</td>
+              <td class="ans">Sustainability</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-word-007</td>
+              <td class="q">What is the name of the self-reinforcing growth loop Jeff Bezos sketched on a napkin, referenced in the keynote?</td>
+              <td class="ans">Flywheel</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-word-008</td>
+              <td class="q">Which AWS managed caching service does Nubank&#x27;s Datomic use as an external cache?</td>
+              <td class="ans">ElastiCache</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-word-009</td>
+              <td class="q">What is the surname of the Amazon CTO who created The Frugal Architect?</td>
+              <td class="ans">Vogels</td>
+              <td class="meta"><a class="src" href="https://en.wikipedia.org/wiki/Werner_Vogels" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-word-010</td>
+              <td class="q">Vogels compares S3&#x27;s evolution to a single-engine plane growing into a fleet of jets. What kind of plane did it start as?</td>
+              <td class="ans">Cessna</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr></tbody>
+      </table>
+    </section>
+    <section id="statement">
+      <h2>True/False Statement (pillar-lock) <span class="count">(25)</span></h2>
+      <table>
+        <thead><tr><th>ID</th><th>Statement (correct / wrong)</th><th>Source</th></tr></thead>
+        <tbody>
+            <tr>
+              <td class="id">frugal-stmt-001</td>
+              <td class="q">The Frugal Architect codifies Werner Vogels&#x27; cost-aware architecture principles into <span class="correct">seven</span> <span class="sep">/</span> <span class="wrong">five</span> laws.</td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-002</td>
+              <td class="q">The Frugal Architect framework groups its laws into the phases Design, Measure, and <span class="correct">Observe</span> <span class="sep">/</span> <span class="wrong">Deploy</span>.</td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-003</td>
+              <td class="q">Per Law I, cost and sustainability should be treated as <span class="correct">non-functional requirements</span> <span class="sep">/</span> <span class="wrong">purely optional add-ons</span> alongside security and availability.</td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-004</td>
+              <td class="q">Law II states that durable systems should align their cost structure to a <span class="correct">business&#x27;s revenue-generating dimension</span> <span class="sep">/</span> <span class="wrong">fixed hardware budget</span>.</td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-005</td>
+              <td class="q">Law III states that architecting is fundamentally a series of <span class="correct">trade-offs</span> <span class="sep">/</span> <span class="wrong">guarantees</span>.</td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-006</td>
+              <td class="q">Law IV warns that <span class="correct">unobserved systems lead to unknown costs</span> <span class="sep">/</span> <span class="wrong">observed systems always cost more</span>.</td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-007</td>
+              <td class="q">Law V states cost-aware architectures must implement <span class="correct">cost controls</span> <span class="sep">/</span> <span class="wrong">larger data centers</span>.</td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-008</td>
+              <td class="q">Law VI states that cost optimization is <span class="correct">incremental</span> <span class="sep">/</span> <span class="wrong">a one-time project</span>.</td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-009</td>
+              <td class="q">Law VII warns against the phrase &#x27;<span class="correct">we&#x27;ve always done it this way</span> <span class="sep">/</span> <span class="wrong">let&#x27;s try something new</span>&#x27; as a sign of unchallenged assumptions.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-010</td>
+              <td class="q">The Frugal Architect website is hosted at <span class="correct">thefrugalarchitect.com</span> <span class="sep">/</span> <span class="wrong">frugalarchitecture.aws</span>.</td>
+              <td class="meta"><a class="src" href="https://thefrugalarchitect.com/laws" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-011</td>
+              <td class="q">Werner Vogels introduced The Frugal Architect concept in <span class="correct">2023</span> <span class="sep">/</span> <span class="wrong">2019</span>.</td>
+              <td class="meta"><a class="src" href="https://en.wikipedia.org/wiki/Werner_Vogels" target="_blank" rel="noopener">source</a> <span class="verified">verified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-012</td>
+              <td class="q">PBS moved off its own datacenters to AWS after its infrastructure failed during <span class="correct">the 40th anniversary of Sesame Street in 2009</span> <span class="sep">/</span> <span class="wrong">the launch of a new logo in 2015</span>.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-013</td>
+              <td class="q">After re-architecting to stream directly from S3 and CloudFront onto ECS and Fargate, PBS cut streaming costs by roughly <span class="correct">80%</span> <span class="sep">/</span> <span class="wrong">20%</span>.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-014</td>
+              <td class="q">WeTransfer is organized as a certified <span class="correct">B-corp</span> <span class="sep">/</span> <span class="wrong">non-profit foundation</span> with high environmental and fiscal transparency standards.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-015</td>
+              <td class="q">When AWS launched S3, it ultimately priced the service across three dimensions: storage, transfer, and <span class="correct">number of requests</span> <span class="sep">/</span> <span class="wrong">number of accounts</span>.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-016</td>
+              <td class="q">DynamoDB&#x27;s eventually consistent reads were priced at <span class="correct">half the cost</span> <span class="sep">/</span> <span class="wrong">double the cost</span> of strongly consistent reads, reflecting the extra quorum work strong consistency requires.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-017</td>
+              <td class="q">AWS Lambda originally ran customer functions inside <span class="correct">T2 instances</span> <span class="sep">/</span> <span class="wrong">bare-metal servers</span> for isolation before Firecracker existed.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-018</td>
+              <td class="q">Firecracker is a micro-VM technology built on top of <span class="correct">KVM</span> <span class="sep">/</span> <span class="wrong">Xen</span> that let AWS run Lambda far more efficiently.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-019</td>
+              <td class="q">Firecracker&#x27;s efficiency gains also made it possible for AWS to later build <span class="correct">Fargate</span> <span class="sep">/</span> <span class="wrong">Redshift</span>, its serverless container service.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-020</td>
+              <td class="q">At Nubank, switching some services to the <span class="correct">Z Garbage Collector (ZGC)</span> <span class="sep">/</span> <span class="wrong">G1 Garbage Collector</span> reduced worst-case stop-the-world pause length for critical services.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-021</td>
+              <td class="q">Nubank found that caching with <span class="correct">NVMe discs</span> <span class="sep">/</span> <span class="wrong">more RAM alone</span> delivered a roughly 3,500x return for every dollar invested, for one critical microservice.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-022</td>
+              <td class="q">Brazil&#x27;s instant payment system, <span class="correct">Pix</span> <span class="sep">/</span> <span class="wrong">Boleto</span>, requires transfers to complete within a mandated maximum latency of 10 seconds.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-023</td>
+              <td class="q">In Amazon retail&#x27;s tiering model, <span class="correct">search, browse, shopping cart, and checkout</span> <span class="sep">/</span> <span class="wrong">personalized recommendations</span> form Tier 1, the components that must always be up.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-024</td>
+              <td class="q">Customer reviews were originally Tier 2 at Amazon retail but were promoted to <span class="correct">Tier 1</span> <span class="sep">/</span> <span class="wrong">Tier 3</span> once data showed offline reviews hurt purchase trust.</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-stmt-025</td>
+              <td class="q">Research from INESC/Universidade do Minho found that languages like Python and Ruby can use over <span class="correct">50 times</span> <span class="sep">/</span> <span class="wrong">2 times</span> more energy than C or Rust for equivalent tasks, per Vogels&#x27; citation.</td>
+              <td class="meta"><a class="src" href="https://dl.acm.org/doi/10.1145/3136014.3136031" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr></tbody>
+      </table>
+    </section>
+    <section id="spelling">
+      <h2>Spelling (spelling-lock) <span class="count">(7)</span></h2>
+      <table>
+        <thead><tr><th>ID</th><th>Answer</th><th>Length</th><th>Source</th></tr></thead>
+        <tbody>
+            <tr>
+              <td class="id">frugal-spell-001</td>
+              <td class="ans">Firecracker</td>
+              <td class="letters">11 letters</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-spell-002</td>
+              <td class="ans">Fargate</td>
+              <td class="letters">7 letters</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-spell-003</td>
+              <td class="ans">Graviton</td>
+              <td class="letters">8 letters</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-spell-004</td>
+              <td class="ans">Frugality</td>
+              <td class="letters">9 letters</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-spell-005</td>
+              <td class="ans">Sustainability</td>
+              <td class="letters">14 letters</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-spell-006</td>
+              <td class="ans">Flywheel</td>
+              <td class="letters">8 letters</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr>
+            <tr>
+              <td class="id">frugal-spell-007</td>
+              <td class="ans">ElastiCache</td>
+              <td class="letters">11 letters</td>
+              <td class="meta"><a class="src" href="https://www.youtube.com/watch?v=UTRBVPvzt9w" target="_blank" rel="noopener">source</a> <span class="unverified">unverified</span></td>
+            </tr></tbody>
+      </table>
+    </section>
+</body>
+</html>
