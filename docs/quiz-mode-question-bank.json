@@ -424,80 +424,106 @@
       "word": [
         {
           "id": "awscore-word-001",
-          "question": "What does the acronym 'EC2' stand for?",
-          "answer": "Elastic Compute Cloud",
+          "question": "Which AWS service acronym stands for 'Elastic Compute Cloud'?",
+
+          "answer": "EC2",
+
           "_verified": false
         },
         {
           "id": "awscore-word-002",
-          "question": "What does the acronym 'S3' stand for?",
-          "answer": "Simple Storage Service",
+          "question": "Which AWS service acronym stands for 'Simple Storage Service'?",
+
+          "answer": "S3",
+
           "_verified": false
         },
         {
           "id": "awscore-word-003",
-          "question": "What does the acronym 'VPC' stand for?",
-          "answer": "Virtual Private Cloud",
+          "question": "Which AWS acronym stands for 'Virtual Private Cloud'?",
+
+          "answer": "VPC",
+
           "_verified": false
         },
         {
           "id": "awscore-word-004",
-          "question": "What does the acronym 'RDS' stand for?",
-          "answer": "Relational Database Service",
+          "question": "Which AWS service acronym stands for 'Relational Database Service'?",
+
+          "answer": "RDS",
+
           "_verified": false
         },
         {
           "id": "awscore-word-005",
-          "question": "What does the acronym 'IAM' stand for?",
-          "answer": "Identity and Access Management",
+          "question": "Which AWS acronym stands for 'Identity and Access Management'?",
+
+          "answer": "IAM",
+
           "_verified": false
         },
         {
           "id": "awscore-word-006",
-          "question": "What does the acronym 'SNS' stand for?",
-          "answer": "Simple Notification Service",
+          "question": "Which AWS service acronym stands for 'Simple Notification Service'?",
+
+          "answer": "SNS",
+
           "_verified": false
         },
         {
           "id": "awscore-word-007",
-          "question": "What does the acronym 'SQS' stand for?",
-          "answer": "Simple Queue Service",
+          "question": "Which AWS service acronym stands for 'Simple Queue Service'?",
+
+          "answer": "SQS",
+
           "_verified": false
         },
         {
           "id": "awscore-word-008",
-          "question": "What does the acronym 'EBS' stand for?",
-          "answer": "Elastic Block Store",
+          "question": "Which AWS service acronym stands for 'Elastic Block Store'?",
+
+          "answer": "EBS",
+
           "_verified": false
         },
         {
           "id": "awscore-word-009",
-          "question": "What does the acronym 'EFS' stand for?",
-          "answer": "Elastic File System",
+          "question": "Which AWS service acronym stands for 'Elastic File System'?",
+
+          "answer": "EFS",
+
           "_verified": false
         },
         {
           "id": "awscore-word-010",
-          "question": "What does the acronym 'KMS' stand for?",
-          "answer": "Key Management Service",
+          "question": "Which AWS service acronym stands for 'Key Management Service'?",
+
+          "answer": "KMS",
+
           "_verified": false
         },
         {
           "id": "awscore-word-011",
-          "question": "What does the acronym 'ECS' stand for?",
-          "answer": "Elastic Container Service",
+          "question": "Which AWS service acronym stands for 'Elastic Container Service'?",
+
+          "answer": "ECS",
+
           "_verified": false
         },
         {
           "id": "awscore-word-012",
-          "question": "What does the acronym 'EKS' stand for?",
-          "answer": "Elastic Kubernetes Service",
+          "question": "Which AWS service acronym stands for 'Elastic Kubernetes Service'?",
+
+          "answer": "EKS",
+
           "_verified": false
         },
         {
           "id": "awscore-word-013",
-          "question": "What does the acronym 'ARN' stand for?",
-          "answer": "Amazon Resource Name",
+          "question": "Which AWS acronym stands for 'Amazon Resource Name'?",
+
+          "answer": "ARN",
+
           "_verified": false
         }
       ],
@@ -1097,8 +1123,10 @@
       "word": [
         {
           "id": "agentic-word-001",
-          "question": "What is the exact command to start spec-driven development in Kiro CLI 3.0?",
-          "answer": "/spec new <name>",
+          "question": "What slash command starts spec-driven development in Kiro CLI 3.0 (just the command, no arguments)?",
+
+          "answer": "/spec",
+
           "source": "https://kiro.dev/docs/cli/v3/"
         },
         {
@@ -1109,20 +1137,26 @@
         },
         {
           "id": "agentic-word-003",
-          "question": "What is the name of the shared architecture underlying Kiro CLI 3.0, Kiro IDE, and Kiro Web?",
-          "answer": "unified agent harness",
+          "question": "What is the last word naming the shared architecture underlying Kiro CLI 3.0, Kiro IDE, and Kiro Web: a 'unified agent ___'?",
+
+          "answer": "harness",
+
           "source": "https://kiro.dev/docs/cli/v3/"
         },
         {
           "id": "agentic-word-004",
-          "question": "What file format replaced trust flags for permissions in Kiro CLI 3.0?",
-          "answer": "permissions.yaml",
+          "question": "What file extension does the permissions file use in Kiro CLI 3.0's 'permissions.yaml', which replaced trust flags?",
+
+          "answer": "yaml",
+
           "source": "https://kiro.dev/docs/cli/v3/"
         },
         {
           "id": "agentic-word-005",
-          "question": "What built-in agent handles spec-driven development in Kiro CLI 3.0?",
-          "answer": "Spec agent",
+          "question": "What is the first word naming the built-in agent that handles spec-driven development in Kiro CLI 3.0, the '___ agent'?",
+
+          "answer": "Spec",
+
           "source": "https://kiro.dev/docs/cli/v3/"
         },
         {
@@ -1139,38 +1173,50 @@
         },
         {
           "id": "agentic-word-008",
-          "question": "What kind of graph does Amazon Quick build per user?",
-          "answer": "personal knowledge graph",
+          "question": "What does Amazon Quick build per user: a personal knowledge ___?",
+
+          "answer": "graph",
+
           "source": "https://aws.amazon.com/quick/faqs/"
         },
         {
           "id": "agentic-word-009",
-          "question": "What is the name of the capability integrated into AWS Security Agent in June 2026 that lets developers trigger scans from their IDE?",
-          "answer": "Kiro Power",
+          "question": "What is the second word naming the capability integrated into AWS Security Agent in June 2026 that lets developers trigger scans from their IDE: 'Kiro ___'?",
+
+          "answer": "Power",
+
           "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
         },
         {
           "id": "agentic-word-010",
-          "question": "Which Nova 2 model name refers to the one built for real-time voice conversations?",
-          "answer": "Nova 2 Sonic",
+          "question": "Which Nova 2 model, built for real-time voice conversations, is named 'Nova 2 ___'?",
+
+          "answer": "Sonic",
+
           "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
         },
         {
           "id": "agentic-word-011",
-          "question": "Which Nova 2 model name refers to the one that generates both text and images?",
-          "answer": "Nova 2 Omni",
+          "question": "Which Nova 2 model, generating both text and images, is named 'Nova 2 ___'?",
+
+          "answer": "Omni",
+
           "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
         },
         {
           "id": "agentic-word-012",
-          "question": "What term describes AWS agents like Kiro Autonomous Agent, AWS Security Agent, and AWS DevOps Agent, announced at re:Invent 2025?",
-          "answer": "Frontier Agents",
+          "question": "What is the first word describing AWS agents like Kiro Autonomous Agent, AWS Security Agent, and AWS DevOps Agent, announced at re:Invent 2025 as '___ Agents'?",
+
+          "answer": "Frontier",
+
           "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
         },
         {
           "id": "agentic-word-013",
-          "question": "What protocol do all four Nova 2 models work with for tool use, abbreviated MCP?",
-          "answer": "Model Context Protocol",
+          "question": "All four Nova 2 models use a tool-use protocol known in full as 'Model Context Protocol' -- what is its acronym?",
+
+          "answer": "MCP",
+
           "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
         }
       ],
@@ -1303,32 +1349,32 @@
       ],
       "spelling": [
         {
-          "id": "agentic-spell-002",
+          "id": "agentic-spell-001",
           "answer": "Tangent",
           "source": "https://kiro.dev/docs/cli/v3/"
         },
         {
-          "id": "agentic-spell-005",
+          "id": "agentic-spell-002",
           "answer": "Spec agent",
           "source": "https://kiro.dev/docs/cli/v3/"
         },
         {
-          "id": "agentic-spell-006",
+          "id": "agentic-spell-003",
           "answer": "Memory",
           "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
         },
         {
-          "id": "agentic-spell-007",
+          "id": "agentic-spell-004",
           "answer": "Cedar",
           "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
         },
         {
-          "id": "agentic-spell-009",
+          "id": "agentic-spell-005",
           "answer": "Kiro Power",
           "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
         },
         {
-          "id": "agentic-spell-012",
+          "id": "agentic-spell-006",
           "answer": "Frontier Agents",
           "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
         }
@@ -1843,8 +1889,10 @@
         },
         {
           "id": "security-word-004",
-          "question": "AWS Security Agent stores test logs in _____ within the customer's own account.",
-          "answer": "CloudWatch",
+          "question": "AWS Security Agent stores test logs in Cloud_____ within the customer's own account.",
+
+          "answer": "Watch",
+
           "_verified": true,
           "source": "https://aws.amazon.com/security-agent/faqs/"
         },
@@ -1885,21 +1933,27 @@
         },
         {
           "id": "security-word-010",
-          "question": "In IAM, the pillar concerned with granting and removing access is called _____.",
-          "answer": "provisioning",
+          "question": "In IAM, formally giving a user a permission is called a _____ (as in 'access ___').",
+
+          "answer": "grant",
+
           "_verified": true,
           "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
         },
         {
           "id": "security-word-011",
-          "question": "MFA stands for Multi-Factor _____.",
-          "answer": "Authentication",
+          "question": "What is the acronym for 'Multi-Factor Authentication'?",
+
+          "answer": "MFA",
+
           "_verified": false
         },
         {
           "id": "security-word-012",
-          "question": "SQLi is short for SQL _____.",
-          "answer": "Injection",
+          "question": "What is the short form of 'SQL Injection', a common web attack technique?",
+
+          "answer": "SQLi",
+
           "_verified": false
         },
         {
@@ -2071,52 +2125,52 @@
           "source": "https://aws.amazon.com/security-agent/faqs/"
         },
         {
-          "id": "security-spell-004",
+          "id": "security-spell-003",
           "answer": "CloudWatch",
           "source": "https://aws.amazon.com/security-agent/faqs/"
         },
         {
-          "id": "security-spell-005",
+          "id": "security-spell-004",
           "answer": "DevOps",
           "source": "https://aws.amazon.com/security-agent/faqs/"
         },
         {
-          "id": "security-spell-006",
+          "id": "security-spell-005",
           "answer": "Claude",
           "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
         },
         {
-          "id": "security-spell-007",
+          "id": "security-spell-006",
           "answer": "sandbox",
           "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
         },
         {
-          "id": "security-spell-008",
+          "id": "security-spell-007",
           "answer": "speed",
           "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
         },
         {
-          "id": "security-spell-009",
+          "id": "security-spell-008",
           "answer": "verify",
           "source": "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"
         },
         {
-          "id": "security-spell-010",
+          "id": "security-spell-009",
           "answer": "provisioning",
           "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
         },
         {
-          "id": "security-spell-011",
+          "id": "security-spell-010",
           "answer": "Authentication",
           "_verified": false
         },
         {
-          "id": "security-spell-012",
+          "id": "security-spell-011",
           "answer": "Injection",
           "_verified": false
         },
         {
-          "id": "security-spell-013",
+          "id": "security-spell-012",
           "answer": "Service",
           "_verified": false
         }
@@ -2600,14 +2654,18 @@
         },
         {
           "id": "vnaws-word-002",
-          "question": "What is the name of the famous lake in central Hanoi tied to the legend of the golden turtle and magic sword?",
-          "answer": "Hoan Kiem Lake",
+          "question": "What animal is central to the legend of the Hanoi lake known as the 'Lake of the Returned Sword'?",
+
+          "answer": "Turtle",
+
           "_verified": false
         },
         {
           "id": "vnaws-word-003",
-          "question": "What river runs through Hanoi and gives its name to a major delta in northern Vietnam?",
-          "answer": "Red River",
+          "question": "What color names the river that runs through Hanoi and gives its name to a major delta in northern Vietnam, the '___ River'?",
+
+          "answer": "Red",
+
           "_verified": false
         },
         {
@@ -2624,15 +2682,19 @@
         },
         {
           "id": "vnaws-word-006",
-          "question": "What type of new AWS infrastructure achieved general availability in Hanoi in June 2026?",
-          "answer": "Local Zone",
+          "question": "What type of new AWS infrastructure achieved general availability in Hanoi in June 2026: an AWS '___ Zone'?",
+
+          "answer": "Local",
+
           "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-local-zones-hanoi-vietnam/",
           "_verified": true
         },
         {
           "id": "vnaws-word-007",
-          "question": "What is the name of the hotel hosting AWS Cloud and AI Day Hanoi 2026?",
-          "answer": "JW Marriott Hotel Hanoi",
+          "question": "Which hotel brand (single word) hosts AWS Cloud and AI Day Hanoi 2026, at the 'JW ___ Hotel Hanoi'?",
+
+          "answer": "Marriott",
+
           "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
           "_verified": true
         },
@@ -2645,35 +2707,45 @@
         },
         {
           "id": "vnaws-word-009",
-          "question": "What is the name of the AWS-commissioned study on AI adoption in Vietnam, conducted with Strand Partners?",
-          "answer": "Unlocking Vietnam's AI Potential",
+          "question": "Which consulting firm partnered with AWS on its Vietnam AI-adoption study, 'Unlocking Vietnam's AI Potential'?",
+
+          "answer": "Strand",
+
           "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
           "_verified": true
         },
         {
           "id": "vnaws-word-010",
-          "question": "What is the name of AWS's Vietnamese-language AI skilling initiative that launched in 2023?",
-          "answer": "AI Ready",
+          "question": "What is the second word in the name of AWS's Vietnamese-language AI skilling initiative launched in 2023: 'AI ___'?",
+
+          "answer": "Ready",
+
           "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
           "_verified": true
         },
         {
           "id": "vnaws-word-011",
-          "question": "What is the name of the hands-on AI agent building activity at AWS Cloud and AI Day Hanoi 2026?",
-          "answer": "8-Bit Agents Activation",
+          "question": "What is the middle word in the name of the hands-on AI agent-building activity at AWS Cloud and AI Day Hanoi 2026: '8-Bit ___ Activation'?",
+
+          "answer": "Agents",
+
           "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
           "_verified": true
         },
         {
           "id": "vnaws-word-012",
-          "question": "What UNESCO-listed bay of limestone karsts lies near Hanoi in northern Vietnam?",
-          "answer": "Ha Long Bay",
+          "question": "What is the middle word in the name of the UNESCO-listed bay of limestone karsts near Hanoi: 'Ha ___ Bay'?",
+
+          "answer": "Long",
+
           "_verified": false
         },
         {
           "id": "vnaws-word-013",
-          "question": "What is the traditional long tunic worn over trousers that is a national symbol of Vietnam?",
-          "answer": "Ao Dai",
+          "question": "What is the first word of the traditional Vietnamese tunic-and-trousers national dress, '___ Dai'?",
+
+          "answer": "Ao",
+
           "_verified": false
         }
       ],
@@ -2836,27 +2908,27 @@
           "_verified": false
         },
         {
-          "id": "vnaws-spell-006",
+          "id": "vnaws-spell-004",
           "answer": "Local Zone",
           "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-local-zones-hanoi-vietnam/"
         },
         {
-          "id": "vnaws-spell-008",
+          "id": "vnaws-spell-005",
           "answer": "Vogels",
           "source": "https://aws.amazon.com/events/cloud-day-hanoi/"
         },
         {
-          "id": "vnaws-spell-010",
+          "id": "vnaws-spell-006",
           "answer": "AI Ready",
           "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
         },
         {
-          "id": "vnaws-spell-012",
+          "id": "vnaws-spell-007",
           "answer": "Ha Long Bay",
           "_verified": false
         },
         {
-          "id": "vnaws-spell-013",
+          "id": "vnaws-spell-008",
           "answer": "Ao Dai",
           "_verified": false
         }
@@ -3278,8 +3350,10 @@
       "word": [
         {
           "id": "startups-word-001",
-          "question": "What does 'MVP' stand for in startup terminology?",
-          "answer": "Minimum Viable Product",
+          "question": "What is the acronym for 'Minimum Viable Product' in startup terminology?",
+
+          "answer": "MVP",
+
           "_verified": false
         },
         {
@@ -3290,14 +3364,18 @@
         },
         {
           "id": "startups-word-003",
-          "question": "What is the short presentation founders use to persuade investors called?",
-          "answer": "Pitch Deck",
+          "question": "What is the first word describing the short presentation founders use to persuade investors, the '___ deck'?",
+
+          "answer": "Pitch",
+
           "_verified": false
         },
         {
           "id": "startups-word-004",
-          "question": "What funding round typically comes after seed funding, often the first major institutional round?",
-          "answer": "Series A",
+          "question": "What word precedes 'A' in the name of the funding round that typically follows seed funding?",
+
+          "answer": "Series",
+
           "_verified": false
         },
         {
@@ -3320,32 +3398,42 @@
         },
         {
           "id": "startups-word-008",
-          "question": "What is the name for a startup accelerator/VC's unique identifier used to grant Activate Portfolio credits?",
-          "answer": "Org ID",
+          "question": "What is the first word in the identifier startups/VCs use to grant Activate Portfolio credits, the '___ ID'?",
+
+          "answer": "Org",
+
           "source": "https://aws.amazon.com/startups/credits"
         },
         {
           "id": "startups-word-009",
-          "question": "What is the name of AWS's program offering cloud credits and support to startups?",
-          "answer": "AWS Activate",
+          "question": "What is the name (single word, following 'AWS') of AWS's program offering cloud credits and support to startups?",
+
+          "answer": "Activate",
+
           "source": "https://aws.amazon.com/startups/credits"
         },
         {
           "id": "startups-word-010",
-          "question": "What is the credential you must create with a professional email to apply for Activate Credits?",
-          "answer": "AWS Builder ID",
+          "question": "What is the middle word in the credential name you must create with a professional email to apply for Activate Credits: 'AWS ___ ID'?",
+
+          "answer": "Builder",
+
           "source": "https://aws.amazon.com/startups/credits"
         },
         {
           "id": "startups-word-011",
-          "question": "What AWS service hosts the third-party foundation models redeemable with Activate Credits?",
-          "answer": "Amazon Bedrock",
+          "question": "What AWS service (single word, following 'Amazon') hosts the third-party foundation models redeemable with Activate Credits?",
+
+          "answer": "Bedrock",
+
           "source": "https://aws.amazon.com/startups/lp/aws-activate-credits"
         },
         {
           "id": "startups-word-012",
-          "question": "What term describes an investor who provides early capital, often using personal funds, before institutional VCs?",
-          "answer": "Angel Investor",
+          "question": "What is the first word describing an investor who provides early capital, often personal funds, before institutional VCs: the '___ investor'?",
+
+          "answer": "Angel",
+
           "_verified": false
         },
         {
@@ -3484,57 +3572,57 @@
       ],
       "spelling": [
         {
-          "id": "startups-spell-002",
+          "id": "startups-spell-001",
           "answer": "Runway",
           "_verified": false
         },
         {
-          "id": "startups-spell-003",
+          "id": "startups-spell-002",
           "answer": "Pitch Deck",
           "_verified": false
         },
         {
-          "id": "startups-spell-004",
+          "id": "startups-spell-003",
           "answer": "Series A",
           "_verified": false
         },
         {
-          "id": "startups-spell-005",
+          "id": "startups-spell-004",
           "answer": "Unicorn",
           "_verified": false
         },
         {
-          "id": "startups-spell-007",
+          "id": "startups-spell-005",
           "answer": "Pivot",
           "_verified": false
         },
         {
-          "id": "startups-spell-008",
+          "id": "startups-spell-006",
           "answer": "Org ID",
           "source": "https://aws.amazon.com/startups/credits"
         },
         {
-          "id": "startups-spell-009",
+          "id": "startups-spell-007",
           "answer": "AWS Activate",
           "source": "https://aws.amazon.com/startups/credits"
         },
         {
-          "id": "startups-spell-010",
+          "id": "startups-spell-008",
           "answer": "AWS Builder ID",
           "source": "https://aws.amazon.com/startups/credits"
         },
         {
-          "id": "startups-spell-011",
+          "id": "startups-spell-009",
           "answer": "Amazon Bedrock",
           "source": "https://aws.amazon.com/startups/lp/aws-activate-credits"
         },
         {
-          "id": "startups-spell-012",
+          "id": "startups-spell-010",
           "answer": "Angel Investor",
           "_verified": false
         },
         {
-          "id": "startups-spell-013",
+          "id": "startups-spell-011",
           "answer": "Dilution",
           "_verified": false
         }
@@ -3956,14 +4044,18 @@
       "word": [
         {
           "id": "cloudf-word-001",
-          "question": "What single word describes the ability of a cloud system to automatically grow or shrink resources based on demand?",
-          "answer": "Elasticity",
+          "question": "What adjective describes a cloud system's ability to automatically grow or shrink resources based on demand?",
+
+          "answer": "Elastic",
+
           "_verified": false
         },
         {
           "id": "cloudf-word-002",
-          "question": "What term describes a company's own data center infrastructure, as opposed to the cloud?",
-          "answer": "On-premises",
+          "question": "What common short term describes a company's own data center infrastructure, as opposed to the cloud?",
+
+          "answer": "On-prem",
+
           "_verified": false
         },
         {
@@ -3974,50 +4066,64 @@
         },
         {
           "id": "cloudf-word-004",
-          "question": "What term refers to one or more discrete data centers within a Region, isolated from failures elsewhere?",
-          "answer": "Availability Zone",
+          "question": "What is the second word of the term for isolated data-center clusters within an AWS Region: 'Availability ___'?",
+
+          "answer": "Zone",
+
           "_verified": false
         },
         {
           "id": "cloudf-word-005",
-          "question": "What business term refers to spending on physical assets like servers, typically paid upfront?",
-          "answer": "Capital Expenditure",
+          "question": "What is the common abbreviation for 'Capital Expenditure', spending on physical assets typically paid upfront?",
+
+          "answer": "CapEx",
+
           "_verified": false
         },
         {
           "id": "cloudf-word-006",
-          "question": "What business term refers to the day-to-day costs of running a business, such as a cloud subscription?",
-          "answer": "Operating Expenditure",
+          "question": "What is the common abbreviation for 'Operating Expenditure', the day-to-day cost of running a business?",
+
+          "answer": "OpEx",
+
           "_verified": false
         },
         {
           "id": "cloudf-word-007",
-          "question": "What pricing model charges customers only for the resources they actually consume?",
-          "answer": "Pay-as-you-go",
+          "question": "What is the common acronym for the pricing model that charges customers only for resources they actually consume ('pay-as-you-go')?",
+
+          "answer": "PAYG",
+
           "_verified": false
         },
         {
           "id": "cloudf-word-008",
-          "question": "What term describes provisioning computing resources instantly, without long procurement delays?",
-          "answer": "On-demand",
+          "question": "What single word describes provisioning computing resources instantly, without long procurement delays?",
+
+          "answer": "Instant",
+
           "_verified": false
         },
         {
           "id": "cloudf-word-009",
-          "question": "What cloud deployment model combines on-premises infrastructure with cloud services?",
-          "answer": "Hybrid cloud",
+          "question": "What is the first word of the cloud deployment model that combines on-premises infrastructure with cloud services: '___ cloud'?",
+
+          "answer": "Hybrid",
+
           "_verified": false
         },
         {
           "id": "cloudf-word-010",
-          "question": "What term describes a cloud environment shared across many customers and offered by a third-party provider?",
-          "answer": "Public cloud",
+          "question": "What is the first word of the term for a cloud environment shared across many customers, offered by a third-party provider: '___ cloud'?",
+
+          "answer": "Public",
+
           "_verified": false
         },
         {
           "id": "cloudf-word-011",
-          "question": "What word describes a system's ability to handle growing workloads by adding resources?",
-          "answer": "Scalability",
+          "question": "What adjective describes a system's ability to handle growing workloads by adding resources?",
+          "answer": "Scalable",
           "_verified": false
         },
         {
@@ -4028,8 +4134,10 @@
         },
         {
           "id": "cloudf-word-013",
-          "question": "What agreement between a cloud provider and customer defines expected service uptime and quality?",
-          "answer": "Service level agreement",
+          "question": "What is the acronym for the agreement between a cloud provider and customer defining expected uptime and service quality?",
+
+          "answer": "SLA",
+
           "_verified": false
         }
       ],
@@ -4167,32 +4275,32 @@
           "_verified": false
         },
         {
-          "id": "cloudf-spell-003",
+          "id": "cloudf-spell-002",
           "answer": "Region",
           "_verified": false
         },
         {
-          "id": "cloudf-spell-004",
+          "id": "cloudf-spell-003",
           "answer": "Availability Zone",
           "_verified": false
         },
         {
-          "id": "cloudf-spell-009",
+          "id": "cloudf-spell-004",
           "answer": "Hybrid cloud",
           "_verified": false
         },
         {
-          "id": "cloudf-spell-010",
+          "id": "cloudf-spell-005",
           "answer": "Public cloud",
           "_verified": false
         },
         {
-          "id": "cloudf-spell-011",
+          "id": "cloudf-spell-006",
           "answer": "Scalability",
           "_verified": false
         },
         {
-          "id": "cloudf-spell-012",
+          "id": "cloudf-spell-007",
           "answer": "Downtime",
           "_verified": false
         }
@@ -4562,8 +4670,10 @@
       "word": [
         {
           "id": "frugal-word-001",
-          "question": "What is the name of the AWS micro-VM technology, built on KVM, that Lambda's compute layer evolved to use?",
-          "answer": "Firecracker",
+          "question": "AWS's micro-VM technology (built on KVM) that Lambda's compute layer evolved to use is called 'Fire_____' -- what's the second half of its name?",
+
+          "answer": "Cracker",
+
           "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
           "_verified": false
         },
@@ -4590,14 +4700,18 @@
         },
         {
           "id": "frugal-word-005",
-          "question": "What word describes maximizing value rather than just minimizing spend, per Law III?",
-          "answer": "Frugality",
+          "question": "What adjective, per Law III, describes maximizing value rather than just minimizing spend?",
+
+          "answer": "Frugal",
+
           "source": "https://thefrugalarchitect.com/laws"
         },
         {
           "id": "frugal-word-006",
-          "question": "What word, alongside cost, does Vogels say is approximated by AWS's per-resource billing?",
-          "answer": "Sustainability",
+          "question": "What word, alongside cost, does Vogels say is approximated by AWS's per-resource billing (think environmental impact)?",
+
+          "answer": "Carbon",
+
           "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
           "_verified": false
         },
@@ -4610,8 +4724,10 @@
         },
         {
           "id": "frugal-word-008",
-          "question": "Which AWS managed caching service does Nubank's Datomic use as an external cache?",
-          "answer": "ElastiCache",
+          "question": "Which AWS managed caching service family does Nubank's Datomic use as an external cache, named 'Elasti_____'?",
+
+          "answer": "Cache",
+
           "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
           "_verified": false
         },
