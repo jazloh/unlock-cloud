@@ -1,8 +1,6 @@
 {
-  "_comment": "This is what the server SENDS to clients after category voting resolves. It is NOT authored by hand — the server picks N question IDs from quiz-mode-question-bank.json for the winning category, then fills in each lock's config below. Schema matches existing scenarios/*/puzzles.json conventions (id/type/ui/config/mandatory).\n\nUPDATED to reflect the 6-category bank (aws-core-services, agentic-ai, security, vietnam-aws, startups-innovation, cloud-fundamentals), 81 entries each, 486 total. This example uses 'agentic-ai' as the winning category to demonstrate the current, event-relevant content (Kiro CLI 3.0, Amazon Quick, AgentCore).",
-
+  "_comment": "This is what the server SENDS to clients after category voting resolves. It is NOT authored by hand — the server picks N question IDs from quiz-mode-question-bank.json for the winning category, then fills in each lock's config below. Schema matches existing scenarios/*/puzzles.json conventions (id/type/ui/config/mandatory).\n\nUPDATED to reflect the 7-category bank (aws-core-services, agentic-ai, security, vietnam-aws, startups-innovation, cloud-fundamentals, FrugalArchitect), 81 core entries each for the first 6 (plus a per-category spelling set); FrugalArchitect was curated down to 82 = 622 total. This example uses 'agentic-ai' as the winning category to demonstrate the current, event-relevant content (Kiro CLI 3.0, Amazon Quick, AgentCore).",
   "_note_keypad_word": "keypad-lock and word-lock take ONE question each. Server picks 1 numeric-type question for keypad, 1 word-type question for word-lock. No internal pool/shuffle exists in these components — the server's per-session pick IS the randomization.",
-
   "puzzles": [
     {
       "id": "q1-keypad",
@@ -12,7 +10,9 @@
       "ui": "keypad-lock",
       "config": {
         "answer": "2025",
-        "falseOutputs": ["Access denied. That vault belongs to a different era."]
+        "falseOutputs": [
+          "Access denied. That vault belongs to a different era."
+        ]
       },
       "mandatory": true
     },
@@ -31,7 +31,12 @@
       "id": "q3-pillar",
       "type": "quiz_lock",
       "category": "agentic-ai",
-      "source_question_ids": ["agentic-stmt-001", "agentic-stmt-004", "agentic-stmt-009", "agentic-stmt-017"],
+      "source_question_ids": [
+        "agentic-stmt-001",
+        "agentic-stmt-004",
+        "agentic-stmt-009",
+        "agentic-stmt-017"
+      ],
       "ui": "pillar-lock",
       "config": {
         "_note": "CORRECTED from earlier draft: the backend, NOT the client, must resolve each '{correctValue|wrongValue}' slot before sending anything over the wire (see quiz-mode-handoff.md, Backend section 3). Sending the raw two-sided template to the client would let a player inspect network traffic and see both values before answering. This example shows the ALREADY-RESOLVED payload the client receives — the raw templates are shown only for reference, they are NOT part of the actual wire payload.",
@@ -41,12 +46,27 @@
           "Amazon Bedrock AgentCore reached general availability in {October 2025|March 2024}.",
           "The Amazon Nova 2 family, announced at re:Invent December 2025, has {four|two} models."
         ],
-        "pillars": ["True", "False"],
+        "pillars": [
+          "True",
+          "False"
+        ],
         "statements": [
-          { "text": "Kiro CLI 3.0 is built on a unified agent harness shared with Kiro IDE and Kiro Web.", "answer": "True" },
-          { "text": "Kiro CLI 3.0 fully supports Amazon Linux 2 (AL2), requiring CLI 2.x there instead.", "answer": "False" },
-          { "text": "Amazon Bedrock AgentCore reached general availability in October 2025.", "answer": "True" },
-          { "text": "The Amazon Nova 2 family, announced at re:Invent December 2025, has two models.", "answer": "False" }
+          {
+            "text": "Kiro CLI 3.0 is built on a unified agent harness shared with Kiro IDE and Kiro Web.",
+            "answer": "True"
+          },
+          {
+            "text": "Kiro CLI 3.0 fully supports Amazon Linux 2 (AL2), requiring CLI 2.x there instead.",
+            "answer": "False"
+          },
+          {
+            "text": "Amazon Bedrock AgentCore reached general availability in October 2025.",
+            "answer": "True"
+          },
+          {
+            "text": "The Amazon Nova 2 family, announced at re:Invent December 2025, has two models.",
+            "answer": "False"
+          }
         ]
       },
       "mandatory": true
@@ -55,11 +75,19 @@
       "id": "q4-spelling",
       "type": "quiz_lock",
       "category": "agentic-ai",
-      "source_question_ids": ["agentic-spell-002", "agentic-spell-006", "agentic-spell-009"],
+      "source_question_ids": [
+        "agentic-spell-002",
+        "agentic-spell-006",
+        "agentic-spell-009"
+      ],
       "ui": "spelling-lock",
       "config": {
         "_note": "spelling-lock takes a pool of answer words/phrases and randomly draws `pickCount` of them per instance, presenting each as its own shuffled-letter anagram (no unrelated decoy letters — every letter shown belongs in the answer). No internal reshuffle-on-loop since it's a fixed pick, not an infinite pool cycle. onSubmit() fires with no arguments once all pickCount words are solved in sequence; onWrong(msg) fires per wrong spelling attempt and should be wired to the engine's onFail penalty helper, same as keypad/word/pillar. Multi-word answers (e.g. 'Kiro Power' below) ARE supported — spelling-lock renders a visible gap in the slot layout at each space, so word boundaries stay visible even though the letter pool itself has spaces stripped. Pull from the bank's dedicated `spelling` array (NOT `word`) — every entry there is pre-filtered to letters+spaces only, 5-16 letters excluding spaces.",
-        "pool": ["TANGENT", "MEMORY", "KIRO POWER"],
+        "pool": [
+          "TANGENT",
+          "MEMORY",
+          "KIRO POWER"
+        ],
         "pickCount": 3,
         "sequential": true,
         "scrambleLetters": true
@@ -70,17 +98,44 @@
       "id": "q5-wager",
       "type": "quiz_lock",
       "category": "security",
-      "source_question_ids": ["security-mcq-001", "security-mcq-002"],
+      "source_question_ids": [
+        "security-mcq-001",
+        "security-mcq-002"
+      ],
       "ui": "wager-lock",
       "config": {
         "_note": "wager-lock also shuffles order + reshuffles internally, and randomizes which decoys are visible per stake tier. Server only supplies the pool. Stakes array below uses the SINGLE-ENTRY form (see quiz-mode-instructions-engine.md 'Wager-lock stake default' section) — this auto-skips the Safe/Confident/All-In picker and always shows 4 choices.",
         "target": 6,
         "questions": [
-          { "question": "Which attack floods a server with traffic to take it offline?", "options": ["DDoS", "SQLi", "XSS", "CSRF"], "answer": "DDoS" },
-          { "question": "What does '2FA' stand for?", "options": ["Two-Factor Authentication", "Two-File Access", "Firewall Auth", "Full Feature Access"], "answer": "Two-Factor Authentication" }
+          {
+            "question": "Which attack floods a server with traffic to take it offline?",
+            "options": [
+              "DDoS",
+              "SQLi",
+              "XSS",
+              "CSRF"
+            ],
+            "answer": "DDoS"
+          },
+          {
+            "question": "What does '2FA' stand for?",
+            "options": [
+              "Two-Factor Authentication",
+              "Two-File Access",
+              "Firewall Auth",
+              "Full Feature Access"
+            ],
+            "answer": "Two-Factor Authentication"
+          }
         ],
         "stakes": [
-          { "label": "Confident", "wager": 1, "penalty": 0, "color": "#eab308", "showOptions": 4 }
+          {
+            "label": "Confident",
+            "wager": 1,
+            "penalty": 0,
+            "color": "#eab308",
+            "showOptions": 4
+          }
         ],
         "revealAnswerOnWrong": false
       },
