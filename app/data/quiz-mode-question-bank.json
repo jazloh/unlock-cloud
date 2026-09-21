@@ -1,0 +1,4202 @@
+{
+  "_comment": "Server-side question bank for Group Quiz Mode, built for AWS Cloud and AI Day Hanoi (Sept 29, 2026, JW Marriott Hotel Hanoi). Server picks question IDs per category based on player vote, then assembles the puzzle config for each lock type (see quiz-mode-puzzle-config-example.json). This file is NOT loaded directly by the client.\n\nCATEGORIES (6 total, confirmed 2026-08-24): aws-core-services, agentic-ai, security, vietnam-aws, startups-innovation, cloud-fundamentals. Each category originally had 81 entries (13 numeric, 13 word, 30 mcq, 25 statement) = 486 total. A 5th type, `spelling` (for spelling-lock, added 2026-08-25 when streak-lock was replaced with spelling-lock in the puzzle lineup), was added per category: 6-12 entries each, 54 total, bringing the grand total to 540. spelling entries were sourced by reusing existing `word` entries that pass a safety filter (letters+spaces only, 5-16 letters excluding spaces) — except aws-core-services, which had ZERO usable `word` entries (all are bare acronyms or contain digits/symbols) and needed 10 newly-authored entries using real AWS service names already referenced elsewhere in that category. This is HALF the original 160-per-category (960 total) target for the original 4 types, per explicit scope reduction agreed with the requester due to fact-exhaustion and verification-cost constraints on categories with limited fresh 2026 source material.\n\nSOURCING: entries with a source field were verified via live web search/fetch on 2026-08-24 against official pages (kiro.dev, aws.amazon.com, press.aboutamazon.com, nist.gov, theneuron.ai re:Invent 2025 recap). Entries with _verified:false are well-established general knowledge (AWS service purposes, port numbers, startup/security/cloud terminology) that were not individually re-verified against a live source in this pass but are standard, safe facts. Spot-check recommended before production use, especially for _verified:false entries.",
+  "_type_to_lock_mapping": {
+    "numeric": "keypad-lock only.",
+    "word": "word-lock only. Answers here are 3-6 letters, matched against word-lock's per-position reel constraint — NOT the same pool as 'spelling'.",
+    "mcq": "wager-lock only (streak-lock was dropped from the lineup — see docs/quiz-mode-instructions-engine.md for why).",
+    "statement": "pillar-lock ONLY, repurposed as True/False sorter within a single category. TEMPLATE FORMAT: {correctValue|wrongValue} slot — the backend, NOT the client, must resolve this by picking index 0 (True) or 1 (False) before sending anything over the wire. See quiz-mode-instructions-backend.md section 3.",
+    "spelling": "spelling-lock only. Each entry's `answer` is the exact string passed into spelling-lock's `pool` config. Answers CAN be multi-word (e.g. 'Kiro Power', 'Direct Connect') — spelling-lock renders a visible gap between words in the slot layout and strips spaces only from the internal shuffled letter pool, so multi-word answers work fine and are not confusing. Rule applied when curating this array: letters and spaces only (no digits/symbols), 5-16 total letters excluding spaces. See docs/quiz-mode-instructions-engine.md for the length-range rationale."
+  },
+  "categories": {
+    "aws-core-services": {
+      "mcq": [
+        {
+          "id": "awscore-mcq-001",
+          "question": "Which AWS service provides resizable virtual servers in the cloud?",
+          "answer": "EC2",
+          "decoys": [
+            "S3",
+            "Lambda",
+            "DynamoDB"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-002",
+          "question": "Which AWS service is described as offering 'virtually unlimited secure object storage'?",
+          "answer": "S3",
+          "decoys": [
+            "EBS",
+            "EFS",
+            "Glacier"
+          ],
+          "source": "https://aws.amazon.com/s3/"
+        },
+        {
+          "id": "awscore-mcq-003",
+          "question": "Which relational database engine from AWS is compatible with both MySQL and PostgreSQL?",
+          "answer": "Aurora",
+          "decoys": [
+            "DynamoDB",
+            "Redshift",
+            "DocumentDB"
+          ],
+          "source": "https://aws.amazon.com/rds/aurora/"
+        },
+        {
+          "id": "awscore-mcq-004",
+          "question": "Which AWS service lets you run code without provisioning or managing servers?",
+          "answer": "Lambda",
+          "decoys": [
+            "EC2",
+            "Elastic Beanstalk",
+            "Fargate"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-005",
+          "question": "Which AWS service is a fully managed key-value and document NoSQL database?",
+          "answer": "DynamoDB",
+          "decoys": [
+            "RDS",
+            "Aurora",
+            "ElastiCache"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-006",
+          "question": "Which AWS service is a global content delivery network (CDN)?",
+          "answer": "CloudFront",
+          "decoys": [
+            "Route 53",
+            "Global Accelerator",
+            "S3 Transfer Acceleration"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-007",
+          "question": "Which AWS service is a scalable Domain Name System (DNS) web service?",
+          "answer": "Route 53",
+          "decoys": [
+            "CloudFront",
+            "VPC",
+            "Direct Connect"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-008",
+          "question": "Which AWS service provides real-time search, observability, and security analytics?",
+          "answer": "OpenSearch Service",
+          "decoys": [
+            "Athena",
+            "CloudSearch",
+            "QuickSight"
+          ],
+          "source": "https://aws.amazon.com/opensearch-service/"
+        },
+        {
+          "id": "awscore-mcq-009",
+          "question": "Which AWS service lets you provision a logically isolated section of the AWS Cloud to launch resources in a virtual network you define?",
+          "answer": "VPC",
+          "decoys": [
+            "Direct Connect",
+            "Transit Gateway",
+            "PrivateLink"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-010",
+          "question": "Which AWS service is a managed relational database service supporting engines like MySQL, PostgreSQL, and SQL Server?",
+          "answer": "RDS",
+          "decoys": [
+            "DynamoDB",
+            "Aurora Serverless",
+            "Redshift"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-011",
+          "question": "AWS has been operating since what year, per its own company boilerplate?",
+          "answer": "2006",
+          "decoys": [
+            "2002",
+            "2010",
+            "1998"
+          ],
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "awscore-mcq-012",
+          "question": "Which AWS service is used to store and manage Docker container images?",
+          "answer": "ECR",
+          "decoys": [
+            "ECS",
+            "EKS",
+            "CodeBuild"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-013",
+          "question": "Which AWS service is a fully managed container orchestration service built on AWS-native APIs?",
+          "answer": "ECS",
+          "decoys": [
+            "EKS",
+            "Fargate",
+            "Lightsail"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-014",
+          "question": "Which AWS service manages Kubernetes clusters without needing to install and operate your own control plane?",
+          "answer": "EKS",
+          "decoys": [
+            "ECS",
+            "ECR",
+            "App Runner"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-015",
+          "question": "Which AWS service is used to manage users, groups, roles, and permissions?",
+          "answer": "IAM",
+          "decoys": [
+            "KMS",
+            "Cognito",
+            "Organizations"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-016",
+          "question": "Which AWS service provides monitoring and observability through metrics, logs, and alarms?",
+          "answer": "CloudWatch",
+          "decoys": [
+            "CloudTrail",
+            "X-Ray",
+            "Config"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-017",
+          "question": "Which AWS service records account activity and API calls for auditing purposes?",
+          "answer": "CloudTrail",
+          "decoys": [
+            "CloudWatch",
+            "Config",
+            "GuardDuty"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-018",
+          "question": "Which AWS messaging service is a fully managed pub/sub notification service?",
+          "answer": "SNS",
+          "decoys": [
+            "SQS",
+            "EventBridge",
+            "SES"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-019",
+          "question": "Which AWS messaging service is a fully managed message queuing service?",
+          "answer": "SQS",
+          "decoys": [
+            "SNS",
+            "MQ",
+            "Kinesis"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-020",
+          "question": "Which AWS service is used for block-level storage volumes attached to EC2 instances?",
+          "answer": "EBS",
+          "decoys": [
+            "S3",
+            "EFS",
+            "FSx"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-021",
+          "question": "Which AWS service provides a managed, scalable NFS file system for use with EC2?",
+          "answer": "EFS",
+          "decoys": [
+            "EBS",
+            "S3",
+            "Storage Gateway"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-022",
+          "question": "Which AWS storage class is designed for long-term archival at the lowest cost?",
+          "answer": "Glacier",
+          "decoys": [
+            "S3 Standard",
+            "S3 Intelligent-Tiering",
+            "EBS"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-023",
+          "question": "Aurora's storage auto-scales up to what maximum size per database instance?",
+          "answer": "256 TiB",
+          "decoys": [
+            "64 TiB",
+            "100 TiB",
+            "1 PiB"
+          ],
+          "source": "https://aws.amazon.com/aurora/faqs/"
+        },
+        {
+          "id": "awscore-mcq-024",
+          "question": "Which AWS service is a fully managed data warehouse used for analytics?",
+          "answer": "Redshift",
+          "decoys": [
+            "Athena",
+            "EMR",
+            "Glue"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-025",
+          "question": "Which AWS service lets you run SQL queries directly on data in S3 without loading it into a database?",
+          "answer": "Athena",
+          "decoys": [
+            "Redshift",
+            "QuickSight",
+            "Glue"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-026",
+          "question": "Which AWS service is used to establish a dedicated private network connection from an on-premises data center to AWS?",
+          "answer": "Direct Connect",
+          "decoys": [
+            "VPN Gateway",
+            "Transit Gateway",
+            "PrivateLink"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-027",
+          "question": "Which AWS service automatically distributes incoming application traffic across multiple targets?",
+          "answer": "Elastic Load Balancing",
+          "decoys": [
+            "Route 53",
+            "CloudFront",
+            "Auto Scaling"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-028",
+          "question": "Which AWS service automatically adjusts the number of EC2 instances based on demand?",
+          "answer": "Auto Scaling",
+          "decoys": [
+            "Elastic Load Balancing",
+            "Elastic Beanstalk",
+            "Systems Manager"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-029",
+          "question": "Which AWS service manages encryption keys used to protect data across AWS services?",
+          "answer": "KMS",
+          "decoys": [
+            "IAM",
+            "Secrets Manager",
+            "ACM"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-030",
+          "question": "Per its own company boilerplate, roughly how many geographic Regions does AWS state it operates?",
+          "answer": "38",
+          "decoys": [
+            "25",
+            "50",
+            "60"
+          ],
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        }
+      ],
+      "numeric": [
+        {
+          "id": "awscore-num-001",
+          "question": "AWS has been operating since what year, per its own company boilerplate?",
+          "answer": "2006",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "awscore-num-002",
+          "question": "Per its own company boilerplate, how many Availability Zones does AWS state it operates globally?",
+          "answer": "120",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "awscore-num-003",
+          "question": "Per its own company boilerplate, how many geographic Regions does AWS state it operates globally?",
+          "answer": "38",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "awscore-num-004",
+          "question": "Up to how many TiB of storage can a single Aurora database instance auto-scale to?",
+          "answer": "256",
+          "source": "https://aws.amazon.com/aurora/faqs/"
+        },
+        {
+          "id": "awscore-num-005",
+          "question": "Up to what percentage better performance did Aurora Serverless gain in its April 2026 update?",
+          "answer": "30",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/04/aurora-serverless-smarter-scaling/"
+        },
+        {
+          "id": "awscore-num-006",
+          "question": "What is the standard TCP port number for HTTPS traffic?",
+          "answer": "443",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-007",
+          "question": "What is the standard TCP port number for HTTP traffic?",
+          "answer": "80",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-008",
+          "question": "What is the standard TCP port number for SSH?",
+          "answer": "22",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-009",
+          "question": "As of AWS's December 2025 update, what is the maximum size, in TB, of a single Amazon S3 object?",
+          "answer": "50",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-s3-maximum-object-size-50-tb"
+        },
+        {
+          "id": "awscore-num-010",
+          "question": "How many bits make up an IPv4 address?",
+          "answer": "32",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-011",
+          "question": "What is the maximum item size, in KB, supported by a single DynamoDB item?",
+          "answer": "400",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-012",
+          "question": "What is the default maximum execution timeout, in minutes, for an AWS Lambda function?",
+          "answer": "15",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-013",
+          "question": "How many digits are in a standard AWS account ID?",
+          "answer": "12",
+          "source": "https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-identifiers.html"
+        }
+      ],
+      "word": [
+        {
+          "id": "awscore-word-001",
+          "question": "What does the acronym 'EC2' stand for?",
+          "answer": "Elastic Compute Cloud",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-002",
+          "question": "What does the acronym 'S3' stand for?",
+          "answer": "Simple Storage Service",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-003",
+          "question": "What does the acronym 'VPC' stand for?",
+          "answer": "Virtual Private Cloud",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-004",
+          "question": "What does the acronym 'RDS' stand for?",
+          "answer": "Relational Database Service",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-005",
+          "question": "What does the acronym 'IAM' stand for?",
+          "answer": "Identity and Access Management",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-006",
+          "question": "What does the acronym 'SNS' stand for?",
+          "answer": "Simple Notification Service",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-007",
+          "question": "What does the acronym 'SQS' stand for?",
+          "answer": "Simple Queue Service",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-008",
+          "question": "What does the acronym 'EBS' stand for?",
+          "answer": "Elastic Block Store",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-009",
+          "question": "What does the acronym 'EFS' stand for?",
+          "answer": "Elastic File System",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-010",
+          "question": "What does the acronym 'KMS' stand for?",
+          "answer": "Key Management Service",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-011",
+          "question": "What does the acronym 'ECS' stand for?",
+          "answer": "Elastic Container Service",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-012",
+          "question": "What does the acronym 'EKS' stand for?",
+          "answer": "Elastic Kubernetes Service",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-013",
+          "question": "What does the acronym 'ARN' stand for?",
+          "answer": "Amazon Resource Name",
+          "_verified": false
+        }
+      ],
+      "statement": [
+        {
+          "id": "awscore-stmt-001",
+          "template": "Amazon Aurora auto-scales storage up to {256 TiB|64 TiB} per database instance, decoupled from compute.",
+          "source": "https://aws.amazon.com/aurora/faqs/"
+        },
+        {
+          "id": "awscore-stmt-002",
+          "template": "Amazon Aurora is compatible with {MySQL and PostgreSQL|Oracle and SQL Server}.",
+          "source": "https://aws.amazon.com/rds/aurora/"
+        },
+        {
+          "id": "awscore-stmt-003",
+          "template": "Aurora Serverless's April 2026 update delivered up to {30%|75%} better performance along with smarter scaling, while still scaling to zero.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/04/aurora-serverless-smarter-scaling/"
+        },
+        {
+          "id": "awscore-stmt-004",
+          "template": "AWS has been operating since {2006|1999}, per its own company boilerplate.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "awscore-stmt-005",
+          "template": "Per its own company boilerplate, AWS states it operates {38|20} geographic Regions worldwide.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "awscore-stmt-006",
+          "template": "Per its own company boilerplate, AWS states it operates {120|85} Availability Zones worldwide.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "awscore-stmt-007",
+          "template": "Amazon S3 is marketed as offering {virtually unlimited secure object storage|fixed-capacity block storage}.",
+          "source": "https://aws.amazon.com/s3/"
+        },
+        {
+          "id": "awscore-stmt-008",
+          "template": "Amazon OpenSearch Service provides {real-time search, observability, and security analytics|batch-only ETL processing}.",
+          "source": "https://aws.amazon.com/opensearch-service/"
+        },
+        {
+          "id": "awscore-stmt-009",
+          "template": "Amazon EC2 provides {resizable virtual servers|serverless container orchestration} in the cloud.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-010",
+          "template": "AWS Lambda lets you run code {without provisioning or managing servers|only on dedicated bare-metal hosts}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-011",
+          "template": "Amazon DynamoDB is a fully managed {NoSQL key-value and document database|relational SQL database}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-012",
+          "template": "Amazon CloudFront is a {global content delivery network|regional-only load balancer}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-013",
+          "template": "Amazon Route 53 is a scalable {Domain Name System (DNS) web service|block storage service}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-014",
+          "template": "A VPC lets you provision a {logically isolated virtual network|physically separate data center} within AWS.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-015",
+          "template": "Amazon RDS supports managed relational engines such as {MySQL and PostgreSQL|MongoDB and Cassandra}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-016",
+          "template": "The standard TCP port for HTTPS traffic is {443|8080}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-017",
+          "template": "The standard TCP port for HTTP traffic is {80|21}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-018",
+          "template": "Amazon S3 storage classes include an archival tier called {Glacier|IceVault}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-019",
+          "template": "Amazon EBS provides {block-level storage volumes|object storage buckets} for use with EC2 instances.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-020",
+          "template": "Amazon EFS provides a {managed scalable NFS file system|managed relational database engine}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-021",
+          "template": "AWS IAM is used to manage {users, groups, roles, and permissions|EC2 instance hardware allocation}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-022",
+          "template": "Amazon CloudWatch is primarily used for {monitoring metrics, logs, and alarms|managing DNS records}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-023",
+          "template": "AWS CloudTrail is used to {record account activity and API calls for auditing|render server-side web pages}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-024",
+          "template": "Amazon Redshift is a fully managed {data warehouse for analytics|real-time video transcoding service}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-025",
+          "template": "AWS Direct Connect establishes a {dedicated private network connection|public internet VPN tunnel} from on-premises to AWS.",
+          "_verified": false
+        }
+      ],
+      "spelling": [
+        {
+          "id": "awscore-spell-001",
+          "answer": "DynamoDB",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-002",
+          "answer": "CloudFront",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-003",
+          "answer": "CloudWatch",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-004",
+          "answer": "CloudTrail",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-005",
+          "answer": "Redshift",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-006",
+          "answer": "Lambda",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-007",
+          "answer": "Aurora",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-008",
+          "answer": "Glacier",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-009",
+          "answer": "Athena",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-010",
+          "answer": "Direct Connect",
+          "_verified": false
+        }
+      ]
+    },
+    "agentic-ai": {
+      "mcq": [
+        {
+          "id": "agentic-mcq-001",
+          "question": "What is Kiro CLI 3.0 built on, which is shared with Kiro IDE and Kiro Web?",
+          "answer": "A unified agent harness",
+          "decoys": [
+            "A distributed microkernel",
+            "A shared plugin marketplace",
+            "A universal container runtime"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-002",
+          "question": "What command starts spec-driven development in Kiro CLI 3.0?",
+          "answer": "/spec new <name>",
+          "decoys": [
+            "/create spec <name>",
+            "/spec init <name>",
+            "/new spec <name>"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-003",
+          "question": "What does Kiro CLI 3.0's 'Tangent' feature let you do?",
+          "answer": "Branch into a named side-conversation that inherits context",
+          "decoys": [
+            "Merge two chat sessions into one",
+            "Fork the CLI into a separate process",
+            "Schedule a task for later execution"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-004",
+          "question": "What command do you use to jump back from a Tangent in Kiro CLI 3.0?",
+          "answer": "/tangent",
+          "decoys": [
+            "/back",
+            "/resume",
+            "/main"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-005",
+          "question": "Which operating system does Kiro CLI 3.0 NOT run on?",
+          "answer": "Amazon Linux 2 (AL2)",
+          "decoys": [
+            "Ubuntu 22.04",
+            "Amazon Linux 2023",
+            "macOS Sonoma"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-006",
+          "question": "What must you use for AWS access in Kiro CLI 3.0, since the built-in aws_tool was removed?",
+          "answer": "MCP servers",
+          "decoys": [
+            "The legacy aws_tool",
+            "AWS CLI wrapper scripts",
+            "A dedicated aws-agent binary"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-007",
+          "question": "What replaced old trust flags like --trust-all-tools in Kiro CLI 3.0?",
+          "answer": "Capability-based permissions.yaml",
+          "decoys": [
+            "A GUI consent dialog",
+            "Environment variable flags",
+            "OAuth scopes"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-008",
+          "question": "How did Kiro CLI 3.0 change hook trigger naming?",
+          "answer": "From camelCase to PascalCase",
+          "decoys": [
+            "From snake_case to camelCase",
+            "From PascalCase to kebab-case",
+            "From camelCase to snake_case"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-009",
+          "question": "Is Kiro CLI 3.0's session format backward-compatible with 2.x?",
+          "answer": "No, it is not backward-compatible",
+          "decoys": [
+            "Yes, fully compatible",
+            "Only for spec sessions",
+            "Only with a migration flag enabled"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-010",
+          "question": "Which agent frameworks is Amazon Bedrock AgentCore compatible with?",
+          "answer": "CrewAI, LangGraph, LlamaIndex, Google ADK, OpenAI Agents SDK",
+          "decoys": [
+            "Only AWS-native SDKs",
+            "Only Strands Agents",
+            "TensorFlow Agents and PyTorch Lightning"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-mcq-011",
+          "question": "When did Amazon Bedrock AgentCore become generally available?",
+          "answer": "October 2025",
+          "decoys": [
+            "December 2025",
+            "June 2026",
+            "October 2026"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-mcq-012",
+          "question": "What does the AgentCore Runtime provide for hosting agents?",
+          "answer": "Low-latency serverless environments with session isolation",
+          "decoys": [
+            "Dedicated EC2 clusters only",
+            "A shared multi-tenant VM pool",
+            "On-premises hosting only"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-mcq-013",
+          "question": "Which AgentCore component converts APIs and Lambda functions into MCP-compatible tools with zero code?",
+          "answer": "Gateway",
+          "decoys": [
+            "Runtime",
+            "Browser Tool",
+            "Code Interpreter"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-014",
+          "question": "Which AgentCore component provides an isolated VM cloud browser runtime?",
+          "answer": "Browser Tool",
+          "decoys": [
+            "Gateway",
+            "Memory",
+            "Policy"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-015",
+          "question": "Which policy language does AgentCore's Policy component use for real-time agent action blocking?",
+          "answer": "Cedar",
+          "decoys": [
+            "OPA Rego",
+            "AWS IAM JSON",
+            "XACML"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-016",
+          "question": "What format does AgentCore Observability use?",
+          "answer": "OpenTelemetry",
+          "decoys": [
+            "CloudWatch proprietary format",
+            "Prometheus format",
+            "AWS X-Ray only"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-017",
+          "question": "Which languages can AgentCore's Code Interpreter execute securely?",
+          "answer": "JavaScript, TypeScript, and Python",
+          "decoys": [
+            "Java, C++, and Go",
+            "Rust and Python only",
+            "Only Python"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-018",
+          "question": "Which Nova 2 model is described as the most intelligent, capable of complex reasoning and serving as a 'teacher' model?",
+          "answer": "Nova 2 Pro",
+          "decoys": [
+            "Nova 2 Lite",
+            "Nova 2 Sonic",
+            "Nova 2 Omni"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-019",
+          "question": "Which Nova 2 model is built for real-time voice conversations?",
+          "answer": "Nova 2 Sonic",
+          "decoys": [
+            "Nova 2 Lite",
+            "Nova 2 Pro",
+            "Nova 2 Omni"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-020",
+          "question": "Which Nova 2 model is the first reasoning model to both understand multimodal input AND generate text and images?",
+          "answer": "Nova 2 Omni",
+          "decoys": [
+            "Nova 2 Lite",
+            "Nova 2 Pro",
+            "Nova 2 Sonic"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-021",
+          "question": "Which Nova 2 model is positioned as fast and cost-effective for everyday tasks?",
+          "answer": "Nova 2 Lite",
+          "decoys": [
+            "Nova 2 Pro",
+            "Nova 2 Sonic",
+            "Nova 2 Omni"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-022",
+          "question": "What do all four Nova 2 models share, besides a 1M token context window?",
+          "answer": "Built-in web grounding, code execution, and MCP tool support",
+          "decoys": [
+            "Built-in video generation only",
+            "On-device inference only",
+            "Support only for text input"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-023",
+          "question": "What new capability did Amazon Quick add in June 2026 with adjustable autonomy levels?",
+          "answer": "Autonomous agents",
+          "decoys": [
+            "Voice-only dashboards",
+            "Automated report scheduling",
+            "Manual approval-only workflows"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-mcq-024",
+          "question": "What does Amazon Quick's multi-dataset analytics (June 2026) let users do?",
+          "answer": "Query across sources like Snowflake and relational DBs via natural language, without manual pre-joining",
+          "decoys": [
+            "Only query a single pre-joined dataset",
+            "Only export to CSV for external analysis",
+            "Require SQL joins written by hand first"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-mcq-025",
+          "question": "What was redesigned in Amazon Quick's June 2026 update to support thumbs up/down prioritization?",
+          "answer": "The activity feed",
+          "decoys": [
+            "The billing dashboard",
+            "The login screen",
+            "The dataset catalog"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-mcq-026",
+          "question": "What does Amazon Quick build per user to power personalization?",
+          "answer": "A personal knowledge graph",
+          "decoys": [
+            "A relational user profile table",
+            "A static preference file",
+            "A shared team ontology"
+          ],
+          "source": "https://aws.amazon.com/quick/faqs/"
+        },
+        {
+          "id": "agentic-mcq-027",
+          "question": "What is required to sign up for Amazon Quick's Free plan?",
+          "answer": "No AWS account or credit card",
+          "decoys": [
+            "An active AWS account with billing enabled",
+            "A corporate email domain only",
+            "A credit card for verification only"
+          ],
+          "source": "https://aws.amazon.com/quick/faqs/"
+        },
+        {
+          "id": "agentic-mcq-028",
+          "question": "What capability did AWS Security Agent gain by integrating 'Kiro Power' in June 2026?",
+          "answer": "Triggering security scans directly from the IDE",
+          "decoys": [
+            "Automatic cloud cost optimization",
+            "Automated code translation between languages",
+            "Real-time video call transcription"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "agentic-mcq-029",
+          "question": "Besides Kiro Power integration, what else did AWS Security Agent add in June 2026?",
+          "answer": "Claude Code plugin support and simulated exploit validation in a sandbox",
+          "decoys": [
+            "A built-in firewall appliance",
+            "Support for on-premises-only deployments",
+            "A manual penetration testing checklist generator"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "agentic-mcq-030",
+          "question": "Which of these is NOT one of the three defining traits of 'Frontier Agents'?",
+          "answer": "Stateless",
+          "decoys": [
+            "Autonomous",
+            "Scalable",
+            "Long-running"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        }
+      ],
+      "numeric": [
+        {
+          "id": "agentic-num-001",
+          "question": "How many models are in the Amazon Nova 2 family?",
+          "answer": "4",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-num-002",
+          "question": "In what year did Amazon Bedrock AgentCore reach general availability?",
+          "answer": "2025",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-num-003",
+          "question": "In what month (as a number, 1-12) did Amazon Bedrock AgentCore become generally available?",
+          "answer": "10",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-num-004",
+          "question": "AgentCore's SDK was downloaded more than how many million times in its first 5 months since preview?",
+          "answer": "2",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-num-005",
+          "question": "Over how many months was AgentCore's SDK downloaded more than 2 million times?",
+          "answer": "5",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-num-006",
+          "question": "How many million tokens is the context window supported by each Nova 2 model?",
+          "answer": "1",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-num-007",
+          "question": "Approximately how many thousand words does Nova 2 Sonic's 1M token context window equal?",
+          "answer": "750",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-num-008",
+          "question": "In what year did Amazon Quick add autonomous agents with adjustable autonomy levels?",
+          "answer": "2026",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-num-009",
+          "question": "In what month (as a number, 1-12) did Amazon Quick add autonomous agents?",
+          "answer": "6",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-num-010",
+          "question": "In what month (as a number, 1-12) did AWS Security Agent integrate 'Kiro Power'?",
+          "answer": "6",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "agentic-num-011",
+          "question": "How many major agent framework names are explicitly listed as compatible with Amazon Bedrock AgentCore (CrewAI, LangGraph, LlamaIndex, Google ADK, OpenAI Agents SDK)?",
+          "answer": "5",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-num-012",
+          "question": "How many named traits define a 'Frontier Agent' (Autonomous, Scalable, Long-running)?",
+          "answer": "3",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-num-013",
+          "question": "How many named example Frontier Agents are given (Kiro Autonomous Agent, AWS Security Agent, AWS DevOps Agent)?",
+          "answer": "3",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        }
+      ],
+      "word": [
+        {
+          "id": "agentic-word-001",
+          "question": "What is the exact command to start spec-driven development in Kiro CLI 3.0?",
+          "answer": "/spec new <name>",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-word-002",
+          "question": "What is the name of Kiro CLI 3.0's feature for branching into a named side-conversation?",
+          "answer": "Tangent",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-word-003",
+          "question": "What is the name of the shared architecture underlying Kiro CLI 3.0, Kiro IDE, and Kiro Web?",
+          "answer": "unified agent harness",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-word-004",
+          "question": "What file format replaced trust flags for permissions in Kiro CLI 3.0?",
+          "answer": "permissions.yaml",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-word-005",
+          "question": "What built-in agent handles spec-driven development in Kiro CLI 3.0?",
+          "answer": "Spec agent",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-word-006",
+          "question": "Which AgentCore component provides short/long-term and episodic memory for agents?",
+          "answer": "Memory",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-word-007",
+          "question": "Which open-source policy language does AgentCore Policy use?",
+          "answer": "Cedar",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-word-008",
+          "question": "What kind of graph does Amazon Quick build per user?",
+          "answer": "personal knowledge graph",
+          "source": "https://aws.amazon.com/quick/faqs/"
+        },
+        {
+          "id": "agentic-word-009",
+          "question": "What is the name of the capability integrated into AWS Security Agent in June 2026 that lets developers trigger scans from their IDE?",
+          "answer": "Kiro Power",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "agentic-word-010",
+          "question": "Which Nova 2 model name refers to the one built for real-time voice conversations?",
+          "answer": "Nova 2 Sonic",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-word-011",
+          "question": "Which Nova 2 model name refers to the one that generates both text and images?",
+          "answer": "Nova 2 Omni",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-word-012",
+          "question": "What term describes AWS agents like Kiro Autonomous Agent, AWS Security Agent, and AWS DevOps Agent, announced at re:Invent 2025?",
+          "answer": "Frontier Agents",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-word-013",
+          "question": "What protocol do all four Nova 2 models work with for tool use, abbreviated MCP?",
+          "answer": "Model Context Protocol",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        }
+      ],
+      "statement": [
+        {
+          "id": "agentic-stmt-001",
+          "template": "Kiro CLI 3.0 is built on a {unified agent harness|standalone monolithic runtime} shared with Kiro IDE and Kiro Web.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-002",
+          "template": "Kiro CLI 3.0 introduces spec-driven development via a built-in {Spec agent|Debug agent}.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-003",
+          "template": "In Kiro CLI 3.0, the Tangent feature lets you {branch into a named side-conversation that inherits context|permanently delete the current conversation}.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-004",
+          "template": "Kiro CLI 3.0 {does not run on|fully supports} Amazon Linux 2 (AL2), requiring CLI 2.x there instead.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-005",
+          "template": "Kiro CLI 3.0 {removed|kept unchanged} the built-in aws_tool, requiring MCP servers for AWS access.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-006",
+          "template": "Kiro CLI 3.0 replaced trust flags like --trust-all-tools with {capability-based permissions.yaml|a single global admin switch}.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-007",
+          "template": "Kiro CLI 3.0 changed hook trigger names from {camelCase to PascalCase|PascalCase to camelCase}.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-008",
+          "template": "Kiro CLI 3.0's session format is {not backward-compatible|fully backward-compatible} with 2.x.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-009",
+          "template": "Amazon Bedrock AgentCore reached general availability in {October 2025|March 2024}.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-stmt-010",
+          "template": "Amazon Bedrock AgentCore is {framework-agnostic, compatible with CrewAI, LangGraph, LlamaIndex, Google ADK, and OpenAI Agents SDK|locked exclusively to a single proprietary framework}.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-stmt-011",
+          "template": "AgentCore Runtime provides {low-latency serverless environments with session isolation|only single-tenant on-premises servers} for long-running agents.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-stmt-012",
+          "template": "AgentCore's Gateway component converts APIs and Lambda functions into {MCP-compatible tools with zero code|manually written SDK wrappers}.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-013",
+          "template": "AgentCore's Browser Tool provides an {isolated VM cloud browser runtime|unsandboxed local browser process}.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-014",
+          "template": "AgentCore's Code Interpreter can securely execute {JavaScript, TypeScript, and Python|only COBOL}.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-015",
+          "template": "AgentCore Observability uses the {OpenTelemetry|Syslog RFC 3164} format.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-016",
+          "template": "AgentCore's Policy component uses the {Cedar|YAML-only} open-source policy language for real-time agent action blocking.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-017",
+          "template": "The Amazon Nova 2 family, announced at re:Invent December 2025, has {four|two} models.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-018",
+          "template": "Nova 2 Pro is described as the {most intelligent model, capable of serving as a teacher model|smallest and least capable model} in the Nova 2 family.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-019",
+          "template": "Nova 2 Sonic is built for {real-time voice conversations|batch image classification only}.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-020",
+          "template": "Nova 2 Omni is the first reasoning model to {understand multimodal input and generate text and images|only process plain text}.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-021",
+          "template": "All four Nova 2 models include {built-in web grounding, code execution, and 1M token context windows|no support for external tools of any kind}.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-022",
+          "template": "In June 2026, Amazon Quick added autonomous agents with {adjustable autonomy levels from step-by-step approval to full goal-based execution|a single fixed fully-autonomous mode only}.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-stmt-023",
+          "template": "Amazon Quick's June 2026 update added multi-dataset analytics allowing natural-language queries across sources like Snowflake {without manual pre-joining|only after manually pre-joining every table}.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-stmt-024",
+          "template": "Amazon Quick's June 2026 update redesigned the activity feed to support {thumbs up/down prioritization|voice-only navigation}.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-stmt-025",
+          "template": "Amazon Quick's Free plan requires {no AWS account or credit card|a valid AWS account with billing configured} to sign up.",
+          "source": "https://aws.amazon.com/quick/faqs/"
+        }
+      ],
+      "spelling": [
+        {
+          "id": "agentic-spell-002",
+          "answer": "Tangent",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-spell-005",
+          "answer": "Spec agent",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-spell-006",
+          "answer": "Memory",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-spell-007",
+          "answer": "Cedar",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-spell-009",
+          "answer": "Kiro Power",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "agentic-spell-012",
+          "answer": "Frontier Agents",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        }
+      ]
+    },
+    "security": {
+      "mcq": [
+        {
+          "id": "security-mcq-001",
+          "question": "What does AWS Security Agent's initial analysis start with before customizing its attack plan to the customer's application context?",
+          "options": [
+            "OWASP Top 10",
+            "CIS Benchmarks",
+            "NIST 800-53",
+            "PCI DSS checklist"
+          ],
+          "answer": "OWASP Top 10",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-mcq-002",
+          "question": "Which broader AWS initiative does AWS Security Agent now belong to?",
+          "options": [
+            "AWS Continuum",
+            "AWS Well-Architected",
+            "AWS Trusted Advisor",
+            "AWS Control Tower"
+          ],
+          "answer": "AWS Continuum",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/"
+        },
+        {
+          "id": "security-mcq-003",
+          "question": "AWS Security Agent encrypts customer data (test results, findings, logs) at rest using which service?",
+          "options": [
+            "AWS KMS",
+            "AWS Secrets Manager",
+            "AWS CloudHSM",
+            "AWS Certificate Manager"
+          ],
+          "answer": "AWS KMS",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-mcq-004",
+          "question": "Where does AWS Security Agent store its test logs?",
+          "options": [
+            "CloudWatch in the customer's own account",
+            "A shared AWS analytics account",
+            "Third-party SIEM only",
+            "S3 buckets owned by AWS"
+          ],
+          "answer": "CloudWatch in the customer's own account",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-mcq-005",
+          "question": "Which AWS agent is responsible for checking deployment health and dependencies, complementing AWS Security Agent?",
+          "options": [
+            "AWS DevOps Agent",
+            "AWS Cost Agent",
+            "AWS Migration Agent",
+            "AWS Support Agent"
+          ],
+          "answer": "AWS DevOps Agent",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-mcq-006",
+          "question": "Does the application scanned by AWS Security Agent need to be built on AWS?",
+          "options": [
+            "No, it can be on-premises, hybrid, or other clouds",
+            "Yes, it must run entirely on EC2",
+            "Yes, it must use Lambda",
+            "Only if using GovCloud"
+          ],
+          "answer": "No, it can be on-premises, hybrid, or other clouds",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-mcq-007",
+          "question": "In the June 2026 update, which two developer tools got new plugin integration with AWS Security Agent?",
+          "options": [
+            "Kiro Power and Claude Code",
+            "Visual Studio and Eclipse",
+            "Postman and Insomnia",
+            "Jenkins and CircleCI"
+          ],
+          "answer": "Kiro Power and Claude Code",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-mcq-008",
+          "question": "What new capability did the June 2026 update add that executes findings in an isolated sandbox to prove exploitability?",
+          "options": [
+            "Simulated exploit validation",
+            "Automated patch deployment",
+            "Live production rollback",
+            "Continuous compliance scoring"
+          ],
+          "answer": "Simulated exploit validation",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-mcq-009",
+          "question": "Which of these was NOT listed among the June 2026 integration partners for AWS Security Agent?",
+          "options": [
+            "Jira Service Management",
+            "GitLab.com",
+            "GitHub Enterprise",
+            "Bitbucket"
+          ],
+          "answer": "Jira Service Management",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-mcq-010",
+          "question": "When was AWS Continuum introduced?",
+          "options": [
+            "June 2026",
+            "January 2025",
+            "December 2025",
+            "March 2026"
+          ],
+          "answer": "June 2026",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-mcq-011",
+          "question": "AWS Continuum is described as a security initiative operating at what speed?",
+          "options": [
+            "Machine speed",
+            "Human review speed",
+            "Quarterly audit speed",
+            "Batch processing speed"
+          ],
+          "answer": "Machine speed",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-mcq-012",
+          "question": "Which statement about AWS Security Agent's use of customer data is TRUE?",
+          "options": [
+            "It does not use customer data for model training",
+            "It shares anonymized data with third parties",
+            "It uses all scan data to train future models",
+            "It sells findings data to security vendors"
+          ],
+          "answer": "It does not use customer data for model training",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-mcq-013",
+          "question": "What is the monthly free-preview limit for design reviews per account with AWS Security Agent?",
+          "options": [
+            "200",
+            "50",
+            "1,000",
+            "500"
+          ],
+          "answer": "200",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-mcq-014",
+          "question": "What is the monthly free-preview limit for code reviews per account with AWS Security Agent?",
+          "options": [
+            "1,000",
+            "200",
+            "100",
+            "2,000"
+          ],
+          "answer": "1,000",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-mcq-015",
+          "question": "What pricing model does AWS Security Agent use for penetration testing?",
+          "options": [
+            "Pay-as-you-go per task-hour",
+            "Flat annual license",
+            "Free forever",
+            "One-time setup fee only"
+          ],
+          "answer": "Pay-as-you-go per task-hour",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-mcq-016",
+          "question": "How long is the free trial period for AWS Security Agent's penetration testing?",
+          "options": [
+            "2 months",
+            "30 days",
+            "1 year",
+            "6 months"
+          ],
+          "answer": "2 months",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-mcq-017",
+          "question": "What is the core principle of Zero Trust security?",
+          "options": [
+            "Never trust, always verify",
+            "Trust internal networks by default",
+            "Verify once per session only",
+            "Trust but audit later"
+          ],
+          "answer": "Never trust, always verify",
+          "_verified": true,
+          "source": "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"
+        },
+        {
+          "id": "security-mcq-018",
+          "question": "Under Zero Trust, is a device automatically trusted just because it is on the internal corporate network?",
+          "options": [
+            "No, location does not grant trust",
+            "Yes, internal network location grants automatic trust",
+            "Only for admin devices",
+            "Only during business hours"
+          ],
+          "answer": "No, location does not grant trust",
+          "_verified": true,
+          "source": "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"
+        },
+        {
+          "id": "security-mcq-019",
+          "question": "Which of these is one of the four pillars of IAM (Identity and Access Management)?",
+          "options": [
+            "Authorization",
+            "Encryption",
+            "Firewalling",
+            "Load balancing"
+          ],
+          "answer": "Authorization",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-mcq-020",
+          "question": "Which IAM pillar answers the question 'who are you'?",
+          "options": [
+            "Authentication",
+            "Provisioning",
+            "Audit",
+            "Authorization"
+          ],
+          "answer": "Authentication",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-mcq-021",
+          "question": "Which IAM pillar involves tracking activity for later review?",
+          "options": [
+            "Audit",
+            "Provisioning",
+            "Authentication",
+            "Federation"
+          ],
+          "answer": "Audit",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-mcq-022",
+          "question": "What does the acronym MFA stand for?",
+          "options": [
+            "Multi-Factor Authentication",
+            "Managed File Access",
+            "Multiple Firewall Assignment",
+            "Master File Authorization"
+          ],
+          "answer": "Multi-Factor Authentication",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-023",
+          "question": "What does SQLi stand for in cybersecurity?",
+          "options": [
+            "SQL Injection",
+            "Secure Query Layer interface",
+            "Simple Query Language index",
+            "Server Query Load interceptor"
+          ],
+          "answer": "SQL Injection",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-024",
+          "question": "Which attack type floods a system with traffic from many sources to make it unavailable?",
+          "options": [
+            "DDoS (Distributed Denial of Service)",
+            "Phishing",
+            "SQL Injection",
+            "Cross-Site Scripting"
+          ],
+          "answer": "DDoS (Distributed Denial of Service)",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-025",
+          "question": "Which social engineering attack tricks users into revealing sensitive information via fake emails or sites?",
+          "options": [
+            "Phishing",
+            "DDoS",
+            "Buffer overflow",
+            "Man-in-the-middle"
+          ],
+          "answer": "Phishing",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-026",
+          "question": "What does the 'S' in HTTPS stand for?",
+          "options": [
+            "Secure",
+            "System",
+            "Server",
+            "Session"
+          ],
+          "answer": "Secure",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-027",
+          "question": "Which security practice converts readable data into an unreadable format using a key?",
+          "options": [
+            "Encryption",
+            "Compression",
+            "Tokenization display",
+            "Caching"
+          ],
+          "answer": "Encryption",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-028",
+          "question": "Which principle limits a user's access to only what is needed to perform their job?",
+          "options": [
+            "Least privilege",
+            "Zero trust",
+            "Defense in depth",
+            "Separation of duties"
+          ],
+          "answer": "Least privilege",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-029",
+          "question": "What is the primary purpose of a firewall?",
+          "options": [
+            "Filter and control network traffic based on rules",
+            "Encrypt data at rest",
+            "Generate random passwords",
+            "Compress log files"
+          ],
+          "answer": "Filter and control network traffic based on rules",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-030",
+          "question": "Which term describes malicious software designed to block access to a system or data until a ransom is paid?",
+          "options": [
+            "Ransomware",
+            "Adware",
+            "Spyware",
+            "Rootkit"
+          ],
+          "answer": "Ransomware",
+          "_verified": false
+        }
+      ],
+      "numeric": [
+        {
+          "id": "security-num-001",
+          "question": "AWS Security Agent penetration testing is billed at how many US dollars per task-hour?",
+          "answer": "50",
+          "unit": "USD",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-num-002",
+          "question": "How many months is the free trial for AWS Security Agent's penetration testing?",
+          "answer": "2",
+          "unit": "months",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-num-003",
+          "question": "What is the maximum number of free design reviews allowed per account per month with AWS Security Agent (in preview)?",
+          "answer": "200",
+          "unit": "reviews/month",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-num-004",
+          "question": "What is the maximum number of free code reviews allowed per account per month with AWS Security Agent (in preview)?",
+          "answer": "1000",
+          "unit": "reviews/month",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-num-005",
+          "question": "In what year was AWS Continuum introduced?",
+          "answer": "2026",
+          "unit": "year",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-num-006",
+          "question": "In what calendar month of 2026 was AWS Continuum introduced?",
+          "answer": "6",
+          "unit": "month number",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-num-007",
+          "question": "How many pillars make up IAM (Identity and Access Management) according to the four-pillar model?",
+          "answer": "4",
+          "unit": "pillars",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-num-008",
+          "question": "How many attack categories are in the OWASP Top 10 list that AWS Security Agent starts its analysis with?",
+          "answer": "10",
+          "unit": "categories",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-num-009",
+          "question": "What is the standard port number for HTTPS traffic?",
+          "answer": "443",
+          "unit": "port",
+          "_verified": false
+        },
+        {
+          "id": "security-num-010",
+          "question": "What is the standard port number for unencrypted HTTP traffic?",
+          "answer": "80",
+          "unit": "port",
+          "_verified": false
+        },
+        {
+          "id": "security-num-011",
+          "question": "What is the standard port number for SSH?",
+          "answer": "22",
+          "unit": "port",
+          "_verified": false
+        },
+        {
+          "id": "security-num-012",
+          "question": "Per the NIST AES standard (FIPS 197), what is the smallest of the three standard AES key lengths, in bits?",
+          "answer": "128",
+          "unit": "bits",
+          "source": "https://csrc.nist.gov/pubs/fips/197/final"
+        },
+        {
+          "id": "security-num-013",
+          "question": "How many integration platforms (GitLab.com, GitLab Self Managed, GitHub Enterprise, Bitbucket, Confluence) were added in the June 2026 AWS Security Agent update?",
+          "answer": "5",
+          "unit": "platforms",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        }
+      ],
+      "word": [
+        {
+          "id": "security-word-001",
+          "question": "AWS Security Agent is described as a 'frontier _____' that proactively secures applications throughout the SDLC.",
+          "answer": "agent",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-word-002",
+          "question": "AWS Security Agent starts its analysis with the OWASP Top 10, which stands for Open Web Application Security _____.",
+          "answer": "Project",
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-word-003",
+          "question": "AWS Security Agent encrypts all customer data at rest using AWS _____ (Key Management Service).",
+          "answer": "KMS",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-word-004",
+          "question": "AWS Security Agent stores test logs in _____ within the customer's own account.",
+          "answer": "CloudWatch",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-word-005",
+          "question": "The AWS agent that checks deployment health and dependencies (complementary to Security Agent) is the AWS _____ Agent.",
+          "answer": "DevOps",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-word-006",
+          "question": "The June 2026 update added plugin integration with Kiro Power and _____ Code.",
+          "answer": "Claude",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-word-007",
+          "question": "The June 2026 update added simulated exploit validation executed in an isolated _____.",
+          "answer": "sandbox",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-word-008",
+          "question": "AWS Continuum was introduced as a security-at-machine-_____ initiative.",
+          "answer": "speed",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-word-009",
+          "question": "Zero Trust's core principle is 'never trust, always _____'.",
+          "answer": "verify",
+          "_verified": true,
+          "source": "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"
+        },
+        {
+          "id": "security-word-010",
+          "question": "In IAM, the pillar concerned with granting and removing access is called _____.",
+          "answer": "provisioning",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-word-011",
+          "question": "MFA stands for Multi-Factor _____.",
+          "answer": "Authentication",
+          "_verified": false
+        },
+        {
+          "id": "security-word-012",
+          "question": "SQLi is short for SQL _____.",
+          "answer": "Injection",
+          "_verified": false
+        },
+        {
+          "id": "security-word-013",
+          "question": "DDoS stands for Distributed Denial of _____.",
+          "answer": "Service",
+          "_verified": false
+        }
+      ],
+      "statement": [
+        {
+          "id": "security-stmt-001",
+          "template": "AWS Security Agent is a 'frontier agent' that {proactively|reactively} secures applications throughout the software development lifecycle.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-002",
+          "template": "AWS Security Agent starts its analysis with the {OWASP Top 10|CIS Top 20 Controls} before customizing its attack plan to the customer's application.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-003",
+          "template": "AWS Security Agent {does not|does} use customer data for model training.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-004",
+          "template": "AWS Security Agent keeps customer data {private, never shared|shared for analytics} with third parties.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-005",
+          "template": "AWS Security Agent encrypts customer data at rest using {AWS KMS|customer-managed PGP keys}.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-006",
+          "template": "AWS Security Agent stores test logs in CloudWatch within {the customer's own account|a shared AWS logging account}.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-007",
+          "template": "AWS Security Agent penetration testing is billed at {$50|$500} per task-hour.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-008",
+          "template": "AWS Security Agent's penetration testing offers a {2-month|14-day} free trial.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-009",
+          "template": "Design review, code review, and threat modeling features are currently {free|paid} in preview.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-010",
+          "template": "AWS Security Agent's free preview allows up to {200|2,000} design reviews per account per month.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-011",
+          "template": "AWS Security Agent's free preview allows up to {1,000|100} code reviews per account per month.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-012",
+          "template": "The application scanned by AWS Security Agent can be {on-premises, hybrid, or on another cloud|exclusively hosted on EC2}, since it does not need to be built on AWS.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-013",
+          "template": "AWS Security Agent {does|does not} require an AWS account to use.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-014",
+          "template": "The AWS {DevOps|Cost Optimization} Agent checks deployment health and dependencies, while AWS Security Agent handles threat modeling and penetration testing.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-stmt-015",
+          "template": "The June 2026 update added plugin integration with Kiro Power and {Claude Code|GitHub Copilot}.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-stmt-016",
+          "template": "The June 2026 update added simulated exploit validation that executes findings in {an isolated sandbox|the live production environment} to prove exploitability.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-stmt-017",
+          "template": "The June 2026 update added integrations including GitLab.com, GitLab Self Managed, GitHub Enterprise, Bitbucket, and {Confluence|Notion}.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-stmt-018",
+          "template": "AWS Continuum was introduced in {June 2026|January 2026} as a security-at-machine-speed initiative.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-stmt-019",
+          "template": "AWS Security Agent is now part of {AWS Continuum|AWS Well-Architected Tool}.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/"
+        },
+        {
+          "id": "security-stmt-020",
+          "template": "Zero Trust security's core principle is '{never trust, always verify|trust internal networks by default}'.",
+          "_verified": true,
+          "source": "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"
+        },
+        {
+          "id": "security-stmt-021",
+          "template": "Under Zero Trust, a user or device is verified {every time, continuously|only once at first login}, regardless of its network location.",
+          "_verified": true,
+          "source": "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"
+        },
+        {
+          "id": "security-stmt-022",
+          "template": "IAM encompasses four pillars: authentication, authorization, provisioning, and {audit|encryption}.",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-stmt-023",
+          "template": "In IAM, {authorization|authentication} refers to what a user is allowed to do, as opposed to who they are.",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-stmt-024",
+          "template": "HTTPS traffic runs by default over port {443|8080}.",
+          "_verified": false
+        },
+        {
+          "id": "security-stmt-025",
+          "template": "Multi-Factor Authentication (MFA) requires {two or more|exactly one} independent forms of verification, rather than just one.",
+          "_verified": false
+        }
+      ],
+      "spelling": [
+        {
+          "id": "security-spell-001",
+          "answer": "agent",
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-spell-002",
+          "answer": "Project",
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-spell-004",
+          "answer": "CloudWatch",
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-spell-005",
+          "answer": "DevOps",
+          "source": "https://aws.amazon.com/security-agent/faqs/"
+        },
+        {
+          "id": "security-spell-006",
+          "answer": "Claude",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-spell-007",
+          "answer": "sandbox",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-spell-008",
+          "answer": "speed",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-spell-009",
+          "answer": "verify",
+          "source": "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"
+        },
+        {
+          "id": "security-spell-010",
+          "answer": "provisioning",
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-spell-011",
+          "answer": "Authentication",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-012",
+          "answer": "Injection",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-013",
+          "answer": "Service",
+          "_verified": false
+        }
+      ]
+    },
+    "vietnam-aws": {
+      "mcq": [
+        {
+          "id": "vnaws-mcq-001",
+          "question": "What is the capital city of Vietnam?",
+          "options": [
+            "Ho Chi Minh City",
+            "Da Nang",
+            "Hanoi",
+            "Hue"
+          ],
+          "answer": "Hanoi",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-002",
+          "question": "Which famous lake sits in the historic heart of Hanoi, associated with the legend of a magic sword returned to a golden turtle?",
+          "options": [
+            "West Lake",
+            "Hoan Kiem Lake",
+            "Truc Bach Lake",
+            "Ba Be Lake"
+          ],
+          "answer": "Hoan Kiem Lake",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-003",
+          "question": "Vietnam's iconic noodle soup, typically made with beef or chicken broth and rice noodles, is called what?",
+          "options": [
+            "Pho",
+            "Bun Cha",
+            "Banh Mi",
+            "Cao Lau"
+          ],
+          "answer": "Pho",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-004",
+          "question": "What body of water borders Vietnam's eastern coastline?",
+          "options": [
+            "Andaman Sea",
+            "Bay of Bengal",
+            "South China Sea (East Sea)",
+            "Arabian Sea"
+          ],
+          "answer": "South China Sea (East Sea)",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-005",
+          "question": "Which river flows through Hanoi and is central to the city's history and geography?",
+          "options": [
+            "Mekong River",
+            "Red River",
+            "Perfume River",
+            "Saigon River"
+          ],
+          "answer": "Red River",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-006",
+          "question": "The Old Quarter of Hanoi is famous for streets historically named after what?",
+          "options": [
+            "Ancient emperors",
+            "The trade guilds/goods sold there",
+            "River tributaries",
+            "Foreign ambassadors"
+          ],
+          "answer": "The trade guilds/goods sold there",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-007",
+          "question": "What is Vietnam's official currency called?",
+          "options": [
+            "Baht",
+            "Dong",
+            "Riel",
+            "Kip"
+          ],
+          "answer": "Dong",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-008",
+          "question": "Which mausoleum in Hanoi honors Vietnam's revolutionary leader and founding president?",
+          "options": [
+            "Ho Chi Minh Mausoleum",
+            "Tran Hung Dao Memorial",
+            "Le Loi Monument",
+            "Bach Dinh Palace"
+          ],
+          "answer": "Ho Chi Minh Mausoleum",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-009",
+          "question": "In June 2026, AWS announced general availability of what new type of infrastructure in Hanoi, Vietnam?",
+          "options": [
+            "A Region",
+            "An AWS Local Zone",
+            "A Wavelength Zone",
+            "A Direct Connect location"
+          ],
+          "answer": "An AWS Local Zone",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-local-zones-hanoi-vietnam/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-010",
+          "question": "In what year did AWS first launch Edge locations in Hanoi and Ho Chi Minh City?",
+          "options": [
+            "2018",
+            "2020",
+            "2022",
+            "2024"
+          ],
+          "answer": "2022",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-011",
+          "question": "AWS Cloud and AI Day Hanoi 2026 is being held at which venue?",
+          "options": [
+            "Melia Hanoi",
+            "JW Marriott Hotel Hanoi",
+            "InterContinental Hanoi",
+            "Sofitel Legend Metropole"
+          ],
+          "answer": "JW Marriott Hotel Hanoi",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-012",
+          "question": "Who is delivering a keynote at AWS Cloud and AI Day Hanoi 2026, as CTO of Amazon.com?",
+          "options": [
+            "Andy Jassy",
+            "Werner Vogels",
+            "Adam Selipsky",
+            "Matt Garman"
+          ],
+          "answer": "Werner Vogels",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-013",
+          "question": "According to the AWS-commissioned 'Unlocking Vietnam's AI Potential' study, what percentage of Vietnam's businesses have adopted AI?",
+          "options": [
+            "9%",
+            "13%",
+            "18%",
+            "41%"
+          ],
+          "answer": "18%",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-014",
+          "question": "What hands-on activity at AWS Cloud and AI Day Hanoi 2026 lets attendees build AI agents?",
+          "options": [
+            "Cloud Quest Challenge",
+            "8-Bit Agents Activation",
+            "Agent Builder Sprint",
+            "AI Arcade"
+          ],
+          "answer": "8-Bit Agents Activation",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-015",
+          "question": "What role does Eric Yeo, the second keynote speaker at the event, hold at AWS?",
+          "options": [
+            "Global CTO",
+            "Country GM, Malaysia/Vietnam/Indochina",
+            "VP of AI Research",
+            "Head of AWS Vietnam Engineering"
+          ],
+          "answer": "Country GM, Malaysia/Vietnam/Indochina",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-016",
+          "question": "Which mountainous region of Vietnam is famous for its terraced rice fields and is a popular trekking destination?",
+          "options": [
+            "Mekong Delta",
+            "Sapa",
+            "Phu Quoc",
+            "Con Dao"
+          ],
+          "answer": "Sapa",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-017",
+          "question": "What UNESCO World Heritage bay, known for thousands of limestone karsts, is located in northern Vietnam near Hanoi?",
+          "options": [
+            "Ha Long Bay",
+            "Nha Trang Bay",
+            "Cam Ranh Bay",
+            "Da Nang Bay"
+          ],
+          "answer": "Ha Long Bay",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-018",
+          "question": "Vietnam shares a land border with which of the following countries?",
+          "options": [
+            "Thailand",
+            "Myanmar",
+            "Laos",
+            "Indonesia"
+          ],
+          "answer": "Laos",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-019",
+          "question": "Per the AWS-commissioned study, what was the year-on-year growth rate in Vietnamese business AI adoption?",
+          "options": [
+            "18%",
+            "39%",
+            "58%",
+            "74%"
+          ],
+          "answer": "39%",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-020",
+          "question": "According to the study, what is the main barrier businesses cite for AI adoption in Vietnam?",
+          "options": [
+            "High compliance costs",
+            "Lack of digital skills",
+            "Poor internet infrastructure",
+            "Government regulation"
+          ],
+          "answer": "Lack of digital skills",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-021",
+          "question": "Since what year has AWS trained individuals in cloud/AI skills in Vietnam (totaling over 100,000 people)?",
+          "options": [
+            "2013",
+            "2017",
+            "2020",
+            "2022"
+          ],
+          "answer": "2017",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-022",
+          "question": "What is the name of AWS's initiative, started in 2023, that has produced 30+ free Vietnamese-language AI/generative AI courses?",
+          "options": [
+            "AI Ready",
+            "Skills Guild",
+            "re/Start",
+            "Cloud Institute"
+          ],
+          "answer": "AI Ready",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-023",
+          "question": "Which traditional Vietnamese garment, a long tunic worn over trousers, is a national symbol often seen at cultural events?",
+          "options": [
+            "Ao Dai",
+            "Kimono",
+            "Hanbok",
+            "Sari"
+          ],
+          "answer": "Ao Dai",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-024",
+          "question": "Which dynasty is credited with founding Thang Long (ancient Hanoi) as the capital in 1010 AD?",
+          "options": [
+            "Ly Dynasty",
+            "Nguyen Dynasty",
+            "Tran Dynasty",
+            "Le Dynasty"
+          ],
+          "answer": "Ly Dynasty",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-025",
+          "question": "At AWS Cloud and AI Day Hanoi 2026, what area is dedicated to early-stage companies showcasing innovation?",
+          "options": [
+            "Startup Zone",
+            "Innovation Alley",
+            "Founders Hub",
+            "Growth Pavilion"
+          ],
+          "answer": "Startup Zone",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-026",
+          "question": "According to the study, what percentage of Vietnamese startups use AI in some way?",
+          "options": [
+            "35%",
+            "41%",
+            "55%",
+            "61%"
+          ],
+          "answer": "55%",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-027",
+          "question": "What is the traditional Vietnamese conical hat called, widely recognized as a national symbol?",
+          "options": [
+            "Non La",
+            "Bamboo Hat",
+            "Do Hat",
+            "Quai Thao"
+          ],
+          "answer": "Non La",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-028",
+          "question": "Which Vietnamese festival, based on the lunar calendar, is the most important national holiday, celebrating the new year?",
+          "options": [
+            "Tet",
+            "Trung Nguyen",
+            "Trung Thu",
+            "Doan Ngo"
+          ],
+          "answer": "Tet",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-mcq-029",
+          "question": "At AWS Cloud and AI Day Hanoi 2026, at what time does the keynote begin according to the published agenda?",
+          "options": [
+            "7:30 AM",
+            "9:00 AM",
+            "10:15 AM",
+            "11:00 AM"
+          ],
+          "answer": "9:00 AM",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-mcq-030",
+          "question": "Which large delta in southern Vietnam is renowned as the country's agricultural heartland, especially for rice production?",
+          "options": [
+            "Red River Delta",
+            "Mekong Delta",
+            "Perfume River Delta",
+            "Thu Bon Delta"
+          ],
+          "answer": "Mekong Delta",
+          "_verified": false
+        }
+      ],
+      "numeric": [
+        {
+          "id": "vnaws-num-001",
+          "question": "In what year did AWS announce general availability of a new AWS Local Zone in Hanoi, Vietnam?",
+          "answer": "2026",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-local-zones-hanoi-vietnam/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-002",
+          "question": "In what year did AWS first launch Edge locations in Hanoi and Ho Chi Minh City?",
+          "answer": "2022",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-003",
+          "question": "What percentage of Vietnam's businesses have adopted AI, per the AWS-commissioned study (rounded whole number)?",
+          "answer": "18",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-004",
+          "question": "How many Vietnamese businesses adopted AI in 2024, according to the study (in thousands, rounded)?",
+          "answer": "47",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-005",
+          "question": "What percentage of Vietnam's AI-adopting businesses remain focused only on basic use cases?",
+          "answer": "74",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-006",
+          "question": "What percentage of AI-adopting Vietnamese businesses reported a revenue increase?",
+          "answer": "61",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-007",
+          "question": "What percentage of large Vietnamese enterprises use AI, per the study?",
+          "answer": "41",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-008",
+          "question": "By what percentage would Vietnamese businesses increase a salary offer for a candidate with strong AI skills?",
+          "answer": "40",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-009",
+          "question": "How many individuals has AWS trained in cloud/AI skills in Vietnam since 2017 (in thousands, minimum figure)?",
+          "answer": "100",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-010",
+          "question": "What year was AWS's 'AI Ready' initiative in Vietnam started?",
+          "answer": "2023",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-011",
+          "question": "On what day of September 2026 is AWS Cloud and AI Day Hanoi being held?",
+          "answer": "29",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-012",
+          "question": "At what hour (24-hour format) does registration and expo open at AWS Cloud and AI Day Hanoi 2026?",
+          "answer": "7",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-num-013",
+          "question": "How many countries does Vietnam share a land border with (China, Laos, Cambodia)?",
+          "answer": "3",
+          "_verified": false
+        }
+      ],
+      "word": [
+        {
+          "id": "vnaws-word-001",
+          "question": "What is the capital of Vietnam?",
+          "answer": "Hanoi",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-word-002",
+          "question": "What is the name of the famous lake in central Hanoi tied to the legend of the golden turtle and magic sword?",
+          "answer": "Hoan Kiem Lake",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-word-003",
+          "question": "What river runs through Hanoi and gives its name to a major delta in northern Vietnam?",
+          "answer": "Red River",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-word-004",
+          "question": "What is Vietnam's national currency called?",
+          "answer": "Dong",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-word-005",
+          "question": "What is the name of Vietnam's most important lunar new year festival?",
+          "answer": "Tet",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-word-006",
+          "question": "What type of new AWS infrastructure achieved general availability in Hanoi in June 2026?",
+          "answer": "Local Zone",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-local-zones-hanoi-vietnam/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-word-007",
+          "question": "What is the name of the hotel hosting AWS Cloud and AI Day Hanoi 2026?",
+          "answer": "JW Marriott Hotel Hanoi",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-word-008",
+          "question": "What is the surname of the Amazon.com CTO delivering a keynote at AWS Cloud and AI Day Hanoi 2026?",
+          "answer": "Vogels",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-word-009",
+          "question": "What is the name of the AWS-commissioned study on AI adoption in Vietnam, conducted with Strand Partners?",
+          "answer": "Unlocking Vietnam's AI Potential",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-word-010",
+          "question": "What is the name of AWS's Vietnamese-language AI skilling initiative that launched in 2023?",
+          "answer": "AI Ready",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-word-011",
+          "question": "What is the name of the hands-on AI agent building activity at AWS Cloud and AI Day Hanoi 2026?",
+          "answer": "8-Bit Agents Activation",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-word-012",
+          "question": "What UNESCO-listed bay of limestone karsts lies near Hanoi in northern Vietnam?",
+          "answer": "Ha Long Bay",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-word-013",
+          "question": "What is the traditional long tunic worn over trousers that is a national symbol of Vietnam?",
+          "answer": "Ao Dai",
+          "_verified": false
+        }
+      ],
+      "statement": [
+        {
+          "id": "vnaws-stmt-001",
+          "template": "Hanoi is the {capital|largest city} of Vietnam.",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-stmt-002",
+          "template": "Ho Chi Minh City is the {wrong|capital} of Vietnam.",
+          "correct": "most populous city",
+          "wrong": "capital",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-stmt-003",
+          "template": "Pho is a traditional Vietnamese {noodle soup|grilled sandwich}.",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-stmt-004",
+          "template": "Hoan Kiem Lake is located in the {Old Quarter|Mekong Delta} area of Hanoi.",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-stmt-005",
+          "template": "Vietnam's currency is called the {Dong|Baht}.",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-stmt-006",
+          "template": "The Red River flows through {Hanoi|Ho Chi Minh City}.",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-stmt-007",
+          "template": "Ha Long Bay is known for its thousands of {limestone karsts|coral reefs}.",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-stmt-008",
+          "template": "Tet is Vietnam's celebration of the {lunar new year|autumn harvest}.",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-stmt-009",
+          "template": "Vietnam shares a land border with {Laos|Thailand}.",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-stmt-010",
+          "template": "The Mekong Delta is located in {southern|northern} Vietnam.",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-stmt-011",
+          "template": "The Ao Dai is a traditional Vietnamese {garment|musical instrument}.",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-stmt-012",
+          "template": "Hanoi's Old Quarter streets are traditionally named after {the trade goods sold there|ancient kings}.",
+          "source": "https://seasia.co/2026/07/30/hanois-street-names-are-a-thousand-year-old-shopping-list"
+        },
+        {
+          "id": "vnaws-stmt-013",
+          "template": "AWS announced general availability of a new Local Zone in Hanoi in {June 2026|June 2022}.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-local-zones-hanoi-vietnam/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-014",
+          "template": "AWS first launched Edge locations in Hanoi and Ho Chi Minh City in {2022|2026}.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-015",
+          "template": "Per the AWS-commissioned study, {18%|41%} of Vietnam's businesses have adopted AI.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-016",
+          "template": "AWS Cloud and AI Day Hanoi 2026 will be held at the {JW Marriott Hotel Hanoi|InterContinental Hanoi}.",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-017",
+          "template": "AWS Cloud and AI Day Hanoi 2026 takes place on {September 29, 2026|October 15, 2026}.",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-018",
+          "template": "Dr. Werner Vogels, a keynote speaker at the event, holds the title of {CTO of Amazon.com|CEO of AWS}.",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-019",
+          "template": "Eric Yeo, a keynote speaker at the event, serves as {Country GM for Malaysia, Vietnam, and Indochina|Global VP of Compute Services}.",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-020",
+          "template": "According to the study, {47,000|100,000} Vietnamese businesses adopted AI in 2024.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-021",
+          "template": "AWS has trained over {100,000|47,000} individuals in cloud/AI skills in Vietnam since 2017.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-022",
+          "template": "AWS's 'AI Ready' initiative in Vietnam has produced {30+|100+} free Vietnamese-language AI/generative AI courses.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-023",
+          "template": "The keynote at AWS Cloud and AI Day Hanoi 2026 is scheduled to begin at {9:00 AM|7:30 AM}.",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-024",
+          "template": "The event includes an activity called the {8-Bit Agents Activation|Cloud Quest Challenge} for hands-on AI agent building.",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/",
+          "_verified": true
+        },
+        {
+          "id": "vnaws-stmt-025",
+          "template": "According to the study, {55%|74%} of Vietnamese businesses cite lack of digital skills as the main barrier to AI adoption.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam",
+          "_verified": true
+        }
+      ],
+      "spelling": [
+        {
+          "id": "vnaws-spell-001",
+          "answer": "Hanoi",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-spell-002",
+          "answer": "Hoan Kiem Lake",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-spell-003",
+          "answer": "Red River",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-spell-006",
+          "answer": "Local Zone",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-local-zones-hanoi-vietnam/"
+        },
+        {
+          "id": "vnaws-spell-008",
+          "answer": "Vogels",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/"
+        },
+        {
+          "id": "vnaws-spell-010",
+          "answer": "AI Ready",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "vnaws-spell-012",
+          "answer": "Ha Long Bay",
+          "_verified": false
+        },
+        {
+          "id": "vnaws-spell-013",
+          "answer": "Ao Dai",
+          "_verified": false
+        }
+      ]
+    },
+    "startups-innovation": {
+      "mcq": [
+        {
+          "id": "startups-mcq-001",
+          "question": "AWS Activate Founders credits (for self-funded/bootstrapped startups) go up to what amount?",
+          "answer": "$5,000",
+          "decoys": [
+            "$1,000",
+            "$50,000",
+            "$200,000"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-002",
+          "question": "Activate Founders participants start with how much in credits, with select participants qualifying for more?",
+          "answer": "$1,000",
+          "decoys": [
+            "$500",
+            "$5,000",
+            "$10,000"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-003",
+          "question": "AWS Activate Portfolio credits (via an Activate Provider's Org ID) go up to what amount?",
+          "answer": "$200,000",
+          "decoys": [
+            "$5,000",
+            "$50,000",
+            "$1 million"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-004",
+          "question": "Which AWS Activate tier requires going through an accelerator or VC's Org ID?",
+          "answer": "Activate Portfolio",
+          "decoys": [
+            "Activate Founders",
+            "AWS Credits for AI Startups",
+            "Kiro Startup Credits"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-005",
+          "question": "AWS Credits for AI Startups is described as being for startups ready to scale post-Activate Portfolio, offering how much?",
+          "answer": "$200,000+",
+          "decoys": [
+            "$5,000+",
+            "$50,000+",
+            "$1,000+"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-006",
+          "question": "AWS Credits for AI Startups is accessed how?",
+          "answer": "Invite-only",
+          "decoys": [
+            "Open application to anyone",
+            "Only via a public lottery",
+            "Automatically granted at signup"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-007",
+          "question": "Which of these is NOT a stated eligibility requirement for AWS Activate?",
+          "answer": "Having raised a Series C round",
+          "decoys": [
+            "Being pre-Series B",
+            "Founded in the last 10 years",
+            "Having an AWS Account on a Paid Tier Plan"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-008",
+          "question": "AWS Activate requires a startup to have been founded within the last how many years?",
+          "answer": "10",
+          "decoys": [
+            "3",
+            "5",
+            "20"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-009",
+          "question": "Which startup accelerator, famous for its 'batches' and Demo Day, is named as an example AWS Activate Provider?",
+          "answer": "Y Combinator",
+          "decoys": [
+            "Techstars",
+            "500 Global",
+            "Plug and Play"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-010",
+          "question": "Which venture capital firm, one of Silicon Valley's oldest and largest, is named as an example AWS Activate Provider?",
+          "answer": "Sequoia",
+          "decoys": [
+            "SoftBank",
+            "Tiger Global",
+            "General Atlantic"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-011",
+          "question": "Which VC firm co-founded by Marc Andreessen and Ben Horowitz is named as an example AWS Activate Provider?",
+          "answer": "Andreessen Horowitz",
+          "decoys": [
+            "Kleiner Perkins",
+            "Benchmark",
+            "Accel"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-012",
+          "question": "Which Boston-founded VC firm, an early investor in Facebook and LinkedIn, is named as an example AWS Activate Provider?",
+          "answer": "Greylock Partners",
+          "decoys": [
+            "Index Ventures",
+            "Insight Partners",
+            "Bessemer Venture Partners"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-013",
+          "question": "Which corporate card and spend-management company for startups is named as an example AWS Activate Provider?",
+          "answer": "Brex",
+          "decoys": [
+            "Stripe",
+            "Ramp",
+            "Mercury"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-014",
+          "question": "Which equity management and cap-table platform is named as an example AWS Activate Provider?",
+          "answer": "Carta",
+          "decoys": [
+            "DocuSign",
+            "Gusto",
+            "Rippling"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-015",
+          "question": "What is the first step to apply for AWS Activate Credits?",
+          "answer": "Create an AWS Builder ID with a professional email",
+          "decoys": [
+            "Submit a pitch deck to AWS Ventures",
+            "Pay a $500 application fee",
+            "Get a referral from an existing AWS customer"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-016",
+          "question": "After creating an AWS Builder ID, what is the next step in the Activate Credits application?",
+          "answer": "Choose your credit tier",
+          "decoys": [
+            "Hire an AWS Solutions Architect",
+            "Publish a case study",
+            "Migrate existing infrastructure first"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-017",
+          "question": "Roughly how long does AWS state it takes to hear back after applying for Activate Credits?",
+          "answer": "5-10 business days",
+          "decoys": [
+            "24 hours",
+            "1 business day",
+            "30-60 business days"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-018",
+          "question": "AWS Activate Credits can be redeemed on third-party foundation models within which AWS service?",
+          "answer": "Amazon Bedrock",
+          "decoys": [
+            "Amazon SageMaker",
+            "Amazon Q",
+            "AWS Lambda"
+          ],
+          "source": "https://aws.amazon.com/startups/lp/aws-activate-credits"
+        },
+        {
+          "id": "startups-mcq-019",
+          "question": "Which AI company, known for its Claude model family, offers models through Amazon Bedrock for Activate Credit redemption?",
+          "answer": "Anthropic",
+          "decoys": [
+            "OpenAI",
+            "Google DeepMind",
+            "xAI"
+          ],
+          "source": "https://aws.amazon.com/startups/lp/aws-activate-credits"
+        },
+        {
+          "id": "startups-mcq-020",
+          "question": "Which French AI company offers foundation models through Amazon Bedrock for Activate Credit redemption?",
+          "answer": "Mistral AI",
+          "decoys": [
+            "OpenAI",
+            "Microsoft",
+            "xAI"
+          ],
+          "source": "https://aws.amazon.com/startups/lp/aws-activate-credits"
+        },
+        {
+          "id": "startups-mcq-021",
+          "question": "Which Israeli AI company offers foundation models through Amazon Bedrock for Activate Credit redemption?",
+          "answer": "AI21 Labs",
+          "decoys": [
+            "OpenAI",
+            "DeepSeek",
+            "Baidu"
+          ],
+          "source": "https://aws.amazon.com/startups/lp/aws-activate-credits"
+        },
+        {
+          "id": "startups-mcq-022",
+          "question": "'Kiro Startup Credits' are aimed at which group of startups?",
+          "answer": "Eligible startups without current Activate Credits",
+          "decoys": [
+            "Only Fortune 500 companies",
+            "Startups that have already exhausted AI Startup credits",
+            "Only startups outside the AWS Activate program entirely"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-023",
+          "question": "What is the purpose of Kiro Startup Credits, per AWS?",
+          "answer": "Help startups start building with Kiro before growing into full Activate Credits",
+          "decoys": [
+            "Replace Activate Credits entirely",
+            "Fund office space for startups",
+            "Cover legal incorporation fees"
+          ],
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-mcq-024",
+          "question": "Per the AWS-commissioned 2025 Vietnam study, what percentage of Vietnamese startups use AI in some way?",
+          "answer": "55%",
+          "decoys": [
+            "18%",
+            "74%",
+            "90%"
+          ],
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-mcq-025",
+          "question": "Among AI-using Vietnamese startups, what percentage are building entirely new AI-driven products?",
+          "answer": "35%",
+          "decoys": [
+            "11%",
+            "61%",
+            "58%"
+          ],
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-mcq-026",
+          "question": "What percentage of large Vietnamese enterprises are building entirely new AI-driven products, compared to 35% of AI-using startups?",
+          "answer": "11%",
+          "decoys": [
+            "35%",
+            "61%",
+            "58%"
+          ],
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-mcq-027",
+          "question": "What percentage of AI-adopting Vietnamese businesses reported a revenue increase, per the AWS-commissioned 2025 study?",
+          "answer": "61%",
+          "decoys": [
+            "35%",
+            "58%",
+            "40%"
+          ],
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-mcq-028",
+          "question": "What percentage of AI-adopting Vietnamese businesses expect cost savings, averaging 20%?",
+          "answer": "58%",
+          "decoys": [
+            "61%",
+            "35%",
+            "11%"
+          ],
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-mcq-029",
+          "question": "Which industries does the AWS Cloud and AI Day Hanoi Startup Zone highlight through customer demos?",
+          "answer": "Fintech, AI, and Commerce",
+          "decoys": [
+            "Agriculture, Mining, and Logistics",
+            "Gaming, Music, and Film",
+            "Healthcare, Education, and Retail only"
+          ],
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/"
+        },
+        {
+          "id": "startups-mcq-030",
+          "question": "In common startup terminology, what does 'MVP' stand for?",
+          "answer": "Minimum Viable Product",
+          "decoys": [
+            "Most Valuable Pitch",
+            "Maximum Viable Prototype",
+            "Minimum Verified Process"
+          ],
+          "_verified": false
+        }
+      ],
+      "numeric": [
+        {
+          "id": "startups-num-001",
+          "question": "Up to how many dollars in credits can an AWS Activate Founders (self-funded/bootstrapped) startup receive?",
+          "answer": "5000",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-num-002",
+          "question": "How many dollars in credits does an Activate Founders participant start with?",
+          "answer": "1000",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-num-003",
+          "question": "Up to how many dollars in credits can an AWS Activate Portfolio startup receive?",
+          "answer": "200000",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-num-004",
+          "question": "AWS Activate requires a startup to be founded within the last how many years?",
+          "answer": "10",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-num-005",
+          "question": "What is the minimum number of business days AWS states it takes to hear back after an Activate Credits application?",
+          "answer": "5",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-num-006",
+          "question": "How many example Activate Providers (VCs/accelerators) are named on the official AWS Activate Credits page?",
+          "answer": "6",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-num-007",
+          "question": "Per the AWS-commissioned 2025 Vietnam study, what percentage of Vietnamese startups use AI in some way?",
+          "answer": "55",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-num-008",
+          "question": "Among AI-using Vietnamese startups, what percentage are building entirely new AI-driven products?",
+          "answer": "35",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-num-009",
+          "question": "What percentage of large Vietnamese enterprises are building entirely new AI-driven products?",
+          "answer": "11",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-num-010",
+          "question": "What percentage of AI-adopting Vietnamese businesses reported a revenue increase?",
+          "answer": "61",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-num-011",
+          "question": "What percentage of AI-adopting Vietnamese businesses expect cost savings?",
+          "answer": "58",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-num-012",
+          "question": "By what percentage would Vietnamese businesses increase a salary offer for a strong AI-skilled candidate?",
+          "answer": "40",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-num-013",
+          "question": "What average percentage cost savings do AI-adopting Vietnamese businesses expect?",
+          "answer": "20",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        }
+      ],
+      "word": [
+        {
+          "id": "startups-word-001",
+          "question": "What does 'MVP' stand for in startup terminology?",
+          "answer": "Minimum Viable Product",
+          "_verified": false
+        },
+        {
+          "id": "startups-word-002",
+          "question": "What term describes the amount of time a startup can operate before running out of money?",
+          "answer": "Runway",
+          "_verified": false
+        },
+        {
+          "id": "startups-word-003",
+          "question": "What is the short presentation founders use to persuade investors called?",
+          "answer": "Pitch Deck",
+          "_verified": false
+        },
+        {
+          "id": "startups-word-004",
+          "question": "What funding round typically comes after seed funding, often the first major institutional round?",
+          "answer": "Series A",
+          "_verified": false
+        },
+        {
+          "id": "startups-word-005",
+          "question": "What term describes a startup reaching $1 billion in valuation?",
+          "answer": "Unicorn",
+          "_verified": false
+        },
+        {
+          "id": "startups-word-006",
+          "question": "What acronym describes the total dollar value of recurring revenue a SaaS company earns annually?",
+          "answer": "ARR",
+          "_verified": false
+        },
+        {
+          "id": "startups-word-007",
+          "question": "What term describes a startup changing its core business strategy or direction?",
+          "answer": "Pivot",
+          "_verified": false
+        },
+        {
+          "id": "startups-word-008",
+          "question": "What is the name for a startup accelerator/VC's unique identifier used to grant Activate Portfolio credits?",
+          "answer": "Org ID",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-word-009",
+          "question": "What is the name of AWS's program offering cloud credits and support to startups?",
+          "answer": "AWS Activate",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-word-010",
+          "question": "What is the credential you must create with a professional email to apply for Activate Credits?",
+          "answer": "AWS Builder ID",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-word-011",
+          "question": "What AWS service hosts the third-party foundation models redeemable with Activate Credits?",
+          "answer": "Amazon Bedrock",
+          "source": "https://aws.amazon.com/startups/lp/aws-activate-credits"
+        },
+        {
+          "id": "startups-word-012",
+          "question": "What term describes an investor who provides early capital, often using personal funds, before institutional VCs?",
+          "answer": "Angel Investor",
+          "_verified": false
+        },
+        {
+          "id": "startups-word-013",
+          "question": "What term describes the reduction in ownership percentage existing shareholders experience when new shares are issued?",
+          "answer": "Dilution",
+          "_verified": false
+        }
+      ],
+      "statement": [
+        {
+          "id": "startups-stmt-001",
+          "template": "AWS Activate Founders credits go up to {$5,000|$50,000} for self-funded/bootstrapped startups.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-002",
+          "template": "Activate Founders participants start with {$1,000|$10,000} in credits.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-003",
+          "template": "AWS Activate Portfolio credits go up to {$200,000|$20,000} via an Activate Provider's Org ID.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-004",
+          "template": "AWS Credits for AI Startups is {invite-only|open to any applicant} and offers $200,000 or more.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-005",
+          "template": "AWS Activate eligibility requires a startup be {pre-Series B|post-IPO}.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-006",
+          "template": "AWS Activate eligibility requires a startup be founded within the last {10 years|25 years}.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-007",
+          "template": "AWS Activate eligibility requires an AWS Account on a {Paid Tier Plan|Free Tier Plan only}.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-008",
+          "template": "Sequoia is listed by AWS as an example {Activate Provider|Activate Credits reseller}.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-009",
+          "template": "Y Combinator is listed by AWS as an example {Activate Provider|AWS Region partner}.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-010",
+          "template": "Andreessen Horowitz is listed by AWS as an example {Activate Provider|Activate eligibility requirement}.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-011",
+          "template": "The first step to apply for Activate Credits is to {create an AWS Builder ID with a professional email|submit a signed term sheet}.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-012",
+          "template": "AWS states applicants will hear back within {5-10 business days|24 hours} of applying for Activate Credits.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-013",
+          "template": "AWS Activate Credits are redeemable on third-party foundation models within {Amazon Bedrock|Amazon SageMaker Studio}.",
+          "source": "https://aws.amazon.com/startups/lp/aws-activate-credits"
+        },
+        {
+          "id": "startups-stmt-014",
+          "template": "Anthropic is among the foundation model providers available through {Amazon Bedrock|Amazon Lex} for Activate Credit redemption.",
+          "source": "https://aws.amazon.com/startups/lp/aws-activate-credits"
+        },
+        {
+          "id": "startups-stmt-015",
+          "template": "Kiro Startup Credits are for eligible startups {without current Activate Credits|who have already used $200,000 in Activate Portfolio credits}.",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-stmt-016",
+          "template": "Per the AWS-commissioned 2025 study, {55%|90%} of Vietnamese startups use AI in some way.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-stmt-017",
+          "template": "Among AI-using Vietnamese startups, {35%|70%} are building entirely new AI-driven products.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-stmt-018",
+          "template": "Only {11%|45%} of large Vietnamese enterprises are building entirely new AI-driven products, compared to startups.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-stmt-019",
+          "template": "{61%|30%} of AI-adopting Vietnamese businesses reported a revenue increase.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-stmt-020",
+          "template": "{58%|80%} of AI-adopting Vietnamese businesses expect cost savings averaging 20%.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-stmt-021",
+          "template": "Vietnamese businesses would increase a salary offer by {40%|10%} for a strong AI-skilled candidate.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "startups-stmt-022",
+          "template": "The AWS Cloud and AI Day Hanoi Startup Zone features customer demos across {Fintech, AI, and Commerce|Aerospace, Mining, and Agriculture}.",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/"
+        },
+        {
+          "id": "startups-stmt-023",
+          "template": "The AWS Cloud and AI Day Hanoi Startup Zone includes {AWS-led demos|only third-party vendor booths with no AWS presence}.",
+          "source": "https://aws.amazon.com/events/cloud-day-hanoi/"
+        },
+        {
+          "id": "startups-stmt-024",
+          "template": "A 'pitch deck' is {a short presentation founders use to persuade investors|a legal contract finalizing a funding round}.",
+          "_verified": false
+        },
+        {
+          "id": "startups-stmt-025",
+          "template": "'Runway' refers to {how long a startup can operate before running out of cash|the physical office space a startup leases}.",
+          "_verified": false
+        }
+      ],
+      "spelling": [
+        {
+          "id": "startups-spell-002",
+          "answer": "Runway",
+          "_verified": false
+        },
+        {
+          "id": "startups-spell-003",
+          "answer": "Pitch Deck",
+          "_verified": false
+        },
+        {
+          "id": "startups-spell-004",
+          "answer": "Series A",
+          "_verified": false
+        },
+        {
+          "id": "startups-spell-005",
+          "answer": "Unicorn",
+          "_verified": false
+        },
+        {
+          "id": "startups-spell-007",
+          "answer": "Pivot",
+          "_verified": false
+        },
+        {
+          "id": "startups-spell-008",
+          "answer": "Org ID",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-spell-009",
+          "answer": "AWS Activate",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-spell-010",
+          "answer": "AWS Builder ID",
+          "source": "https://aws.amazon.com/startups/credits"
+        },
+        {
+          "id": "startups-spell-011",
+          "answer": "Amazon Bedrock",
+          "source": "https://aws.amazon.com/startups/lp/aws-activate-credits"
+        },
+        {
+          "id": "startups-spell-012",
+          "answer": "Angel Investor",
+          "_verified": false
+        },
+        {
+          "id": "startups-spell-013",
+          "answer": "Dilution",
+          "_verified": false
+        }
+      ]
+    },
+    "cloud-fundamentals": {
+      "mcq": [
+        {
+          "id": "cloudf-mcq-001",
+          "question": "What is cloud computing, in simple terms?",
+          "answer": "On-demand delivery of IT resources over the Internet with pay-as-you-go pricing",
+          "decoys": [
+            "A type of physical server room owned by one company",
+            "A method for storing paper documents digitally",
+            "A subscription-only software license with no usage tracking"
+          ],
+          "source": "https://aws.amazon.com/what-is-cloud-computing/"
+        },
+        {
+          "id": "cloudf-mcq-002",
+          "question": "What pricing model is most associated with cloud computing?",
+          "answer": "Pay-as-you-go",
+          "decoys": [
+            "Fixed annual licensing regardless of usage",
+            "One-time perpetual purchase",
+            "Mandatory five-year hardware lease"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-003",
+          "question": "What does 'elasticity' mean in a cloud context?",
+          "answer": "The ability to automatically scale resources up or down based on demand",
+          "decoys": [
+            "The physical flexibility of server cables",
+            "A discount applied only during holidays",
+            "A rule that limits how much storage a company can buy"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-004",
+          "question": "In cloud terminology, what is a 'Region'?",
+          "answer": "A separate geographic area containing multiple isolated data center locations",
+          "decoys": [
+            "A single physical server rack",
+            "A billing category for enterprise customers",
+            "A type of virtual machine"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-005",
+          "question": "What is an 'Availability Zone'?",
+          "answer": "One or more discrete data centers within a Region, isolated from failures in other zones",
+          "decoys": [
+            "A marketing term with no technical meaning",
+            "A country-level division for tax purposes",
+            "A single desktop computer used for testing"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-006",
+          "question": "Why do companies use multiple Availability Zones?",
+          "answer": "To improve resilience and reduce the impact of a single data center failure",
+          "decoys": [
+            "To increase their monthly bill intentionally",
+            "Because it is legally required everywhere",
+            "To reduce the number of employees needed"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-007",
+          "question": "What does CapEx stand for in a business context?",
+          "answer": "Capital Expenditure",
+          "decoys": [
+            "Capacity Extension",
+            "Cloud Expansion",
+            "Central Expense"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-008",
+          "question": "What does OpEx stand for in a business context?",
+          "answer": "Operating Expenditure",
+          "decoys": [
+            "Optional Expense",
+            "Operational Extension",
+            "Overhead Exchange"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-009",
+          "question": "How does cloud computing typically shift IT spending?",
+          "answer": "From upfront capital expenditure to ongoing operating expenditure",
+          "decoys": [
+            "From operating expenditure to capital expenditure",
+            "It eliminates all IT spending entirely",
+            "It has no effect on how spending is classified"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-010",
+          "question": "What is a key business benefit of 'on-demand' cloud resources?",
+          "answer": "Resources can be provisioned in minutes without buying physical hardware",
+          "decoys": [
+            "Resources must be ordered a year in advance",
+            "Only government agencies can access them",
+            "They require permanent long-term contracts"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-011",
+          "question": "What does 'scalability' mean for a cloud-based business application?",
+          "answer": "The ability to handle increasing (or decreasing) workload by adjusting resources",
+          "decoys": [
+            "The physical size of the server hardware",
+            "A fixed limit on how many users can log in",
+            "The number of employees managing the servers"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-012",
+          "question": "Which of these is a common reason businesses migrate to the cloud?",
+          "answer": "To reduce the need for large upfront hardware investments",
+          "decoys": [
+            "To guarantee zero costs forever",
+            "Because it is required by international law",
+            "To eliminate the need for any internet connection"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-013",
+          "question": "What is 'on-premises' IT infrastructure?",
+          "answer": "Computing hardware and servers owned and run in a company's own facilities",
+          "decoys": [
+            "Any system accessed through a web browser",
+            "A synonym for cloud computing",
+            "A type of software subscription"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-014",
+          "question": "What best describes a 'hybrid cloud' approach?",
+          "answer": "A mix of on-premises infrastructure and cloud services working together",
+          "decoys": [
+            "Using only one cloud provider exclusively",
+            "A cloud service that only works offline",
+            "A backup system that never connects to the internet"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-015",
+          "question": "What is a 'public cloud'?",
+          "answer": "Cloud services offered by a third-party provider over the internet, shared across multiple customers",
+          "decoys": [
+            "A cloud data center owned exclusively by one government",
+            "A free service with no billing",
+            "A local network only accessible within one office"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-016",
+          "question": "What is a primary advantage of pay-as-you-go pricing for a business?",
+          "answer": "You only pay for the resources you actually consume",
+          "decoys": [
+            "You must pay for a fixed amount regardless of usage",
+            "It requires paying five years of fees upfront",
+            "It only applies to physical hardware purchases"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-017",
+          "question": "What does 'time to market' typically mean when discussing cloud adoption?",
+          "answer": "How quickly a business can launch a new product or service",
+          "decoys": [
+            "The time it takes to ship physical servers",
+            "The number of years a data center operates",
+            "The time zone a company operates in"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-018",
+          "question": "Why might a startup prefer cloud computing over building its own data center?",
+          "answer": "It avoids large upfront costs and lets them scale as they grow",
+          "decoys": [
+            "It guarantees the startup will become profitable",
+            "It removes the need for any software development",
+            "It is the only way to legally start a company"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-019",
+          "question": "What is 'disaster recovery' in a cloud context?",
+          "answer": "Strategies and services to restore systems and data after an outage or failure",
+          "decoys": [
+            "A marketing term with no real function",
+            "A type of physical insurance policy",
+            "A tool for designing office furniture layouts"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-020",
+          "question": "What does 'global reach' mean for a cloud provider?",
+          "answer": "The ability to deploy applications closer to customers in many locations worldwide",
+          "decoys": [
+            "The ability to operate without any internet connection",
+            "A limit on how many countries can use the service",
+            "A requirement to hire staff in every country"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-021",
+          "question": "What is a common non-technical driver for cloud adoption among business leaders?",
+          "answer": "Cost predictability and flexibility compared to fixed hardware investments",
+          "decoys": [
+            "A legal mandate that applies to all industries equally",
+            "Guaranteed elimination of all IT staff",
+            "A one-time tax exemption"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-022",
+          "question": "What does 'managed service' mean in cloud computing?",
+          "answer": "A service where the provider handles operational tasks like maintenance and updates",
+          "decoys": [
+            "A service that requires the customer to build everything from scratch",
+            "A service only available to government clients",
+            "A physical device shipped to the customer's office"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-023",
+          "question": "What is the main idea behind 'economies of scale' in cloud pricing?",
+          "answer": "Costs per unit can decrease as a provider serves more customers at larger scale",
+          "decoys": [
+            "Prices always increase as more customers join",
+            "It only applies to small businesses",
+            "It refers to the physical size of server buildings"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-024",
+          "question": "What does 'downtime' refer to in a business technology context?",
+          "answer": "A period when a system or service is unavailable to users",
+          "decoys": [
+            "The time employees spend on lunch breaks",
+            "A scheduled marketing campaign",
+            "The time it takes to sign a new contract"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-025",
+          "question": "What is a 'service level agreement' (SLA)?",
+          "answer": "A commitment defining the expected level of service, such as uptime, between provider and customer",
+          "decoys": [
+            "A legal document unrelated to technology",
+            "A one-time discount code",
+            "A requirement to use only one data center"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-026",
+          "question": "Why is redundancy important in cloud infrastructure design?",
+          "answer": "It helps ensure services keep running even if one component fails",
+          "decoys": [
+            "It intentionally slows down systems for testing",
+            "It is only relevant for small businesses",
+            "It eliminates the need for any monitoring"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-027",
+          "question": "What does 'infrastructure as a service' (IaaS) generally provide?",
+          "answer": "Access to fundamental computing resources like servers and storage over the internet",
+          "decoys": [
+            "Only pre-built finished software applications",
+            "Physical office space for employees",
+            "A service limited to marketing analytics"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-028",
+          "question": "What does 'software as a service' (SaaS) generally mean for a business user?",
+          "answer": "Using ready-made software applications delivered over the internet, typically via subscription",
+          "decoys": [
+            "Building and maintaining your own servers",
+            "A type of hardware warranty",
+            "A one-time software purchase with no updates"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-029",
+          "question": "What is a common concern business leaders evaluate before moving to the cloud?",
+          "answer": "Data security, compliance, and governance requirements",
+          "decoys": [
+            "The color scheme of the cloud provider's website",
+            "The number of holidays observed by the provider",
+            "The font used in billing invoices"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "cloudf-mcq-030",
+          "question": "What does 'agility' mean when business leaders talk about cloud computing?",
+          "answer": "The ability to quickly adapt and deploy new resources or services as business needs change",
+          "decoys": [
+            "A fitness program for IT staff",
+            "A fixed schedule for quarterly hardware upgrades",
+            "A legal term for contract termination"
+          ],
+          "_verified": false
+        }
+      ],
+      "numeric": [
+        {
+          "id": "cloudf-num-001",
+          "question": "According to AWS's own company boilerplate, how many geographic Regions does it state it operates?",
+          "answer": "38",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "cloudf-num-002",
+          "question": "According to AWS's own company boilerplate, how many Availability Zones does it state it operates?",
+          "answer": "120",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "cloudf-num-003",
+          "question": "According to the NIST definition, how many essential characteristics does cloud computing have (on-demand self-service, broad network access, resource pooling, rapid elasticity, measured service)?",
+          "answer": "5",
+          "source": "https://www.nist.gov/news-events/news/2011/10/final-version-nist-cloud-computing-definition-published"
+        },
+        {
+          "id": "cloudf-num-004",
+          "question": "In the commonly taught cloud deployment model list of public, private, and hybrid, how many models are named?",
+          "answer": "3",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-num-005",
+          "question": "How many primary 'as a Service' delivery models are commonly taught (IaaS, PaaS, SaaS)?",
+          "answer": "3",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-num-006",
+          "question": "What year did NIST publish its final version of the official cloud computing definition?",
+          "answer": "2011",
+          "source": "https://www.nist.gov/news-events/news/2011/10/final-version-nist-cloud-computing-definition-published"
+        },
+        {
+          "id": "cloudf-num-007",
+          "question": "How many parties are typically involved in a basic Service Level Agreement — the provider and the ___?",
+          "answer": "2",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-num-008",
+          "question": "In the CapEx vs OpEx distinction, how many total spending categories are being compared?",
+          "answer": "2",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-num-009",
+          "question": "How many broad cloud service models are typically layered on top of each other (IaaS, then PaaS, then SaaS)?",
+          "answer": "3",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-num-010",
+          "question": "How many of NIST's essential cloud characteristics specifically relate to resource flexibility (resource pooling and rapid elasticity)?",
+          "answer": "2",
+          "source": "https://www.nist.gov/news-events/news/2011/10/final-version-nist-cloud-computing-definition-published"
+        },
+        {
+          "id": "cloudf-num-011",
+          "question": "How many deployment models does the broader NIST cloud framework typically describe (public, private, hybrid, community)?",
+          "answer": "4",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-num-012",
+          "question": "How many essential characteristics did NIST originally define for cloud computing in its 2011 final publication?",
+          "answer": "5",
+          "source": "https://www.nist.gov/news-events/news/2011/10/final-version-nist-cloud-computing-definition-published"
+        },
+        {
+          "id": "cloudf-num-013",
+          "question": "In the commonly taught contrast of pay-as-you-go vs. fixed upfront billing, how many models are named?",
+          "answer": "2",
+          "_verified": false
+        }
+      ],
+      "word": [
+        {
+          "id": "cloudf-word-001",
+          "question": "What single word describes the ability of a cloud system to automatically grow or shrink resources based on demand?",
+          "answer": "Elasticity",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-002",
+          "question": "What term describes a company's own data center infrastructure, as opposed to the cloud?",
+          "answer": "On-premises",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-003",
+          "question": "What word describes a separate geographic area used by cloud providers, made up of multiple isolated data center clusters?",
+          "answer": "Region",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-004",
+          "question": "What term refers to one or more discrete data centers within a Region, isolated from failures elsewhere?",
+          "answer": "Availability Zone",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-005",
+          "question": "What business term refers to spending on physical assets like servers, typically paid upfront?",
+          "answer": "Capital Expenditure",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-006",
+          "question": "What business term refers to the day-to-day costs of running a business, such as a cloud subscription?",
+          "answer": "Operating Expenditure",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-007",
+          "question": "What pricing model charges customers only for the resources they actually consume?",
+          "answer": "Pay-as-you-go",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-008",
+          "question": "What term describes provisioning computing resources instantly, without long procurement delays?",
+          "answer": "On-demand",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-009",
+          "question": "What cloud deployment model combines on-premises infrastructure with cloud services?",
+          "answer": "Hybrid cloud",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-010",
+          "question": "What term describes a cloud environment shared across many customers and offered by a third-party provider?",
+          "answer": "Public cloud",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-011",
+          "question": "What word describes a system's ability to handle growing workloads by adding resources?",
+          "answer": "Scalability",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-012",
+          "question": "What term describes a period when a service is unavailable to its users?",
+          "answer": "Downtime",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-word-013",
+          "question": "What agreement between a cloud provider and customer defines expected service uptime and quality?",
+          "answer": "Service level agreement",
+          "_verified": false
+        }
+      ],
+      "statement": [
+        {
+          "id": "cloudf-stmt-001",
+          "template": "Cloud computing is the {on-demand|subscription-locked} delivery of IT resources over the Internet with pay-as-you-go pricing.",
+          "source": "https://aws.amazon.com/what-is-cloud-computing/"
+        },
+        {
+          "id": "cloudf-stmt-002",
+          "template": "According to AWS's own company boilerplate, it states it operates {38|25} geographic Regions.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "cloudf-stmt-003",
+          "template": "According to AWS's own company boilerplate, it states it operates {120|75} Availability Zones.",
+          "source": "https://press.aboutamazon.com/aws/2025/9/new-aws-research-shows-strong-ai-adoption-momentum-in-vietnam"
+        },
+        {
+          "id": "cloudf-stmt-004",
+          "template": "NIST's official cloud computing definition lists {5|3} essential characteristics.",
+          "source": "https://www.nist.gov/news-events/news/2011/10/final-version-nist-cloud-computing-definition-published"
+        },
+        {
+          "id": "cloudf-stmt-005",
+          "template": "CapEx stands for {Capital Expenditure|Central Expansion}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-006",
+          "template": "OpEx stands for {Operating Expenditure|Optional Expense}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-007",
+          "template": "Elasticity refers to the ability to {automatically scale resources up or down|permanently fix resource levels} based on demand.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-008",
+          "template": "A Region is a {separate geographic area with multiple isolated data centers|single physical server rack}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-009",
+          "template": "An Availability Zone is {one or more discrete data centers within a Region|an entire country's cloud footprint}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-010",
+          "template": "Businesses use multiple Availability Zones mainly to {improve resilience against failures|reduce the number of employees}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-011",
+          "template": "Pay-as-you-go pricing means customers pay {only for what they use|a fixed fee regardless of usage}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-012",
+          "template": "On-demand resources can typically be provisioned in {minutes|months} without buying physical hardware.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-013",
+          "template": "On-premises infrastructure refers to computing hardware {owned and run in a company's own facilities|rented briefly from a third party per hour}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-014",
+          "template": "A hybrid cloud approach combines {on-premises infrastructure and cloud services|two unrelated cloud providers with no integration}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-015",
+          "template": "A public cloud is offered by a {third-party provider shared across many customers|single company exclusively for internal use}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-016",
+          "template": "Scalability describes a system's ability to {handle increasing or decreasing workload|remain a fixed size regardless of demand}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-017",
+          "template": "A key startup benefit of cloud adoption is avoiding {large upfront hardware investments|any need for software}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-018",
+          "template": "Time to market refers to how quickly a business can {launch a new product or service|hire additional staff}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-019",
+          "template": "A service level agreement defines the {expected level of service, such as uptime|logo design used on invoices}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-020",
+          "template": "Downtime refers to a period when a system is {unavailable to users|running faster than normal}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-021",
+          "template": "Redundancy in cloud design helps ensure services {keep running if one component fails|stop completely during maintenance}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-022",
+          "template": "Infrastructure as a Service (IaaS) provides {fundamental computing resources like servers and storage|only finished, ready-to-use applications}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-023",
+          "template": "Software as a Service (SaaS) delivers {ready-made applications over the internet, often via subscription|raw servers that customers must configure from scratch}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-024",
+          "template": "Economies of scale suggest that costs per unit can {decrease as a provider serves more customers|increase indefinitely with more customers}.",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-stmt-025",
+          "template": "Business agility in the cloud context means the ability to {quickly adapt and deploy resources as needs change|follow a fixed multi-year hardware refresh cycle}.",
+          "_verified": false
+        }
+      ],
+      "spelling": [
+        {
+          "id": "cloudf-spell-001",
+          "answer": "Elasticity",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-spell-003",
+          "answer": "Region",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-spell-004",
+          "answer": "Availability Zone",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-spell-009",
+          "answer": "Hybrid cloud",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-spell-010",
+          "answer": "Public cloud",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-spell-011",
+          "answer": "Scalability",
+          "_verified": false
+        },
+        {
+          "id": "cloudf-spell-012",
+          "answer": "Downtime",
+          "_verified": false
+        }
+      ]
+    }
+  }
+}

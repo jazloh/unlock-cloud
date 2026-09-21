@@ -41,6 +41,9 @@ class WagerLock {
     ];
     this.maxRounds = opts.maxRounds || null;
     this.onSubmit = opts.onSubmit || (() => {});
+    this.onWrong = opts.onWrong || null;
+    this.revealAnswerOnWrong = opts.revealAnswerOnWrong !== false; // default true
+    this.repeatOnWrong = opts.repeatOnWrong || false;
 
     this._init();
   }
@@ -87,6 +90,8 @@ class WagerLock {
     const q = this._shuffled[this.round];
     const stake = this.stakes[this.chosenStake];
     this.correct = answer === q.answer;
+
+    if (!this.correct && this.onWrong) this.onWrong('Wrong — try again.');
 
     if (this.correct) {
       this.score += stake.wager;
@@ -232,14 +237,24 @@ class WagerLock {
       const s = this.stakes[this.chosenStake];
       res.innerHTML = `
         <div class="wglk-result-icon">${this.correct ? '✓' : '✕'}</div>
-        <div class="wglk-result-text">${this.correct ? 'Correct!' : `Wrong — answer: ${q.answer}`}</div>
+        <div class="wglk-result-text">${this.correct ? 'Correct!' : (this.revealAnswerOnWrong ? `Wrong — answer: ${q.answer}` : 'Wrong!')}</div>
         <div class="wglk-result-delta" style="color:${this.correct ? s.color : 'var(--red,#ef4444)'}">${this.correct ? '+' + s.wager : s.penalty} pts</div>`;
       wrap.appendChild(res);
 
       const nextBtn = document.createElement('button');
       nextBtn.className = 'wglk-btn';
-      nextBtn.textContent = 'Next Question';
-      nextBtn.addEventListener('click', () => this._nextRound());
+      nextBtn.textContent = (this.correct || !this.repeatOnWrong) ? 'Next Question' : 'Try Again';
+      nextBtn.addEventListener('click', () => {
+        if (!this.correct && this.repeatOnWrong) {
+          this.phase = 'wager';
+          this.chosenStake = null;
+          this.chosenAnswer = null;
+          this.correct = null;
+          this._render();
+        } else {
+          this._nextRound();
+        }
+      });
       wrap.appendChild(nextBtn);
     }
 
