@@ -1,3 +1,7 @@
+> ⛔ **SUPERSEDED 2026-09-17.** This is the original *frontend-authored proposal* for the Showdown backend. The backend was ultimately built to a different contract; ~85% of this document is now counterfactual. **Do not implement against this doc.** The single source of truth is [`docs/showdown-api-integration.md`](../showdown-api-integration.md), which reflects the deployed API. Kept for historical record only.
+
+---
+
 # Showdown Mode — Backend API Contract
 
 > **For:** Backend Engineer **From:** Frontend/Engine Engineer **Date:** 2026-08-26 **Status:** Draft v4 — all 5 phases complete

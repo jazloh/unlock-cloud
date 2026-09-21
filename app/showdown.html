@@ -3,34 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
-<title>Showdown — re:Solve</title>
+<!-- Neutral vault-lock favicon (retires the emoji favicon). -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' fill='%230A0705'/><path d='M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h1zm2 0h6V8a3 3 0 0 0-6 0v2zm3 3a1.4 1.4 0 0 0-.7 2.6V17h1.4v-1.4A1.4 1.4 0 0 0 12 13z' fill='%23FF9900'/></svg>">
+<title>Showdown - re:Solve</title>
+
+<!-- Type: "the shout" (Archivo, variable width+weight axes) and "the readout"
+     (JetBrains Mono). font-display:swap so the system fallback renders instantly
+     if the webfont is slow over event WiFi. No gradient text anywhere. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,600..900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
 
 <!-- index.css ships the CSS variables, fonts and the puzzle-component styles
-     (kpdlk / wordlk / pillk / wglk …). showdown.css layers the dark game-shell
-     theme + screen-flow chrome on top, matching puzzle-test-showdown.html. -->
+     (kpdlk / wordlk / pillk / wglk). showdown.css layers the "HEAT" game-shell
+     theme + screen-flow chrome on top and remaps tokens to the ember palette. -->
 <link rel="stylesheet" href="index.css">
 <link rel="stylesheet" href="showdown.css">
 </head>
 <body>
+
+<!-- AMBIENT HEAT: ember bed, static vault grain, breathing heat bar. All are
+     fixed / pointer-events:none, collapse to static under reduced motion, and
+     pause during PLAY (see showdown.css). -->
+<div class="sd-ember" aria-hidden="true"></div>
+<div class="sd-grain" aria-hidden="true"></div>
+<div class="sd-heatbar" aria-hidden="true"></div>
+
+<!-- ONE shared self-terminating particle canvas (solve spark burst). -->
+<canvas id="sd-fx" aria-hidden="true"></canvas>
+
 <div class="sd-app" id="sd-app">
 
   <!-- ══════════════════ SCREEN 1 · JOIN ══════════════════ -->
   <section class="sd-screen" id="screen-join" aria-label="Join session">
-    <div class="sd-card sd-join-card">
-      <div class="sd-logo">⚔️</div>
-      <h1 class="sd-title">Showdown</h1>
-      <p class="sd-tagline">Quiz battle · 3–5 players · fastest correct wins</p>
+    <div class="sd-join-hero">
+      <span class="sd-logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h1zm2 0h6V8a3 3 0 0 0-6 0v2z" fill="currentColor"/><rect x="11.2" y="13" width="1.6" height="4" rx=".8" fill="#0A0705"/></svg>
+      </span>
+      <h1 class="sd-title" aria-label="Showdown">
+        <svg class="sd-wordmark" viewBox="0 0 1000 210" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true" focusable="false">
+          <text x="500" y="168" text-anchor="middle" textLength="1000" lengthAdjust="spacingAndGlyphs">SHOWDOWN</text>
+          <rect class="sd-wordmark-cut" x="-10" y="101" width="1020" height="11"></rect>
+        </svg>
+      </h1>
+      <p class="sd-tagline">Five locks. One vault. Fastest crew wins.</p>
+    </div>
 
+    <div class="sd-card sd-join-card">
       <form id="join-form" class="sd-form" novalidate>
         <label class="sd-label" for="join-name">Your name</label>
         <input class="sd-input" id="join-name" type="text" autocomplete="off"
-               maxlength="20" placeholder="e.g. Alex" required>
+               maxlength="20" minlength="1" placeholder="e.g. Alex" required>
 
         <label class="sd-label" for="join-code">Session code</label>
         <input class="sd-input sd-input--code" id="join-code" type="text"
                autocomplete="off" maxlength="6" placeholder="6-char code"
-               inputmode="latin" required>
+               inputmode="latin" pattern="[A-Za-z0-9]{6}" required>
 
         <button class="sd-btn sd-btn--primary" id="join-btn" type="submit">Join Session</button>
         <div class="sd-error-msg" id="join-error" role="alert"></div>
@@ -52,7 +80,7 @@
       <ul class="sd-player-list" id="lobby-players"></ul>
 
       <button class="sd-btn sd-btn--primary" id="ready-btn" type="button">I'm Ready</button>
-      <p class="sd-hint" id="lobby-hint">The battle begins when everyone is ready (min 3 players).</p>
+      <p class="sd-hint" id="lobby-hint">The crack begins when the whole crew is ready. Minimum 3 players.</p>
     </div>
   </section>
 
@@ -60,16 +88,17 @@
   <section class="sd-screen" id="screen-vote" aria-label="Vote on category" hidden>
     <div class="sd-card">
       <div class="sd-vote-head">
-        <h2 class="sd-subtitle">Vote a category</h2>
+        <h2 class="sd-subtitle">Pick the target</h2>
         <div class="sd-timer" id="vote-timer" aria-live="polite" aria-label="Time remaining to vote">
           <svg class="sd-timer-ring" viewBox="0 0 48 48" aria-hidden="true">
             <circle class="sd-timer-ring-bg" cx="24" cy="24" r="21"></circle>
+            <circle class="sd-timer-ticks" cx="24" cy="24" r="21"></circle>
             <circle class="sd-timer-ring-fg" cx="24" cy="24" r="21"></circle>
           </svg>
           <span class="sd-timer-num" id="vote-timer-num">30</span>
         </div>
       </div>
-      <p class="sd-hint">Tap one. Highest votes wins — ties broken randomly.</p>
+      <p class="sd-hint">Tap one. Highest votes wins. Ties broken randomly.</p>
 
       <div class="sd-cat-grid" id="vote-grid"></div>
 
@@ -78,13 +107,13 @@
       </div>
     </div>
 
-    <!-- Winning-category reveal overlay -->
+    <!-- Winning-category reveal overlay (WOW 1 · THE LOCK-IN) -->
     <div class="sd-reveal" id="vote-reveal" hidden>
       <div class="sd-reveal-inner">
-        <div class="sd-reveal-label">Winning category</div>
+        <div class="sd-reveal-label">Target locked</div>
         <div class="sd-reveal-icon" id="reveal-icon">🤖</div>
         <div class="sd-reveal-name" id="reveal-name">Agentic AI</div>
-        <div class="sd-reveal-go">Get ready…</div>
+        <div class="sd-reveal-go">GO</div>
       </div>
     </div>
   </section>
@@ -102,7 +131,8 @@
       </div>
     </header>
 
-    <!-- Live opponent progress (populated by polling; hidden until data arrives) -->
+    <!-- WOW 2 · THE RACE: live opponent lanes (populated by polling; hidden
+         until data arrives). Hook #1 sets --solved per lane for the smooth slide. -->
     <div class="sd-progress-panel" id="play-progress-panel" role="status" aria-live="polite" aria-label="Other players' progress" hidden></div>
 
     <div class="sd-puzzle-wrap">
@@ -111,7 +141,25 @@
       <div class="sd-play-log" id="play-log" aria-live="polite"></div>
     </div>
 
-    <div class="sd-solved-flash" id="play-solved-flash">🔓 Solved!</div>
+    <!-- WOW 3 · SOLVED burst. JS toggles .is-on only; the word + shards are
+         markup here, the canvas sparks are spawned by hook #3. -->
+    <div class="sd-solved-flash" id="play-solved-flash" aria-hidden="true">
+      <span class="sd-shards">
+        <span class="sd-shard" style="--a:0deg;--sd-shard-delay:0ms"></span>
+        <span class="sd-shard" style="--a:30deg;--sd-shard-delay:6ms"></span>
+        <span class="sd-shard" style="--a:60deg;--sd-shard-delay:12ms"></span>
+        <span class="sd-shard" style="--a:90deg;--sd-shard-delay:18ms"></span>
+        <span class="sd-shard" style="--a:120deg;--sd-shard-delay:24ms"></span>
+        <span class="sd-shard" style="--a:150deg;--sd-shard-delay:30ms"></span>
+        <span class="sd-shard" style="--a:180deg;--sd-shard-delay:36ms"></span>
+        <span class="sd-shard" style="--a:210deg;--sd-shard-delay:42ms"></span>
+        <span class="sd-shard" style="--a:240deg;--sd-shard-delay:48ms"></span>
+        <span class="sd-shard" style="--a:270deg;--sd-shard-delay:54ms"></span>
+        <span class="sd-shard" style="--a:300deg;--sd-shard-delay:60ms"></span>
+        <span class="sd-shard" style="--a:330deg;--sd-shard-delay:66ms"></span>
+      </span>
+      <span class="sd-solved-word">Solved</span>
+    </div>
   </section>
 
   <!-- ══════════════════ SCREEN 5 · RESULTS ══════════════════ -->
@@ -120,13 +168,15 @@
     <div class="sd-confetti" id="sd-confetti" aria-hidden="true"></div>
 
     <div class="sd-card">
-      <div class="sd-results-crown" id="results-crown">🏆</div>
+      <div class="sd-results-crown" id="results-crown" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 7l4 4 5-7 5 7 4-4-2 12H5L3 7z" fill="currentColor"/><rect x="5" y="19" width="14" height="2.4" rx="1" fill="currentColor"/></svg>
+      </div>
       <h2 class="sd-subtitle sd-subtitle--center" id="results-headline">Results</h2>
 
       <!-- Current player's score breakdown -->
       <div class="sd-your-results" id="results-yours" hidden>
         <span class="sd-your-results-label">Your Results</span>
-        <span class="sd-your-results-line" id="results-yours-line">—</span>
+        <span class="sd-your-results-line" id="results-yours-line"></span>
         <span class="sd-your-results-stars" id="results-yours-stars" aria-label="Star rating"></span>
       </div>
 
@@ -144,6 +194,87 @@
 
 <!-- Transient "someone finished!" toasts stack here -->
 <div class="sd-toast-host" id="sd-toast-host" aria-live="polite" aria-atomic="false"></div>
+
+<!-- ─────────────────────────────────────────────────────────────────
+     FX ENGINE (not game logic): the ONE shared, self-terminating canvas
+     particle system. Lives here (not in showdown.js) so showdown.js stays
+     limited to its 3 additive hooks. Exposes window.SDFx.burst(). One RAF
+     loop that runs only while particles are alive, caps the backing store at
+     DPR<=1.5, animates transform/opacity-equivalents only, and never starts
+     under prefers-reduced-motion. Nothing here runs idle.
+     ───────────────────────────────────────────────────────────────── -->
+<script>
+(function () {
+  'use strict';
+  var canvas = document.getElementById('sd-fx');
+  if (!canvas || !canvas.getContext) { window.SDFx = { burst: function () {} }; return; }
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ctx = canvas.getContext('2d');
+  var dpr = Math.min(window.devicePixelRatio || 1, 1.5); // cap backing store
+  var W = 0, H = 0, parts = [], raf = 0, last = 0, rt = null;
+  // Ember-band burst palette: lime, orange, gold.
+  var COLORS = ['#D6FF3A', '#FF9900', '#FFD24A'];
+
+  function resize() {
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(resize, 150); });
+
+  function tick(ts) {
+    if (!last) last = ts;
+    var dt = Math.min(48, ts - last); last = ts;
+    var step = dt / 16.7;
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter'; // additive glow for the burst
+    for (var i = parts.length - 1; i >= 0; i--) {
+      var p = parts[i];
+      p.vy += p.g * step;
+      p.x += p.vx * step; p.y += p.vy * step;
+      p.life -= dt;
+      if (p.life <= 0) { parts.splice(i, 1); continue; }
+      ctx.globalAlpha = Math.max(0, p.life / p.max);
+      ctx.fillStyle = p.c;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    if (parts.length) {
+      raf = requestAnimationFrame(tick);
+    } else {                              // self-terminate: no idle pump
+      cancelAnimationFrame(raf); raf = 0; last = 0;
+      ctx.clearRect(0, 0, W, H);
+    }
+  }
+
+  // burst([x],[y],[count]) - radial spark burst with gravity, ~600ms life.
+  function burst(x, y, n) {
+    if (reduce) return;                   // reduced motion: canvas never starts
+    if (typeof x !== 'number') { x = window.innerWidth / 2; y = window.innerHeight * 0.42; }
+    n = n || 72;
+    for (var i = 0; i < n; i++) {
+      var ang = Math.random() * 6.2832, sp = 2 + Math.random() * 6;
+      parts.push({
+        x: x, y: y,
+        vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp - 2,
+        g: 0.16, r: 1.4 + Math.random() * 2.2,
+        c: COLORS[i % COLORS.length],
+        life: 420 + Math.random() * 180, max: 600
+      });
+    }
+    if (!raf) { last = 0; raf = requestAnimationFrame(tick); }
+  }
+
+  window.SDFx = { burst: burst };
+})();
+</script>
 
 <!-- The 5 Showdown quiz-lock puzzle components (global classes) -->
 <script src="puzzle/keypad-lock.js"></script>
