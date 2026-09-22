@@ -49,6 +49,9 @@
   const MOCK = params.get('mock') === 'true';
   // Rehearsal fault switches (SSOT §8): only meaningful under ?mock=true.
   const MOCK_FAIL = params.get('mockfail') || ''; // 'bankid' | 'auth' | 'badpin' | 'latejoin'
+  // Optional host-set event name (display-only) for the attract-screen eyebrow,
+  // e.g. ?event_name=AWS%20Cloud%20Day. Presentation only; absent = eyebrow hidden.
+  const EVENT_NAME = (params.get('event_name') || params.get('event') || '').trim();
 
   /* ─────────────────────────── Theme (Feature 1) ──────────────── */
   // HEAT dark is the default; 'light' remaps the palette CSS custom properties
@@ -63,7 +66,14 @@
   function applyTheme(t) {
     const light = t === 'light';
     document.documentElement.classList.toggle('sd-theme-light', light);
-    if (document.body) document.body.classList.toggle('sd-theme-light', light);
+    if (document.body) {
+      document.body.classList.toggle('sd-theme-light', light);
+      // VS Select mode mechanism: accents flow from --mode-color (coral) via
+      // body[data-mode='showdown']. data-theme mirrors it for parity with the
+      // broadcast board. Presentation-only; set here (not in showdown.html).
+      document.body.setAttribute('data-mode', 'showdown');
+      document.body.setAttribute('data-theme', 'showdown');
+    }
   }
   function setTheme(t) {
     try { localStorage.setItem(THEME_KEY, t); } catch { /* storage off — session-only */ }
@@ -549,9 +559,9 @@
     if (!b) {
       b = document.createElement('div');
       b.id = 'sd-mock-badge';
-      b.style.cssText = 'position:fixed;bottom:8px;right:8px;z-index:9999;' +
-        'font:600 11px/1.4 system-ui,sans-serif;letter-spacing:.08em;color:#fff;' +
-        'background:rgba(220,38,38,.9);padding:4px 8px;border-radius:6px;pointer-events:none';
+      // Styling lives in showdown.css (#sd-mock-badge). Setting inline anchors
+      // here previously fought that rule's left/top and stretched the fixed
+      // element to fill the viewport (a full-screen wash). Keep JS to DOM only.
       (document.body || document.documentElement).appendChild(b);
     }
     b.textContent = text || 'MOCK MODE';
@@ -837,94 +847,345 @@
     if (label) label.textContent = 'Seat PIN';
   }
 
+  // JOIN is a small step machine (reordered from the old single form):
+  //   resolve game_id → PIN claim (only if needed) → waiting-for-session landing
+  //   → name entry (always empty) → join.
+  // getReusableIdentity / hidePinField / unhidePinField / ensureGameCodeField /
+  // extractGameId / joinErrorMessage below are REUSED (not duplicated); the old
+  // runIdentityFlow + discoverAndJoin are replaced by this explicit sequence.
+  let joinReusable = null;   // stored identity usable for THIS game_id (seat already held)
+  let joinWaitTimer = null;  // /public poll timer for the waiting-for-session landing
+  let joinWaitTick = 0;      // drives the live "waiting" status so it never reads frozen
+
   function initJoin() {
     showScreen('join');
     configurePinInput();
 
+    // CHANGE 3 (show-once): a valid stored seat_token for THIS game_id means the
+    // PIN was already claimed on a prior visit. Skip the PIN box entirely and go
+    // straight to the waiting-for-session landing, which auto-advances to the
+    // name step the moment a session is live.
+    joinReusable = getReusableIdentity();
+    if (joinReusable) {
+      state.seatToken = joinReusable.seatToken;
+      if (joinReusable.seatNumber != null) state.seatNumber = joinReusable.seatNumber;
+      if (joinReusable.pin) state.pin = joinReusable.pin;
+      persistIdentity();
+      renderWaitingStep(); // seat held → resolve session, then empty name entry
+      return;
+    }
+
+    // No reusable seat → collect the PIN (and, ONLY if game_id is unknown
+    // everywhere, the inline table link/code) before claiming.
+    renderCredsStep();
+  }
+
+  // Toggle the name field (never disabled — dropping `required` keeps the
+  // :has() arm-glow honest while the field is hidden).
+  function showNameField(show) {
+    const input = $('join-name');
+    if (input) {
+      input.hidden = !show;
+      if (show) { input.setAttribute('required', 'required'); input.removeAttribute('aria-hidden'); input.tabIndex = 0; }
+      else { input.removeAttribute('required'); input.setAttribute('aria-hidden', 'true'); input.tabIndex = -1; }
+    }
+    const label = document.querySelector('label[for="join-name"]');
+    if (label) label.hidden = !show;
+  }
+
+  function removeGameCodeField() {
+    const input = $('join-gamecode'); if (input) input.remove();
+    const label = document.querySelector('label[for="join-gamecode"]'); if (label) label.remove();
+  }
+  function removeWaitingPanel() {
+    const panel = $('join-waiting'); if (panel) panel.remove();
+    const screen = $('screen-join'); if (screen) screen.classList.remove('sd-attract-mode');
+  }
+  // Show/hide the submit button RELIABLY. `.sd-btn { display:inline-block }` has
+  // the same specificity as the UA `[hidden]{display:none}` and loads later, so
+  // the `hidden` attribute alone does NOT hide it — drive inline display too.
+  function showJoinButton(show) {
+    const btn = $('join-btn');
+    if (!btn) return;
+    btn.hidden = !show;
+    btn.style.display = show ? '' : 'none';
+  }
+
+  // STEP 1 — credentials: the PIN (always, since no valid stored seat) plus the
+  // inline table link/code field ONLY when game_id is genuinely unknown
+  // everywhere (CHANGE 1: hidden whenever game_id is known via URL/storage/id).
+  function renderCredsStep() {
     const form = $('join-form');
     const errEl = $('join-error');
     const btn = $('join-btn');
-
-    // CHANGE 4: decide which JOIN fields to show.
-    //  • game_id known (URL / sessionStorage / stored identity) → no game-code field.
-    //  • a real stored seat_token for THIS game_id → no PIN field (reuse the seat,
-    //    skip the claim). Net "Play again": only the name field, prefilled.
-    let reusable = getReusableIdentity();
-    if (reusable) {
-      state.seatToken = reusable.seatToken;
-      if (reusable.seatNumber != null) state.seatNumber = reusable.seatNumber;
-      if (reusable.pin) state.pin = reusable.pin;
-      hidePinField();
-      const nameInput = $('join-name');
-      if (nameInput && reusable.displayName && !nameInput.value) nameInput.value = reusable.displayName;
-    } else if (!state.gameId) {
-      // No game_id anywhere → offer the inline table-link/code field (PIN still shown).
+    clearSessionWaitLoop();
+    removeWaitingPanel();
+    showNameField(false);   // name is collected AFTER a session is live
+    unhidePinField();       // PIN visible for the claim
+    if (!state.gameId) {
       ensureGameCodeField(form);
-      if (errEl) errEl.textContent = 'No table code detected. Paste your table link or game code above, or open this page from your table\u2019s QR.';
+      if (errEl && !errEl.textContent) errEl.textContent = 'No table code detected. Paste your table link or game code above, or open this page from your table\u2019s QR.';
+    } else {
+      removeGameCodeField();
+    }
+    if (btn) { btn.disabled = false; btn.textContent = 'Continue'; }
+    showJoinButton(true);
+    if (form) form.onsubmit = onCredsSubmit;
+    const focusEl = !state.gameId ? $('join-gamecode') : $('join-code');
+    if (focusEl && typeof focusEl.focus === 'function') focusEl.focus();
+  }
+
+  // Validate the PIN by CLAIMING the seat (claim works WITHOUT a session). On
+  // success the seat_token is persisted, so the PIN box is not shown again for
+  // this game; a 403 / flat error re-shows the PIN box with an inline prompt
+  // (CHANGE 3). The form is never disabled/dead.
+  async function onCredsSubmit(e) {
+    e.preventDefault();
+    const errEl = $('join-error');
+    const btn = $('join-btn');
+    if (errEl) errEl.textContent = '';
+
+    // Resolve game_id from the inline field if it was unknown.
+    if (!state.gameId) {
+      const gc = $('join-gamecode');
+      const parsed = gc ? extractGameId(gc.value) : null;
+      if (parsed) { state.gameId = parsed; persistGameId(parsed); }
+    }
+    if (!state.gameId) {
+      if (errEl) errEl.textContent = 'Enter your table link or game code (or open this page from your table\u2019s QR).';
+      const gc = $('join-gamecode'); if (gc) gc.focus();
+      return;
     }
 
-    if (form) form.onsubmit = async (e) => {
-      e.preventDefault();
-      if (errEl) errEl.textContent = '';
+    const pin = $('join-code').value.trim().toUpperCase();
+    if (!PIN_RE.test(pin)) {
+      if (errEl) errEl.textContent = 'PIN must be 6 characters (letters and numbers).';
+      const code = $('join-code'); if (code) code.focus();
+      return;
+    }
 
-      const name = $('join-name').value.trim();
+    btn.disabled = true;
+    const btnText = btn.textContent;
+    btn.textContent = 'Checking\u2026';
+    try {
+      const claim = await claimSeat(state.gameId, pin);
+      state.pin = pin;
+      state.seatNumber = claim.seat_number != null ? claim.seat_number : null;
+      state.seatToken = claim.seat_token || null;
+      persistIdentity();
+      renderWaitingStep(); // seat held → waiting landing → empty name entry
+    } catch (err) {
+      // Invalid PIN / claim failure → RE-SHOW the PIN box with a clear prompt.
+      if (errEl) errEl.textContent = joinErrorMessage(err, 'claim');
+      btn.disabled = false;
+      btn.textContent = btnText;
+      const code = $('join-code'); if (code) { code.focus(); if (code.select) code.select(); }
+    }
+  }
 
-      // Resolve game_id from the URL/storage or, if it was missing, the inline field.
-      if (!state.gameId) {
-        const gc = $('join-gamecode');
-        const parsed = gc ? extractGameId(gc.value) : null;
-        if (parsed) { state.gameId = parsed; persistGameId(parsed); }
-      }
-      if (!state.gameId) {
-        if (errEl) errEl.textContent = 'Enter your table link or game code (or open this page from your table\u2019s QR).';
-        const gc = $('join-gamecode'); if (gc) gc.focus();
-        return;
-      }
+  // STEP 2 — waiting-for-session LANDING. It is valid to hold a claimed seat
+  // before the host starts a session; poll GET /public (~POLL_MS) until a
+  // session is live, then advance to name entry. A dedicated live panel (NOT a
+  // frozen "Joining…" button) built at runtime from existing chrome classes;
+  // the submit button is hidden here.
+  function renderWaitingStep() {
+    const form = $('join-form');
+    const btn = $('join-btn');
+    const errEl = $('join-error');
+    showNameField(false);
+    hidePinField();
+    removeGameCodeField();
+    if (btn) btn.disabled = false;
+    showJoinButton(false);
+    if (errEl) errEl.textContent = '';
+    if (form) form.onsubmit = (e) => { e.preventDefault(); }; // no manual submit while waiting
+    buildWaitingPanel();
+    startSessionWaitLoop();
+  }
 
-      if (!name) { if (errEl) errEl.textContent = 'Please enter your name.'; return; }
+  // WAITING = the ported "VS Select" arcade ATTRACT screen (replaces the old
+  // plain spinner panel). Built at runtime inside #screen-join (no showdown.html
+  // edits): re:Solve crest, neon SHOWDOWN wordmark (Press Start 2P), dashed
+  // coral rule, blinking "STARTING NEW SESSION" prompt, subtitle, and a live
+  // "waiting for host" foot (id join-waiting-status, driven by
+  // updateWaitingStatus). Adding .sd-attract-mode hides the base hero + card so
+  // the attract screen owns the viewport. Motion is reduced-motion gated in CSS.
+  function buildWaitingPanel() {
+    const screen = $('screen-join');
+    if (!screen || $('join-waiting')) return;
+    screen.classList.add('sd-attract-mode');
 
-      // Reuse the stored seat (skip claim) ONLY when we truly hold a seat_token
-      // for THIS game; otherwise validate + claim with the PIN as normal.
-      const reusing = !!(state.seatToken && reusable && reusable.gameId === state.gameId);
-      let pin = '';
-      if (!reusing) {
-        pin = $('join-code').value.trim().toUpperCase();
-        if (!PIN_RE.test(pin)) {
-          if (errEl) errEl.textContent = 'PIN must be 6 characters (letters and numbers).';
+    const root = document.createElement('div');
+    root.id = 'join-waiting';
+    root.className = 'sdl-attract';
+
+    const core = document.createElement('div');
+    core.className = 'sdl-attract-core';
+
+    const crest = document.createElement('img');
+    crest.className = 'sdl-crest';
+    crest.src = 'showdown/resolve-logo.png';
+    crest.alt = 're:Solve';
+
+    const logo = document.createElement('div');
+    logo.className = 'sdl-attract-logo';
+    // Optional event-name eyebrow (◆ RESOLVE EVENT) above the wordmark, matching
+    // the reference attract markup. Rendered only when a host-set event_name is
+    // present; otherwise it stays hidden (parity with the reference default).
+    if (EVENT_NAME) {
+      const eyebrow = document.createElement('span');
+      eyebrow.className = 'sdl-eventname';
+      const dia = document.createElement('span');
+      dia.className = 'dia';
+      dia.setAttribute('aria-hidden', 'true');
+      dia.textContent = '\u25c6'; // ◆
+      eyebrow.appendChild(dia);
+      eyebrow.appendChild(document.createTextNode(' ' + EVENT_NAME));
+      logo.appendChild(eyebrow);
+    }
+    const title = document.createElement('span');
+    title.className = 'sdl-attract-title';
+    title.textContent = 'SHOWDOWN';
+    logo.appendChild(title);
+
+    const rule = document.createElement('div');
+    rule.className = 'sdl-attract-rule';
+    rule.setAttribute('aria-hidden', 'true');
+
+    const prompt = document.createElement('p');
+    prompt.className = 'sdl-attract-prompt';
+    prompt.setAttribute('role', 'status');
+    prompt.setAttribute('aria-live', 'polite');
+    // \u25b8 / \u25c2 = arrow brackets, \u00b7 = middot. No em dashes.
+    prompt.innerHTML = '\u25b8 <span class="b">STARTING NEW SESSION</span> \u25c2';
+
+    const sub = document.createElement('p');
+    sub.className = 'sdl-attract-sub';
+    sub.textContent = state.seatNumber != null
+      ? ('Seat ' + state.seatNumber + ' secured \u00b7 First to finish wins')
+      : 'First to finish wins \u00b7 Grab a seat and stand by';
+
+    core.appendChild(crest);
+    core.appendChild(logo);
+    core.appendChild(rule);
+    core.appendChild(prompt);
+    core.appendChild(sub);
+
+    const foot = document.createElement('p');
+    foot.className = 'sdl-attract-foot';
+    foot.id = 'join-waiting-status';
+    foot.setAttribute('role', 'status');
+    foot.setAttribute('aria-live', 'polite');
+    foot.textContent = 'Waiting for the host to start the round';
+
+    root.appendChild(core);
+    root.appendChild(foot);
+    screen.appendChild(root);
+  }
+
+  function updateWaitingStatus(reconnecting) {
+    const status = $('join-waiting-status');
+    if (!status) return;
+    if (reconnecting) { status.textContent = 'Reconnecting\u2026'; return; }
+    const dots = '.'.repeat(1 + (joinWaitTick % 3));
+    status.textContent = 'Waiting for the host to start the session' + dots;
+  }
+
+  function clearSessionWaitLoop() {
+    if (joinWaitTimer) { clearTimeout(joinWaitTimer); joinWaitTimer = null; }
+  }
+
+  // A session is joinable once /public reports a current_session_id in a
+  // pre/live state (setup/voting/in_progress). An id present with an unknown
+  // state is treated as joinable; a completed state keeps us waiting for the
+  // next round.
+  function isJoinableSession(pub) {
+    if (!pub || !pub.current_session_id) return false;
+    const s = pub.current_session_state;
+    if (!s) return true;
+    return s === 'setup' || s === 'voting' || s === 'in_progress';
+  }
+
+  function startSessionWaitLoop() {
+    clearSessionWaitLoop();
+    joinWaitTick = 0;
+    const attempt = async () => {
+      joinWaitTimer = null;
+      try {
+        const pub = await getPublic(state.gameId);
+        if (isJoinableSession(pub)) {
+          state.sessionId = pub.current_session_id;
+          clearSessionWaitLoop();
+          renderNameStep();
           return;
         }
-      }
-
-      btn.disabled = true;
-      const btnText = btn.textContent;
-      btn.textContent = 'Joining\u2026';
-      try {
-        state.displayName = name;
-        if (reusing) {
-          // Skip the seat claim — reuse the stored seat_token, then discover + join.
-          persistIdentity();
-          await discoverAndJoin(name);
-        } else {
-          state.pin = pin;
-          await runIdentityFlow(name, pin);
-        }
-        // On success, the standings poll loop drives the screen from here.
+        joinWaitTick++;
+        updateWaitingStatus(false);
       } catch (err) {
-        if (errEl) errEl.textContent = joinErrorMessage(err);
-        if (reusing) {
-          // The stored seat didn't work (stale/mismatched) — fall back to a
-          // normal PIN claim: reveal the PIN field and clear the reuse flag so
-          // the next submit claims. Never leave a disabled/dead form.
-          reusable = null;
-          state.seatToken = null;
-          unhidePinField();
-          const code = $('join-code'); if (code) code.focus();
-        }
-      } finally {
-        btn.disabled = false;
-        btn.textContent = btnText;
+        // Transient /public blip — keep the landing alive and retry (SSOT §6).
+        console.warn('[showdown] /public wait error (' + (err && (err.status || err.message)) + '); retrying');
+        updateWaitingStatus(true);
       }
+      joinWaitTimer = setTimeout(attempt, POLL_MS);
     };
+    attempt(); // fire immediately (advances instantly when a session is already live)
+  }
+
+  // STEP 3 — name entry. The name input ALWAYS renders EMPTY (CHANGE 2: no
+  // prefill from stored identity). On submit POST /players {seat_token,
+  // display_name} → hand off to the single standings poll loop.
+  function renderNameStep() {
+    const form = $('join-form');
+    const btn = $('join-btn');
+    const errEl = $('join-error');
+    clearSessionWaitLoop();
+    removeWaitingPanel();
+    hidePinField();
+    removeGameCodeField();
+    showNameField(true);
+    const nameInput = $('join-name');
+    if (nameInput) nameInput.value = ''; // ALWAYS empty for the participant to key in
+    if (btn) { btn.disabled = false; btn.textContent = 'Join Session'; }
+    showJoinButton(true);
+    if (errEl) errEl.textContent = '';
+    if (form) form.onsubmit = onNameSubmit;
+    if (nameInput && typeof nameInput.focus === 'function') nameInput.focus();
+  }
+
+  async function onNameSubmit(e) {
+    e.preventDefault();
+    const errEl = $('join-error');
+    const btn = $('join-btn');
+    if (errEl) errEl.textContent = '';
+    const name = $('join-name').value.trim();
+    if (!name) { if (errEl) errEl.textContent = 'Please enter your name.'; return; }
+    if (!state.sessionId) { renderWaitingStep(); return; } // session vanished → wait again
+
+    btn.disabled = true;
+    const btnText = btn.textContent;
+    btn.textContent = 'Joining\u2026';
+    try {
+      state.displayName = name;
+      const p = await postPlayers(state.sessionId, state.seatToken, name);
+      state.playerId = p.player_id || null;
+      state.token = p.token || null;
+      if (p.seat_number != null) state.seatNumber = p.seat_number;
+      if (p.display_name) state.displayName = p.display_name;
+      persistIdentity();
+      startPollLoop(); // standings drives every screen from here
+    } catch (err) {
+      if (errEl) errEl.textContent = joinErrorMessage(err, 'join');
+      btn.disabled = false;
+      btn.textContent = btnText;
+      // A stale/rejected seat_token (403/404) — the stored seat no longer works.
+      // Fall back to a fresh PIN claim (never leave a dead form).
+      if (err && (err.status === 403 || err.status === 404)) {
+        joinReusable = null;
+        state.seatToken = null;
+        renderCredsStep();
+        if (errEl) errEl.textContent = 'Please re-enter your seat PIN.';
+      }
+    }
   }
 
   // CHANGE 4 helpers ─────────────────────────────────────────────
@@ -962,13 +1223,22 @@
     if (label) label.hidden = false;
   }
 
-  // Map claim/players errors to inline copy (SSOT §6/§9).
-  function joinErrorMessage(err) {
+  // Map claim/players errors to inline copy (SSOT §6/§9). `context` = 'claim'
+  // (PIN step) or 'join' (name step) so a 409 reads correctly for each. We never
+  // surface the raw server string for 403/404/409 (the live claim-409 text
+  // carries an em-dash); the fallback strips em/en dashes to keep rendered
+  // strings dash-clean.
+  function stripDashes(s) { return s ? String(s).replace(/[\u2014\u2013]/g, '-').trim() : s; }
+  function joinErrorMessage(err, context) {
     if (!err) return 'Could not join. Please try again.';
     if (err.status === 403) return 'That PIN wasn\u2019t recognised. Check your table card and try again.';
-    if (err.status === 409) return 'The lobby has already closed for this session.';
+    if (err.status === 409) {
+      return context === 'claim'
+        ? 'This seat is already claimed. Ask the host to reset it, then try again.'
+        : 'The lobby has already closed for this session.';
+    }
     if (err.status === 404) return 'Seat not found. Check your table card and try again.';
-    return err.message || 'Could not join. Please try again.';
+    return stripDashes(err.message) || 'Could not join. Please try again.';
   }
 
   // Parse a game_id from a pasted full URL (…?game=<id>) or a bare id/code.
@@ -1009,54 +1279,11 @@
 
   /* ── Identity flow: claim → /public poll → /players (SSOT §3) ──── */
 
-  let discoverTimer = null;
-
-  async function runIdentityFlow(displayName, pin) {
-    // 1. claim the seat.
-    const claim = await claimSeat(state.gameId, pin);
-    state.seatNumber = claim.seat_number != null ? claim.seat_number : null;
-    state.seatToken = claim.seat_token || null;
-    persistIdentity();
-
-    // 2. discover the live session, then 3. join as a player.
-    await discoverAndJoin(displayName);
-  }
-
-  // Poll /public until current_session_id is present, then POST /players once.
-  // Uses its own short poll (independent of the standings loop, which only
-  // starts after we have a player_id + token).
-  function discoverAndJoin(displayName) {
-    return new Promise((resolve, reject) => {
-      const attempt = async () => {
-        try {
-          const pub = await getPublic(state.gameId);
-          if (pub && pub.current_session_id) {
-            state.sessionId = pub.current_session_id;
-            // /players is setup-only (Q8); a 409 here means the lobby closed.
-            const p = await postPlayers(state.sessionId, state.seatToken, displayName);
-            state.playerId = p.player_id || null;
-            state.token = p.token || null;
-            if (p.seat_number != null) state.seatNumber = p.seat_number;
-            if (p.display_name) state.displayName = p.display_name;
-            persistIdentity();
-            // Hand off to the single standings poll loop.
-            startPollLoop();
-            resolve();
-            return;
-          }
-          // session not created yet — keep polling /public. Reflect the real
-          // "waiting for the host to start the session" state so the JOIN button
-          // is not a frozen "Joining…" for the whole pre-session wait.
-          const waitBtn = $('join-btn');
-          if (waitBtn) waitBtn.textContent = 'Waiting for host\u2026';
-          discoverTimer = setTimeout(attempt, POLL_MS);
-        } catch (err) {
-          reject(err);
-        }
-      };
-      attempt();
-    });
-  }
+  // NOTE: the old runIdentityFlow + discoverAndJoin (claim + a coupled /public
+  // poll that immediately POSTed /players and repurposed the JOIN button as a
+  // frozen "Waiting for host…" label) are REPLACED by the step machine above:
+  // renderCredsStep (claim) → renderWaitingStep (startSessionWaitLoop polls
+  // /public) → renderNameStep (POST /players) → startPollLoop.
 
   /* ══════════════════════════ SCREEN 2 · LOBBY (P2, SSOT §6) ══════ */
   // Roster from standings[] at 0% during setup (Q3). #lobby-code banner shows
@@ -1110,12 +1337,14 @@
   function renderRoster(roster) {
     const list = $('lobby-players');
     if (!list) return;
+    // Seat presence shown as a VS Select status-badge (uppercase word + 7px
+    // square marker), not a 0% readout — in the lobby nobody has progress yet,
+    // so occupancy is the honest signal. Identity stays keyed by player_id.
     list.innerHTML = roster.map((p) => {
       const isMe = state.playerId && p.player_id === state.playerId;
-      const pct = Math.max(0, Math.min(100, Number(p.completion_pct) || 0));
       return '<li class="sd-player' + (isMe ? ' sd-player--me' : '') + '" data-pid="' + escapeHtml(p.player_id || '') + '">' +
         '<span class="sd-player-name">' + escapeHtml(p.display_name || '') + (isMe ? ' (you)' : '') + '</span>' +
-        '<span class="sd-player-ready is-waiting">' + pct + '%</span>' +
+        '<span class="sd-player-ready is-seated">Seated</span>' +
         '</li>';
     }).join('');
   }
@@ -2016,9 +2245,10 @@
     setTimeout(() => { btn.textContent = original; }, 1800);
   }
 
-  // Play again → keep seat_token + game_id so JOIN returns as a name-only form
-  // (CHANGE 4); clear only round-scoped state so tryRehydrate won't resume the
-  // finished session. Falls back to a full clear if no seat is held.
+  // Play again → keep seat_token + game_id so JOIN skips the PIN box and returns
+  // via the waiting-for-session landing → EMPTY name entry (CHANGE 2/3); clear
+  // only round-scoped state so tryRehydrate won't resume the finished session.
+  // Falls back to a full clear if no seat is held.
   function playAgain() {
     stopPollLoop();
     const saved = loadIdentity() || {};
@@ -2053,7 +2283,16 @@
     if (!host) return;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     clearConfetti();
-    const colors = ['#FF9900', '#D6FF3A', '#FFD24A', '#FFF6EE'];
+    // VS Select palette, read from the live tokens so it stays theme-correct
+    // (coral mode accent, action, success, bone text). Retires the HEAT hexes.
+    const cs = getComputedStyle(document.body || document.documentElement);
+    const tok = (name, fb) => (cs.getPropertyValue(name).trim() || fb);
+    const colors = [
+      tok('--mode-color', 'var(--showdown)'),
+      tok('--action', 'var(--action)'),
+      tok('--success', 'var(--success)'),
+      tok('--text', 'var(--text)'),
+    ];
     for (let i = 0; i < 70; i++) {
       const p = document.createElement('span');
       p.className = 'sd-confetti-piece';
@@ -2184,16 +2423,25 @@
       };
     }
 
-    // game_id from the table QR (?game=<id>) — SSOT §9/Q2. CHANGE 3: persist it
-    // in sessionStorage so it survives in-session navigation; if this boot has
-    // no ?game=, fall back to the stored value before asking for a table code.
+    // game_id from the table QR (?game=<id>) — SSOT §9/Q2. CHANGE 1: ?game= is
+    // ALWAYS priority and is stored to sessionStorage, OVERWRITING any prior
+    // value. With no URL param, fall back to the stored sessionStorage id, then
+    // a stored identity's game_id; normalise whatever we find back into
+    // sessionStorage so later in-session navigation keeps it.
     const urlGameId = params.get('game') || null;
     if (urlGameId) {
       state.gameId = urlGameId;
-      persistGameId(urlGameId);
+      persistGameId(urlGameId); // overwrite
     } else {
-      state.gameId = loadGameId();
+      let gid = loadGameId();
+      if (!gid) { const saved = loadIdentity(); gid = (saved && saved.gameId) || null; }
+      state.gameId = gid;
+      if (gid) persistGameId(gid);
     }
+    // MOCK convenience: with ?mock=true and no real game_id anywhere, synthesise
+    // one so the fully-offline walkthrough runs without a table code (the mock
+    // backend ignores the id; this NEVER affects the live path).
+    if (MOCK && !state.gameId) state.gameId = 'mock-game';
 
     // P0: fetch + index the question bank at boot (log counts). Non-blocking for
     // JOIN/LOBBY; the P4 resolver awaits bankReady before mounting puzzles.
