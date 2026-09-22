@@ -129,6 +129,12 @@
   const PIN_LEN = 6;
   const PIN_RE = new RegExp('^[' + PIN_ALPHABET + ']{' + PIN_LEN + '}$');
 
+  // Display name: capped client-side because every surface that shows it is
+  // width-constrained — the race lane's name column and the three podium plates.
+  // showdown.html ships maxlength="20"; 12 is what actually fits at these type
+  // sizes in a half-width booth pane. The backend imposes no limit of its own.
+  const NAME_MAX = 12;
+
   // Same-origin, versioned bank asset (SSOT §5). Tracks app/VERSION for the
   // ?v= cache-bust convention (NOT bumped by this task — local only).
   const BANK_VERSION = '13';
@@ -722,7 +728,16 @@
 
   let pollTimer = null;
   let pollInFlight = false;
-  let pollStopped = false;
+  // BUGFIX (join race): the standings poll starts STOPPED and is only armed by
+  // startPollLoop() after a successful /players join (or a rehydrated identity).
+  // Previously this defaulted to false, so a routine visibilitychange during the
+  // JOIN name step (common on mobile after a QR scan / tab switch) let the
+  // visibilitychange handler call schedulePoll → getStandings with the
+  // session_id discovered by the /public wait loop, and reduceToScreen jumped
+  // straight to LOBBY ("Waiting for the host") WITHOUT ever POSTing /players —
+  // so the backend never registered the player. Defaulting to true closes that
+  // race: no standings poll until we have actually joined.
+  let pollStopped = true;
   let backoffIdx = -1; // -1 = healthy (1s cadence); 0/1/2 index into BACKOFF_MS
 
   function startPollLoop() {
@@ -744,6 +759,10 @@
   async function pollTick() {
     pollTimer = null;
     if (pollStopped) return;
+    // Never poll standings without a joined session (defense-in-depth for the
+    // join race): the loop is only meaningful once /players has returned a
+    // player_id. Without one we would query /showdown/undefined/standings.
+    if (!state.sessionId || !state.playerId) { stopPollLoop(); return; }
     if (document.hidden) { schedulePoll(POLL_MS); return; }   // paused while hidden
     if (pollInFlight) { schedulePoll(POLL_MS); return; }      // guard re-entrancy
     pollInFlight = true;
@@ -808,6 +827,10 @@
         renderVote(standings);
         break;
       case 'in_progress':
+        // Stamp the local clock anchor the first time we observe the race live, so
+        // the header timer moves before the first solve (server elapsed_ms is 0
+        // until the first /progress POST). Set once — never re-stamped.
+        if (!state._raceAnchorAt) state._raceAnchorAt = Date.now();
         showScreen('play');
         enterPlay(standings);
         break;
@@ -856,6 +879,15 @@
   let joinReusable = null;   // stored identity usable for THIS game_id (seat already held)
   let joinWaitTimer = null;  // /public poll timer for the waiting-for-session landing
   let joinWaitTick = 0;      // drives the live "waiting" status so it never reads frozen
+  // BUGFIX (join never fires): the name step now OWNS the join. pendingJoinName
+  // holds the name the player entered; nameJoinTimer is a light /public
+  // readiness poll used ONLY when the session is not join-ready yet, so the join
+  // auto-fires the instant a setup session appears instead of silently bouncing
+  // back to the waiting screen. joinInFlight guards against overlapping POSTs.
+  let pendingJoinName = null;
+  let nameJoinTimer = null;
+  let nameJoinTick = 0;
+  let joinInFlight = false;
 
   function initJoin() {
     showScreen('join');
@@ -912,21 +944,27 @@
   }
 
   // STEP 1 — credentials: the PIN (always, since no valid stored seat) plus the
-  // inline table link/code field ONLY when game_id is genuinely unknown
-  // everywhere (CHANGE 1: hidden whenever game_id is known via URL/storage/id).
+  // game-code field. CHANGE 1 (BUGFIX): when game_id is KNOWN (URL/storage/id)
+  // the field is SHOWN, POPULATED with the game_id, and READ-ONLY so the player
+  // can see which game they are joining (previously it was removed). When the
+  // game_id is unknown, the field stays an editable inline prompt to paste the
+  // table link / code.
   function renderCredsStep() {
     const form = $('join-form');
     const errEl = $('join-error');
     const btn = $('join-btn');
     clearSessionWaitLoop();
+    clearNameJoinLoop();
     removeWaitingPanel();
     showNameField(false);   // name is collected AFTER a session is live
     unhidePinField();       // PIN visible for the claim
+    ensureGameCodeField(form);
     if (!state.gameId) {
-      ensureGameCodeField(form);
+      setGameCodeReadonly(false);
       if (errEl && !errEl.textContent) errEl.textContent = 'No table code detected. Paste your table link or game code above, or open this page from your table\u2019s QR.';
     } else {
-      removeGameCodeField();
+      setGameCodeReadonly(true); // populated + read-only (shows the game being joined)
+      persistGameId(state.gameId);
     }
     if (btn) { btn.disabled = false; btn.textContent = 'Continue'; }
     showJoinButton(true);
@@ -992,6 +1030,8 @@
     const form = $('join-form');
     const btn = $('join-btn');
     const errEl = $('join-error');
+    clearNameJoinLoop();
+    pendingJoinName = null;
     showNameField(false);
     hidePinField();
     removeGameCodeField();
@@ -1131,20 +1171,33 @@
     attempt(); // fire immediately (advances instantly when a session is already live)
   }
 
-  // STEP 3 — name entry. The name input ALWAYS renders EMPTY (CHANGE 2: no
-  // prefill from stored identity). On submit POST /players {seat_token,
-  // display_name} → hand off to the single standings poll loop.
+  // STEP 3 — name entry + JOIN. The name input ALWAYS renders EMPTY (CHANGE 2:
+  // no prefill). This step OWNS the join: on submit we capture the name and fire
+  // POST /players. If the session is not join-ready yet (no session_id, or the
+  // round already advanced past setup), we do NOT bounce back to the waiting
+  // screen — we keep the name entry, show an inline status, and auto-fire the
+  // join the instant a joinable (setup) session appears.
   function renderNameStep() {
     const form = $('join-form');
     const btn = $('join-btn');
     const errEl = $('join-error');
     clearSessionWaitLoop();
+    clearNameJoinLoop();
     removeWaitingPanel();
     hidePinField();
     removeGameCodeField();
     showNameField(true);
     const nameInput = $('join-name');
-    if (nameInput) nameInput.value = ''; // ALWAYS empty for the participant to key in
+    if (nameInput) {
+      nameInput.value = ''; // ALWAYS empty for the participant to key in
+      // Cap at NAME_MAX at runtime (showdown.html ships maxlength="20", which
+      // overflows the race lane and the podium plates). Attribute-only change —
+      // same pattern as the #join-code PIN reconfiguration above.
+      nameInput.setAttribute('maxlength', String(NAME_MAX));
+      nameInput.setAttribute('placeholder', 'e.g. Alex (max ' + NAME_MAX + ')');
+    }
+    pendingJoinName = null;
+    joinInFlight = false;
     if (btn) { btn.disabled = false; btn.textContent = 'Join Session'; }
     showJoinButton(true);
     if (errEl) errEl.textContent = '';
@@ -1152,40 +1205,111 @@
     if (nameInput && typeof nameInput.focus === 'function') nameInput.focus();
   }
 
-  async function onNameSubmit(e) {
+  // Submit just captures the name and defers to tryFireJoin (single join path).
+  function onNameSubmit(e) {
     e.preventDefault();
     const errEl = $('join-error');
-    const btn = $('join-btn');
-    if (errEl) errEl.textContent = '';
-    const name = $('join-name').value.trim();
+    // Trim, collapse runs of whitespace, then hard-cap — belt and braces behind
+    // the maxlength attribute, which a paste or an autofill can still outrun.
+    const name = $('join-name').value.trim().replace(/\s+/g, ' ').slice(0, NAME_MAX);
     if (!name) { if (errEl) errEl.textContent = 'Please enter your name.'; return; }
-    if (!state.sessionId) { renderWaitingStep(); return; } // session vanished → wait again
+    if (errEl) errEl.textContent = '';
+    state.displayName = name;
+    pendingJoinName = name;
+    tryFireJoin();
+  }
 
-    btn.disabled = true;
-    const btnText = btn.textContent;
-    btn.textContent = 'Joining\u2026';
+  // The ONE place that POSTs /players. Fires immediately when a session_id is
+  // known; otherwise arms the readiness poll so the join auto-fires the moment a
+  // joinable session appears. Never silently bounces to the waiting screen.
+  async function tryFireJoin() {
+    if (joinInFlight || !pendingJoinName) return;
+    const errEl = $('join-error');
+    const btn = $('join-btn');
+    if (!state.sessionId) {
+      // No live session yet: keep the name, wait for one (no bounce).
+      startNameJoinLoop('Waiting for the host to open the lobby');
+      return;
+    }
+    joinInFlight = true;
+    if (btn) { btn.disabled = true; btn.textContent = 'Joining\u2026'; }
     try {
-      state.displayName = name;
-      const p = await postPlayers(state.sessionId, state.seatToken, name);
+      const p = await postPlayers(state.sessionId, state.seatToken, pendingJoinName);
       state.playerId = p.player_id || null;
       state.token = p.token || null;
       if (p.seat_number != null) state.seatNumber = p.seat_number;
       if (p.display_name) state.displayName = p.display_name;
       persistIdentity();
-      startPollLoop(); // standings drives every screen from here
+      clearNameJoinLoop();
+      pendingJoinName = null;
+      joinInFlight = false;
+      startPollLoop(); // single standings poll after a successful join
     } catch (err) {
-      if (errEl) errEl.textContent = joinErrorMessage(err, 'join');
-      btn.disabled = false;
-      btn.textContent = btnText;
-      // A stale/rejected seat_token (403/404) — the stored seat no longer works.
+      joinInFlight = false;
+      if (btn) { btn.disabled = false; btn.textContent = 'Join Session'; }
+      // A stale/rejected seat_token (403/404): the stored seat no longer works.
       // Fall back to a fresh PIN claim (never leave a dead form).
       if (err && (err.status === 403 || err.status === 404)) {
+        clearNameJoinLoop();
+        pendingJoinName = null;
         joinReusable = null;
         state.seatToken = null;
         renderCredsStep();
         if (errEl) errEl.textContent = 'Please re-enter your seat PIN.';
+        return;
       }
+      // 409: /players is SETUP-stage only, so the round already advanced (lobby
+      // closed). Surface a clear status and KEEP polling — if the host opens a
+      // fresh setup session we auto-fire the join. No silent bounce.
+      if (err && err.status === 409) {
+        startNameJoinLoop('The lobby has closed. Waiting for the host to open the next round');
+        return;
+      }
+      // Transient error: keep the name, show the reason, and retry via the poll.
+      if (errEl) errEl.textContent = joinErrorMessage(err, 'join');
+      startNameJoinLoop('Reconnecting');
     }
+  }
+
+  function clearNameJoinLoop() {
+    if (nameJoinTimer) { clearTimeout(nameJoinTimer); nameJoinTimer = null; }
+  }
+
+  // Readiness poll used ONLY while a name is pending but the session is not
+  // join-ready. Polls GET /public; when a session in the SETUP stage is present
+  // (the only stage /players accepts), it auto-fires the join. Runs a live
+  // "waiting" status so the screen never reads frozen. No em dashes in copy.
+  function startNameJoinLoop(statusMsg) {
+    clearNameJoinLoop();
+    nameJoinTick = 0;
+    const paint = () => {
+      const errEl = $('join-error');
+      if (errEl) errEl.textContent = statusMsg + '.'.repeat(1 + (nameJoinTick % 3));
+    };
+    paint();
+    const attempt = async () => {
+      nameJoinTimer = null;
+      if (!pendingJoinName) return; // name cleared (left the step) — stop quietly
+      try {
+        const pub = await getPublic(state.gameId);
+        if (pub && pub.current_session_id) state.sessionId = pub.current_session_id;
+        const s = pub && pub.current_session_state;
+        // Fire only when the session can accept a join (setup). An unknown state
+        // with a live session id is treated as joinable (best effort).
+        const joinReady = pub && pub.current_session_id && (!s || s === 'setup');
+        if (joinReady && pendingJoinName && !joinInFlight) {
+          clearNameJoinLoop();
+          tryFireJoin();
+          return;
+        }
+      } catch (err) {
+        // Transient /public blip — keep waiting and retry.
+      }
+      nameJoinTick++;
+      paint();
+      nameJoinTimer = setTimeout(attempt, POLL_MS);
+    };
+    nameJoinTimer = setTimeout(attempt, POLL_MS);
   }
 
   // CHANGE 4 helpers ─────────────────────────────────────────────
@@ -1221,6 +1345,40 @@
     }
     const label = document.querySelector('label[for="join-code"]');
     if (label) label.hidden = false;
+  }
+
+  /* ── Display names: cap length, disambiguate collisions ─────────────
+   * The backend enforces NO uniqueness on display_name, so two players can both
+   * be "Alex". Identity is always keyed on player_id (never on the name), but a
+   * duplicated label is unreadable on the race strip and the podium.
+   *
+   * We disambiguate with the seat_number the backend already returns from
+   * /seats/claim — "ALEX S2" is meaningful at a booth (it names the physical
+   * seat) where a random suffix would not be. The suffix is added ONLY to names
+   * that actually collide, so a unique name is never decorated.
+   *
+   * Pass the full standings rows so the collision set is computed per render. */
+  function dupNameIds(rows) {
+    const seen = Object.create(null);
+    const dup = Object.create(null);
+    (rows || []).forEach((r) => {
+      const k = String(r && r.display_name || '').trim().toLowerCase();
+      if (!k) return;
+      if (seen[k]) dup[k] = true;
+      seen[k] = true;
+    });
+    return dup;
+  }
+
+  // `dup` is the map from dupNameIds(rows); omit it to skip disambiguation.
+  function sdName(row, dup) {
+    const raw = String(row && row.display_name || '').trim();
+    let out = raw.slice(0, NAME_MAX);
+    if (dup && raw && dup[raw.toLowerCase()]) {
+      const seat = row && row.seat_number;
+      if (seat != null && seat !== '') out += ' S' + seat;
+    }
+    return out;
   }
 
   // Map claim/players errors to inline copy (SSOT §6/§9). `context` = 'claim'
@@ -1275,6 +1433,36 @@
     });
     form.insertBefore(input, form.firstChild);
     form.insertBefore(label, input);
+  }
+
+  // CHANGE 1 (BUGFIX): drive the game-code field between its two states without
+  // touching showdown.html. READ-ONLY = game_id is known: populate it with the
+  // exact game_id, mark it readonly + aria-readonly, style it muted/inset (via
+  // .sd-input--readonly in showdown.css) so it plainly reads as display-only,
+  // and take it out of the tab order. EDITABLE = game_id unknown: restore the
+  // "paste your table link" prompt so the player can supply it.
+  function setGameCodeReadonly(readonly) {
+    const input = $('join-gamecode');
+    if (!input) return;
+    const label = document.querySelector('label[for="join-gamecode"]');
+    if (readonly) {
+      input.value = state.gameId || '';
+      input.readOnly = true;
+      input.setAttribute('readonly', 'readonly');
+      input.setAttribute('aria-readonly', 'true');
+      input.classList.add('sd-input--readonly');
+      input.removeAttribute('placeholder');
+      input.tabIndex = -1;
+      if (label) label.textContent = 'Joining game';
+    } else {
+      input.readOnly = false;
+      input.removeAttribute('readonly');
+      input.removeAttribute('aria-readonly');
+      input.classList.remove('sd-input--readonly');
+      input.setAttribute('placeholder', 'Paste your table link');
+      input.tabIndex = 0;
+      if (label) label.textContent = 'Table link or game code';
+    }
   }
 
   /* ── Identity flow: claim → /public poll → /players (SSOT §3) ──── */
@@ -1340,10 +1528,11 @@
     // Seat presence shown as a VS Select status-badge (uppercase word + 7px
     // square marker), not a 0% readout — in the lobby nobody has progress yet,
     // so occupancy is the honest signal. Identity stays keyed by player_id.
+    const dup = dupNameIds(roster);
     list.innerHTML = roster.map((p) => {
       const isMe = state.playerId && p.player_id === state.playerId;
       return '<li class="sd-player' + (isMe ? ' sd-player--me' : '') + '" data-pid="' + escapeHtml(p.player_id || '') + '">' +
-        '<span class="sd-player-name">' + escapeHtml(p.display_name || '') + (isMe ? ' (you)' : '') + '</span>' +
+        '<span class="sd-player-name">' + escapeHtml(sdName(p, dup)) + (isMe ? ' (you)' : '') + '</span>' +
         '<span class="sd-player-ready is-seated">Seated</span>' +
         '</li>';
     }).join('');
@@ -1582,9 +1771,8 @@
       state.puzzlesCompleted = resume;
       state.puzzleIndex = Math.min(resume, slots.length - 1);
       if (resume >= slots.length) {
-        // Already finished everything — wait for the round to end.
-        const q = $('play-question'); if (q) q.textContent = 'All locks cracked. Waiting for the crew\u2026';
-        if (mount) mount.innerHTML = '<div class="sd-loading">Waiting for the round to end\u2026</div>';
+        // Already finished everything — spectate until the server flips to completed.
+        enterFinishedWaiting(standings);
       } else {
         if (resume > 0) console.info('[showdown] resuming at puzzle ' + (resume + 1) + '/' + slots.length);
         renderPuzzle();
@@ -1673,9 +1861,15 @@
           words.push(w); // explicit deterministic order (picks[] order), NOT pool+pickCount
         });
         if (words.length) {
+          // Showdown opts into all three spelling-lock affordances. They default
+          // off in the component, so the episodes using it are unaffected.
+          // clickSlotToReturn is REQUIRED alongside keepOnWrong: once a wrong word
+          // fills every slot the pool is empty, so returning a letter is the only
+          // way to correct it.
           slots.push({ id: 'spelling:' + ids.join(','), ui: 'spelling-lock', category: winningCategory,
             type, question: 'Unscramble each answer.',
-            config: { title: 'SPELL IT OUT', words, sequential: true, scrambleLetters: true } });
+            config: { title: 'SPELL IT OUT', words, sequential: true, scrambleLetters: true,
+                      clickSlotToReturn: true, keepOnWrong: true, upperCase: true } });
         }
 
       } else if (type === 'mcq') {
@@ -1826,28 +2020,58 @@
   let wrongLocked = false;
   let wrongTimer = null;
 
+  /* The scrim lives in a runtime-inserted shell that WRAPS #play-mount, and
+   * `inert` is set on #play-mount ITSELF rather than on its children.
+   *
+   * Why: several lock components re-render by clearing the mount's innerHTML on a
+   * wrong answer — wager-lock.js:148 (`container.innerHTML = ''`, reached via
+   * _render() at :129, immediately after onWrong at :94) and spelling-lock.js:84
+   * (re-render at +300ms). An overlay appended INTO the mount was destroyed
+   * milliseconds after being created, and per-child `inert` flags were dropped
+   * along with the replaced children. That is why mcq appeared never to pause and
+   * spelling paused only briefly.
+   *
+   * The shell is a sibling wrapper no component ever touches, so the scrim
+   * survives any number of re-renders and covers exactly the puzzle area — the
+   * question above it stays readable during the pause. Puzzle progress is
+   * untouched; this gates input only. Built at runtime (no showdown.html edits). */
+  function lockoutHost() {
+    const mount = $('play-mount');
+    if (!mount) return null;
+    let shell = mount.parentElement;
+    if (!shell || !shell.classList.contains('sd-mount-shell')) {
+      shell = document.createElement('div');
+      shell.className = 'sd-mount-shell';
+      mount.parentNode.insertBefore(shell, mount);
+      shell.appendChild(mount);
+    }
+    return shell;
+  }
+
   function clearWrongLockout() {
     wrongLocked = false;
     if (wrongTimer) { clearInterval(wrongTimer); wrongTimer = null; }
+    const host = lockoutHost();
+    if (host) {
+      const ov = host.querySelector('.sd-lockout');
+      if (ov) ov.remove();
+    }
     const mount = $('play-mount');
-    if (!mount) return;
-    const ov = mount.querySelector('.sd-lockout');
-    if (ov) ov.remove();
-    mount.classList.remove('sd-locked');
-    Array.from(mount.children).forEach((c) => { if (!c.classList.contains('sd-lockout')) c.inert = false; });
+    if (mount) { mount.classList.remove('sd-locked'); mount.inert = false; }
   }
 
   function startWrongLockout() {
     const mount = $('play-mount');
-    if (!mount || wrongLocked) return;      // ignore repeat wrongs while locked
+    const host = lockoutHost();
+    if (!mount || !host || wrongLocked) return;   // ignore repeat wrongs while locked
     wrongLocked = true;
-    // Disable the puzzle for keyboard + AT via `inert`; the scrim blocks pointer.
-    Array.from(mount.children).forEach((c) => { c.inert = true; });
+    // `inert` on the mount itself survives the component clearing its children.
+    mount.inert = true;
     mount.classList.add('sd-locked');
     const ov = document.createElement('div');
     ov.className = 'sd-lockout';
     ov.setAttribute('role', 'status');
-    mount.appendChild(ov);
+    host.appendChild(ov);
     let rem = WRONG_LOCK_SEC;
     const paint = () => { ov.textContent = 'Wrong. Try again in ' + rem + 's'; };
     paint();
@@ -1883,8 +2107,7 @@
     if (last) {
       playSfxGameComplete();
       // Do NOT advance to RESULTS locally — the standings loop flips at completed.
-      const q = $('play-question'); if (q) q.textContent = 'All locks cracked. Waiting for the crew\u2026';
-      const mount = $('play-mount'); if (mount) mount.innerHTML = '<div class="sd-loading">Waiting for the round to end\u2026</div>';
+      enterFinishedWaiting(state._lastStandings);
     } else {
       setTimeout(() => { state.puzzleIndex += 1; renderPuzzle(); }, 700);
     }
@@ -1961,9 +2184,74 @@
   }
 
   function updatePlay(standings) {
+    state._lastStandings = standings; // so the spectator card can render off-poll
     setPlayClockFromServer(myElapsedMs(standings)); // authoritative + smoothed clock
     updateClockHeat(standings);
     renderRace(standings);
+    if (state._finishedWaiting) renderFinishedWaiting(standings); // refresh spectator card
+  }
+
+  /* ── Finished-and-waiting: spectate, don't stare at a dead string ──────
+   * Reached when you have cracked all 5 locks but the round is still running (the
+   * client NEVER advances to RESULTS locally — the standings loop flips at
+   * `completed`). This is a competitive race, not a co-op crew, so the old
+   * "Waiting for the crew…" was wrong on both counts: wrong relationship, and it
+   * gave a finished player nothing to look at for what can be a long wait.
+   *
+   * The live race strip above stays on and keeps updating, so here we add the
+   * information a finished racer actually wants: their locked-in time, their
+   * provisional position, and who is still going. Marked PROVISIONAL because
+   * final rank is the server's call at `completed`. Re-rendered every poll. */
+  function renderFinishedWaiting(standings) {
+    const mount = $('play-mount');
+    if (!mount) return;
+    const rows = (standings && Array.isArray(standings.standings)) ? standings.standings : [];
+    const dup = dupNameIds(rows);
+    const me = rows.find((r) => state.playerId && r.player_id === state.playerId);
+    const myPos = me && me.rank != null ? Number(me.rank) : null;
+    const done = rows.filter((r) => (Number(r.completion_pct) || 0) >= 100).length;
+    const still = rows.length - done;
+
+    const ord = (n) => {
+      if (n == null) return null;
+      const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    };
+
+    const myTime = me && typeof me.elapsed_ms === 'number' && me.elapsed_ms > 0
+      ? fmtTime(me.elapsed_ms) : (state._clockShownMs != null ? fmtTime(state._clockShownMs) : null);
+
+    // Opponents still racing, nearest-first, so the threat is at the top.
+    const chasers = rows
+      .filter((r) => (Number(r.completion_pct) || 0) < 100)
+      .sort((a, b) => (Number(b.completion_pct) || 0) - (Number(a.completion_pct) || 0))
+      .map((r) => '<li class="sd-spec-row"><span class="sd-spec-name">' + escapeHtml(sdName(r, dup)) +
+        '</span><span class="sd-spec-pct">' + Math.round(Number(r.completion_pct) || 0) + '%</span></li>')
+      .join('');
+
+    mount.innerHTML =
+      '<div class="sd-spectate">' +
+        '<div class="sd-spec-head">' +
+          '<span class="sd-spec-badge">Finished</span>' +
+          (myTime ? '<span class="sd-spec-time">' + escapeHtml(myTime) + '</span>' : '') +
+        '</div>' +
+        (myPos != null
+          ? '<div class="sd-spec-pos">Currently <strong>' + escapeHtml(String(ord(myPos))) + '</strong>' +
+            '<span class="sd-spec-prov">provisional</span></div>'
+          : '') +
+        (still > 0
+          ? '<div class="sd-spec-sub">' + still + (still === 1 ? ' racer' : ' racers') + ' still going</div>' +
+            '<ul class="sd-spec-list">' + chasers + '</ul>'
+          : '<div class="sd-spec-sub">Everyone is in. Final results coming up…</div>') +
+      '</div>';
+  }
+
+  // Enter the finished-and-waiting state (arms the per-poll refresh above).
+  function enterFinishedWaiting(standings) {
+    state._finishedWaiting = true;
+    const q = $('play-question');
+    if (q) q.textContent = 'All five locks cracked. You’re in — watching the rest of the race…';
+    renderFinishedWaiting(standings || state._lastStandings);
   }
 
   // Authoritative play time is the CURRENT player's row elapsed_ms — a
@@ -1995,11 +2283,22 @@
     if (state._clockSrvMs !== ms) { state._clockSrvMs = ms; state._clockAt = Date.now(); }
     paintPlayClock();
   }
+  /* Pre-first-solve the clock runs off a LOCAL anchor stamped when the race first
+   * went in_progress. Server elapsed_ms is 0 until the first /progress POST, and
+   * /progress only fires on a solve — so the header read a frozen 00:00 for the
+   * whole of the first question, which looked broken. Once the server value goes
+   * above 0 it takes over and the existing monotonic clamp hides the handover.
+   * Ranking is unaffected: server elapsed_ms remains the only authority. */
   function paintPlayClock() {
     const el = $('play-timer');
-    if (!el || state._clockSrvMs == null) return;
+    if (!el) return;
     let ms = state._clockSrvMs;
-    if (ms > 0 && state._clockAt) ms += (Date.now() - state._clockAt); // fill the inter-poll gap
+    if (ms == null || ms <= 0) {
+      if (!state._raceAnchorAt) return;               // no anchor yet → leave as-is
+      ms = Date.now() - state._raceAnchorAt;
+    } else if (state._clockAt) {
+      ms += (Date.now() - state._clockAt);            // fill the inter-poll gap
+    }
     if (state._clockShownMs != null && ms < state._clockShownMs) ms = state._clockShownMs; // monotonic
     state._clockShownMs = ms;
     el.textContent = fmtTime(ms);
@@ -2025,15 +2324,21 @@
     // Rebuild lanes only when the SET of player_ids changes (sorted key → stable
     // across rank reordering so the runner can slide instead of hard-cut).
     const rosterKey = rows.map((r) => r.player_id).slice().sort().join('|');
-    if (panel._sdRoster !== rosterKey) {
+    // Roster key intentionally excludes names, so re-label on the same roster when
+    // a collision suffix appears (a late joiner can create a duplicate).
+    const dup = dupNameIds(rows);
+    const labelKey = rows.map((r) => r.player_id + ':' + sdName(r, dup)).slice().sort().join('|');
+    if (panel._sdRoster !== rosterKey || panel._sdLabels !== labelKey) {
       panel._sdRoster = rosterKey;
+      panel._sdLabels = labelKey;
       panel.innerHTML = rows.map((r) => {
         const isMe = state.playerId && r.player_id === state.playerId;
         let dots = '';
         for (let i = 0; i < pc; i++) dots += '<span class="sd-pg-dot"></span>';
         return '<span class="sd-pg-player' + (isMe ? ' sd-pg-player--me' : '') +
           '" data-pid="' + escapeHtml(r.player_id || '') + '">' +
-          '<span class="sd-pg-name">' + escapeHtml(r.display_name || '') + (isMe ? ' (you)' : '') + '</span>' +
+          '<span class="sd-pg-ghost" data-ghost="idle" aria-hidden="true"></span>' +
+          '<span class="sd-pg-name">' + escapeHtml(sdName(r, dup)) + (isMe ? ' (you)' : '') + '</span>' +
           '<span class="sd-pg-dots"><span class="sd-pg-runner"></span>' + dots + '</span>' +
           '<span class="sd-pg-flag" hidden>Done</span>' +
           '</span>';
@@ -2069,9 +2374,29 @@
       // (collapses to a static gold tint under reduced motion, via CSS).
       lane.classList.toggle('sd-pg-leader', rank === 1);
 
+      /* Ghost racer state. Priority: done > leading > trailing > running > idle.
+       * "running" needs a movement signal, so it holds for ~1.5s after a solve
+       * rather than only on the poll where pct changed — otherwise the run cycle
+       * would flicker for a single frame every few questions. "trailing" only
+       * applies once someone is actually ahead (rank > 1 and any progress made),
+       * so nobody gets the teary ghost merely for being at 0% on the start line. */
+      const was = prev && prev[lane.dataset.pid];
+
+      const ghost = lane.querySelector('.sd-pg-ghost');
+      if (ghost) {
+        if (was && pct > was.pct) lane._sdMovedAt = Date.now();
+        const moving = lane._sdMovedAt && (Date.now() - lane._sdMovedAt) < 1500;
+        let g;
+        if (pct >= 100) g = 'done';
+        else if (rank === 1 && pct > 0) g = 'leading';
+        else if (moving) g = 'running';
+        else if (rank != null && rank > 1 && pct > 0) g = 'trailing';
+        else g = 'idle';
+        if (ghost.dataset.ghost !== g) ghost.dataset.ghost = g;
+      }
+
       curr[lane.dataset.pid] = { pct: pct, rank: rank };
 
-      const was = prev && prev[lane.dataset.pid];
       if (!was || reduce) return; // first paint / reduced motion → no one-shot cues
 
       // A2 — opponent ADVANCE tick: a brief beat when their completion% rises.
@@ -2129,7 +2454,7 @@
   // elapsed_ms only. Identity (champion / your row) keyed by player_id (dev #1).
 
   const END_REASON_COPY = {
-    all_completed:     'Every crew cracked the vault.',
+    all_completed:     'Every racer cracked the vault.',
     force_completed:   'The host ended the round.',
     countdown_expired: 'Time\u2019s up. Pencils down.',
     reset:             'Round reset by the host.',
@@ -2155,6 +2480,7 @@
     const sessionElapsed = standings && standings.elapsed_ms;
     const puzzleCount = Number(standings && standings.puzzle_count) || 0;
 
+    const dup = dupNameIds(rows);
     const board = $('results-board');
     if (board) {
       board.innerHTML = rows.map((r, i) => {
@@ -2172,7 +2498,7 @@
         return '<li class="sd-lb-row' + (isMe ? ' sd-lb-row--me' : '') + (isWin ? ' sd-lb-row--win' : '') +
           '" data-pid="' + escapeHtml(r.player_id || '') + '">' +
           '<span class="sd-lb-rank">' + rank + '</span>' +
-          '<span class="sd-lb-name">' + escapeHtml(r.display_name || '') + (isMe ? ' (you)' : '') + '</span>' +
+          '<span class="sd-lb-name">' + escapeHtml(sdName(r, dup)) + (isMe ? ' (you)' : '') + '</span>' +
           '<span class="sd-lb-stats">' + stats + '</span>' +
           '</li>';
       }).join('');
@@ -2182,7 +2508,7 @@
     const champ = rows.find((r) => winnerId ? r.player_id === winnerId : false) || rows[0];
     const iWon = champ && state.playerId && champ.player_id === state.playerId;
     const headline = $('results-headline');
-    if (headline) headline.textContent = champ ? (iWon ? 'You win! \ud83c\udf89' : champ.display_name + ' wins!') : 'Results';
+    if (headline) headline.textContent = champ ? (iWon ? 'You win! \ud83c\udf89' : sdName(champ, dup) + ' wins!') : 'Results';
     const crown = $('results-crown');
     if (crown) crown.classList.add('is-champion');
 
@@ -2210,8 +2536,13 @@
   }
 
   function wireResultsActions() {
+    // "Share result" is retired: it copied a boast to the clipboard, which has no
+    // use at a booth where the crowd leaderboard is already on a dedicated screen.
+    // Removed at runtime rather than from showdown.html, matching how the lobby
+    // strips its share-code hint (no showdown.html DOM edits). doShare/shareText
+    // are left in place, unreferenced, so restoring this is a one-line change.
     const share = $('results-share');
-    if (share) share.onclick = () => doShare(share);
+    if (share) share.remove();
     const again = $('results-again');
     if (again) again.onclick = playAgain;
   }
