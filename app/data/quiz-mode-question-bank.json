@@ -424,17 +424,17 @@
       "word": [
         {
           "id": "awscore-word-001",
-          "question": "Which AWS service acronym stands for 'Elastic Compute Cloud'?",
+          "question": "What is the middle word of the AWS service name behind the acronym EC2, 'Elastic ___ Cloud'?",
 
-          "answer": "EC2",
+          "answer": "Compute",
 
           "_verified": false
         },
         {
           "id": "awscore-word-002",
-          "question": "Which AWS service acronym stands for 'Simple Storage Service'?",
+          "question": "What is the middle word of the AWS service name behind the acronym S3, 'Simple ___ Service'?",
 
-          "answer": "S3",
+          "answer": "Storage",
 
           "_verified": false
         },
