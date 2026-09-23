@@ -20,3 +20,9 @@ test-results/
 
 tools/deploy-ep11.sh
 tools/resize-ep11.py
+
+tools/deploy-ep11.sh
+tools/resize-ep11.py
+
+tools/deploy-ep11.sh
+tools/resize-ep11.py

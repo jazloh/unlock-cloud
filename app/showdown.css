@@ -1,177 +1,183 @@
 /* ══════════════════════════════════════════════════════════════════
-   Showdown Mode - "HEAT" game-shell theme
+   Showdown Mode - "VS Select" design system
    ------------------------------------------------------------------
-   Five locks. One vault. Everybody is watching the clock.
-   A heist crew cracking a vault, broadcast like a match. Zero-blue warm
-   ember band; AWS Signal Orange is the ONLY accent; electric lime is a
-   semantic live/correct/ready/win signal only; gold appears in exactly two
-   places (session code + 1st place). Archivo Expanded is "the shout",
-   JetBrains Mono is "the readout".
+   Retires the earlier "HEAT" ember look. This is the re:Solve VS Select
+   product system: ink-plum stepped planes, Chakra Petch (display) +
+   Saira (body), a single soft shadow, angular clip-path cuts, and ONE
+   mode hue carried by --mode-color. Showdown = coral (never hardcoded;
+   flows from body[data-mode='showdown'] -> --showdown).
 
-   index.css ships the shared puzzle-component styles (kpdlk / wlock / pillk /
-   wglk / splk) which read --green/--red/--yellow/--blue/--purple/--surface-dim
+   PRESENTATION-LAYER ONLY. Every id/class showdown.js and showdown.html
+   bind to is preserved verbatim; this file only re-skins them. index.css
+   ships the shared puzzle-component styles (kpdlk / wlock / pillk / wglk /
+   splk) which read --accent/--green/--red/--surface/--border/--text/--muted
    and hardcode color:#fff on --accent fills. This file loads after it and
-   re-declares those tokens to the HEAT palette, so the components rendered
-   inside #play-mount stay on-theme and legible. Every id/class showdown.js
-   binds to is preserved verbatim.
+   remaps those aliases to VS Select tokens so the components rendered
+   inside #play-mount stay on-theme and legible in both themes.
 
-   Z-INDEX SCALE (documented, no ad-hoc values):
-     0  ember bed (behind all)      | 40 solved-flash overlay
+   Fonts are @imported here (showdown.html cannot be edited): Chakra Petch
+   + Saira for the system, Press Start 2P for the SANCTIONED attract-screen
+   neon wordmark only.
+
+   Z-INDEX SCALE:
+     0  (retired ambient)           | 40 solved-flash overlay
      1  screen content              | 50 category reveal overlay
-     2  vault grain (static)        | 55 confetti host
-     3  heat bar                    | 58 particle canvas (#sd-fx)
-                                     | 60 toast host
+     5  wrong-answer lockout scrim   | 55 confetti host
+     6  theme toggle                 | 60 toast host
    ══════════════════════════════════════════════════════════════════ */
 
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600;1,700&family=Press+Start+2P&family=Saira:wght@400;500;600;700&display=swap');
+
+/* ══════════════════ VS Select tokens (dark, default) ══════════════ */
 :root {
-  /* ── HEAT palette (warm ember band, zero blue) ───────────────── */
-  --ink:         #0A0705;  /* ground - warm near-black */
-  --ink-raise:   #17100B;  /* panels / cards */
-  --steel:       #221913;  /* controls, inset chips, vault plate */
-  --hairline:    #33261C;  /* dividers */
-  --hairline-2:  #4A3625;  /* stronger hairline for emphasis */
-  --text:        #FFF6EE;  /* warm off-white (NOT cool grey) */
-  --muted:       #B39C8A;  /* warm grey */
+  color-scheme: dark;
 
-  --signal:      #FF9900;  /* THE accent - every interactive surface */
-  --signal-ink:  #1A0F00;  /* dark ink that sits ON orange (AA) */
-  --signal-wash: #2A1B08;  /* opaque low-key orange wash */
-  --alarm:       #FF2D3D;  /* danger / penalty / sub-5s (>=18px bold + shape) */
-  --live:        #D6FF3A;  /* live / correct / ready / win ONLY */
-  --live-ink:    #101600;  /* dark ink on lime */
-  --gold:        #FFD24A;  /* session code + 1st place ONLY */
-  --gold-ink:    #1A1300;  /* dark ink on gold */
+  /* Mode identity hues - the record; never change with theme. */
+  --tournament: #22e0ff;
+  --arcade:     #ffb020;
+  --showdown:   #ff2e6a;
 
-  /* ── Aliases the shared puzzle components read (keep them on-theme) ─
-     The components hardcode color:#fff on background:var(--accent); bright
-     Signal Orange fails AA with white, so #play-mount below overrides --accent
-     to a white-safe deep orange. Everywhere else --accent is bright + dark ink. */
+  /* Ink-plum stepped planes. */
+  --ink:      #0f0a19;
+  --panel:    #17102a;
+  --panel-2:  #201636;
+  --panel-3:  #2b1f45;
+  --line:         #332748;
+  --line-strong:  #4a3a66;
+  --border-subtle:#251b3d;
+
+  --text:           #f2ede1;
+  --text-secondary: #b9b0c8;
+  --text-muted:     #968dad;
+
+  --action:        #22e0ff;
+  --action-strong: #6febff;
+  --success: #3ddc84;
+  --danger:  #ff4d5e;
+  --warning: #ffb020;
+  --focus:   #f2ede1;
+  --on-flood: #0f0a19;
+  --purple:  #b89cff;
+
+  --shadow: 0 18px 48px rgba(0, 0, 0, .34);
+
+  /* Coral halo used ONLY by the sanctioned attract-screen wordmark. */
+  --sd-glow: color-mix(in srgb, var(--showdown) 52%, transparent);
+
+  /* Type. */
+  --font-body:    'Saira', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Chakra Petch', 'Arial Narrow', sans-serif;
+  --font-arcade:  'Press Start 2P', ui-monospace, monospace;
+
+  /* Spacing + radius scales. */
+  --space-xs: .25rem;
+  --space-sm: .5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --radius-sm: 3px;
+  --radius-md: 7px;
+  --radius-lg: 12px;
+
+  /* ── Aliases the shared puzzle components read (keep them on-theme).
+     Defined via var() so the .sd-theme-light overrides below cascade to
+     them automatically. Components hardcode color:#fff on
+     background:var(--accent); #play-mount scopes --accent to a white-safe
+     deep coral (see the PLAY section) so those fills pass AA. ── */
   --bg:          var(--ink);
-  --surface:     var(--ink-raise);
-  --surface-2:   var(--steel);
-  --surface-dim: var(--steel);
-  --border:      var(--hairline);
-  --border-2:    var(--hairline-2);
-  --accent:      var(--signal);
-  --accent-ink:  var(--signal-ink);
-  --accent-soft: var(--signal-wash);
-  --danger:      var(--alarm);
-  --green:  var(--live);   /* components use --green for "correct" */
-  --red:    var(--alarm);
-  --yellow: var(--gold);
-  --blue:   var(--accent); /* neutralise any inherited blue  -> orange */
-  --purple: var(--accent); /* neutralise any inherited purple -> orange */
+  --surface:     var(--panel);
+  --surface-2:   var(--panel-2);
+  --surface-dim: var(--panel-2);
+  --border:      var(--line);
+  --border-2:    var(--line-strong);
+  --accent:      var(--showdown);
+  --accent-ink:  var(--on-flood);
+  --accent-soft: color-mix(in srgb, var(--showdown) 14%, var(--panel));
+  --muted:       var(--text-muted);
+  --green:  var(--success);
+  --red:    var(--danger);
+  --yellow: var(--warning);
+  --blue:   var(--action);
 
-  /* ── Type ────────────────────────────────────────────────────── */
-  /* The shout: Archivo variable (wdth 62-125). The readout: JetBrains Mono. */
-  --sd-shout: 'Archivo', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
-  --sd-mono:  'JetBrains Mono', ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
-  --sd-sans:  system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
-
-  /* ── Radius scale (one system) ───────────────────────────────── */
-  --r-sm: 6px;
-  --r:    10px;
-  --r-lg: 14px;
-
-  /* Warm-tinted shadows (never pure black) */
-  --shadow-card: 0 14px 44px rgba(10, 5, 0, .55);
-  --shadow-pop:  0 10px 30px rgba(10, 5, 0, .6);
+  /* Legacy radius aliases (in case anything references them). */
+  --r-sm: var(--radius-sm);
+  --r:    var(--radius-md);
+  --r-lg: var(--radius-lg);
 }
 
-/* The "shout" utility: expanded + heavy + uppercase. Tracking flips with size
-   at the element level (>=32px tightens, <32px opens up). */
-.sd-shout {
-  font-family: var(--sd-shout);
-  font-variation-settings: 'wdth' 125, 'wght' 900;
-  font-weight: 900;
-  text-transform: uppercase;
+/* The mode mechanism: a Showdown screen tints its accents coral. Set on
+   <body> at runtime by showdown.js (data-mode + data-theme). */
+body[data-mode='tournament'] { --mode-color: var(--tournament); }
+body[data-mode='arcade']     { --mode-color: var(--arcade); }
+body[data-mode='showdown']   { --mode-color: var(--showdown); }
+/* Fallback if the attribute is not present yet (pre-paint). */
+:root { --mode-color: var(--showdown); }
+
+/* ══════════════════ Light theme (.sd-theme-light) ══════════════════
+   The existing theme toggle in showdown.js flips .sd-theme-light on
+   <html>/<body>. Light strikes dark-on-light: deepened mode hues hold
+   contrast where the vivid dark-mode hues would wash out. Only the base
+   VS Select tokens are redefined - the puzzle-component aliases above are
+   var()-based and follow automatically. */
+.sd-theme-light {
+  color-scheme: light;
+  --tournament: #0b6d84;
+  --arcade:     #9e4e05;
+  --showdown:   #b0104a;
+
+  --ink:     #e9e4f3;
+  --panel:   #ffffff;
+  --panel-2: #f0ecf8;
+  --panel-3: #e8e0f4;
+  --line:          #d7cfe2;
+  --line-strong:   #9486ad;
+  --border-subtle: #ded4ea;
+
+  --text:           #1a1226;
+  --text-secondary: #4a3f5c;
+  --text-muted:     #655a7a;
+
+  --action:        #0b6d84;
+  --action-strong: #06515f;
+  --success: #0c6b3c;
+  --danger:  #c2102a;
+  --warning: #9e4e05;
+  --focus:   #1a1226;
+  --on-flood: #f2ede1;
+  --purple:  #6848a8;
+
+  --shadow: 0 16px 40px rgba(26, 18, 38, .13);
+  --sd-glow: color-mix(in srgb, var(--showdown) 40%, transparent);
 }
 
+/* ══════════════════ Base ══════════════════ */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { height: 100%; overflow-x: hidden; }
+html { height: 100%; overflow-x: hidden; scroll-behavior: smooth; }
 body {
   min-height: 100%;
   background: var(--ink);
   color: var(--text);
-  font-family: var(--sd-sans);
+  font: 400 16px/1.5 var(--font-body);
+  -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
+button, input, select, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+img, svg { display: block; max-width: 100%; }
+::selection { background: var(--mode-color); color: var(--on-flood); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.tabular { font-variant-numeric: tabular-nums; }
 
 .sd-app { position: relative; min-height: 100%; }
 
-/* ══════════════ AMBIENT HEAT (idle is never dead) ══════════════
-   (a) ember bed: two soft signal radials drifting on long cycles
-   (b) vault grain: static SVG-noise + scanline (never animated)
-   (c) heat bar: 2px line breathing at the viewport bottom
-   All collapse to static under reduced motion; ember + heat pause on play. */
+/* Retire the HEAT ambient (ember bed, vault grain, breathing heat bar) and
+   the spark-burst canvas. The nodes stay in the DOM (aria-hidden, decorative)
+   but paint nothing in VS Select - depth comes from stepped planes, not glow. */
+.sd-ember, .sd-grain, .sd-heatbar, #sd-fx { display: none !important; }
 
-.sd-ember {
-  position: fixed; inset: -20%;
-  z-index: 0; pointer-events: none;
-}
-.sd-ember::before, .sd-ember::after {
-  content: ""; position: absolute; inset: 0;
-  border-radius: 50%;
-  filter: blur(20px);
-}
-.sd-ember::before {
-  background: radial-gradient(closest-side, rgba(255,153,0,.06), transparent 70%);
-  width: 90%; height: 90%; left: -25%; bottom: -25%; top: auto;
-  animation: sd-ember-a 34s ease-in-out infinite;
-}
-.sd-ember::after {
-  background: radial-gradient(closest-side, rgba(255,153,0,.045), transparent 70%);
-  width: 80%; height: 80%; right: -20%; top: -20%; left: auto;
-  animation: sd-ember-b 47s ease-in-out infinite;
-}
-@keyframes sd-ember-a {
-  0%,100% { transform: translate3d(0,0,0); }
-  50%     { transform: translate3d(6%, -4%, 0); }
-}
-@keyframes sd-ember-b {
-  0%,100% { transform: translate3d(0,0,0); }
-  50%     { transform: translate3d(-5%, 5%, 0); }
-}
-
-/* Vault grain: fixed, pointer-events-none, NOT animated. */
-.sd-grain {
-  position: fixed; inset: 0;
-  z-index: 2; pointer-events: none;
-  opacity: .5;
-  background-image:
-    repeating-linear-gradient(0deg, rgba(0,0,0,.05) 0 1px, transparent 1px 4px),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-  background-size: auto, 128px 128px;
-}
-
-/* Heat bar: 2px line pinned to the viewport bottom, breathing on 8s. */
-.sd-heatbar {
-  position: fixed; left: 0; right: 0; bottom: 0;
-  height: 2px; z-index: 3; pointer-events: none;
-  background: var(--signal);
-  opacity: .5;
-  animation: sd-heat 8s ease-in-out infinite;
-}
-@keyframes sd-heat { 0%,100% { opacity: .3; } 50% { opacity: .7; } }
-
-/* Particle canvas: one shared self-terminating layer above the chrome. */
-#sd-fx {
-  position: fixed; inset: 0;
-  z-index: 58; pointer-events: none;
-}
-
-/* NOTHING decorative runs during PLAY: pause ember + heat when play is live.
-   (:has() enhancement; if unsupported the ambient simply keeps drifting.) */
-body:has(#screen-play:not([hidden])) .sd-ember::before,
-body:has(#screen-play:not([hidden])) .sd-ember::after,
-body:has(#screen-play:not([hidden])) .sd-heatbar {
-  animation-play-state: paused;
-}
-
-/* ── Screens ─────────────────────────────────────────────────── */
+/* ══════════════════ Screens ══════════════════ */
 .sd-screen {
   position: relative;
   z-index: 1;
@@ -187,381 +193,470 @@ body:has(#screen-play:not([hidden])) .sd-heatbar {
 .sd-screen[hidden] { display: none; }
 .sd-screen--play { justify-content: flex-start; padding-top: calc(12px + env(safe-area-inset-top)); }
 
-/* ── Screen transitions (JS adds one enter class to the incoming screen) ── */
-.sd-enter-slide-left { animation: sd-enter-slide-left .45s cubic-bezier(.22,.61,.36,1) both; }
-.sd-enter-fade       { animation: sd-enter-fade .4s ease both; }
-.sd-enter-zoom       { animation: sd-enter-zoom .55s cubic-bezier(.22,.61,.36,1) both; }
-.sd-enter-slide-up   { animation: sd-enter-slide-up .55s cubic-bezier(.22,.61,.36,1) both; }
-
-@keyframes sd-enter-slide-left {
-  from { opacity: 0; transform: translate3d(44px, 0, 0); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0); }
-}
+/* Screen entrances - VS Select motion range (160-180ms feel, short slides). */
+.sd-enter-slide-left { animation: sd-enter-slide-left .18s ease-out both; }
+.sd-enter-fade       { animation: sd-enter-fade .16s ease-out both; }
+.sd-enter-zoom       { animation: sd-enter-zoom .18s ease-out both; }
+.sd-enter-slide-up   { animation: sd-enter-slide-up .18s ease-out both; }
+@keyframes sd-enter-slide-left { from { opacity: 0; transform: translate3d(20px,0,0); } to { opacity: 1; transform: none; } }
 @keyframes sd-enter-fade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes sd-enter-zoom {
-  from { opacity: 0; transform: scale(.82); }
-  60%  { opacity: 1; }
-  to   { opacity: 1; transform: scale(1); }
-}
-@keyframes sd-enter-slide-up {
-  from { opacity: 0; transform: translate3d(0, 52px, 0); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0); }
-}
+@keyframes sd-enter-zoom { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes sd-enter-slide-up { from { opacity: 0; transform: translate3d(0,22px,0); } to { opacity: 1; transform: none; } }
 
-/* ── Card ────────────────────────────────────────────────────── */
+/* ══════════════════ Card / panel ══════════════════ */
 .sd-card {
   width: 100%;
   max-width: 460px;
-  background: var(--ink-raise);
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-lg);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow);
 }
 
-/* ══════════════════════════ SCREEN 1 · JOIN ═════════════════════
-   "You got the call." Near-empty, dark, the wordmark cropped by the edges. */
+/* ══════════════════════════ SCREEN 1 · JOIN ═════════════════════ */
 .sd-join-hero {
   width: 100%;
   max-width: 460px;
   margin: 0 auto;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
 }
 .sd-logo {
   width: 40px; height: 40px;
-  color: var(--signal);
+  color: var(--mode-color);
   display: flex; align-items: center; justify-content: center;
-  filter: drop-shadow(0 4px 10px rgba(255,153,0,.2));
 }
 .sd-logo svg { width: 100%; height: 100%; display: block; }
 
-/* The wordmark: Archivo Expanded 900, huge, tight, bleeding off both edges. */
-/* The wordmark: an SVG that fits the FULL word to its container width via
-   textLength, so "SHOWDOWN" always reads correctly and stays composed at any
-   width or aspect ratio (never a random middle slice). The hero is capped and
-   centred so it does not stretch on tablet/landscape. The stencil "cut" (1 of
-   max 4) is drawn as an in-SVG rect so it scales with the mark. */
+/* Wordmark: the SVG mark now renders in the Chakra Petch display face
+   (Archivo retired). No glow on the base join screen - the neon treatment
+   is reserved for the sanctioned attract wordmark. */
 .sd-title { width: 100%; margin: 4px 0; line-height: 0; }
 .sd-wordmark { display: block; width: 100%; height: auto; }
 .sd-wordmark text {
-  font-family: var(--sd-shout);
-  font-variation-settings: 'wdth' 125, 'wght' 900;
-  font-weight: 900;
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: 200px;
+  letter-spacing: -6px;
   fill: var(--text);
 }
 .sd-wordmark-cut { fill: var(--ink); }
 .sd-tagline {
-  text-align: center; color: var(--muted); font-size: 13px; letter-spacing: .3px;
+  text-align: center; color: var(--text-secondary);
+  font: 500 13px/1.4 var(--font-body); letter-spacing: .02em;
 }
 .sd-join-card { align-items: stretch; }
 
+/* Forms - VS Select .form-group pattern: display-face uppercase labels,
+   inset inputs over --ink, 44px targets. */
 .sd-form { display: flex; flex-direction: column; gap: 8px; }
 .sd-label {
-  font-family: var(--sd-mono);
-  font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;
-  color: var(--muted); margin-top: 8px;
+  display: block;
+  margin: 10px 0 2px;
+  color: var(--text-secondary);
+  font: 600 .77rem/1.2 var(--font-display);
+  letter-spacing: .07em; text-transform: uppercase;
 }
+/* `.sd-label{display:block}` outranks the UA `[hidden]{display:none}` rule (same
+   specificity, loaded later), so the step-machine's `label.hidden = true` (name
+   label hidden during the creds/PIN step) would leak. Restore hiding explicitly. */
+.sd-label[hidden] { display: none; }
 .sd-input {
   width: 100%;
-  padding: 14px;
+  min-height: 44px;
+  padding: .65rem .75rem;
   background: var(--ink);
-  border: 1px solid var(--hairline-2);
-  border-radius: var(--r);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
   color: var(--text);
-  font-family: var(--sd-mono);
-  font-size: 16px; /* >=16px prevents iOS zoom-on-focus */
-  letter-spacing: .5px;
-  transition: border-color .15s, box-shadow .15s;
+  caret-color: var(--mode-color);
+  font: 500 16px/1.3 var(--font-body); /* >=16px prevents iOS zoom-on-focus */
+  transition: border-color .16s ease-out, outline-color .16s ease-out;
 }
-.sd-input::placeholder { color: var(--muted); opacity: .7; }
+.sd-input::placeholder { color: var(--text-muted); opacity: 1; }
 .sd-input:focus {
-  outline: none;
-  border-color: var(--signal);
-  box-shadow: 0 0 0 3px rgba(255, 153, 0, .3);
+  outline: 2px solid color-mix(in srgb, var(--focus) 28%, transparent);
+  outline-offset: 1px;
+  border-color: var(--focus);
 }
-/* Session code drawn as six discrete instrument cells (readout, gold). */
+
+/* Session code: six angular instrument cells (readout, mode-color). The
+   ch-based cell grid keeps each glyph centered at any width; separators are
+   square (no rounding). */
 .sd-input--code {
+  font-family: var(--font-display);
   text-transform: uppercase;
   text-align: center;
   font-weight: 700;
-  font-size: 22px;
-  letter-spacing: 20px;
-  text-indent: 20px;
-  color: var(--gold);
+  font-size: 24px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1ch;
+  text-indent: 0.25ch;
+  width: 12.5ch;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-left: 0;
+  padding-right: 0;
+  color: var(--mode-color);
   background:
     var(--ink)
     repeating-linear-gradient(90deg,
-      transparent 0 calc(16.666% - 1px),
-      var(--hairline-2) calc(16.666% - 1px) 16.666%);
+      transparent 0 calc(2ch - 1px),
+      var(--line-strong) calc(2ch - 1px) 2ch);
+  background-repeat: no-repeat;
   background-size: 100% 100%;
 }
-.sd-input--code::placeholder { letter-spacing: 2px; text-indent: 0; font-size: 15px; }
+.sd-input--code::placeholder { letter-spacing: 2px; text-indent: 0; font-size: 14px; color: var(--text-muted); }
 
-/* ── Buttons ─────────────────────────────────────────────────── */
+/* Read-only game-code field (BUG 1): when the game_id is known from the URL the
+   field is shown POPULATED but display-only. Muted text + a recessed/inset fill
+   read plainly as "not editable" (distinct from the live .sd-input surface),
+   with no focus ring or caret. Both themes inherit via the same custom props. */
+.sd-input--readonly,
+.sd-input--readonly:focus {
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--ink) 84%, #000 16%);
+  border-color: var(--line);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .35);
+  caret-color: transparent;
+  cursor: default;
+  outline: none;
+  opacity: .95;
+}
+
+/* Buttons - VS Select .btn recipe. */
 .sd-btn {
-  display: inline-block;
+  display: inline-flex;
   width: 100%;
-  padding: 15px 18px;
-  min-height: 48px;
-  border: 1px solid var(--hairline-2);
-  border-radius: var(--r);
-  background: var(--steel);
+  min-height: 44px;
+  align-items: center; justify-content: center; gap: .45rem;
+  padding: .58rem 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
   color: var(--text);
-  font-family: var(--sd-mono);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: .8px;
-  text-transform: uppercase;
-  text-align: center;
-  text-decoration: none;
+  font: 600 .82rem/1 var(--font-display);
+  letter-spacing: .07em; text-transform: uppercase;
+  text-align: center; text-decoration: none;
   cursor: pointer;
-  transition: transform .08s ease, background .15s, border-color .15s, box-shadow .15s;
+  transition: background .16s ease-out, border-color .16s ease-out, color .16s ease-out, transform .16s ease-out;
 }
-.sd-btn:active { transform: translateY(1px) scale(.985); }
-.sd-btn:disabled { opacity: .5; cursor: default; }
+.sd-btn:hover { border-color: var(--text-secondary); background: var(--panel-3); }
+.sd-btn:active { transform: translateY(1px); }
+.sd-btn:disabled { cursor: not-allowed; opacity: .48; }
 
-/* Primary = solid Signal Orange with dark ink (AA, never white on orange). */
+/* Primary = flood the mode color, dark ink on top (flood-on-select idiom). */
 .sd-btn--primary {
-  background: var(--signal);
-  border-color: transparent;
-  color: var(--signal-ink);
   margin-top: 8px;
-  box-shadow: 0 8px 22px rgba(255, 153, 0, .2);
+  border-color: var(--mode-color);
+  background: var(--mode-color);
+  color: var(--on-flood);
 }
-.sd-btn--primary:hover { background: #FFAA1F; }
-
-/* "Arm" the join button once name + code both validate (progressive
-   enhancement via :has(); default state is already the usable orange). */
-.sd-form:has(#join-name:valid):has(#join-code:valid) #join-btn {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 26px rgba(255, 153, 0, .34);
+.sd-btn--primary:hover {
+  border-color: var(--mode-color);
+  background: color-mix(in srgb, var(--mode-color) 84%, white);
+  color: var(--on-flood);
+}
+/* Lobby waiting-status button (#ready-btn) is disabled while the host holds the
+   round. The generic disabled opacity:.48 dims the coral flood + on-flood text
+   into a ~2:1 muddy pair (WCAG-exempt as a disabled control, but this element
+   carries the lobby's primary status). Re-skin it as a calm, full-opacity muted
+   status pill so "Waiting for the host" clears AA in BOTH themes. Presentation
+   only; the button stays disabled and non-interactive. */
+#ready-btn:disabled {
+  opacity: 1;
+  border-color: var(--line-strong);
+  background: var(--panel-2);
+  color: var(--text-secondary);
 }
 
-/* Ready = lime (JS toggles .sd-btn--ready). Live/committed -> lime + dark ink. */
+/* Ready = success flood (JS toggles .sd-btn--ready). */
 .sd-btn--ready {
-  background: var(--live);
-  border-color: transparent;
-  color: var(--live-ink);
-  box-shadow: 0 8px 22px rgba(214, 255, 58, .22);
+  border-color: var(--success);
+  background: var(--success);
+  color: var(--on-flood);
 }
 
-.sd-btn--ghost { background: transparent; color: var(--muted); border-color: var(--hairline); margin-top: 8px; }
-.sd-btn--ghost:hover { border-color: var(--signal); color: var(--text); }
+/* Ghost / secondary = outline over the panel. */
+.sd-btn--ghost { margin-top: 8px; background: transparent; color: var(--text-secondary); border-color: var(--line-strong); }
+.sd-btn--ghost:hover { border-color: var(--text-secondary); background: var(--panel-2); color: var(--text); }
 
-/* Form error: alarm colour is never alone - prefixed with a warning glyph. */
-.sd-error-msg { color: var(--alarm); font-size: 13px; min-height: 18px; text-align: center; font-weight: 700; }
-.sd-error-msg:not(:empty)::before { content: "! "; font-family: var(--sd-mono); }
+/* Form error - danger with a shape prefix, never color alone. */
+.sd-error-msg {
+  color: var(--danger); font: 600 13px/1.4 var(--font-body);
+  min-height: 18px; text-align: center;
+}
+.sd-error-msg:not(:empty)::before { content: "! "; font-family: var(--font-display); font-weight: 700; }
 
-/* ══════════════════════════ SCREEN 2 · LOBBY ════════════════════
-   "The crew assembles." Session code hero like a vault serial number. */
+/* ══════════════════ WAITING · ATTRACT SCREEN (ported .sdl-attract) ══
+   Replaces the old plain "Waiting..." panel. showdown.js builds this at
+   runtime inside #screen-join and adds .sd-attract-mode so the base hero +
+   card are hidden and the attract screen owns the viewport. The neon
+   SHOWDOWN wordmark (Press Start 2P + coral glow) is the ONE sanctioned
+   glow treatment in this file. Motion is reduced-motion gated (foot). */
+#screen-join.sd-attract-mode { padding: 0; justify-content: stretch; }
+#screen-join.sd-attract-mode .sd-join-hero,
+#screen-join.sd-attract-mode .sd-join-card { display: none; }
+
+.sdl-attract {
+  flex: 1 1 auto; width: 100%; min-height: 100vh; min-height: 100dvh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  gap: clamp(1.2rem, 3.5vh, 2.4rem);
+  padding: clamp(1.4rem, 4vh, 3rem) clamp(1rem, 4vw, 3rem);
+  position: relative; overflow: hidden;
+  background: var(--ink);
+}
+.sdl-attract-core {
+  flex: 0 1 auto; min-height: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+}
+/* CRT scanline wash + soft vignette (subtle; part of the ported attract look). */
+.sdl-attract::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.20) 0 2px, transparent 2px 4px);
+  mix-blend-mode: multiply;
+  animation: sdl-scan 8s linear infinite;
+}
+.sdl-attract::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  box-shadow: inset 0 0 200px 36px rgba(0,0,0,.5);
+}
+.sd-theme-light .sdl-attract::before { opacity: .35; }
+.sd-theme-light .sdl-attract::after { box-shadow: inset 0 0 160px 30px rgba(60,40,80,.12); }
+.sdl-attract > * { position: relative; z-index: 1; }
+@keyframes sdl-scan { to { background-position: 0 4px; } }
+
+.sdl-crest {
+  width: clamp(120px, 13vw, 190px); height: auto; display: block;
+  margin: 0 auto clamp(1.2rem, 3vh, 2.2rem);
+  filter: drop-shadow(0 0 24px rgba(122,120,255,.4));
+  opacity: 0; transform: translateY(-14px) scale(.9);
+  animation: sdl-crest-in .7s cubic-bezier(.2,.8,.2,1) .1s forwards, sdl-float 5s ease-in-out 1s infinite;
+}
+@keyframes sdl-crest-in { to { opacity: 1; transform: none; } }
+@keyframes sdl-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+.sdl-attract-logo { line-height: .9; }
+.sdl-eventname {
+  display: block;
+  font: 700 clamp(.9rem,1.8vw,1.5rem)/1.2 var(--font-display);
+  letter-spacing: .24em; text-transform: uppercase; color: var(--text-secondary);
+  margin-bottom: clamp(1.1rem, 3vh, 2.1rem);
+  opacity: 0; transform: translateY(10px);
+  animation: sdl-ev-in .55s cubic-bezier(.2,.9,.2,1) .35s forwards;
+}
+.sdl-eventname .dia { color: var(--text-muted); }
+.sdl-eventname[hidden] { display: none; }
+@keyframes sdl-ev-in { to { opacity: 1; transform: none; } }
+
+/* The neon SHOWDOWN wordmark - the hero. Arcade face + coral glow + CRT
+   flicker. The coral is --mode-color, never a hardcoded hex. */
+.sdl-attract-title {
+  display: block; font-family: var(--font-arcade);
+  font-size: clamp(2.2rem, 8.4vw, 6.6rem);
+  color: var(--mode-color); letter-spacing: .02em;
+  --sdl-title-shadow: color-mix(in srgb, var(--mode-color) 45%, #000);
+  text-shadow: 0 0 12px var(--sd-glow), 0 0 40px var(--sd-glow), 4px 4px 0 var(--sdl-title-shadow);
+  opacity: 0; transform: translateY(18px);
+  animation: sdl-title-in .6s cubic-bezier(.2,.9,.2,1) .5s forwards, sdl-flicker 5.5s steps(1) 1.4s infinite;
+}
+@keyframes sdl-title-in { to { opacity: 1; transform: none; } }
+@keyframes sdl-flicker {
+  0%,95%,100% { opacity: 1; }
+  96% { opacity: .68; }
+  97% { opacity: .94; }
+  98% { opacity: .75; }
+}
+
+.sdl-attract-rule {
+  width: min(560px, 70vw); height: 3px; margin: clamp(1.4rem,4vh,2.6rem) auto;
+  background: repeating-linear-gradient(90deg, var(--mode-color) 0 18px, transparent 18px 34px);
+  opacity: 0; animation: sdl-rule-in .5s ease .95s forwards;
+}
+@keyframes sdl-rule-in { to { opacity: .6; } }
+
+.sdl-attract-prompt {
+  font-family: var(--font-arcade); font-size: clamp(.85rem, 2vw, 1.5rem);
+  color: var(--text); letter-spacing: .06em; opacity: 0;
+  animation: sdl-prompt-in .01s linear 1.3s forwards, sdl-blink 1.1s steps(1) 1.3s infinite;
+}
+.sdl-attract-prompt .b { color: var(--mode-color); }
+@keyframes sdl-prompt-in { to { opacity: 1; } }
+@keyframes sdl-blink { 0%,49% { opacity: 1; } 50%,100% { opacity: .12; } }
+
+.sdl-attract-sub {
+  margin-top: clamp(1.2rem,3vh,2rem);
+  font: 600 clamp(.72rem,1vw,.95rem)/1.5 var(--font-body);
+  letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted);
+  opacity: 0; animation: sdl-sub-in .6s ease 1.5s forwards;
+}
+.sdl-attract-foot {
+  flex: none;
+  font: 700 clamp(.62rem,.9vw,.85rem)/1.4 var(--font-display);
+  letter-spacing: .2em; text-transform: uppercase; color: var(--text-muted);
+  opacity: 0; animation: sdl-sub-in .6s ease 1.7s forwards;
+}
+@keyframes sdl-sub-in { to { opacity: 1; } }
+
+/* ══════════════════════════ SCREEN 2 · LOBBY ════════════════════ */
 .sd-code-banner {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   padding: 20px 16px;
   background: var(--ink);
-  border: 1px solid var(--hairline-2);
-  border-radius: var(--r);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
 }
 .sd-code-label {
-  font-family: var(--sd-mono);
-  font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px; color: var(--muted);
+  color: var(--text-muted);
+  font: 600 .66rem/1 var(--font-display);
+  letter-spacing: .15em; text-transform: uppercase;
 }
 .sd-code-value {
-  font-family: var(--sd-mono);
-  font-variant-numeric: tabular-nums slashed-zero;
-  font-size: 52px; font-weight: 800; letter-spacing: 10px;
-  text-indent: 10px;
-  color: var(--gold);
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-size: 48px; font-weight: 700; letter-spacing: 8px; text-indent: 8px;
+  color: var(--mode-color);
 }
-.sd-code-hint { font-size: 11px; color: var(--muted); }
+.sd-code-hint { color: var(--text-muted); font-size: 11px; }
 
 .sd-lobby-status {
-  font-family: var(--sd-mono);
-  text-align: center; font-size: 13px; font-weight: 700; letter-spacing: .5px;
-  text-transform: uppercase; color: var(--signal);
+  text-align: center; color: var(--text-secondary);
+  font: 600 .78rem/1.3 var(--font-display);
+  letter-spacing: .06em; text-transform: uppercase;
 }
 
-/* Roster - an esports lineup. Each row carries a patterned identity plate
-   (identity by PATTERN not colour). Rows grow a lime rail when ready. */
-.sd-player-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+/* Roster - VS Select rows: stepped plane, seat badge, status marker.
+   Your row grows a left-edge accent bar (NOT a glow). */
+.sd-player-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
 .sd-player {
   position: relative;
   display: flex; align-items: center; gap: 12px;
-  padding: 10px 14px;
-  min-height: 48px;
-  background: var(--ink);
-  border: 1px solid var(--hairline);
-  border-left: 4px solid var(--hairline-2);
-  border-radius: var(--r-sm);
+  padding: 10px 14px; min-height: 48px;
+  background: var(--panel);
+  border: 1px solid var(--line);
 }
-.sd-player--me { border-left-color: var(--signal); }
-.sd-player:has(.is-ready) {
-  border-left-color: var(--live);
-  background: linear-gradient(90deg, rgba(214, 255, 58, .08), transparent 70%);
-}
-.sd-player-name {
-  flex: 1; min-width: 0;
-  font-family: var(--sd-shout);
-  font-variation-settings: 'wdth' 112, 'wght' 800;
-  font-size: 16px; letter-spacing: .2px; text-transform: uppercase;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.sd-player-ready {
-  font-family: var(--sd-mono);
-  font-variant-numeric: tabular-nums;
-  font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-}
-.sd-player-ready.is-ready { color: var(--live); }
-.sd-player-ready.is-waiting { color: var(--muted); }
-
-/* ── Player identity plates: 5 CSS-only fills, all orange, distinct in grey.
-   Applied by row position (roster + race lanes share the same set). ────── */
-.sd-plate {
-  flex: 0 0 auto;
-  width: 34px; height: 34px;
-  border-radius: 8px;
-  border: 1px solid rgba(26, 15, 0, .35);
-  box-shadow: inset 0 0 0 1px rgba(255,246,238,.06);
-}
-.sd-plate--1 { background: var(--signal); }
-.sd-plate--2 {
-  background: repeating-linear-gradient(45deg, var(--signal-ink) 0 3px, var(--signal) 3px 9px);
-}
-.sd-plate--3 {
-  background:
-    radial-gradient(var(--signal-ink) 1.5px, transparent 1.9px) 0 0 / 8px 8px,
-    var(--signal);
-}
-.sd-plate--4 {
-  background: linear-gradient(to bottom, var(--signal) 0 50%, var(--signal-ink) 50% 100%);
-}
-.sd-plate--5 {
-  background: radial-gradient(circle, var(--ink-raise) 0 32%, var(--signal) 34% 100%);
-}
-/* Roster rows: give each row a plate via ::before, cycled by position. */
+.sd-player--me { background: var(--panel-2); box-shadow: inset 3px 0 0 var(--mode-color); }
+/* Seat badge - a small square marker plate carrying the roster position. */
 .sd-player::before {
   content: ""; flex: 0 0 auto;
-  width: 34px; height: 34px; border-radius: 8px;
-  border: 1px solid rgba(26, 15, 0, .35);
-  box-shadow: inset 0 0 0 1px rgba(255,246,238,.06);
+  width: 30px; height: 30px;
+  border: 1px solid var(--line-strong);
+  background: var(--panel-2);
 }
-.sd-player:nth-child(5n+1)::before { background: var(--signal); }
-.sd-player:nth-child(5n+2)::before { background: repeating-linear-gradient(45deg, var(--signal-ink) 0 3px, var(--signal) 3px 9px); }
-.sd-player:nth-child(5n+3)::before { background: radial-gradient(var(--signal-ink) 1.5px, transparent 1.9px) 0 0 / 8px 8px, var(--signal); }
-.sd-player:nth-child(5n+4)::before { background: linear-gradient(to bottom, var(--signal) 0 50%, var(--signal-ink) 50% 100%); }
-.sd-player:nth-child(5n+5)::before { background: radial-gradient(circle, var(--ink-raise) 0 32%, var(--signal) 34% 100%); }
+.sd-player--me::before { border-color: var(--mode-color); background: color-mix(in srgb, var(--mode-color) 20%, var(--panel-2)); }
+.sd-player-name {
+  flex: 1; min-width: 0;
+  color: var(--text);
+  font: 700 16px/1.1 var(--font-display);
+  letter-spacing: -.01em;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* Status badge - uppercase word + 7px square marker in currentColor. */
+.sd-player-ready {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font: 600 .7rem/1 var(--font-display);
+  letter-spacing: .04em; text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+.sd-player-ready::before { content: ""; display: block; flex: none; width: 7px; height: 7px; border: 1px solid currentColor; }
+.sd-player-ready.is-ready { color: var(--success); }
+.sd-player-ready.is-ready::before { background: currentColor; }
+/* Seated = present in the lobby: neutral word + filled square marker (occupancy,
+   not the retired "ready" mechanic). Matches the VS Select .status-badge idiom. */
+.sd-player-ready.is-seated { color: var(--text-secondary); }
+.sd-player-ready.is-seated::before { background: currentColor; }
+.sd-player-ready.is-waiting { color: var(--text-muted); }
 
-/* ══════════════════════════ SCREEN 3 · VOTE ═════════════════════
-   "Pick the target." Category tiles are the vaults; the timer is the dial. */
+/* Retired HEAT identity plates (kept as no-ops if referenced). */
+.sd-plate { display: none; }
+
+/* ══════════════════════════ SCREEN 3 · VOTE ═════════════════════ */
 .sd-vote-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .sd-subtitle {
-  font-family: var(--sd-shout);
-  font-variation-settings: 'wdth' 118, 'wght' 800;
-  font-size: 22px; font-weight: 800; letter-spacing: .04em;
-  text-transform: uppercase;
+  color: var(--text);
+  font: 700 22px/1 var(--font-display);
+  letter-spacing: -.01em; text-transform: uppercase;
 }
-.sd-subtitle--center { text-align: center; letter-spacing: -0.01em; font-size: 26px; }
-.sd-hint { color: var(--muted); font-size: 12px; line-height: 1.55; }
+.sd-subtitle--center { text-align: center; font-size: 26px; }
+.sd-hint { color: var(--text-muted); font: 400 12px/1.55 var(--font-body); }
 
-/* The vault dial: ring + 12 tick marks, numeral inside in mono. */
+/* Countdown ring - stroke follows the mode color; urgent flips to danger. */
 .sd-timer {
-  position: relative;
-  width: 58px; height: 58px;
-  flex: 0 0 auto;
+  position: relative; width: 58px; height: 58px; flex: 0 0 auto;
   display: flex; align-items: center; justify-content: center;
 }
 .sd-timer-ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-.sd-timer-ring-bg { fill: none; stroke: var(--hairline-2); stroke-width: 4; }
+.sd-timer-ring-bg { fill: none; stroke: var(--line-strong); stroke-width: 4; }
 .sd-timer-ticks {
-  fill: none; stroke: var(--hairline-2); stroke-width: 4;
-  /* 12 ticks around r=21 (circ 131.95): 12 dashes of ~2 with ~9 gaps. */
-  stroke-dasharray: 2 8.996;
-  opacity: .8;
+  fill: none; stroke: var(--line-strong); stroke-width: 4;
+  stroke-dasharray: 2 8.996; opacity: .8;
 }
 .sd-timer-ring-fg {
-  fill: none; stroke: var(--signal); stroke-width: 4; stroke-linecap: round;
-  /* r=21 -> circumference ~= 131.95; JS sets dasharray/offset each tick. */
-  stroke-dasharray: 131.95;
-  stroke-dashoffset: 0;
+  fill: none; stroke: var(--mode-color); stroke-width: 4; stroke-linecap: butt;
+  stroke-dasharray: 131.95; stroke-dashoffset: 0;
   transition: stroke-dashoffset 1s linear, stroke .3s;
 }
 .sd-timer-num {
   position: relative; z-index: 1;
-  font-family: var(--sd-mono);
-  font-variant-numeric: tabular-nums slashed-zero;
-  font-size: 20px; font-weight: 800;
-  color: var(--signal);
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-size: 20px; font-weight: 700; color: var(--mode-color);
 }
-.sd-timer.is-urgent .sd-timer-ring-fg { stroke: var(--alarm); }
-.sd-timer.is-urgent .sd-timer-ticks { stroke: var(--alarm); animation: sd-strobe .5s steps(2) infinite; }
-.sd-timer.is-urgent .sd-timer-num { color: var(--alarm); }
-.sd-timer.is-urgent { animation: sd-pulse .55s ease-in-out infinite; }
-@keyframes sd-pulse { 50% { transform: scale(1.1); } }
-@keyframes sd-strobe { 50% { opacity: .25; } }
+.sd-timer.is-urgent .sd-timer-ring-fg { stroke: var(--danger); }
+.sd-timer.is-urgent .sd-timer-ticks { stroke: var(--danger); }
+.sd-timer.is-urgent .sd-timer-num { color: var(--danger); }
 
-/* Sub-5s viewport vignette pulse (fixed, pointer-events none, 0 -> .35). */
-#screen-vote:has(.sd-timer.is-urgent)::after {
-  content: ""; position: fixed; inset: 0; z-index: 1; pointer-events: none;
-  box-shadow: inset 0 0 120px 20px rgba(255, 45, 61, .5);
-  animation: sd-vignette 1s ease-in-out infinite;
-}
-@keyframes sd-vignette { 0%,100% { opacity: 0; } 50% { opacity: .35; } }
-
-/* Target cards (the vaults) - big arm's-length tap targets. */
+/* Category tiles - diagonal clip-path mode-tile look. Flood-on-select. */
 .sd-cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 .sd-cat-btn {
   position: relative;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px;
-  padding: 18px 10px;
-  background: var(--steel);
-  border: 2px solid var(--hairline);
-  border-radius: var(--r);
-  color: var(--text);
+  padding: 18px 12px; min-height: 104px;
+  background: var(--panel-2);
+  border: 1px solid var(--line-strong);
+  color: var(--text-secondary);
   cursor: pointer;
-  min-height: 104px;
-  transition: transform .09s ease, border-color .15s, background .15s, box-shadow .15s, opacity .2s, filter .2s;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+  transition: background .16s ease-out, color .16s ease-out, border-color .16s ease-out, opacity .18s ease-out, filter .18s ease-out;
 }
-.sd-cat-btn:active { transform: scale(.96); }
+.sd-cat-btn:hover { background: var(--panel-3); color: var(--text); }
 .sd-cat-btn.is-selected {
-  border-color: var(--signal);
-  background: var(--signal-wash);
-  box-shadow: 0 0 0 3px rgba(255, 153, 0, .32);
+  background: var(--mode-color);
+  border-color: var(--mode-color);
+  color: var(--on-flood);
 }
-/* Casting your vote COMMITS the screen: chosen tile solid, others recede. */
-.sd-cat-grid:has(.is-selected) .sd-cat-btn:not(.is-selected) { opacity: .55; filter: saturate(.4); }
-.sd-cat-icon { font-size: 30px; line-height: 1; color: var(--text); }
+/* Committing your vote: chosen tile floods, others recede. */
+.sd-cat-grid:has(.is-selected) .sd-cat-btn:not(.is-selected) { opacity: .5; filter: saturate(.5); }
+.sd-cat-icon { color: var(--mode-color); line-height: 1; }
 .sd-cat-icon svg { width: 30px; height: 30px; display: block; }
-.is-selected .sd-cat-icon { color: var(--signal); }
+.is-selected .sd-cat-icon { color: var(--on-flood); }
 .sd-cat-label {
-  font-family: var(--sd-shout);
-  font-variation-settings: 'wdth' 110, 'wght' 800;
-  font-size: 13px; letter-spacing: .04em;
-  text-align: center; line-height: 1.2; text-transform: uppercase;
+  font: 700 13px/1.2 var(--font-display);
+  letter-spacing: .02em; text-align: center; text-transform: uppercase;
 }
-/* Live vote tally as a compact readout badge (lime = live count). */
+/* Live tally - a square readout marker in the corner. */
 .sd-cat-tally {
   position: absolute; top: 8px; right: 8px;
-  min-width: 22px; height: 22px; padding: 0 6px;
+  min-width: 22px; height: 20px; padding: 0 6px;
   display: inline-flex; align-items: center; justify-content: center;
-  font-family: var(--sd-mono);
+  font: 700 12px/1 var(--font-display);
   font-variant-numeric: tabular-nums;
-  font-size: 12px; font-weight: 800; color: var(--live-ink);
-  background: var(--live); border-radius: 999px;
+  color: var(--on-flood); background: var(--mode-color);
 }
+.is-selected .sd-cat-tally { color: var(--mode-color); background: var(--on-flood); }
 .sd-cat-tally:empty { display: none; }
 
 .sd-vote-empty {
-  padding: 28px 16px; text-align: center; color: var(--muted);
-  font-size: 14px; line-height: 1.6;
-  background: var(--ink); border: 1px dashed var(--hairline-2); border-radius: var(--r);
+  padding: 28px 16px; text-align: center; color: var(--text-muted);
+  font: 400 14px/1.6 var(--font-body);
+  background: var(--ink); border: 1px dashed var(--line-strong); border-radius: var(--radius-sm);
 }
 
-/* ══════════════ WOW 1 · THE LOCK-IN (category reveal) ══════════════
-   grid snaps black -> mark focuses in -> double shockwave -> name reveals
-   L->R via clip-path steps() -> GO becomes a full-bleed lime bar. */
+/* Category reveal overlay (THE LOCK-IN) - restyled angular, no neon halo. */
 .sd-reveal {
   position: fixed; inset: 0; z-index: 50;
   display: flex; align-items: center; justify-content: center;
@@ -570,348 +665,221 @@ body:has(#screen-play:not([hidden])) .sd-heatbar {
 .sd-reveal[hidden] { display: none; }
 .sd-reveal-inner { position: relative; text-align: center; opacity: 0; padding: 20px; }
 .sd-reveal.is-in .sd-reveal-inner { opacity: 1; }
-
-/* Double shockwave: orange ring, then lime ring, from behind the mark. */
-.sd-reveal-inner::before, .sd-reveal-inner::after {
-  content: ""; position: absolute; top: 34%; left: 50%;
-  width: 120px; height: 120px; margin: -60px 0 0 -60px;
-  border-radius: 50%; opacity: 0;
-}
-.sd-reveal-inner::before { border: 2px solid var(--signal); }
-.sd-reveal-inner::after  { border: 2px solid var(--live); }
-.sd-reveal.is-in .sd-reveal-inner::before { animation: sd-shock .6s ease-out .12s; }
-.sd-reveal.is-in .sd-reveal-inner::after  { animation: sd-shock .6s ease-out .21s; }
-@keyframes sd-shock {
-  0%   { opacity: 1; transform: scale(.2); }
-  100% { opacity: 0; transform: scale(3.2); }
-}
-
 .sd-reveal-label {
-  font-family: var(--sd-mono);
-  font-size: 12px; text-transform: uppercase; letter-spacing: 4px; color: var(--muted);
+  color: var(--text-muted);
+  font: 600 12px/1 var(--font-display); letter-spacing: .28em; text-transform: uppercase;
 }
-.sd-reveal-icon { font-size: 88px; margin: 14px 0; color: var(--text); }
+.sd-reveal-icon { color: var(--mode-color); margin: 16px 0; }
 .sd-reveal-icon svg { width: 84px; height: 84px; display: block; margin: 0 auto; }
-.sd-reveal.is-in .sd-reveal-icon { animation: sd-focus-in .26s cubic-bezier(.16,1,.3,1) both; }
-@keyframes sd-focus-in {
-  0%   { opacity: 0; transform: scale(.4); filter: blur(12px); }
-  60%  { opacity: 1; }
-  100% { opacity: 1; transform: scale(1); filter: blur(0); }
-}
+.sd-reveal.is-in .sd-reveal-icon { animation: sd-focus-in .22s ease-out both; }
+@keyframes sd-focus-in { 0% { opacity: 0; transform: scale(.6); } 100% { opacity: 1; transform: none; } }
 .sd-reveal-name {
   position: relative;
-  font-family: var(--sd-shout);
-  font-variation-settings: 'wdth' 125, 'wght' 900;
-  font-size: 34px; font-weight: 900; letter-spacing: .02em; text-transform: uppercase;
-  color: var(--signal);
+  color: var(--mode-color);
+  font: 700 34px/1 var(--font-display); letter-spacing: -.01em; text-transform: uppercase;
 }
-.sd-reveal.is-in .sd-reveal-name {
-  animation: sd-wipe .38s steps(8) .44s both;
-}
-@keyframes sd-wipe {
-  from { clip-path: inset(0 100% 0 0); }
-  to   { clip-path: inset(0 0 0 0); }
-}
-/* GO becomes a full-bleed lime bar wiping across the lower third. */
+.sd-reveal.is-in .sd-reveal-name { animation: sd-wipe .3s steps(8) .2s both; }
+@keyframes sd-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 .sd-reveal-go {
   position: fixed; left: 0; right: 0; bottom: 22%;
   padding: 14px 0; text-align: center;
-  font-family: var(--sd-shout);
-  font-variation-settings: 'wdth' 125, 'wght' 900;
-  font-size: 30px; letter-spacing: .3em; text-transform: uppercase;
-  color: var(--live-ink); background: var(--live);
+  font: 700 30px/1 var(--font-display); letter-spacing: .3em; text-transform: uppercase;
+  color: var(--on-flood); background: var(--mode-color);
   opacity: 0;
 }
-.sd-reveal.is-in .sd-reveal-go { animation: sd-go-bar .4s ease-out .78s both; }
-@keyframes sd-go-bar {
-  from { opacity: 0; clip-path: inset(0 100% 0 0); }
-  to   { opacity: 1; clip-path: inset(0 0 0 0); }
-}
+.sd-reveal.is-in .sd-reveal-go { animation: sd-go-bar .3s ease-out .5s both; }
+@keyframes sd-go-bar { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
 
-/* ══════════════════════════ SCREEN 4 · PLAY ═════════════════════
-   "The crack." Operate mode: puzzle is sacred, chrome is thin. */
+/* ══════════════════════════ SCREEN 4 · PLAY ═════════════════════ */
 .sd-play-bar {
   width: 100%; max-width: 460px;
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 12px 16px;
-  min-height: 44px;
-  background: var(--ink-raise);
-  border: 1px solid var(--hairline);
-  border-radius: var(--r);
-  box-shadow: var(--shadow-pop);
+  padding: 12px 16px; min-height: 44px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
 }
 .sd-progress { flex: 1; min-width: 0; }
 .sd-progress > span {
-  font-family: var(--sd-mono);
+  color: var(--text-muted);
+  font: 600 .68rem/1 var(--font-display);
   font-variant-numeric: tabular-nums;
-  font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--muted);
+  letter-spacing: .08em; text-transform: uppercase;
 }
-/* 5-segment tick strip - thin, filling lime. */
-.sd-progress-track {
-  margin-top: 7px; height: 3px; background: var(--steel);
-  border-radius: 999px; overflow: hidden;
-}
-.sd-progress-fill {
-  height: 100%; width: 0;
-  background: var(--live);
-  border-radius: 999px;
-  transition: width .4s ease;
-}
+.sd-progress-track { margin-top: 8px; height: 4px; background: var(--panel-2); overflow: hidden; }
+.sd-progress-fill { height: 100%; width: 0; background: var(--mode-color); transition: width .18s ease-out; }
 .sd-play-stats { display: flex; gap: 16px; }
 .sd-stat { display: flex; flex-direction: column; align-items: flex-end; }
 .sd-stat-label {
-  font-family: var(--sd-mono);
-  font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted);
+  color: var(--text-muted);
+  font: 600 .58rem/1.2 var(--font-display); letter-spacing: .1em; text-transform: uppercase;
 }
 .sd-stat-val {
-  font-family: var(--sd-mono);
-  font-variant-numeric: tabular-nums slashed-zero;
-  font-size: 18px; font-weight: 800;
+  color: var(--text);
+  font: 700 18px/1 var(--font-display);
+  font-variant-numeric: tabular-nums;
 }
-.sd-stat-val--warn { color: var(--alarm); }
+.sd-stat-val--warn { color: var(--danger); }
+#play-timer { display: inline-block; }
 
-/* Play clock 30s pulse (JS toggles .is-pulse). */
-#play-timer { display: inline-block; transition: color .3s; }
-#play-timer.is-pulse { animation: sd-clock-pulse 1s ease-in-out; }
-@keyframes sd-clock-pulse {
-  0%, 100% { transform: scale(1); color: var(--text); }
-  50% { transform: scale(1.18); color: var(--signal); }
-}
-
-/* ── WOW 2 · THE RACE - opponent progress as lane track ──────────
-   Hook #1 sets --solved per lane (persistent nodes) so the runner SLIDES.
-   Your lane is pinned to the top with a lime rail. */
+/* THE RACE - opponent progress as stepped-plane lanes. Your lane sits on a
+   raised plane with a left-edge accent bar (NOT a glow). Runner slides on
+   --solved. */
 .sd-progress-panel {
   width: 100%; max-width: 460px;
-  display: flex; flex-direction: column; gap: 6px;
+  display: flex; flex-direction: column; gap: 4px;
   max-height: 168px; overflow-y: auto;
-  padding: 10px 14px;
-  background: var(--ink-raise);
-  border: 1px solid var(--hairline);
-  border-radius: var(--r);
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
   scrollbar-width: none;
 }
 .sd-progress-panel[hidden] { display: none; }
 .sd-progress-panel::-webkit-scrollbar { display: none; }
 
+/* Lane columns: ghost | name | dots | done-flag.
+   The name column was a hard 88px, which ellipsised at ~8 characters. 132px fits
+   a 12-char name (the join input's cap) at this type size without pushing the
+   dots off a half-width booth pane. */
 .sd-pg-player {
-  display: grid;
-  grid-template-columns: 84px 1fr auto;
+  position: relative;
+  display: grid; grid-template-columns: 30px 132px minmax(0, 1fr) auto;
   align-items: center; gap: 10px;
-  padding: 3px 0 3px 8px;
-  border-left: 3px solid transparent;
+  padding: 6px 8px;
+  border: 1px solid transparent;
 }
-.sd-pg-player--me { order: -1; border-left-color: var(--live); }
+
+/* Ghost racer — state read from data-ghost, set per poll in renderRace().
+   GIFs are decorative; the lane's name + dots already carry the information, so
+   these are aria-hidden and collapse to a static frame under reduced motion. */
+.sd-pg-ghost {
+  width: 30px; height: 30px;
+  background-repeat: no-repeat; background-position: center bottom; background-size: contain;
+  image-rendering: pixelated;
+  /* No scaleX flip — the source GIFs already face right, which is the direction
+     of travel along the dot track. */
+}
+.sd-pg-ghost[data-ghost="idle"]    { background-image: url("assets/showdown/ghost_sleep_idle.gif"); opacity: .55; }
+.sd-pg-ghost[data-ghost="running"] { background-image: url("assets/showdown/ghost_run.gif"); }
+.sd-pg-ghost[data-ghost="leading"] { background-image: url("assets/showdown/ghost_sparkle_idle.gif"); }
+.sd-pg-ghost[data-ghost="trailing"]{ background-image: url("assets/showdown/ghost_teary_idle.gif"); }
+.sd-pg-ghost[data-ghost="done"]    { background-image: url("assets/showdown/ghost_sparkle_idle.gif"); }
+.sd-pg-player--me { order: -1; background: var(--panel-2); box-shadow: inset 3px 0 0 var(--mode-color); }
 .sd-pg-name {
-  font-family: var(--sd-shout);
-  font-variation-settings: 'wdth' 108, 'wght' 800;
-  font-size: 12px; letter-spacing: .02em; text-transform: uppercase; color: var(--muted);
+  color: var(--text-secondary);
+  font: 700 12px/1 var(--font-display); letter-spacing: .01em; text-transform: uppercase;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.sd-pg-player--me .sd-pg-name { color: var(--live); }
+.sd-pg-player--me .sd-pg-name { color: var(--text); }
 
-/* The lane: 5 stops with a runner that rides on --solved. */
-.sd-pg-dots {
-  position: relative;
-  display: flex; align-items: center; gap: 4px;
-  height: 18px;
-}
-.sd-pg-dot {
-  width: 9px; height: 9px; border-radius: 999px;
-  background: var(--steel);
-  border: 1px solid var(--hairline-2);
-}
-.sd-pg-dot.is-filled {
-  background: var(--live); border-color: var(--live);
-}
-/* Runner slides along the lane (dot pitch = 9px + 4px gap = 13px). */
+.sd-pg-dots { position: relative; display: flex; align-items: center; gap: 4px; height: 18px; }
+.sd-pg-dot { width: 9px; height: 9px; background: var(--panel-3); border: 1px solid var(--line-strong); }
+.sd-pg-dot.is-filled { background: var(--mode-color); border-color: var(--mode-color); }
+/* Runner slides (dot pitch = 9px + 4px gap = 13px). Square token, no glow. */
 .sd-pg-runner {
   position: absolute; left: -2px; top: 50%;
   width: 13px; height: 13px; margin-top: -6.5px;
-  border-radius: 4px;
-  background: var(--live);
-  box-shadow: 0 0 8px rgba(214, 255, 58, .55);
+  background: var(--text-muted);
   transform: translateX(calc(var(--solved, 0) * 13px));
-  transition: transform .45s cubic-bezier(.22,.61,.36,1);
+  transition: transform .18s ease-out;
 }
-.sd-pg-player:not(.sd-pg-player--me) .sd-pg-runner { background: var(--signal); box-shadow: none; }
-/* Finished marker (semantic live state; replaces the old flag emoji). */
+.sd-pg-player--me .sd-pg-runner { background: var(--mode-color); }
 .sd-pg-flag {
-  font-family: var(--sd-mono);
-  font-size: 9px; font-weight: 800; letter-spacing: .5px;
-  color: var(--live-ink); background: var(--live);
-  padding: 2px 5px; border-radius: 999px; text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: .3rem;
+  color: var(--success);
+  font: 700 9px/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase;
 }
+.sd-pg-flag::before { content: ""; width: 6px; height: 6px; background: currentColor; }
 .sd-pg-flag[hidden] { display: none; }
+/* Leader marker - a subtle raised tint, no animated sheen/glow. */
+.sd-pg-leader:not(.sd-pg-player--me) { background: color-mix(in srgb, var(--mode-color) 8%, var(--panel)); }
 
-/* ══════════════ RACE ENERGY (PLAY) — competitive motion layer ══════════════
-   Visual-only enhancement over the existing race strip + heat bar. Every cue is
-   a transform / opacity / box-shadow beat (no layout, no reflow), keyed to the
-   real standings poll, and every one collapses to static under reduced motion
-   (see the @media block at the foot of this file). The ember bed + vault grain
-   stay FROZEN during PLAY — none of this touches them. */
+/* Retired HEAT race-energy animation classes collapse to no-ops. */
+.sd-pg-advance .sd-pg-dots, .sd-pg-pass, .sd-pg-passed, .sd-pg-solved,
+.sd-pg-solved .sd-pg-dots, .sd-pg-leader::after { animation: none; }
 
-/* Lanes anchor the leader sheen pseudo-element. */
-.sd-pg-player { position: relative; }
+/* Puzzle mount plane. Components hardcode color:#fff on --accent fills, and
+   bright coral fails AA with white, so scope --accent to a white-safe deep
+   coral HERE only (white-on-fill ~5:1). The shell keeps bright coral. */
+.sd-puzzle-wrap { width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 14px; }
 
-/* A1 — make "find yourself" instant: reinforce your own lane's lime rail. */
-.sd-pg-player--me { box-shadow: inset 2px 0 0 0 var(--live); }
-
-/* A2 — opponent ADVANCE tick: a brief scale beat when their completion% rises. */
-.sd-pg-advance .sd-pg-dots { animation: sd-pg-advance .5s ease-out; }
-@keyframes sd-pg-advance {
-  0%, 100% { transform: scale(1); }
-  40%      { transform: scale(1.07); }
-}
-
-/* A3 — PASS-ME alarm (~600ms): an opponent overtook you. Alarm-red, short. */
-.sd-pg-pass { animation: sd-pg-pass .6s ease-out; }
-@keyframes sd-pg-pass {
-  0%, 100% { background: rgba(255, 45, 61, 0); }
-  22%      { background: rgba(255, 45, 61, .30); }
-}
-.sd-pg-passed { animation: sd-pg-passed .6s ease-out; }
-@keyframes sd-pg-passed {
-  0%, 100% { box-shadow: inset 2px 0 0 0 var(--live); transform: translateX(0); }
-  22%      { box-shadow: inset 3px 0 0 0 var(--alarm); transform: translateX(1.5px); }
-  60%      { transform: translateX(-1.5px); }
-}
-
-/* A4 — LEADER shimmer: a subtle gold sheen sweeping the current 1st-place lane.
-   Gold is reserved for 1st place. Persistent while rank 1. */
-.sd-pg-leader::after {
-  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 42%;
-  pointer-events: none; border-radius: 4px;
-  background: linear-gradient(90deg, transparent, rgba(255, 210, 74, .18), transparent);
-  transform: translateX(-70%);
-  animation: sd-pg-leader-sheen 3.4s ease-in-out infinite;
-}
-@keyframes sd-pg-leader-sheen {
-  0%   { transform: translateX(-70%); }
-  100% { transform: translateX(320%); }
-}
-
-/* A5 — punchier SOLVE: a quick lime overexpose + scale beat on YOUR lane. */
-.sd-pg-solved { animation: sd-pg-solved .6s cubic-bezier(.22, 1.2, .4, 1); }
-@keyframes sd-pg-solved {
-  0%, 100% { transform: scale(1); background: rgba(214, 255, 58, 0); }
-  25%      { transform: scale(1.03); background: rgba(214, 255, 58, .30); }
-}
-.sd-pg-solved .sd-pg-dots { animation: sd-pg-solved-dots .6s ease-out; }
-@keyframes sd-pg-solved-dots {
-  0%, 100% { filter: none; }
-  30%      { filter: brightness(1.6); }
-}
-
-/* B — CLOCK HEAT: restrained exception to the PLAY freeze. ONLY this peripheral
-   bottom edge bar reacts to the clock (JS toggles .sd-heat-live and feeds the
-   custom props from standings.game_remaining_sec / is_final_minute). Anchored
-   under the SAME :has() that freezes the ambient, so it overrides that pause. */
-body:has(#screen-play:not([hidden])) .sd-heatbar.sd-heat-live {
-  animation-name: sd-heat-live-breathe;
-  animation-duration: var(--sd-heat-dur, 6s);
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-play-state: running;
-  opacity: var(--sd-heat-hi, .7);
-  box-shadow: 0 0 var(--sd-heat-glow, 0px) var(--signal);
-}
-@keyframes sd-heat-live-breathe {
-  0%, 100% { opacity: var(--sd-heat-lo, .35); }
-  50%      { opacity: var(--sd-heat-hi, .85); }
-}
-
-/* ── Puzzle mount - clean and neutral (do NOT decorate inside) ─── */
-.sd-puzzle-wrap {
-  width: 100%; max-width: 460px;
-  display: flex; flex-direction: column; gap: 14px;
-}
+/* Runtime-inserted wrapper around #play-mount (see lockoutHost() in showdown.js).
+   It hosts the absolutely-positioned wrong-answer scrim. The scrim CANNOT live
+   inside #play-mount: lock components clear that element's innerHTML when they
+   re-render on a wrong answer (wager-lock.js:148, spelling-lock.js:84) and would
+   destroy it. Covering only the mount keeps the question above it readable. */
+.sd-mount-shell { position: relative; display: flex; flex-direction: column; }
 .sd-question {
   padding: 15px 16px;
-  background: var(--ink-raise);
-  border: 1px solid var(--hairline);
-  border-left: 3px solid var(--signal);
-  border-radius: var(--r);
-  font-size: 15px; font-weight: 600; line-height: 1.5;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--mode-color);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font: 600 15px/1.5 var(--font-body);
 }
 .sd-question:empty { display: none; }
-.sd-puzzle-mount { min-height: 60px; }
-
-/* Shared puzzle components hardcode color:#fff on background:var(--accent)
-   fills. Bright Signal Orange fails AA with white, so scope a deeper
-   white-safe orange to the mount ONLY (contrast with #fff ~= 4.9:1). The shell
-   keeps bright orange + dark ink everywhere else. */
-#play-mount { --accent: #A85D00; }
+.sd-puzzle-mount {
+  min-height: 60px;
+  padding: 14px 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+#play-mount { --accent: #c81450; }
+.sd-theme-light #play-mount { --accent: #b0104a; }
 
 .sd-play-log {
-  min-height: 18px; text-align: center; font-size: 12px; color: var(--muted);
-  font-family: var(--sd-mono); letter-spacing: .2px;
+  min-height: 18px; text-align: center; color: var(--text-muted);
+  font: 500 12px/1.4 var(--font-body); letter-spacing: .02em;
 }
 
-/* ══════════════ WOW 3 · SOLVED (the burst) ══════════════
-   full-bleed lime overexpose -> SOLVED settles through overshoot ->
-   12 sliver shards fan out (canvas sparks via hook #3 draw on top). */
+/* Wrong-answer 5s lockout scrim. */
+#play-mount.sd-locked { position: relative; }
+.sd-lockout {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px; text-align: center;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--ink) 78%, transparent);
+  color: var(--text);
+  font: 700 15px/1.3 var(--font-display); letter-spacing: .04em; text-transform: uppercase;
+}
+
+/* SOLVED flash - restyled to a clean coral wash + display word, no neon halo. */
 .sd-solved-flash {
   position: fixed; inset: 0; z-index: 40;
   display: flex; align-items: center; justify-content: center;
-  pointer-events: none;
-  opacity: 0;
-  background: rgba(10, 7, 5, 0);
+  pointer-events: none; opacity: 0;
 }
-.sd-solved-flash.is-on { animation: sd-solve-bg .62s ease-out; }
+.sd-solved-flash.is-on { animation: sd-solve-bg .5s ease-out; }
 @keyframes sd-solve-bg {
-  0%   { opacity: 1; background: rgba(214, 255, 58, .9); }
-  12%  { opacity: 1; background: rgba(10, 7, 5, .55); }
-  85%  { opacity: 1; background: rgba(10, 7, 5, .5); }
-  100% { opacity: 0; background: rgba(10, 7, 5, 0); }
+  0% { opacity: 1; background: color-mix(in srgb, var(--mode-color) 82%, transparent); }
+  30% { opacity: 1; background: color-mix(in srgb, var(--ink) 55%, transparent); }
+  100% { opacity: 0; background: transparent; }
 }
 .sd-solved-word {
   position: relative;
-  font-family: var(--sd-shout);
-  font-variation-settings: 'wdth' 125, 'wght' 900;
-  font-size: 15vw; letter-spacing: -0.02em; text-transform: uppercase;
-  color: var(--live);
-  transform: scale(.86); opacity: 0;
+  font: 700 15vw/1 var(--font-display); letter-spacing: -.02em; text-transform: uppercase;
+  color: var(--mode-color);
+  transform: scale(.9); opacity: 0;
 }
-/* "The cut" (2 of max 4): stencil hairline through SOLVED. */
-.sd-solved-word::after {
-  content: ""; position: absolute; left: -4%; right: -4%; top: 52%;
-  height: 4px; background: var(--ink);
-}
-.sd-solved-flash.is-on .sd-solved-word { animation: sd-solve-word .5s cubic-bezier(.22,1.2,.4,1) .06s both; }
-@keyframes sd-solve-word {
-  0%   { opacity: 0; transform: scale(.86); }
-  60%  { opacity: 1; transform: scale(1.04); }
-  100% { opacity: 1; transform: scale(1); }
-}
-/* 12 thin sliver shards fanning out. */
-.sd-shards { position: absolute; inset: 0; pointer-events: none; }
-.sd-shard {
-  position: absolute; top: 50%; left: 50%;
-  width: 2px; height: 18px; margin: -9px 0 0 -1px;
-  background: var(--live); opacity: 0;
-  transform: rotate(var(--a)) translateY(0);
-}
-.sd-shard:nth-child(even) { background: var(--signal); }
-.sd-solved-flash.is-on .sd-shard { animation: sd-shard-fly .52s ease-out both; animation-delay: var(--sd-shard-delay, 0s); }
-@keyframes sd-shard-fly {
-  0%   { opacity: 1; transform: rotate(var(--a)) translateY(0); }
-  100% { opacity: 0; transform: rotate(var(--a)) translateY(-120px); }
-}
+.sd-solved-flash.is-on .sd-solved-word { animation: sd-solve-word .4s ease-out .04s both; }
+@keyframes sd-solve-word { 0% { opacity: 0; transform: scale(.9); } 100% { opacity: 1; transform: none; } }
+/* Retire the HEAT shard fan. */
+.sd-shards, .sd-shard { display: none; }
 
-/* ── Shared status / loading ─────────────────────────────────── */
-.sd-loading, .sd-error {
-  padding: 24px 16px; text-align: center; font-size: 14px;
-  border-radius: var(--r);
-}
-.sd-loading { color: var(--muted); font-family: var(--sd-mono); letter-spacing: .3px; }
+/* Shared status / loading. */
+.sd-loading, .sd-error { padding: 24px 16px; text-align: center; font-size: 14px; border-radius: var(--radius-sm); }
+.sd-loading { color: var(--text-muted); font-family: var(--font-body); }
 .sd-error {
-  color: var(--alarm); font-weight: 700;
-  background: rgba(255, 45, 61, .08);
-  border: 1px solid rgba(255, 45, 61, .3);
+  color: var(--danger); font-weight: 600;
+  background: color-mix(in srgb, var(--danger) 10%, var(--panel));
+  border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--line));
 }
 
-/* ══════════════ TOASTS ("Name finished!") ══════════════ */
+/* ══════════════════ TOASTS ══════════════════ */
 .sd-toast-host {
   position: fixed; left: 0; right: 0; top: calc(12px + env(safe-area-inset-top));
   z-index: 60;
@@ -920,345 +888,246 @@ body:has(#screen-play:not([hidden])) .sd-heatbar.sd-heat-live {
 }
 .sd-toast {
   max-width: 90vw;
-  padding: 10px 18px;
-  background: var(--steel);
-  border: 1px solid var(--live);
-  border-radius: 999px;
+  padding: 10px 16px;
+  background: var(--panel-2);
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--mode-color);
+  border-radius: var(--radius-sm);
   color: var(--text);
-  font-family: var(--sd-mono);
-  font-size: 12.5px; font-weight: 700; letter-spacing: .3px;
-  box-shadow: var(--shadow-pop);
+  font: 600 12.5px/1.3 var(--font-display); letter-spacing: .02em;
+  box-shadow: var(--shadow);
   opacity: 0; transform: translateY(-12px);
-  animation: sd-toast-in .3s ease-out forwards, sd-toast-out .3s ease-in forwards;
+  animation: sd-toast-in .18s ease-out forwards, sd-toast-out .18s ease-in forwards;
   animation-delay: 0s, 2.4s;
 }
 .sd-toast svg { width: 13px; height: 13px; vertical-align: -2px; }
-@keyframes sd-toast-in { to { opacity: 1; transform: translateY(0); } }
+@keyframes sd-toast-in { to { opacity: 1; transform: none; } }
 @keyframes sd-toast-out { to { opacity: 0; transform: translateY(-12px); } }
 
-/* ══════════════ WOW 4 · THE PODIUM (the split) ══════════════
-   black -> hairline sweep -> headline (ranks withheld) -> 3rd/2nd/1st
-   EXTRUDE up as podium plates of different heights -> 1st lands hardest.
-   DOM order stays natural (best-first, for a11y + JS); the podium arrangement
-   comes from grid-area on nth-child(1..3). 4th/5th are flat rows that still
-   get their own rise beat. */
-.sd-results-crown {
-  color: var(--gold);
-  text-align: center; line-height: 1;
-  filter: drop-shadow(0 6px 16px rgba(255, 210, 74, .3));
-}
+/* ══════════════════════════ SCREEN 5 · RESULTS ══════════════════
+   Podium in SERVER rank order (best-first DOM). Top three placed into a
+   3-column podium (2nd left, 1st centre, 3rd right); 4th/5th flow below. */
+.sd-results-crown { color: var(--mode-color); text-align: center; line-height: 1; }
 .sd-results-crown svg { width: 56px; height: 56px; display: inline-block; }
-.sd-results-crown.is-champion {
-  animation: sd-crown-pop 1s ease-out, sd-crown-float 2.4s ease-in-out .8s infinite;
-}
-@keyframes sd-crown-pop {
-  0%   { transform: translateY(-24px) scale(0) rotate(-30deg); opacity: 0; }
-  60%  { transform: translateY(4px) scale(1.3) rotate(8deg); opacity: 1; }
-  100% { transform: translateY(0) scale(1) rotate(0); opacity: 1; }
-}
-@keyframes sd-crown-float { 50% { transform: translateY(-8px) rotate(-4deg); } }
+.sd-results-crown.is-champion { animation: sd-crown-pop .3s ease-out both; }
+@keyframes sd-crown-pop { 0% { transform: translateY(-14px) scale(.7); opacity: 0; } 100% { transform: none; opacity: 1; } }
 
-/* Player's own score breakdown. */
 .sd-your-results {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   padding: 15px 16px;
-  background: var(--signal-wash);
-  border: 1px solid var(--signal);
-  border-radius: var(--r);
+  background: color-mix(in srgb, var(--mode-color) 10%, var(--panel));
+  border: 1px solid var(--mode-color);
+  border-radius: var(--radius-md);
 }
 .sd-your-results[hidden] { display: none; }
 .sd-your-results-label {
-  font-family: var(--sd-mono);
-  font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px; color: var(--signal);
+  color: var(--mode-color);
+  font: 600 .66rem/1 var(--font-display); letter-spacing: .18em; text-transform: uppercase;
 }
 .sd-your-results-line {
-  font-family: var(--sd-mono);
-  font-variant-numeric: tabular-nums slashed-zero;
-  font-size: 15px; font-weight: 700; text-align: center;
+  color: var(--text);
+  font: 700 15px/1.3 var(--font-display);
+  font-variant-numeric: tabular-nums; text-align: center;
 }
 .sd-your-results-stars { font-size: 20px; letter-spacing: 3px; line-height: 1; }
 
-/* Leaderboard / self-building podium. Top three are placed explicitly into a
-   3-column podium (2nd left, 1st centre, 3rd right), bottoms aligned so the
-   height differences read as extrusion. 4th/5th flow as full-width rows below. */
+/* minmax(0, …) not a bare 1fr: `1fr` means `minmax(auto, 1fr)`, so a long
+   white-space:nowrap name raised the column's auto minimum and widened its podium
+   plate, making the three plates unequal. A 0 minimum keeps the plates fixed and
+   lets .sd-lb-name ellipsis do its job. */
 .sd-leaderboard {
-  list-style: none;
-  display: grid;
-  grid-template-columns: 1fr 1.15fr 1fr;
-  align-items: end;
-  gap: 8px;
+  list-style: none; display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: end; gap: 8px;
 }
 .sd-lb-row {
   display: flex; align-items: center; gap: 10px;
   padding: 14px 12px;
-  background: var(--ink-raise);
-  border: 1px solid var(--hairline);
-  border-left: 3px solid var(--hairline-2);
-  border-radius: var(--r);
-  animation: sd-lb-rise .5s cubic-bezier(.34,1.4,.64,1) both;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  animation: sd-lb-rise .18s ease-out both;
 }
-@keyframes sd-lb-rise {
-  from { opacity: 0; transform: translateY(40px) scaleY(.9); }
-  to   { opacity: 1; transform: translateY(0) scaleY(1); }
-}
+@keyframes sd-lb-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
-/* Top three become tiered podium plates. Rows are pre-sorted best-first by JS,
-   so nth-child maps to rank. */
+/* Top three as tiered podium plates (rows pre-sorted best-first by JS). */
 #results-board .sd-lb-row:nth-child(1) {
   grid-column: 2; grid-row: 1;
   flex-direction: column; text-align: center; gap: 6px;
   padding-top: 26px; min-height: 128px;
-  border-left: none; border-top: 3px solid var(--gold);
-  background: linear-gradient(180deg, rgba(255, 210, 74, .14), transparent 60%), var(--ink-raise);
-  animation-delay: .56s;
+  border-top: 3px solid var(--mode-color);
+  background: color-mix(in srgb, var(--mode-color) 12%, var(--panel));
 }
 #results-board .sd-lb-row:nth-child(2) {
   grid-column: 1; grid-row: 1;
   flex-direction: column; text-align: center; gap: 6px;
   padding-top: 20px; min-height: 100px;
-  border-left: none; border-top: 3px solid #C7CDD8;
-  animation-delay: .34s;
+  border-top: 3px solid var(--line-strong);
 }
 #results-board .sd-lb-row:nth-child(3) {
   grid-column: 3; grid-row: 1;
   flex-direction: column; text-align: center; gap: 6px;
   padding-top: 20px; min-height: 84px;
-  border-left: none; border-top: 3px solid #C97B3C;
-  animation-delay: .16s;
+  border-top: 3px solid var(--text-muted);
 }
-/* 4th/5th: full-width flat rows that still get their own rise beat. */
-#results-board .sd-lb-row:nth-child(n+4) { grid-column: 1 / -1; animation-delay: 0s; }
+#results-board .sd-lb-row:nth-child(n+4) { grid-column: 1 / -1; }
 
-#results-board .sd-lb-row:nth-child(1) .sd-lb-rank { color: var(--gold); font-size: 30px; }
-#results-board .sd-lb-row:nth-child(2) .sd-lb-rank { color: #C7CDD8; font-size: 24px; }
-#results-board .sd-lb-row:nth-child(3) .sd-lb-rank { color: #C97B3C; font-size: 24px; }
+#results-board .sd-lb-row:nth-child(1) .sd-lb-rank { color: var(--mode-color); font-size: 30px; }
+#results-board .sd-lb-row:nth-child(2) .sd-lb-rank { color: var(--text-secondary); font-size: 24px; }
+#results-board .sd-lb-row:nth-child(3) .sd-lb-rank { color: var(--text-secondary); font-size: 24px; }
 #results-board .sd-lb-row:nth-child(-n+3) .sd-lb-name { font-size: 14px; }
-#results-board .sd-lb-row:nth-child(-n+3) .sd-lb-stats {
-  justify-content: center; flex-wrap: wrap; gap: 6px; font-size: 11px;
-}
+#results-board .sd-lb-row:nth-child(-n+3) .sd-lb-stats { justify-content: center; flex-wrap: wrap; gap: 6px; font-size: 11px; }
 
-/* Champion (JS adds --win only when finished & rank 1): gold ring + shake +
-   shockwave. 1st place lands hardest. */
-.sd-lb-row--win {
-  border-color: var(--gold);
-  position: relative;
-  animation: sd-lb-rise .5s cubic-bezier(.34,1.4,.64,1) both, sd-shake .12s steps(2) .56s 2;
-}
-@keyframes sd-shake { 50% { transform: translateX(3px); } }
-.sd-lb-row--win::after {
-  content: ""; position: absolute; inset: 0; border-radius: var(--r);
-  border: 2px solid var(--gold); opacity: 0;
-  animation: sd-gold-shock .7s ease-out .6s;
-}
-@keyframes sd-gold-shock {
-  0%   { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.5); }
-}
-/* Your own row: lime rail identity. */
-.sd-lb-row--me { box-shadow: inset 3px 0 0 0 var(--live); }
+/* Champion (JS adds --win when finished & rank 1): mode-color ring. */
+.sd-lb-row--win { border-color: var(--mode-color); box-shadow: inset 0 0 0 1px var(--mode-color); }
+.sd-lb-row--me { box-shadow: inset 3px 0 0 var(--mode-color); }
+.sd-lb-row--win.sd-lb-row--me { box-shadow: inset 3px 0 0 var(--mode-color), inset 0 0 0 1px var(--mode-color); }
 
 .sd-lb-rank {
-  font-family: var(--sd-shout);
-  font-variation-settings: 'wdth' 125, 'wght' 900;
-  font-size: 20px; font-weight: 900; min-width: 30px; text-align: center;
+  color: var(--text);
+  font: 700 20px/1 var(--font-display);
+  font-variant-numeric: tabular-nums;
+  min-width: 30px; text-align: center;
 }
 .sd-lb-name {
-  flex: 1; min-width: 0;
-  font-family: var(--sd-shout);
-  font-variation-settings: 'wdth' 112, 'wght' 800;
-  font-size: 15px; text-transform: uppercase;
+  flex: 1; min-width: 0; max-width: 100%;
+  color: var(--text);
+  font: 700 15px/1.1 var(--font-display); text-transform: uppercase;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .sd-lb-stats {
   display: flex; align-items: center; gap: 10px;
-  font-family: var(--sd-mono);
-  font-variant-numeric: tabular-nums slashed-zero;
-  font-size: 12px; color: var(--muted);
+  color: var(--text-muted);
+  font: 500 12px/1 var(--font-body);
+  font-variant-numeric: tabular-nums;
 }
-.sd-lb-correct { color: var(--live); font-weight: 800; }
-.sd-lb-pen { color: var(--alarm); font-weight: 700; }
-.sd-lb-time { color: var(--text); }
-.sd-lb-dnf { color: var(--muted); font-style: italic; }
+.sd-lb-correct { color: var(--success); font-weight: 700; }
+.sd-lb-pen { color: var(--danger); font-weight: 700; }
+.sd-lb-time { color: var(--text-secondary); }
+.sd-lb-dnf { color: var(--text-muted); font-style: italic; }
 
-.sd-results-status { text-align: center; font-size: 13px; color: var(--muted); font-family: var(--sd-mono); letter-spacing: .3px; }
+/* ── Finished-and-waiting spectator card (renderFinishedWaiting) ──────
+   Shown in #play-mount once you have cracked all 5 locks but the round is still
+   running. The live race strip stays visible above it. */
+.sd-spectate { display: flex; flex-direction: column; gap: 10px; }
+.sd-spec-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.sd-spec-badge {
+  padding: 3px 8px;
+  background: var(--mode-color); color: var(--ink);
+  font: 700 11px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+}
+.sd-spec-time {
+  color: var(--text); font: 700 20px/1 var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+.sd-spec-pos {
+  display: flex; align-items: baseline; gap: 8px;
+  color: var(--text-secondary); font: 500 14px/1.2 var(--font-body);
+}
+.sd-spec-pos strong { color: var(--text); font: 700 22px/1 var(--font-display); }
+.sd-spec-prov {
+  color: var(--text-muted);
+  font: 600 10px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase;
+}
+.sd-spec-sub { color: var(--text-muted); font: 500 12px/1.4 var(--font-body); }
+.sd-spec-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.sd-spec-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 5px 8px;
+  background: var(--panel-2);
+  border-left: 2px solid var(--line-strong);
+}
+.sd-spec-name {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--text-secondary);
+  font: 700 12px/1 var(--font-display); text-transform: uppercase;
+}
+.sd-spec-pct {
+  color: var(--text); font: 600 12px/1 var(--font-body); font-variant-numeric: tabular-nums;
+}
 
+.sd-results-status { text-align: center; color: var(--text-muted); font: 500 13px/1.4 var(--font-body); }
 .sd-results-actions { display: flex; flex-direction: column; gap: 8px; }
 .sd-results-actions .sd-btn { margin-top: 0; }
 
-/* ── Confetti (CSS-only; pieces + colors injected by JS hook #2) ─────── */
+/* Confetti (CSS-only; pieces + colors injected by JS from the palette). */
 .sd-confetti { position: fixed; inset: 0; z-index: 55; overflow: hidden; pointer-events: none; }
 .sd-confetti:empty { display: none; }
 .sd-confetti-piece {
   position: absolute; top: -12px;
-  width: 3px; height: 16px;      /* thin slivers, matching the SOLVED shards */
-  opacity: 0;
+  width: 3px; height: 14px; opacity: 0;
   will-change: transform, opacity;
   animation: sd-confetti-fall linear forwards;
 }
 @keyframes sd-confetti-fall {
-  0%   { opacity: 1; transform: translateY(-12px) rotateZ(0deg); }
+  0% { opacity: 1; transform: translateY(-12px) rotateZ(0deg); }
   100% { opacity: .9; transform: translateY(102vh) rotateZ(720deg); }
 }
 
-/* ══════════════════════════════════════════════════════════════
-   Reduced motion - collapse every burst to a static end-state.
-   ══════════════════════════════════════════════════════════════ */
-@media (prefers-reduced-motion: reduce) {
-  .sd-ember::before, .sd-ember::after, .sd-heatbar { animation: none; }
-  .sd-enter-slide-left, .sd-enter-fade, .sd-enter-zoom, .sd-enter-slide-up { animation: none; }
-  .sd-timer.is-urgent { animation: none; }
-  .sd-timer.is-urgent .sd-timer-ticks { animation: none; opacity: .8; }
-  .sd-timer-ring-fg { transition: stroke .3s; }
-  #screen-vote:has(.sd-timer.is-urgent)::after { animation: none; opacity: .28; }
-  .sd-reveal.is-in .sd-reveal-inner::before,
-  .sd-reveal.is-in .sd-reveal-inner::after { animation: none; opacity: 0; }
-  .sd-reveal.is-in .sd-reveal-icon { animation: none; opacity: 1; }
-  .sd-reveal.is-in .sd-reveal-name { animation: none; clip-path: none; }
-  .sd-reveal.is-in .sd-reveal-go { animation: none; opacity: 1; clip-path: none; }
-  #play-timer.is-pulse { animation: none; }
-  .sd-pg-runner { transition: none; }
-  /* Race-energy cues collapse to static (JS also no-ops via prefersReducedMotion). */
-  .sd-pg-advance .sd-pg-dots,
-  .sd-pg-pass, .sd-pg-passed,
-  .sd-pg-solved, .sd-pg-solved .sd-pg-dots { animation: none; }
-  .sd-pg-leader::after {
-    animation: none; transform: none; left: 0; width: 100%;
-    background: linear-gradient(90deg, rgba(255, 210, 74, .12), transparent 45%);
-  }
-  /* Clock-heat: no breathe; keep a static brighter bar so time pressure still reads. */
-  body:has(#screen-play:not([hidden])) .sd-heatbar.sd-heat-live {
-    animation: none; opacity: var(--sd-heat-hi, .6);
-  }
-  .sd-toast { animation: none; opacity: 1; transform: none; }
-  /* Solved burst collapses to a static lime frame, canvas never starts. */
-  .sd-solved-flash.is-on { animation: sd-solve-static .62s ease-out; }
-  @keyframes sd-solve-static { 0% { opacity: 0; } 20%,75% { opacity: 1; } 100% { opacity: 0; } }
-  .sd-solved-flash.is-on .sd-solved-word { animation: none; opacity: 1; transform: none; }
-  .sd-solved-flash.is-on .sd-shard { animation: none; opacity: 0; }
-  .sd-results-crown.is-champion { animation: none; }
-  .sd-lb-row, .sd-lb-row--win { animation: none; opacity: 1; transform: none; }
-  .sd-lb-row--win::after { animation: none; opacity: 0; }
-  .sd-confetti { display: none; }
-  .sd-btn:active { transform: none; }
-  .sd-cat-btn:active { transform: none; }
-}
-
-/* ── Small screens (mobile-first baseline; test target 375px) ──── */
-@media (max-width: 360px) {
-  .sd-cat-grid { grid-template-columns: 1fr; }
-  .sd-code-value { font-size: 40px; letter-spacing: 7px; }
-  .sd-input--code { letter-spacing: 14px; text-indent: 14px; font-size: 20px; }
-}
-
-/* ── Landscape / short viewports: top-align and cap the wordmark so it never
-   dominates the height; vertical scroll (never horizontal) absorbs overflow. */
-@media (max-height: 480px) and (orientation: landscape) {
-  .sd-screen { justify-content: flex-start; padding-top: calc(14px + env(safe-area-inset-top)); gap: 12px; }
-  .sd-join-hero { max-width: 360px; }
-  .sd-card { padding: 18px 18px; }
-}
-
-/* ══════════════════════════════════════════════════════════════════
-   FEATURE 1 - Theme toggle control (built at runtime by showdown.js)
-   Small, unobtrusive pill in the JOIN screen chrome. Tokenised, so it
-   themes itself. Reduced-motion safe (no animation).
-   ══════════════════════════════════════════════════════════════════ */
+/* ══════════════════ Theme toggle (runtime pill) ══════════════════ */
 #screen-join { position: relative; }
 .sd-theme-toggle {
   position: absolute;
   top: calc(10px + env(safe-area-inset-top));
-  right: 10px;
-  z-index: 6;
+  right: 10px; z-index: 6;
   width: auto; min-height: 0;
   padding: 6px 11px;
-  font-family: var(--sd-mono);
-  font-size: 11px; font-weight: 700; letter-spacing: .5px;
-  text-transform: uppercase;
   color: var(--text);
-  background: var(--steel);
-  border: 1px solid var(--hairline-2);
-  border-radius: 999px;
+  background: var(--panel-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  font: 600 11px/1 var(--font-display);
+  letter-spacing: .06em; text-transform: uppercase;
   cursor: pointer;
+  transition: border-color .16s ease-out, background .16s ease-out;
 }
-.sd-theme-toggle:hover { border-color: var(--signal); }
-.sd-theme-toggle:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.sd-theme-toggle:hover { border-color: var(--text-secondary); background: var(--panel-3); }
+.sd-theme-toggle:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
-/* ══════════════════════════════════════════════════════════════════
-   FEATURE 2 - Wrong-answer 5s lockout scrim (created by showdown.js)
-   Covers #play-mount, blocks pointer input; the puzzle itself is set
-   `inert` for keyboard/AT. Static countdown text (reduced-motion safe).
-   #play-mount only becomes positioned while locked (.sd-locked), so
-   normal puzzle layout is untouched.
-   ══════════════════════════════════════════════════════════════════ */
-#play-mount.sd-locked { position: relative; }
-.sd-lockout {
-  position: absolute; inset: 0; z-index: 5;
-  display: flex; align-items: center; justify-content: center;
-  padding: 12px; text-align: center;
-  border-radius: var(--r);
-  background: rgba(10, 7, 5, .66);
-  color: var(--text);
-  font-family: var(--sd-mono);
-  font-weight: 700; font-size: 15px; letter-spacing: .5px;
+/* MOCK badge (built at runtime). */
+#sd-mock-badge {
+  position: fixed; left: 10px; top: calc(10px + env(safe-area-inset-top)); z-index: 60;
+  padding: 5px 9px; border-radius: var(--radius-sm); pointer-events: none;
+  background: var(--warning); color: var(--on-flood);
+  font: 700 10px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   FEATURE 1 - LIGHT THEME (.sd-theme-light on <html>/<body>)
-   Remaps the HEAT palette tokens to a warm light surface set. The
-   one-accent lock is preserved: neon tokens stay BRIGHT so fills keep
-   dark-ink-on-accent AA; a small set of deep *-text tokens covers the
-   places a neon is used AS TEXT on a (now light) surface.
-   ══════════════════════════════════════════════════════════════════ */
-.sd-theme-light {
-  /* warm light surfaces (not a cold white admin UI) */
-  --ink:        #F4EADA;  /* ground - warm sand */
-  --ink-raise:  #FFFCF7;  /* panels / cards - warm white */
-  --steel:      #ECE0CF;  /* controls, inset chips */
-  --hairline:   #E0D2BE;
-  --hairline-2: #C9B49A;
-  --text:       #241708;  /* dark warm brown - AA on all light surfaces */
-  --muted:      #6E5A45;  /* warm grey - AA on card + ground */
-
-  /* accents stay BRIGHT (fills pair with dark *-ink -> AA) */
-  --signal:      #FF9900;
-  --signal-ink:  #241400;
-  --signal-wash: #FBE1C2;  /* light orange tint; dark --text on it is AA */
-  --alarm:       #C81E2B;  /* deeper red - AA on light, still with "!" glyph */
-  --live:        #C7E600;
-  --live-ink:    #1C2200;
-  --gold:        #F5B301;
-  --gold-ink:    #241900;
-
-  /* deep neon shades for the AS-TEXT usages on light surfaces (AA) */
-  --signal-text: #A34B00;
-  --live-text:   #4C6B00;
-  --gold-text:   #7A5A00;
-
-  /* warm, soft light shadows (never the dark warm-black ones) */
-  --shadow-card: 0 14px 40px rgba(120, 80, 20, .16);
-  --shadow-pop:  0 10px 28px rgba(120, 80, 20, .18);
+/* ══════════════════ Reduced motion ══════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  .sd-enter-slide-left, .sd-enter-fade, .sd-enter-zoom, .sd-enter-slide-up { animation: none; }
+  .sd-timer-ring-fg { transition: stroke .3s; }
+  .sd-pg-runner { transition: none; }
+  /* Attract screen: no float/flicker/blink/scan; everything rests visible. */
+  .sdl-attract::before { animation: none; }
+  .sdl-crest, .sdl-eventname, .sdl-attract-title, .sdl-attract-rule,
+  .sdl-attract-prompt, .sdl-attract-sub, .sdl-attract-foot { animation: none; opacity: 1; transform: none; }
+  .sdl-attract-rule { opacity: .6; }
+  .sd-reveal.is-in .sd-reveal-icon,
+  .sd-reveal.is-in .sd-reveal-name,
+  .sd-reveal.is-in .sd-reveal-go { animation: none; opacity: 1; clip-path: none; }
+  .sd-solved-flash.is-on { animation: sd-solve-static .5s ease-out; }
+  @keyframes sd-solve-static { 0% { opacity: 0; } 20%,75% { opacity: 1; } 100% { opacity: 0; } }
+  .sd-solved-flash.is-on .sd-solved-word { animation: none; opacity: 1; transform: none; }
+  .sd-results-crown.is-champion { animation: none; }
+  .sd-lb-row { animation: none; opacity: 1; transform: none; }
+  .sd-toast { animation: none; opacity: 1; transform: none; }
+  .sd-confetti { display: none; }
+  .sd-btn:active { transform: none; }
 }
 
-/* Neon-as-TEXT overrides (only in light; dark keeps the bright tokens). */
-.sd-theme-light .sd-logo,
-.sd-theme-light .sd-lobby-status,
-.sd-theme-light .sd-timer-num,
-.sd-theme-light .is-selected .sd-cat-icon,
-.sd-theme-light .sd-reveal-name,
-.sd-theme-light .sd-your-results-label { color: var(--signal-text); }
+/* ══════════════════ Small screens (test target 375px) ══════════════════ */
+@media (max-width: 360px) {
+  .sd-cat-grid { grid-template-columns: 1fr; }
+  .sd-code-value { font-size: 40px; letter-spacing: 6px; text-indent: 6px; }
+  .sd-input--code { font-size: 20px; }
+}
 
-.sd-theme-light .sd-input--code,
-.sd-theme-light .sd-code-value,
-.sd-theme-light .sd-results-crown,
-.sd-theme-light #results-board .sd-lb-row:nth-child(1) .sd-lb-rank { color: var(--gold-text); }
-
-.sd-theme-light .sd-player-ready.is-ready,
-.sd-theme-light .sd-pg-player--me .sd-pg-name,
-.sd-theme-light .sd-solved-word,
-.sd-theme-light .sd-lb-correct { color: var(--live-text); }
-
-/* Light scrim for the lockout (dark text on light frost, AA). */
-.sd-theme-light .sd-lockout {
-  background: rgba(255, 251, 244, .80);
-  color: var(--text);
+/* Landscape / short viewports: top-align, absorb overflow with vertical scroll. */
+@media (max-height: 480px) and (orientation: landscape) {
+  .sd-screen { justify-content: flex-start; padding-top: calc(14px + env(safe-area-inset-top)); gap: 12px; }
+  .sd-join-hero { max-width: 360px; }
+  .sd-card { padding: 18px; }
+  .sdl-attract { min-height: auto; }
 }

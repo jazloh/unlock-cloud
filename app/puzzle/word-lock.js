@@ -92,7 +92,12 @@ class WordLock {
     ov.className = 'wlock-hint';
     const inner = document.createElement('div');
     inner.className = 'wlock-hint-inner';
-    inner.textContent = '↕ Swipe each reel up or down to change the letter';
+    // Name the input that actually works on the device in hand. Showdown runs on
+    // laptops, where "swipe" is wrong and was the whole reason the reels felt hard.
+    const touch = (typeof matchMedia === 'function' && matchMedia('(hover: none) and (pointer: coarse)').matches);
+    inner.textContent = touch
+      ? '↕ Swipe each reel up or down to change the letter'
+      : '↕ Scroll, click above/below, or use ↑↓ keys to change each letter';
     ov.appendChild(inner);
     host.appendChild(ov);
     let done = false;
@@ -237,6 +242,67 @@ class WordLock {
     reel.addEventListener('touchstart', onStart, { passive: true });
 
     strip._snap = () => { currentOffset = 0; snap(); };
+
+    /* ── Desktop input, in addition to drag ─────────────────────────────
+     * The reel was drag-only, which is fine on a phone but awkward on a laptop
+     * trackpad — and Showdown's primary device IS a laptop. These are pure
+     * additions: drag behaviour is untouched, so every episode using word-lock
+     * keeps working exactly as before and simply gains three more ways in.
+     *   • wheel / two-finger scroll over a reel steps one letter
+     *   • click the letter above or below the window steps toward it
+     *   • focus a reel and use ↑/↓ (or a letter key to jump straight to it)
+     */
+    const step = (delta) => {
+      if (animFrame) cancelAnimationFrame(animFrame);
+      strip.style.transition = '';
+      const next = ((this.selected[index] + delta) % count + count) % count;
+      this.selected[index] = next;
+      currentOffset = -(count + next - 1) * CELL_H;
+      strip.style.transition = 'transform 0.16s ease-out';
+      strip.style.transform = `translateY(${currentOffset}px)`;
+      setTimeout(() => { strip.style.transition = ''; }, 160);
+      if (this.onChange) this.onChange({ reelChars: this.reelChars, selected: [...this.selected] });
+    };
+    reel._step = step;
+
+    // Wheel: accumulate so a high-resolution trackpad doesn't fly past letters.
+    let wheelAcc = 0;
+    reel.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      wheelAcc += e.deltaY;
+      const THRESH = 24;
+      while (Math.abs(wheelAcc) >= THRESH) {
+        step(wheelAcc > 0 ? 1 : -1);
+        wheelAcc += wheelAcc > 0 ? -THRESH : THRESH;
+      }
+    }, { passive: false });
+
+    // Click above/below the centre window. Guarded by `moved` so the click that
+    // ends a drag is never treated as a step.
+    reel.addEventListener('click', (e) => {
+      if (moved) return;
+      const r = reel.getBoundingClientRect();
+      const y = e.clientY - r.top;
+      if (y < CELL_H) step(-1);
+      else if (y > CELL_H * 2) step(1);
+    });
+
+    // Keyboard: arrows step, letter keys jump to that letter if it is on the reel.
+    reel.tabIndex = 0;
+    reel.setAttribute('role', 'spinbutton');
+    reel.setAttribute('aria-label', `Letter ${index + 1}`);
+    reel.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        step(e.key === 'ArrowDown' ? 1 : -1);
+        return;
+      }
+      if (/^[a-zA-Z]$/.test(e.key)) {
+        const want = e.key.toUpperCase();
+        const target = this.reelChars[index].findIndex((c) => String(c).toUpperCase() === want);
+        if (target >= 0) { e.preventDefault(); step(target - this.selected[index]); }
+      }
+    });
   }
 
   /* ── Public API ─────────────────────────────────── */
@@ -263,6 +329,8 @@ class WordLock {
 .wlock{display:flex;flex-direction:column;align-items:center;gap:16px;padding:16px 0}
 .wlock-reels{display:flex;gap:6px}
 .wlock-reel{position:relative;width:48px;overflow:hidden;border-radius:10px;background:#0d1220;border:1px solid var(--border,#1e2a45);cursor:grab;user-select:none;-webkit-user-select:none}
+/* Reels are keyboard-focusable (role=spinbutton, ↑↓ to change) — show it. */
+.wlock-reel:focus-visible{outline:2px solid var(--mode-color,#ff2e6a);outline-offset:2px}
 .wlock-reel.wlock-dragging{cursor:grabbing}
 .wlock-strip{display:flex;flex-direction:column;will-change:transform}
 .wlock-cell{display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#7a8ba8;letter-spacing:1px}
