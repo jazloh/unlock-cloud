@@ -15,6 +15,13 @@
  *     ],
  *     onSubmit(correct) { ... }
  *   });
+ *
+ * Optional teaching feedback on wrong picks (opt-in, backward compatible):
+ *   - Per-statement: statement.wrong_feedback = { 'PillarName': 'text', ... }
+ *   - Per-config fallback: opts.pillar_wrong_feedback = { 'PillarName': 'text', ... }
+ *   When either is present, the puzzle uses inline retry: on a wrong pick it shows the
+ *   teaching text and lets the player try the same statement again, instead of the
+ *   legacy "advance and reset on imperfect" flow.
  */
 
 class PillarLock {
@@ -24,6 +31,13 @@ class PillarLock {
     this.statements = opts.statements || [];
     this.onSubmit = opts.onSubmit || (() => {});
     this.onWrong = opts.onWrong || null;
+    this.pillarWrongFeedback = opts.pillar_wrong_feedback || opts.pillarWrongFeedback || {};
+    // Retry-on-wrong (inline teaching) is enabled when any teaching text is configured.
+    // Explicit override wins if provided.
+    this.retryOnWrong = (typeof opts.retryOnWrong === 'boolean')
+      ? opts.retryOnWrong
+      : (Object.keys(this.pillarWrongFeedback).length > 0
+         || this.statements.some(s => s && s.wrong_feedback));
     this.current = 0;
     this.answers = [];
     this._render();
@@ -70,19 +84,46 @@ class PillarLock {
     this.progressEl.textContent = `${this.current + 1} / ${this.statements.length}`;
     this.cardEl.textContent = this.statements[this.current].text;
     this.cardEl.classList.remove('pillk-right', 'pillk-wrong');
+    this.statusEl.textContent = '';
+    this.statusEl.classList.remove('pillk-status-teach');
   }
 
   _choose(pillar) {
     if (this.current >= this.statements.length) return;
-    const correct = pillar === this.statements[this.current].answer;
-    this.answers.push({ pillar, correct });
+    const stmt = this.statements[this.current];
+    const correct = pillar === stmt.answer;
 
     if (correct) {
+      this.answers.push({ pillar, correct: true });
       this.cardEl.classList.add('pillk-right');
-    } else {
-      this.cardEl.classList.add('pillk-wrong');
+      this.statusEl.textContent = '';
+      this.statusEl.classList.remove('pillk-status-teach');
+      setTimeout(() => {
+        this.current++;
+        this._showCurrent();
+      }, 500);
+      return;
     }
 
+    // Wrong pick
+    if (this.retryOnWrong) {
+      // Inline teaching: show why it's wrong, stay on the same statement.
+      const feedback = (stmt.wrong_feedback && stmt.wrong_feedback[pillar])
+        || this.pillarWrongFeedback[pillar]
+        || `Not quite — that isn't ${pillar}. Try again.`;
+      this.cardEl.classList.add('pillk-wrong');
+      this.statusEl.textContent = feedback;
+      this.statusEl.classList.add('pillk-status-teach');
+      if (this.onWrong) this.onWrong(feedback);
+      setTimeout(() => {
+        this.cardEl.classList.remove('pillk-wrong');
+      }, 900);
+      return;
+    }
+
+    // Legacy: advance on wrong; overall check happens at _test with soft reset.
+    this.answers.push({ pillar, correct: false });
+    this.cardEl.classList.add('pillk-wrong');
     setTimeout(() => {
       this.current++;
       this._showCurrent();
@@ -95,10 +136,12 @@ class PillarLock {
     if (allCorrect) {
       this.cardEl.textContent = '🏛️';
       this.cardEl.classList.add('pillk-right');
+      this.statusEl.classList.remove('pillk-status-teach');
       this.statusEl.textContent = `✅ All pillars correct! (${score}/${this.statements.length})`;
       this.pillarBtns.style.display = 'none';
       setTimeout(() => this.onSubmit(true), 400);
     } else {
+      this.statusEl.classList.remove('pillk-status-teach');
       this.statusEl.textContent = `❌ ${score}/${this.statements.length} correct — try again`;
       this.cardEl.textContent = 'Review and retry';
       if (this.onWrong) this.onWrong('Wrong — some statements are incorrect. Try again.');
@@ -127,7 +170,8 @@ class PillarLock {
 .pillk-pillars{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
 .pillk-pillar{padding:8px 14px;border:1px solid var(--border,#1e2a45);border-radius:8px;background:var(--surface,#141b2d);color:var(--muted,#7a8ba8);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
 .pillk-pillar:active{background:var(--accent,#3b82f6);color:#fff;transform:scale(.95)}
-.pillk-status{font-size:13px;color:var(--muted,#7a8ba8);min-height:18px;text-align:center}
+.pillk-status{font-size:13px;color:var(--muted,#7a8ba8);min-height:18px;text-align:center;line-height:1.4;padding:0 8px;max-width:340px}
+.pillk-status.pillk-status-teach{color:#ef4444;font-weight:600}
 `;
     document.head.appendChild(s);
   }

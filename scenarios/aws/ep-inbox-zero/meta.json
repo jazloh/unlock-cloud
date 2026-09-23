@@ -1,0 +1,21 @@
+{
+  "id": "ep-inbox-zero",
+  "title": "Inbox Zero",
+  "episode": "inbox-zero",
+  "arc": "booth",
+  "category": "aws",
+  "description": "First day at the operator. The mailbox is a war crime. A colleague introduces Amazon Quick — the AI work companion that answers questions in plain English, connects to your internal docs, and drafts your replies. By lunch you hit Inbox Zero. Before the 4 PM board call.",
+  "difficulty": { "tier": 0, "label": "Booth Qualifier" },
+  "duration_minutes": 10,
+  "players": { "min": 1, "max": 6, "recommended": 2 },
+  "aws_topics": ["Amazon Quick"],
+  "mechanics_taught": [
+    "plain_language_data_questions",
+    "internal_document_context",
+    "prompt_structure",
+    "draft_and_automate"
+  ],
+  "version": "0.1",
+  "start_button": "Clock In",
+  "lore_label": "Sticky Note"
+}

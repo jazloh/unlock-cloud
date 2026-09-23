@@ -1,0 +1,343 @@
+{
+  "puzzles": [
+    {
+      "id": "puzzle-urgent",
+      "type": "word_lock",
+      "card_ref": 101,
+      "description": "One word repeats behind every URGENT flag. Scroll the four reels and spell the analyst's silent plea.",
+      "ui": "word-lock",
+      "config": {
+        "answer": "HELP",
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      },
+      "hints": [
+        "Every URGENT-tagged email is asking for the same thing. It's four letters. It's also what YOU are silently asking for at 9:04 AM on day one.",
+        "Starts with H. A four-letter cry heard by every new hire staring at an inbox of 400. Try the obvious.",
+        "H-E-L-P."
+      ],
+      "success_card": 105,
+      "mandatory": true
+    },
+
+    {
+      "id": "npc-sam",
+      "type": "tool",
+      "card_ref": 201,
+      "description": "Talk to Sam. They introduce Amazon Quick and explain what to do next.",
+      "ui": "npc-dialog",
+      "config": {
+        "name": "Sam",
+        "portrait": "🧑‍💻",
+        "greeting": "Oh hey. You found the desk. Yeah — that mailbox looks like a war crime. Don't panic. There's a trick, and it's called Amazon Quick. Also, no — not QuickSight. QuickSight does dashboards. Quick is the whole work companion. It's here to save your morning.",
+        "lines": [
+          {
+            "label": "What is Amazon Quick, exactly?",
+            "response": "AI work companion. It sits on top of our data — churn reports, network tickets, exec asks, the whole internal doc system — and you ask it questions in plain English. It goes and reads everything relevant and comes back with an answer. Not a search bar. More like a colleague who already read every doc last night."
+          },
+          {
+            "label": "So it's the same as QuickSight?",
+            "response": "It USES QuickSight for charts, yes. But Quick itself is the whole suite. Three things it does: Research — go find and summarize stuff. Dashboards — read them AND build them. Automate — schedule things, draft things on repeat. Any ask you have, it falls into one of those three buckets. Know the bucket, know how to ask."
+          },
+          {
+            "label": "How do I ask it something good?",
+            "response": "Four parts, in this order. Action — a verb Quick can do, like 'summarize' or 'find'. Subject — the actual thing, like 'last month's churn'. Context — which slice, 'for the northern region', 'this quarter', 'for enterprise'. Format — how you want it back, '3 bullets', 'a chart', 'a paragraph'. Skip a part, mid answer. Include all four, scary-good answer."
+          },
+          {
+            "label": "Does it actually know OUR stuff?",
+            "response": "Yeah, that was the whole rollout last quarter — we plugged Quick into the internal doc system. It reads current churn data, latest network reports, this quarter's KPIs. It also reads five-year-old pricing sheets and duplicate exports if we don't clean them up, so — you'll see. Right context in, brilliant Quick. Fire hose of everything, confused Quick."
+          },
+          {
+            "label": "Where do I start?",
+            "response": "Two things right here on my desk. Sort what Quick can do into the three buckets — you'll see six real analyst asks and where each one belongs. Then draft your first ask to Quick using the four-parts rule. Do both and you're ready to actually hit the inbox. Go. I'll grab coffee. You've got this."
+          }
+        ]
+      },
+      "hints": [
+        "Click each option to hear Sam. The three-bucket answer and the four-part prompt structure both show up early.",
+        "Sam names the three buckets: Research, Dashboards, Automate. And names the four prompt parts: Action, Subject, Context, Format.",
+        "Read every dialog line — the answers to both puzzles in this room are literally in Sam's dialog."
+      ],
+      "mandatory": false
+    },
+
+    {
+      "id": "puzzle-sort",
+      "type": "pillar_lock",
+      "card_ref": 203,
+      "description": "Six real analyst asks. Sort each into the correct Quick capability bucket: Research, Dashboards, or Automate.",
+      "ui": "pillar-lock",
+      "config": {
+        "pillars": ["Research", "Dashboards", "Automate"],
+        "pillar_wrong_feedback": {
+          "Research": "Research = summarize / find / explain why. Try again.",
+          "Dashboards": "Dashboards = show / chart / live view of a metric. Try again.",
+          "Automate": "Automate = recurring / auto-draft / do it every time. Try again."
+        },
+        "statements": [
+          {
+            "text": "Summarize why churn spiked in the northern region last month",
+            "answer": "Research",
+            "wrong_feedback": {
+              "Dashboards": "'Summarize why' is a Research verb — you want an explanation, not a chart.",
+              "Automate": "It's a one-shot ask, not a schedule — that puts it in Research."
+            }
+          },
+          {
+            "text": "Show me this quarter's ARPU trend as a chart",
+            "answer": "Dashboards",
+            "wrong_feedback": {
+              "Research": "'Show me' + 'as a chart' is Dashboards — pictures of a metric, not a summary.",
+              "Automate": "There's no schedule and no draft — it's a one-off view. That's Dashboards."
+            }
+          },
+          {
+            "text": "Every Monday, email me the top 10 escalated tickets",
+            "answer": "Automate",
+            "wrong_feedback": {
+              "Research": "'Every Monday' is the tell — that's a recurring schedule, i.e. Automate.",
+              "Dashboards": "It's a recurring email, not a live chart on a screen. That's Automate."
+            }
+          },
+          {
+            "text": "Find the 3 root causes buyers cite for cancelling",
+            "answer": "Research",
+            "wrong_feedback": {
+              "Dashboards": "'Find … root causes' asks for an explanation — that's Research, not a chart.",
+              "Automate": "One-time investigation, not something you run on a schedule — Research."
+            }
+          },
+          {
+            "text": "Build a live view of network outage tickets by state",
+            "answer": "Dashboards",
+            "wrong_feedback": {
+              "Research": "'Live view … by state' is a dashboard — an updating picture of a metric.",
+              "Automate": "It's a persistent view, not a recurring draft or scheduled action — Dashboards."
+            }
+          },
+          {
+            "text": "Auto-draft replies to billing complaints for my review",
+            "answer": "Automate",
+            "wrong_feedback": {
+              "Research": "'Auto-draft … for my review' is a recurring draft — that's Automate.",
+              "Dashboards": "Drafts and replies aren't charts — that's Automate."
+            }
+          }
+        ]
+      },
+      "hints": [
+        "Three buckets. Research = go look things up and summarize. Dashboards = show me numbers as pictures. Automate = do this on a schedule, or draft this for me every time.",
+        "Verb clues: 'summarize' / 'find' / 'why' → Research. 'Show me' / 'chart' / 'live view' → Dashboards. 'Every Monday' / 'auto-draft' / 'schedule' → Automate.",
+        "Research: churn summary, root causes. Dashboards: ARPU chart, live outage view. Automate: Monday email, auto-drafted billing replies."
+      ],
+      "success_card": 205,
+      "mandatory": true
+    },
+
+    {
+      "id": "puzzle-prompt",
+      "type": "prompt_lock",
+      "card_ref": 202,
+      "description": "Assemble your first good ask to Quick — one choice per slot. Great asks have four parts.",
+      "ui": "prompt-lock",
+      "config": {
+        "npc": { "name": "Quick", "portrait": "⚡" },
+        "mode": "row",
+        "rows": [
+          {
+            "label": "Action",
+            "options": ["Summarize", "Vibe check on", "Do a thing about"],
+            "answer": "Summarize"
+          },
+          {
+            "label": "Subject",
+            "options": ["last month's churn", "everything, kinda", "my personal feelings"],
+            "answer": "last month's churn"
+          },
+          {
+            "label": "Context / Scope",
+            "options": ["for the northern region", "everywhere all at once", "vibes only, no filter"],
+            "answer": "for the northern region"
+          },
+          {
+            "label": "Format",
+            "options": ["in 3 bullet points", "as a 12-page novel", "no format, just words"],
+            "answer": "in 3 bullet points"
+          }
+        ],
+        "success_response": "🥇 Perfect ask. Action + subject + context + format — all four slots specific. Quick returns three tight bullets on last month's northern churn in eight seconds. That's the whole trick.",
+        "partial_response": "🥈 Close. Quick returns something — but not sharp. A specific action, a real subject, a real scope, and the format you actually want gets you a scary-good answer. Tighten the weak slots.",
+        "fail_response": "❌ Quick can't find your intent. A great ask has four parts — an action, a subject, a scope/context, and a format. 'Vibe check', 'kinda', 'everywhere all at once', 'no format' — those aren't asks, those are shrugs. Try again."
+      },
+      "hints": [
+        "Great asks have four parts: Action, Subject, Context, Format. Quick works best when all four are specific.",
+        "Action = a verb Quick can actually do ('summarize', not 'vibe check'). Subject = a real thing (churn, not 'my feelings'). Context = a real slice (northern region, not 'everywhere all at once'). Format = how you want it back (3 bullets, not 'no format').",
+        "Row by row: Summarize / last month's churn / for the northern region / in 3 bullet points."
+      ],
+      "success_card": 215,
+      "mandatory": true
+    },
+
+    {
+      "id": "puzzle-context",
+      "type": "context_lock",
+      "card_ref": 301,
+      "description": "Quick is connected to the internal doc system but has too much loaded — stale, duplicate, and off-topic files are poisoning the answer. Remove them until the live stream stabilizes and fits the budget.",
+      "ui": "context-lock",
+      "config": {
+        "capacity": 2500,
+        "agentName": "Quick",
+        "intro": "Quick is over-fed. Its live output stream is contradicting itself because half the docs in its head are stale, duplicated, or off-topic. Drop the poison. Keep only what actually answers this quarter's churn ask.",
+        "shelfLabel": "Loaded documents — tap to remove the ones Quick shouldn't be using",
+        "documents": [
+          {
+            "id": "churn-current",
+            "label": "churn-current.csv",
+            "icon": "📊",
+            "desc": "This month's churn data — the actual dataset for the exec ask",
+            "tokens": 500,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ No current churn data — I can't answer the exec's question."
+          },
+          {
+            "id": "network-report-q3",
+            "label": "network-report-q3.md",
+            "icon": "📡",
+            "desc": "This quarter's network incident report",
+            "tokens": 600,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ No current network report — I'm guessing outage causes."
+          },
+          {
+            "id": "kpi-dashboard-q3",
+            "label": "kpi-dashboard-q3.md",
+            "icon": "📈",
+            "desc": "This quarter's KPI dashboard — subscribers, ARPU, ticket volumes",
+            "tokens": 400,
+            "status": "required",
+            "poisonLine": null,
+            "missingLine": "❓ No KPI baseline — my numbers have nothing to compare against."
+          },
+          {
+            "id": "pricing-2019",
+            "label": "pricing-2019.pdf",
+            "icon": "🗓️",
+            "desc": "Six-year-old pricing sheet — wrong tiers, wrong plan names",
+            "tokens": 350,
+            "status": "poison",
+            "poisonLine": "❌ Quoting 2019 pricing — churn drivers will be attributed to plans that don't exist anymore!"
+          },
+          {
+            "id": "churn-duplicate",
+            "label": "churn-export-jan-DUPLICATE.csv",
+            "icon": "📄",
+            "desc": "Duplicate of last month's churn export — same rows, twice",
+            "tokens": 400,
+            "status": "poison",
+            "poisonLine": "❌ Duplicate churn rows detected — top drivers are being double-counted!"
+          },
+          {
+            "id": "hr-policy",
+            "label": "hr-vacation-policy-v3.pdf",
+            "icon": "🏖️",
+            "desc": "HR policy on paid leave — nothing to do with churn",
+            "tokens": 300,
+            "status": "poison",
+            "poisonLine": "❌ Injecting HR vacation-policy language into the network incident section..."
+          },
+          {
+            "id": "todo-draft",
+            "label": "draft-with-TODO.md",
+            "icon": "🚧",
+            "desc": "Half-finished draft with #TODO placeholders and lorem ipsum",
+            "tokens": 450,
+            "status": "poison",
+            "poisonLine": "❌ Producing output with #TODO placeholders and lorem ipsum — this is unshippable!"
+          },
+          {
+            "id": "team-readme",
+            "label": "team-readme.md",
+            "icon": "📖",
+            "desc": "Team readme — general context, doesn't hurt",
+            "tokens": 100,
+            "status": "safe",
+            "poisonLine": null
+          },
+          {
+            "id": "glossary",
+            "label": "glossary.md",
+            "icon": "🔤",
+            "desc": "Company acronym glossary — harmless",
+            "tokens": 150,
+            "status": "safe",
+            "poisonLine": null
+          }
+        ]
+      },
+      "hints": [
+        "Quick is only as good as what you feed it. Right now every doc in the internal system is loaded — including ancient, duplicated, and unrelated files. Trim to just the docs that actually answer this quarter's churn / network / KPI ask.",
+        "Keep documents that are (a) current and (b) actually about this ask: this month's churn, this quarter's network report, this quarter's KPIs. Drop the 2019 pricing sheet, the duplicate churn export, the HR vacation policy, and the draft full of #TODO placeholders.",
+        "Keep loaded: churn-current.csv + network-report-q3.md + kpi-dashboard-q3.md. Remove: pricing-2019.pdf, churn-export-jan-DUPLICATE.csv, hr-vacation-policy-v3.pdf, draft-with-TODO.md. The readme and glossary are harmless either way."
+      ],
+      "success_card": 305,
+      "mandatory": true
+    },
+
+    {
+      "id": "puzzle-defuse",
+      "type": "defuse_lock",
+      "card_ref": 302,
+      "description": "Board call in 60 seconds. Approve the drafts Quick got right, skip the trap, and enter the target unread count.",
+      "ui": "defuse-lock",
+      "config": {
+        "timeSeconds": 60,
+        "tasks": [
+          {
+            "id": "churn-reply",
+            "type": "toggle",
+            "label": "Approve Quick's drafted reply to the churn exec",
+            "answer": true,
+            "wrong_text_off": "The churn exec is expecting a reply. Quick's draft is grounded in the current data — approve it."
+          },
+          {
+            "id": "billing-auto",
+            "type": "toggle",
+            "label": "Approve the auto-reply to billing complaints",
+            "answer": true,
+            "wrong_text_off": "The billing auto-reply is ready and personalized from clean context — approve it."
+          },
+          {
+            "id": "kpi-attach",
+            "type": "toggle",
+            "label": "Attach the KPI dashboard link to the board pack",
+            "answer": true,
+            "wrong_text_off": "The board wants numbers. The KPI dashboard link belongs in the pack — attach it."
+          },
+          {
+            "id": "public-post",
+            "type": "toggle",
+            "label": "Auto-post the churn summary to the public status page",
+            "answer": false,
+            "wrong_text_on": "That would leak customer complaints and internal churn drivers publicly — don't approve it."
+          },
+          {
+            "id": "target-count",
+            "type": "code",
+            "label": "Remaining unread emails you're aiming for",
+            "answer": "0",
+            "wrong_text": "Wrong count — the target is Inbox Zero. Recount the cleared threads."
+          }
+        ]
+      },
+      "hints": [
+        "The timer is your 4 PM board call. Approve the drafts Quick got right, refuse the one that leaks customer complaints publicly, and enter the target count that matches the name of the episode.",
+        "You WANT to send the drafts Quick prepared privately (churn exec reply, billing auto-reply, KPI dashboard link). You DO NOT want to auto-post customer complaints to the public status page — that's the trap. The count is Inbox Zero. Literally.",
+        "Approve churn = ON. Approve billing = ON. Attach KPI = ON. Public status page = OFF. Remaining unread = 0."
+      ],
+      "success_card": 399,
+      "mandatory": true,
+      "isFinal": true
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "timed_events": [
+    {
+      "id": "TE-01",
+      "time_remaining": 540,
+      "message": "Slack ping: \"#analyst-newbies — welcome! Ping me if the inbox scares you. It should. — Sam\"",
+      "type": "atmosphere",
+      "voice": "sam"
+    },
+    {
+      "id": "TE-02",
+      "time_remaining": 420,
+      "message": "Slack DM from Priya, VP Ops: \"Any chance you saw the churn deck? Board call at 4.\"",
+      "type": "atmosphere",
+      "voice": "narrator"
+    },
+    {
+      "id": "TE-03",
+      "time_remaining": 300,
+      "message": "MID-EVENT: Halfway through your first morning.",
+      "type": "narrative",
+      "triggers_narrative": "mid_event"
+    },
+    {
+      "id": "TE-04",
+      "time_remaining": 180,
+      "message": "Calendar alert: \"Board call in 3 minutes. Executive briefing prep expected.\"",
+      "type": "alarm",
+      "voice": "narrator"
+    },
+    {
+      "id": "TE-05",
+      "time_remaining": 60,
+      "message": "One minute. The board doesn't wait.",
+      "type": "alarm",
+      "voice": "narrator"
+    }
+  ],
+  "triggered_events": [
+    {
+      "id": "hint-tooltip",
+      "trigger": "first_hint_request",
+      "message": "Hints are always available. Small point cost, never blocks you. Most players still land 3+ stars.",
+      "type": "tooltip",
+      "once": true
+    },
+    {
+      "id": "urgent-solved",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "puzzle-urgent",
+      "result_card": 105,
+      "message": "URGENT decoded. Sam waves you over. Room 2 unlocked.",
+      "type": "reveal",
+      "unlocks_room": 200
+    },
+    {
+      "id": "sort-solved",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "puzzle-sort",
+      "result_card": 205,
+      "message": "Capabilities sorted. Category Map in hand.",
+      "type": "reveal"
+    },
+    {
+      "id": "prompt-solved",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "puzzle-prompt",
+      "result_card": 215,
+      "message": "First good prompt sent. Well-Formed Prompt printed.",
+      "type": "reveal"
+    },
+    {
+      "id": "ready-to-return",
+      "trigger": "card_discovered",
+      "card_id": 220,
+      "result_card": 220,
+      "message": "Category Map + Well-Formed Prompt in hand. Head back to your desk.",
+      "type": "reveal",
+      "unlocks_room": 300
+    },
+    {
+      "id": "context-solved",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "puzzle-context",
+      "result_card": 305,
+      "message": "Quick's context stabilized. Clean Context tag printed.",
+      "type": "reveal"
+    },
+    {
+      "id": "defuse-solved",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "puzzle-defuse",
+      "result_card": 399,
+      "message": "INBOX ZERO. Board call cleared with real numbers and drafted talking points.",
+      "type": "ending"
+    }
+  ]
+}

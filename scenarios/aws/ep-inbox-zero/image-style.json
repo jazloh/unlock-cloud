@@ -1,0 +1,9 @@
+{
+  "style_prefix": "Digital illustration, modern telecom-operator office interior, bright clean isometric style, professional-blue and warm-gold accent palette, friendly analyst-desk aesthetic, soft natural lighting, mid-century modern furniture mixed with screens and dashboards, game card art.",
+  "style_prefix_location": "Digital illustration, modern telecom-operator office, isometric wide-angle, professional-blue and warm-gold palette, holographic UI overlays on glass and monitors, friendly clean tech aesthetic, soft natural lighting, ergonomic desks, plants, subscriber-KPI wall boards, game environment art.",
+  "style_prefix_item": "Digital illustration, single office/analyst prop on dark gradient background, professional-blue base with warm-gold highlights, clean icon style, slightly cartoonish, centered, game inventory art.",
+  "style_prefix_object": "Digital illustration, telecom-analyst interactive prop, soft moody background, professional-blue and warm-gold accents, close-up detail, friendly tech vibe, game card art.",
+  "style_prefix_character": "Digital illustration, single character portrait, casual-professional telecom-office analyst or friendly colleague, warm cartoon-realistic style, dark gradient background, expressive pose, game NPC art.",
+  "negative_prompt": "readable text, words, letters, typography, watermark, blurry, low quality, ugly, dark dystopian, horror, gore",
+  "aspect_ratio": "16:9"
+}
