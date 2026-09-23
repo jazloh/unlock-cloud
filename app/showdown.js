@@ -351,7 +351,14 @@
   const MOCK_SESSION_DELAY_MS = 1500; // /public withholds session_id this long
   const MOCK_SETUP_MS   = 6000;  // setup   window (lobby)
   const MOCK_VOTING_MS  = 6000;  // voting  window
-  const MOCK_PLAY_MS    = 9000;  // in_progress window
+  // in_progress window. 9s is right for a quick walkthrough but is too short to
+  // actually finish all 5 locks, which makes the finished-and-waiting spectator
+  // state unreachable in mock. &mockplay=<seconds> widens it for that test.
+  // Mock-only; ignored entirely against the live backend.
+  const MOCK_PLAY_MS = (() => {
+    const s = Number(params.get('mockplay'));
+    return Number.isFinite(s) && s > 0 ? Math.min(s, 600) * 1000 : 9000;
+  })();
   // completed thereafter.
 
   const MOCK_SESSION_ID = 'mock-session-0001';
@@ -545,6 +552,10 @@
     if (url.indexOf('/puzzles') !== -1) {
       const picks = JSON.parse(JSON.stringify(MOCK_PICKS));
       if (MOCK_FAIL === 'bankid') picks.numeric = ['agentic-num-DOES-NOT-EXIST'];
+      // &mockfail=badword models the backend serving a word id whose answer
+      // word-lock cannot render (agentic-word-001 = "/spec", not alpha-only).
+      // Exercises resolveBank's deterministic substitution instead of a dead race.
+      if (MOCK_FAIL === 'badword') picks.word = ['agentic-word-001'];
       return mockJson({ winning_category: 'agentic-ai', picks: picks });
     }
     // POST [S] /showdown/{session_id}/progress (P4). &mockfail=auth = superseded.
@@ -1795,6 +1806,89 @@
   }
   const bad = (category, type, id, reason) => ({ category, type, id, reason });
 
+  /* ── word-lock playability + deterministic substitution ─────────────
+   * word-lock renders one A-Z reel per character, so its answer MUST be
+   * alpha-only and <= 8 characters. Several live bank entries are not
+   * (awscore-word-001 "EC2", awscore-word-002 "S3", agentic-word-001 "/spec",
+   * cloudf-word-002 "On-prem").
+   *
+   * Previously such a pick pushed an error, and loadPuzzles() replaces the WHOLE
+   * race with an error panel on any error — so one unusable word ID killed all
+   * five puzzles, and its Retry re-fetched the same IDs and failed identically.
+   * With 2 of 13 word entries unusable in aws-core-services that is roughly a
+   * 1-in-7 dead race, which at a booth is a visible failure with no recovery.
+   *
+   * So: substitute a playable word from the SAME category instead. The choice is
+   * seeded from session_id + the original id, exactly like resolveStatement's
+   * True/False side, so every device in the race substitutes identically and the
+   * race stays fair. Only if the category has no playable word at all do we fall
+   * back to erroring, which is then genuinely unplayable rather than a coin flip.
+   *
+   * The durable fix is still backend-side (constrain the word slot's eligible ids
+   * at resolve time); this keeps the event safe until that lands. */
+  const WORD_OK_RE = /^[A-Za-z]{1,8}$/;
+  const wordPlayable = (entry) => !!entry && WORD_OK_RE.test(String(entry.answer || ''));
+
+  /* Generic deterministic substitution for ANY type.
+   *
+   * A pick the engine cannot use — id missing from the bank (bank/backend drift),
+   * or content a lock cannot render — used to push an error, and loadPuzzles()
+   * replaces the WHOLE race with an error panel on any error whose Retry refetches
+   * the same ids. So a single bad pick of any type was an unrecoverable dead race.
+   *
+   * Substituting a usable entry of the same type from the same category keeps the
+   * race alive. Seeded from session_id + the original id, exactly like
+   * resolveStatement's True/False side, so every device in the race substitutes
+   * IDENTICALLY and the race stays fair. `usable` filters to entries the relevant
+   * lock can actually render. Returns null only when the category genuinely has no
+   * usable entry of that type, which is then a real error rather than a coin flip.
+   *
+   * `excludeId` avoids picking the very entry we rejected. */
+  function substituteEntry(type, origId, category, sessionId, usable, excludeId) {
+    const bucket = (BANK_INDEX && BANK_INDEX[category]) || {};
+    const m = bucket[type];
+    if (!m || typeof m.forEach !== 'function') return null;
+    const candidates = [];
+    m.forEach((entry, id) => {
+      if (id === excludeId) return;
+      if (!usable || usable(entry)) candidates.push({ id, entry });
+    });
+    if (!candidates.length) return null;
+    candidates.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)); // stable order
+    return candidates[fnv1a(String(sessionId) + String(origId)) % candidates.length];
+  }
+
+  const substituteWord = (origId, category, sessionId) =>
+    substituteEntry('word', origId, category, sessionId, wordPlayable, origId);
+
+  /* "Usable" per type — the minimum each lock needs to render. Mirrors the
+   * validation each branch already performs, so a substitute can never itself be
+   * rejected downstream. */
+  const nonEmpty = (v) => v !== undefined && v !== null && String(v).trim() !== '';
+  const numericUsable   = (e) => !!e && nonEmpty(e.answer);
+  const spellingUsable  = (e) => !!e && nonEmpty(e.answer);
+  const statementUsable = (e) => !!e && /\{[^|}]*\|[^|}]*\}/.test(String(e.template || ''));
+  const mcqUsable = (e) => {
+    if (!e || e.answer == null) return false;
+    const opts = Array.isArray(e.options) ? e.options
+      : (Array.isArray(e.decoys) ? [e.answer].concat(e.decoys) : null);
+    return !!opts && opts.length >= 2 && opts.indexOf(e.answer) !== -1;
+  };
+
+  /* Try a deterministic substitution; push an error and return null only if the
+   * category has nothing usable. Keeps each call site to a few lines. */
+  function subOrNull(type, id, category, sessionId, usable, errors, errType) {
+    const sub = substituteEntry(type, id, category, sessionId, usable, id);
+    if (!sub) {
+      errors.push(bad(category, errType, id,
+        'not found in bank, and no usable substitute in category'));
+      return null;
+    }
+    console.warn('[showdown] ' + type + ' pick ' + id +
+      ' missing from bank — substituting ' + sub.id);
+    return sub.entry;
+  }
+
   function resolveBank(picks, winningCategory, sessionId) {
     const slots = [];
     const errors = [];
@@ -1812,8 +1906,12 @@
 
       if (type === 'numeric') {
         ids.forEach((id) => {
-          const e = lookup('numeric', id);
-          if (!e) { errors.push(bad(winningCategory, type, id, 'not found in bank')); return; }
+          let e = lookup('numeric', id);
+          if (!e) {
+            const sub = subOrNull('numeric', id, winningCategory, sessionId, numericUsable, errors, type);
+            if (!sub) return;
+            e = sub;
+          }
           if (!/^\d{1,6}$/.test(String(e.answer))) {
             errors.push(bad(winningCategory, type, id, 'answer not 1\u20136 digits')); return;
           }
@@ -1826,21 +1924,38 @@
       } else if (type === 'word') {
         ids.forEach((id) => {
           const e = lookup('word', id);
-          if (!e) { errors.push(bad(winningCategory, type, id, 'not found in bank')); return; }
-          const ans = String(e.answer || '');
-          // Backend now guarantees ≤8 alpha; keep the guard, never mangle.
-          if (!/^[A-Za-z]+$/.test(ans) || ans.length > 8) {
-            errors.push(bad(winningCategory, type, id, 'word not alpha \u22648: "' + ans + '"')); return;
+          let entry = e;
+          let useId = id;
+          // A missing id, or an answer word-lock physically cannot render, now swaps
+          // in a playable word from the same category instead of killing the race.
+          // Deterministic, so every device in the race gets the SAME substitute.
+          if (!entry || !wordPlayable(entry)) {
+            const sub = substituteWord(id, winningCategory, sessionId);
+            if (!sub) {
+              errors.push(bad(winningCategory, type, id, entry
+                ? 'word not alpha \u22648: "' + String(entry.answer || '') + '" and no playable substitute in category'
+                : 'not found in bank, and no playable substitute in category'));
+              return;
+            }
+            console.warn('[showdown] word pick ' + id + ' unplayable (' +
+              (entry ? JSON.stringify(entry.answer) : 'missing') + ') \u2014 substituting ' +
+              sub.id + ' (' + JSON.stringify(sub.entry.answer) + ')');
+            entry = sub.entry;
+            useId = sub.id;
           }
-          slots.push({ id, ui: 'word-lock', category: winningCategory, type,
-            question: e.question || '', config: { answer: ans } });
+          slots.push({ id: useId, ui: 'word-lock', category: winningCategory, type,
+            question: entry.question || '', config: { answer: String(entry.answer) } });
         });
 
       } else if (type === 'statement') {
         const statements = [];
         ids.forEach((id) => {
-          const e = lookup('statement', id);
-          if (!e) { errors.push(bad(winningCategory, type, id, 'not found in bank')); return; }
+          let e = lookup('statement', id);
+          if (!e) {
+            const sub = subOrNull('statement', id, winningCategory, sessionId, statementUsable, errors, type);
+            if (!sub) return;
+            e = sub;
+          }
           const r = resolveStatement(e, sessionId);
           if (r.error) { errors.push(bad(winningCategory, type, id, r.error)); return; }
           statements.push({ text: r.text, answer: r.answer });
@@ -1859,8 +1974,12 @@
       } else if (type === 'spelling') {
         const words = [];
         ids.forEach((id) => {
-          const e = lookup('spelling', id);
-          if (!e) { errors.push(bad(winningCategory, type, id, 'not found in bank')); return; }
+          let e = lookup('spelling', id);
+          if (!e) {
+            const sub = subOrNull('spelling', id, winningCategory, sessionId, spellingUsable, errors, type);
+            if (!sub) return;
+            e = sub;
+          }
           const w = String(e.answer || '');
           if (!w) { errors.push(bad(winningCategory, type, id, 'empty spelling answer')); return; }
           words.push(w); // explicit deterministic order (picks[] order), NOT pool+pickCount
@@ -1880,8 +1999,12 @@
       } else if (type === 'mcq') {
         const questions = [];
         ids.forEach((id) => {
-          const e = lookup('mcq', id);
-          if (!e) { errors.push(bad(winningCategory, type, id, 'not found in bank')); return; }
+          let e = lookup('mcq', id);
+          if (!e) {
+            const sub = subOrNull('mcq', id, winningCategory, sessionId, mcqUsable, errors, type);
+            if (!sub) return;
+            e = sub;
+          }
           const answer = e.answer;
           // Two bank shapes: options:[4] as-is, OR answer + decoys[3].
           const options = Array.isArray(e.options)
@@ -2120,7 +2243,15 @@
     if (last) {
       playSfxGameComplete();
       // Do NOT advance to RESULTS locally — the standings loop flips at completed.
-      enterFinishedWaiting(state._lastStandings);
+      // Let the full-screen SOLVED flash finish first: it sits at z-index 40 over
+      // the mount, so rendering the spectator card underneath it immediately means
+      // the player reads their finishing time through a giant word. Set the flag
+      // now so the per-poll refresh is armed, but reveal the card once the
+      // celebration clears (flash is 900ms; see onPuzzleSolved above).
+      state._finishedWaiting = true;
+      const q = $('play-question');
+      if (q) q.textContent = 'All five locks cracked. You’re in — watching the rest of the race…';
+      setTimeout(() => enterFinishedWaiting(state._lastStandings), 950);
     } else {
       setTimeout(() => { state.puzzleIndex += 1; renderPuzzle(); }, 700);
     }
@@ -2201,7 +2332,12 @@
     setPlayClockFromServer(myElapsedMs(standings)); // authoritative + smoothed clock
     updateClockHeat(standings);
     renderRace(standings);
-    if (state._finishedWaiting) renderFinishedWaiting(standings); // refresh spectator card
+    // Refresh the spectator card only once it EXISTS. The first render is deferred
+    // behind the SOLVED flash (see onPuzzleSolved), and a ~1s poll landing inside
+    // that window would otherwise render it early and undo the deferral.
+    if (state._finishedWaiting && document.querySelector('#play-mount .sd-spectate')) {
+      renderFinishedWaiting(standings);
+    }
   }
 
   /* ── Finished-and-waiting: spectate, don't stare at a dead string ──────
@@ -2222,8 +2358,13 @@
     const dup = dupNameIds(rows);
     const me = rows.find((r) => state.playerId && r.player_id === state.playerId);
     const myPos = me && me.rank != null ? Number(me.rank) : null;
-    const done = rows.filter((r) => (Number(r.completion_pct) || 0) >= 100).length;
-    const still = rows.length - done;
+    /* Count and list OTHERS only. We reach this state from local knowledge that all
+     * five locks are solved, but the server's completion_pct for our own row lags
+     * the final /progress POST by up to a poll — so filtering on pct alone showed
+     * the player who just finished as one of the racers still going, chasing
+     * themselves at 80%. Our own row is finished by definition here. */
+    const others = rows.filter((r) => !state.playerId || r.player_id !== state.playerId);
+    const still = others.filter((r) => (Number(r.completion_pct) || 0) < 100).length;
 
     const ord = (n) => {
       if (n == null) return null;
@@ -2235,7 +2376,7 @@
       ? fmtTime(me.elapsed_ms) : (state._clockShownMs != null ? fmtTime(state._clockShownMs) : null);
 
     // Opponents still racing, nearest-first, so the threat is at the top.
-    const chasers = rows
+    const chasers = others
       .filter((r) => (Number(r.completion_pct) || 0) < 100)
       .sort((a, b) => (Number(b.completion_pct) || 0) - (Number(a.completion_pct) || 0))
       .map((r) => '<li class="sd-spec-row"><span class="sd-spec-name">' + escapeHtml(sdName(r, dup)) +
