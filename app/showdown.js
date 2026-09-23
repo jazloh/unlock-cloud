@@ -1865,7 +1865,11 @@
    * validation each branch already performs, so a substitute can never itself be
    * rejected downstream. */
   const nonEmpty = (v) => v !== undefined && v !== null && String(v).trim() !== '';
-  const numericUsable   = (e) => !!e && nonEmpty(e.answer);
+  // Must match the numeric branch's own guard (1-6 digits) exactly. A looser
+  // predicate would let a substitute pass selection and then fail validation
+  // downstream, pushing the very error the substitution exists to avoid. No bank
+  // entry violates this today, so this is guarding against a future bank edit.
+  const numericUsable   = (e) => !!e && /^\d{1,6}$/.test(String(e.answer));
   const spellingUsable  = (e) => !!e && nonEmpty(e.answer);
   const statementUsable = (e) => !!e && /\{[^|}]*\|[^|}]*\}/.test(String(e.template || ''));
   const mcqUsable = (e) => {
