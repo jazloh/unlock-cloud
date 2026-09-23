@@ -56,7 +56,42 @@ class KeypadLock {
     wrap.appendChild(this.statusEl);
 
     this.container.appendChild(wrap);
+    this._attachKeyboard(wrap);
     this._injectStyles();
+  }
+
+  /* Physical keyboard entry, in addition to clicking.
+   *
+   * The pad was click-only, which is fine on a phone but real friction on a
+   * laptop — and it is the FIRST puzzle in a Showdown race, where the whole point
+   * is being fastest. Purely additive: click behaviour is untouched, so the
+   * episodes using this lock are unaffected and simply gain typing.
+   *
+   * Listener is on the wrapper (focusable), NOT on document, so several locks on a
+   * page cannot fight over the same keystroke, and typing elsewhere is unaffected.
+   * The wrapper is auto-focused on mount so a player can just start typing. */
+  _attachKeyboard(wrap) {
+    wrap.tabIndex = 0;
+    wrap.setAttribute('role', 'group');
+    wrap.setAttribute('aria-label', 'Keypad — type digits, Enter to submit, Backspace to delete');
+    wrap.addEventListener('keydown', (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (/^[0-9]$/.test(e.key)) { e.preventDefault(); this._press(e.key); return; }
+      if (e.key === 'Enter') { e.preventDefault(); this._press('↵'); return; }
+      if (e.key === 'Backspace') {
+        e.preventDefault();
+        // Backspace deletes one digit — a plain Clear would be needlessly punishing
+        // mid-entry. Escape/Delete keep the full Clear behaviour.
+        this.input = this.input.slice(0, -1);
+        this.statusEl.textContent = '';
+        this.display.classList.remove('kpdlk-wrong', 'kpdlk-correct');
+        this._updateDisplay();
+        return;
+      }
+      if (e.key === 'Escape' || e.key === 'Delete') { e.preventDefault(); this._press('C'); }
+    });
+    // Focus without yanking the viewport on mobile.
+    try { wrap.focus({ preventScroll: true }); } catch { /* older browsers */ }
   }
 
   _press(k) {
@@ -113,6 +148,11 @@ class KeypadLock {
     s.id = 'kpdlk-css';
     s.textContent = `
 .kpdlk{display:flex;flex-direction:column;align-items:center;gap:14px;padding:16px 0}
+/* The pad is keyboard-focusable (type digits, Enter, Backspace). It is focused on
+   mount, so suppress the default ring — a box around the whole pad reads as an
+   error — but keep a clear ring for actual keyboard navigation. */
+.kpdlk:focus{outline:none}
+.kpdlk:focus-visible{outline:2px solid var(--accent,#ff2e6a);outline-offset:6px;border-radius:10px}
 .kpdlk-display{font-size:28px;letter-spacing:8px;color:var(--accent,#3b82f6);min-height:36px;font-weight:700;transition:color .2s}
 .kpdlk-display.kpdlk-wrong{color:#ef4444;animation:kpdlk-sh .4s}
 .kpdlk-display.kpdlk-correct{color:var(--green,#22c55e)}
