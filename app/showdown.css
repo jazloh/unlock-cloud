@@ -1250,14 +1250,25 @@ img, svg { display: block; max-width: 100%; }
 }
 
 /* ── keypad ─────────────────────────────────────────────────────────── */
+/* The display is a PIN-dot readout: one glyph per digit (● filled / ○ empty), so
+   its intrinsic width tracks the ANSWER LENGTH. Giving it a plate without a width
+   floor meant a 1-digit answer collapsed to a ~24px box around a single circle,
+   which read as a stray rendering artifact floating above the pad.
+   A fixed floor wide enough for the longest answer (6 digits) keeps it a stable,
+   deliberate readout window at every length. */
 #play-mount .kpdlk-display {
+  display: flex; align-items: center; justify-content: center;
+  min-width: 168px;
+  min-height: 48px;
+  padding: 0 14px;
   background: var(--lk-well);
   border: 1px solid var(--lk-edge);
   border-radius: var(--lk-radius);
-  color: var(--lk-glyph);
+  color: var(--mode-color);
   font-family: var(--font-display);
   font-variant-numeric: tabular-nums;
   letter-spacing: .18em;
+  text-indent: .18em;   /* offset the trailing letter-space so dots sit centred */
 }
 #play-mount .kpdlk-enter {
   background: var(--mode-color);
