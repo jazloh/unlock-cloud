@@ -1,4 +1,5 @@
 const _params = new URLSearchParams(location.search);
+const ADMIN = _params.get('admin') === 'true';
 let SCENARIO_BASE = _params.get('scenario') || null;
 const EVENT_ID = _params.get('game_id') || _params.get('event') || null;
 const _gmParam = _params.get('gameMode');
@@ -25,7 +26,10 @@ const ASSET_BASE = location.hostname === 'localhost' || location.hostname === '1
   ? SCENARIO_BASE
   : 'https://beta.re-solve.cloud/' + SCENARIO_BASE.replace(/^\.\.\//, '');
 const engine = new GameEngine(ASSET_BASE);
-window.engine = engine;
+// Only exposed for the admin debug panel — a public global handle to the engine
+// lets anyone call engine.onLeaderboardEvent('game_complete', {score:{...}}) from
+// devtools and post a fake score without ever touching the real API.
+if (ADMIN) window.engine = engine;
 const leaderboard = new LeaderboardClient();
 const GUEST_MODE = new URLSearchParams(location.search).get('mode') === 'guest';
 engine.onLeaderboardEvent = (event, payload) => {
@@ -377,8 +381,6 @@ function renderNarrativeText() {
     return `<p>${label}${s.text || (s.ssml || '').replace(/<[^>]+>/g, '')}</p>`;
   }).join('');
 }
-
-const ADMIN = new URLSearchParams(location.search).get('admin') === 'true';
 
 (async () => {
   await engine.load();
@@ -1523,8 +1525,23 @@ function showPuzzlePopup(puzzleId, awardCardId) {
   } else if (puzzle.ui === 'prompt-lock') {
     new PromptLock(mount, {
       npc: cfg.npc,
+      // Row mode config — forwarded so row-mode puzzles actually render their slots.
+      // Falls through to fragment mode when `mode` isn't 'row' or `rows` is empty,
+      // per the PromptLock constructor's own guard.
+      mode: cfg.mode,
+      rows: cfg.rows || [],
+      // Fragment mode config — unchanged.
       fragments: cfg.fragments || [],
       answers: cfg.answers || [],
+      // Response strings for both modes (row mode uses these directly;
+      // fragment mode ignores them — matches are keyed off `answers[].response`).
+      success_response: cfg.success_response,
+      partial_response: cfg.partial_response,
+      fail_response: cfg.fail_response,
+      // Component only calls onSubmit on success (gold): row mode fires it once
+      // all slots are correct; fragment mode fires it on a gold-tier match. So
+      // wiring straight to onSolve is correct — partial/fail stay in the popup
+      // and let the player retry.
       onSubmit() { onSolve(); }
     });
   } else if (puzzle.ui === 'booking-run-lock') {

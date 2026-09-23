@@ -1,0 +1,31 @@
+{
+  "rooms": [
+    {
+      "card_id": 100,
+      "name": "The Avalanche",
+      "description": "Room 1 — The mailbox is a war crime. Find the word repeating in every URGENT flag.",
+      "connects_to": [200],
+      "unlocked_by": null,
+      "unlock_text": "Day one. Clock in.",
+      "map_pos": [140, 360]
+    },
+    {
+      "card_id": 200,
+      "name": "Meet Quick",
+      "description": "Room 2 — Sam introduces Amazon Quick. Sort what it can do; draft your first good ask.",
+      "connects_to": [300],
+      "unlocked_by": { "type": "puzzle", "puzzle_id": "puzzle-urgent" },
+      "unlock_text": "URGENT decoded. Sam waves you over.",
+      "map_pos": [140, 200]
+    },
+    {
+      "card_id": 300,
+      "name": "Clear the Board",
+      "description": "Room 3 — Quick is docked to the mailbox and the internal docs. Fix its context, approve the drafts, hit Inbox Zero before 4 PM.",
+      "connects_to": [],
+      "unlocked_by": { "type": "items", "card_ids": [211, 212] },
+      "unlock_text": "Category Map + Well-Formed Prompt in hand. Back to the desk.",
+      "map_pos": [140, 40]
+    }
+  ]
+}

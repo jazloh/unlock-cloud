@@ -1,0 +1,312 @@
+{
+  "cards": [
+    {
+      "id": 100,
+      "type": "location",
+      "color": "green",
+      "title": "The Avalanche",
+      "description": "Your cramped desk. Day one. The monitor is buried under an avalanche of unread email notifications \u2014 churn reports, exec asks, network ticket escalations, billing complaints, cold pitches, and a wellness survey somebody sent to all-hands at 3 AM. The unread count ticks up while you watch.\n\nAt the top of every red-flagged email, the same tag: 'URGENT ____'. Same last word. Every single one.\n\nSomeone left a sticky note under the keyboard. You should probably read it before you drown.",
+      "image": "assets/room-avalanche.png",
+      "image_prompt": "Cramped analyst's cubicle on a first-day morning, monitor buried under an overwhelming cascade of email-notification popups filling the entire screen, sticky notes on the edges, cold coffee, warm morning light through blinds, professional-blue and warm-gold palette, isometric digital illustration, mildly comedic",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 110,
+          "label": "Read the sticky note under the keyboard"
+        },
+        {
+          "card_id": 105,
+          "label": "Focus on the word repeating in every URGENT flag",
+          "puzzle": "puzzle-urgent"
+        }
+      ],
+      "visible_to": "all",
+      "room": "avalanche"
+    },
+    {
+      "id": 101,
+      "type": "object",
+      "color": "blue",
+      "title": "Overflowing Inbox",
+      "description": "The screen is fully covered. Every red-flagged subject line ends the same way: 'URGENT ____'. Scroll the four letter reels \u2014 the repeated last word is the analyst's silent plea on day one.",
+      "image": "assets/card-inbox.png",
+      "image_prompt": "Close-up of a monitor showing a long list of unread email rows with red URGENT tags, four glowing letter-reel dials floating in front of the screen, professional-blue interface, warm-gold accent lights, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "avalanche"
+    },
+    {
+      "id": 105,
+      "type": "event",
+      "color": "yellow",
+      "title": "URGENT: Word Located.",
+      "description": "The four reels click into place. The whole inbox rearranges itself: 'URGENT HELP', 'URGENT HELP', 'URGENT HELP' \u2014 the same word behind every red flag. And exactly then, a colleague pokes their head over the cubicle wall.\n\n'Oh no. New hire. That look. Come with me \u2014 I know a way. Not a coping mechanism. A tool.'",
+      "reveals": [
+        200
+      ],
+      "consumes": [],
+      "awards": [],
+      "visible_to": "all",
+      "room": "avalanche"
+    },
+    {
+      "id": 110,
+      "type": "lore",
+      "color": "purple",
+      "title": "Sticky Note \u2014 From the Previous Analyst",
+      "description": "A curled Post-it, coffee-ringed, tucked under the keyboard:\n\n\"If you're reading this, congrats \u2014 you have my desk. I left to go touch grass. There's a better way to do this job. It's already installed. Ask Sam. Do not, under any circumstances, try to reply to every email by hand. That way lies my fate. \u2014 J\"\n\nHint: There is, in fact, a better way.",
+      "image": "assets/card-sticky.png",
+      "image_prompt": "Curled coffee-stained yellow sticky note with hasty handwritten message, tucked under a beige keyboard corner, warm desk light, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "avalanche"
+    },
+    {
+      "id": 200,
+      "type": "location",
+      "color": "green",
+      "title": "Meet Quick \u2014 Sam's Desk",
+      "description": "Sam's cubicle two rows over. Their monitor shows a clean chat window titled 'Amazon Quick'. On the desk: a printed capability sheet with three big buckets, a scratch pad, and a fresh prompt template with four labeled slots. Sam gestures at the monitor.\n\n'Right. So. This is Amazon Quick. Not QuickSight \u2014 Quick is the whole work companion. It reads our stuff, answers questions, drafts replies, automates the boring bits. I'll walk you through the two things you need to see, then you're off.'\n\nTwo tasks laid out on the desk. Both of them, and you're ready for the actual mailbox.",
+      "image": "assets/room-quicks-desk.png",
+      "image_prompt": "Friendly colleague's desk, second monitor with a clean AI chat window, printed capability sheet with three labeled columns, a prompt template with four slot boxes, warm mid-morning office light, professional-blue and warm-gold palette, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 201,
+          "label": "Say hi to Sam",
+          "puzzle": "npc-sam"
+        },
+        {
+          "card_id": 205,
+          "label": "Sort what Quick can do into three buckets",
+          "puzzle": "puzzle-sort"
+        },
+        {
+          "card_id": 215,
+          "label": "Draft your first ask to Quick",
+          "puzzle": "puzzle-prompt"
+        },
+        {
+          "card_id": 220,
+          "label": "Head back to your desk \u2014 clear the board",
+          "requires_item": [
+            211,
+            212
+          ],
+          "consumes_item": [
+            211,
+            212
+          ]
+        }
+      ],
+      "visible_to": "all",
+      "room": "quicks-desk"
+    },
+    {
+      "id": 201,
+      "type": "tool",
+      "color": "orange",
+      "title": "Sam \u2014 Colleague",
+      "description": "Sam. Two years in. Coffee in one hand, empathy in the other. Genuinely happy someone else has the mailbox now. Introduces Quick like they've done this many times before.",
+      "image": "assets/card-sam.png",
+      "image_prompt": "Friendly colleague in business-casual sweater holding a mug, warm smile, mid-explanation gesture toward a monitor off-frame, modern telecom office background, single character portrait on dark gradient",
+      "visible_to": "all",
+      "room": "quicks-desk"
+    },
+    {
+      "id": 202,
+      "type": "object",
+      "color": "blue",
+      "title": "Quick Console \u2014 Prompt Draft",
+      "description": "A clean chat window with four labeled slot boxes on top: Action / Subject / Context / Format. Fill each one and Quick returns a scary-good answer. Skip a slot and Quick returns a mid answer. It's that direct.",
+      "image": "assets/card-quick-console.png",
+      "image_prompt": "Modern AI chat interface with four labeled input slots arranged in a row above a message box, clean professional-blue UI, warm-gold accent buttons, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "quicks-desk"
+    },
+    {
+      "id": 203,
+      "type": "object",
+      "color": "blue",
+      "title": "Capability Sheet",
+      "description": "A printed sheet with three columns \u2014 Research, Dashboards, Automate \u2014 and six real analyst asks that need to be sorted into the right column. Sam's handwriting at the top: 'If you know which bucket, you know how to ask.'",
+      "image": "assets/card-capability-sheet.png",
+      "image_prompt": "Printed handout on a desk with three labeled column headers \u2014 Research, Dashboards, Automate \u2014 and six sortable statement cards fanned out below, marker annotations at the top, warm desk light, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "quicks-desk"
+    },
+    {
+      "id": 205,
+      "type": "event",
+      "color": "yellow",
+      "title": "Capabilities Sorted.",
+      "description": "All six asks slide into the right column. Research summarizes and finds. Dashboards shows numbers as pictures. Automate schedules and drafts. Sam nods.\n\n'Nice. Whenever you're about to ask Quick something, you know which bucket it's in. That's the whole game.'\n\nA folded Category Map slides across the desk into your hand.",
+      "reveals": [
+        211
+      ],
+      "awards": [
+        211
+      ],
+      "visible_to": "all",
+      "room": "quicks-desk"
+    },
+    {
+      "id": 211,
+      "type": "item",
+      "color": "red",
+      "title": "Category Map",
+      "description": "A folded pocket card with three buckets: Research (summarize / find / explain), Dashboards (show / chart / live view), Automate (schedule / draft / auto-reply). Everything Quick can do fits into one of these. Bring this to your desk \u2014 it's half of what you need to actually hit the inbox.",
+      "image": "assets/card-category-map.png",
+      "image_prompt": "Folded pocket reference card showing three labeled bucket icons with verb keywords under each, clean professional-blue design, warm-gold accent, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "quicks-desk"
+    },
+    {
+      "id": 215,
+      "type": "event",
+      "color": "yellow",
+      "title": "First Prompt Sent.",
+      "description": "You fill the four slots \u2014 Action, Subject, Context, Format \u2014 and hit send. Quick returns three tight bullets on last month's northern churn in about eight seconds. Sam gives a satisfied 'told you'.\n\nA printed copy of the prompt drops out of the printer with a green checkmark stamped on it.",
+      "reveals": [
+        212
+      ],
+      "awards": [
+        212
+      ],
+      "visible_to": "all",
+      "room": "quicks-desk"
+    },
+    {
+      "id": 212,
+      "type": "item",
+      "color": "red",
+      "title": "Well-Formed Prompt",
+      "description": "A printed copy of your first good ask to Quick: 'Summarize last month's churn for the northern region in 3 bullet points.' Action + Subject + Context + Format. Bring this to your desk \u2014 it's the other half of what you need to actually clear the board.",
+      "image": "assets/card-prompt-print.png",
+      "image_prompt": "Printed prompt template with four highlighted colored slots labeled Action Subject Context Format and a green checkmark stamp, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "quicks-desk"
+    },
+    {
+      "id": 220,
+      "type": "event",
+      "color": "yellow",
+      "title": "Ready. Head back to the board.",
+      "description": "Category Map in one hand. Well-Formed Prompt in the other. Sam waves you off with a coffee salute.\n\n'Go. Quick's already connected to our internal doc system \u2014 churn data, network reports, KPIs, all of it. You know which bucket, you know how to ask. Clear it. Board call's at four.'\n\nThe path back to your desk lights up. The mailbox is still on fire, but not for long.",
+      "reveals": [
+        300
+      ],
+      "consumes": [
+        211,
+        212
+      ],
+      "awards": [],
+      "visible_to": "all",
+      "room": "quicks-desk"
+    },
+    {
+      "id": 300,
+      "type": "location",
+      "color": "green",
+      "title": "Clear the Board \u2014 Your Desk Again",
+      "description": "Back at your desk. Quick is now docked to the mailbox and hooked into the internal doc system. On one side, a live document feed shows every doc Quick is currently pulling from \u2014 and there's way too much of it, and half is stale. On the other side, a draft reply console: Quick has drafted responses to the top emails, and there's a countdown to the 4 PM board call.\n\nSomebody pinned a reminder on the monitor. Read that first.",
+      "image": "assets/room-clear-the-board.png",
+      "image_prompt": "Analyst's desk mid-morning with a large monitor showing a split view \u2014 left panel scrolling document icons with mixed status halos, right panel showing draft-reply toggles and a large countdown timer \u2014 pinned sticky notes on the frame, warm task-focused lighting, professional-blue and warm-gold palette, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 310,
+          "label": "Read the pinned 4 PM board call reminder"
+        },
+        {
+          "card_id": 305,
+          "label": "Untangle Quick's document feed",
+          "puzzle": "puzzle-context"
+        },
+        {
+          "card_id": 399,
+          "label": "Approve replies, close the loop",
+          "puzzle": "puzzle-defuse",
+          "requires_item": [
+            213
+          ],
+          "consumes_item": [
+            213
+          ]
+        }
+      ],
+      "visible_to": "all",
+      "room": "clear-the-board"
+    },
+    {
+      "id": 301,
+      "type": "object",
+      "color": "blue",
+      "title": "Quick's Document Feed",
+      "description": "The live feed shows every doc Quick can currently see in the operator's internal system. Some are current and correct \u2014 this month's churn data, the latest network report, this quarter's KPI dashboard. Others are junk: a 2019 pricing sheet, a duplicate churn export, an unrelated HR policy, a half-finished draft full of #TODO placeholders.\n\nRight now Quick's output stream is a mess. Remove the poison and stale docs until the stream stabilizes and the answer fits the budget.",
+      "image": "assets/card-doc-feed.png",
+      "image_prompt": "Vertical stack of document icons on a glass panel with mixed red and green status halos, a live scrolling stream of build-log lines below, a horizontal capacity gauge to the side, professional-blue UI on dark gradient background, single object",
+      "visible_to": "all",
+      "room": "clear-the-board"
+    },
+    {
+      "id": 302,
+      "type": "object",
+      "color": "blue",
+      "title": "Draft Reply Console",
+      "description": "A row of Quick's drafted replies waiting for your approval: the churn exec, the billing complaints, the KPI dashboard link, and \u2014 this one is a trap \u2014 an auto-post to the public status page with customer complaints in it. A code entry at the bottom asks for the number of remaining unread emails you're aiming for.\n\nAbove all of it, the 4 PM board call timer counts down.",
+      "image": "assets/card-draft-console.png",
+      "image_prompt": "Row of draft-reply toggle cards on a monitor, large countdown timer above, single numeric input at the bottom, one toggle card highlighted with warning tape, professional-blue UI with warm-gold accents, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "clear-the-board"
+    },
+    {
+      "id": 305,
+      "type": "event",
+      "color": "yellow",
+      "title": "Context Stabilized.",
+      "description": "Stale and off-topic docs slide off the feed. Quick's live stream stops contradicting itself \u2014 every line is now a real component of the actual answer: current churn, current network, current KPIs. The capacity gauge drops into the green.\n\nA sealed Clean Context tag prints out of the console.",
+      "reveals": [
+        213
+      ],
+      "awards": [
+        213
+      ],
+      "visible_to": "all",
+      "room": "clear-the-board"
+    },
+    {
+      "id": 213,
+      "type": "item",
+      "color": "red",
+      "title": "Clean Context",
+      "description": "A tag confirming Quick's document feed is trimmed to exactly what this ask needs \u2014 current churn data, current network report, this quarter's KPIs. Everything stale, duplicate, and off-topic has been dropped.\n\nWith clean context, Quick's drafted replies are grounded in the real state of the business. Feed this into the approval console before you hit the board call.",
+      "image": "assets/card-clean-context.png",
+      "image_prompt": "Sealed manifest card labeled with three stacked document icons and a green checkmark seal, warm-gold trim on professional-blue background, single object on dark gradient",
+      "visible_to": "all",
+      "room": "clear-the-board"
+    },
+    {
+      "id": 310,
+      "type": "lore",
+      "color": "purple",
+      "title": "Sticky Note \u2014 4 PM Board Call",
+      "description": "A red sticky pinned dead-center on the monitor:\n\n\"BOARD CALL \u2014 4:00 PM SHARP. VP wants the churn summary, the network incident readout, and the top billing escalations. Do NOT walk in with an inbox at 400. \u2014 Priya\"\n\nHint: the timer is real. So is the ask.",
+      "image": "assets/card-board-call.png",
+      "image_prompt": "Bright red sticky note pinned to a monitor bezel with urgent handwritten reminder, warm desk light, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "clear-the-board"
+    },
+    {
+      "id": 399,
+      "type": "event",
+      "color": "yellow",
+      "title": "INBOX ZERO.",
+      "description": "You approve Quick's drafted reply to the churn exec. Approve the auto-reply to the billing complaints. Attach the KPI dashboard link. Leave the auto-post-to-public-status-page toggle firmly OFF \u2014 that one was a trap. Enter 0 for remaining emails.\n\nThe defuse timer freezes with seconds to spare and flips green. The mailbox shows a triumphant '0 unread'. The 4 PM board call timer lights amber, then blue: you're on it, ready, with real numbers, drafted talking points, and a mailbox that no longer resembles a war crime.\n\nSam, across the floor, gives you a slow clap.",
+      "is_ending": true,
+      "reveals": [],
+      "visible_to": "all",
+      "room": "clear-the-board",
+      "image": "assets/ending-success.png",
+      "image_prompt": "Satisfied analyst at a tidy desk with an empty clean inbox glowing on the monitor, friendly AI companion sparkle, triumphant warm lighting, professional-blue and warm-gold palette, portrait game ending art"
+    }
+  ]
+}

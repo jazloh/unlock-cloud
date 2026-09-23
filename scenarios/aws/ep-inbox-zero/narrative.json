@@ -1,0 +1,52 @@
+{
+  "voices": {
+    "narrator": { "voice_id": "Joanna",  "role": "Narrator — sets scene, warm corporate, mildly amused" },
+    "sam":      { "voice_id": "Salli",   "role": "Sam, colleague — chatty, over-caffeinated, genuinely helpful" },
+    "exec":     { "voice_id": "Matthew", "role": "Priya's stand-in / exec voice — dry, precise, patient" }
+  },
+  "intro": {
+    "segments": [
+      { "voice": "narrator", "text": "Welcome to the operator. Day one. You have a desk, a monitor, and — technically — a mailbox.", "pause_after_ms": 800 },
+      { "voice": "narrator", "text": "Four hundred unread emails. Churn reports, exec asks, network ticket escalations, billing complaints, and a wellness survey somebody sent at three in the morning.", "pause_after_ms": 900 },
+      { "voice": "sam", "text": "Hey. New hire. Yeah, that mailbox looks like a war crime. Don't panic. There's a tool called Amazon Quick. Not QuickSight — Quick is the whole work companion. I'll walk you through it.", "pause_after_ms": 900 },
+      { "voice": "exec", "text": "Board call at four. I want the churn summary, the network readout, and the top billing escalations. Don't walk in with an inbox at four hundred.", "pause_after_ms": 800 },
+      { "voice": "narrator", "text": "Ten minutes on the clock. Three rooms. Ask your data questions in plain language. Trim what Quick knows. Let it draft your replies. Hit Inbox Zero before four.", "emphasis": "moderate" }
+    ],
+    "audio": null
+  },
+  "mid_event": {
+    "trigger_time_remaining": 300,
+    "segments": [
+      { "voice": "narrator", "text": "Five minutes remaining. Halfway through your first morning at the operator.", "pause_after_ms": 800 },
+      { "voice": "sam", "text": "How you doing? If you got the buckets and the four-part prompt, you're ready. Head back to your desk. Quick's already connected to our internal docs.", "pause_after_ms": 900 },
+      { "voice": "exec", "text": "Five minutes to board call prep. I trust the tool. I also trust you to check what it wrote before you send it.", "emphasis": "moderate" }
+    ],
+    "audio": null
+  },
+  "ending": {
+    "success": {
+      "segments": [
+        { "voice": "narrator", "text": "The mailbox flips to zero. The board-call timer lights blue. You made it.", "pause_after_ms": 900 },
+        { "voice": "narrator", "text": "This morning you drowned in email.", "pause_after_ms": 600 },
+        { "voice": "narrator", "text": "By lunch you'd asked your data questions in plain language — no SQL, no dashboards, just words.", "pause_after_ms": 800, "emphasis": "moderate" },
+        { "voice": "narrator", "text": "You connected Quick to the operator's internal docs, and it answered with our context — this month's churn, this quarter's network report, this quarter's KPIs.", "pause_after_ms": 800, "emphasis": "moderate" },
+        { "voice": "narrator", "text": "And you let Quick draft every reply and automate the busywork — churn exec, billing auto-reply, dashboard link, all reviewed and sent.", "pause_after_ms": 900, "emphasis": "moderate" },
+        { "voice": "narrator", "text": "You hit Inbox Zero before the four PM board call. That's Amazon Quick.", "pause_after_ms": 900 },
+        { "voice": "sam", "text": "See? Told you. Same time tomorrow — I'll show you how to schedule the whole thing on a Monday.", "pause_after_ms": 700 },
+        { "voice": "exec", "text": "Good. Board's ready. Grab a coffee. Welcome aboard.", "emphasis": "subtle" }
+      ],
+      "audio": null,
+      "next_episode": null
+    },
+    "failure": {
+      "segments": [
+        { "voice": "narrator", "text": "Four PM. The board call opens without the drafted talking points.", "pause_after_ms": 900, "emphasis": "moderate" },
+        { "voice": "narrator", "text": "You didn't fail — you just didn't finish. The three moves are still true: ask in plain language, feed Quick the right context, let it draft the busywork.", "pause_after_ms": 900 },
+        { "voice": "sam", "text": "Hey — it's day one. Tomorrow morning you'll hit Inbox Zero before nine. Trust me. I've seen the arc.", "pause_after_ms": 800 },
+        { "voice": "exec", "text": "Reschedule the readout. Bring the churn summary tomorrow. This is not a career-ending event.", "pause_after_ms": 700 },
+        { "voice": "narrator", "text": "The cloud is patient. Mostly. Try again — the mailbox is waiting." }
+      ],
+      "audio": null
+    }
+  }
+}
