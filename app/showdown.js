@@ -1979,7 +1979,14 @@
           slots.push({ id: 'statement:' + ids.join(','), ui: 'pillar-lock', category: winningCategory,
             type, question: 'Sort each statement into True or False.',
             config: { pillars: ['True', 'False'], statements,
-                      immediateWrong: true, wrongHoldMs: (WRONG_LOCK_SEC * 1000) + 200 } });
+                      // Hold the wrong card slightly SHORTER than the lockout, not
+                      // longer. The scrim clears after WRONG_LOCK_SEC interval ticks;
+                      // a hold of +200ms left a ~200ms window where the scrim was gone
+                      // but the card had not advanced, so taps landed on a stale
+                      // statement — one of the ingredients in the credited-false-solve
+                      // bug. Advancing just before the scrim lifts closes that window
+                      // and the player still sees the wrong card for the whole pause.
+                      immediateWrong: true, wrongHoldMs: (WRONG_LOCK_SEC * 1000) - 150 } });
         }
 
       } else if (type === 'spelling') {
