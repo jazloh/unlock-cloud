@@ -1741,6 +1741,8 @@
     // Retire the penalty stat (Showdown has no penalties now) — keep the node.
     const pen = $('play-penalties');
     if (pen) { const stat = pen.closest('.sd-stat'); if (stat) stat.style.display = 'none'; }
+    attachPressSfx();   // delegated press cue for whichever lock is mounted
+    mountMuteToggle();  // booth staff must be able to silence a machine in one tap
     const q = $('play-question');
     if (q) q.textContent = '';
     // Clear the HTML placeholder "Puzzle 1 of 5" so a non-5 puzzle_count round
@@ -2024,7 +2026,11 @@
             question: 'Answer each question to reach the target.',
             config: {
               target: questions.length, questions,
-              stakes: [{ label: 'Confident', wager: 1, penalty: 0, color: '#eab308', showOptions: 4 }],
+              // Single tier: Showdown has no stake CHOICE and no penalties, so this is
+              // informational only. Colour moved off the episode-era #eab308 onto the
+              // VS Select warning hue; wager/penalty/showOptions untouched because they
+              // drive the component's target logic and how many options are revealed.
+              stakes: [{ label: 'Confident', wager: 1, penalty: 0, color: '#ffb020', showOptions: 4 }],
               revealAnswerOnWrong: false, repeatOnWrong: true,
             } });
         }
@@ -2218,7 +2224,7 @@
     wrongTimer = setInterval(() => {
       rem -= 1;
       if (rem <= 0) { clearWrongLockout(); }
-      else { paint(); }
+      else { paint(); playSfxLockTick(); } // make the pause audible, not just visible
     }, 1000);
   }
 
@@ -2567,8 +2573,16 @@
         pulseOnce(lane, 'sd-pg-pass', 600);
         const meLane = panel.querySelector('.sd-pg-player--me');
         if (meLane) pulseOnce(meLane, 'sd-pg-passed', 600);
+        // Being overtaken is the sharpest moment in the race and the one a player
+        // is least likely to SEE — their eyes are on the puzzle, not the strip.
+        playSfxPassed();
       }
     });
+
+    // Taking 1st is the counterpart to being passed. Fired here rather than
+    // per-lane because it is about MY rank, and only on the transition so it
+    // cannot retrigger every poll while I stay in front.
+    if (!reduce && myRank === 1 && prevMyRank != null && prevMyRank > 1) playSfxLead();
 
     curr._myRank = myRank;
     panel._sdPrev = curr;
@@ -2839,9 +2853,198 @@
       });
     } catch { /* best-effort */ }
   }
-  const playSfxCorrect      = () => sfxTone([523, 659, 784]);
-  const playSfxWrong        = () => sfxTone([185, 195], { type: 'sawtooth', dur: 0.25, vol: 0.04 });
-  const playSfxGameComplete = () => sfxTone([523, 659, 784, 1047], { step: 0.12, dur: 0.3, vol: 0.06 });
+  /* ── Sound design ──────────────────────────────────────────────────
+   * Three raw oscillator beeps wired straight to destination is what a
+   * prototype sounds like. A competitive game needs feedback you feel, and it
+   * can be fully procedural — no assets, no download weight, no licensing.
+   *
+   * Constraints that shaped these, all from the booth:
+   *  - THREE LAPTOPS SIT SIDE BY SIDE. Every cue is under ~320ms and quiet, and
+   *    the voices occupy different pitch registers so simultaneous play from
+   *    neighbouring machines does not turn to mush.
+   *  - Players wear no headphones and the hall is loud, so cues are shaped for
+   *    transient clarity (a fast attack and a filtered body) rather than volume.
+   *  - Everything runs through ONE master bus with a limiter, so no combination
+   *    of cues can clip, and a single mute switch silences all of it.
+   *  - Muting persists: at a booth someone will want it off, once, for good. */
+  let sfxBus = null;      // master gain -> limiter -> destination
+  let sfxMuted = false;
+  try { sfxMuted = localStorage.getItem('sd_muted') === '1'; } catch { /* private mode */ }
+
+  function audioReady() {
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      if (!sfxCtx) sfxCtx = new Ctx();
+      if (sfxCtx.state === 'suspended') sfxCtx.resume();
+      if (!sfxBus) {
+        const gain = sfxCtx.createGain();
+        gain.gain.value = 0.9;
+        // Fast-attack compressor acting as a safety limiter: with several cues
+        // overlapping (a solve landing while the race strip fires) raw gains sum
+        // and clip, which reads as cheap.
+        const comp = sfxCtx.createDynamicsCompressor();
+        comp.threshold.value = -14; comp.knee.value = 12;
+        comp.ratio.value = 12; comp.attack.value = 0.002; comp.release.value = 0.12;
+        gain.connect(comp).connect(sfxCtx.destination);
+        sfxBus = gain;
+      }
+      return sfxMuted ? null : sfxCtx;
+    } catch { return null; }
+  }
+
+  /* One shaped voice. `type` picks the oscillator, `cut` a lowpass corner so
+   * nothing is harsh on laptop speakers, and the gain envelope is explicit
+   * (attack/decay) rather than two exponential ramps that click. */
+  function voice(o) {
+    const ctx = audioReady();
+    if (!ctx) return;
+    const t0 = ctx.currentTime + (o.at || 0);
+    const dur = o.dur || 0.14;
+    const osc = ctx.createOscillator();
+    osc.type = o.type || 'sine';
+    osc.frequency.setValueAtTime(o.f, t0);
+    if (o.to) osc.frequency.exponentialRampToValueAtTime(o.to, t0 + dur);
+    const g = ctx.createGain();
+    const peak = Math.max(0.0001, o.vol == null ? 0.06 : o.vol);
+    const atk = o.atk == null ? 0.006 : o.atk;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.linearRampToValueAtTime(peak, t0 + atk);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    let node = osc;
+    if (o.cut) {
+      const lp = ctx.createBiquadFilter();
+      lp.type = 'lowpass'; lp.frequency.value = o.cut; lp.Q.value = o.q || 0.7;
+      node = osc.connect(lp);
+      lp.connect(g);
+    } else {
+      osc.connect(g);
+    }
+    void node;
+    g.connect(sfxBus);
+    osc.start(t0); osc.stop(t0 + dur + 0.02);
+  }
+  const chord = (notes) => notes.forEach(voice);
+
+  // Kept for compatibility with any existing caller.
+  function sfxTone(freqs, opts) {
+    opts = opts || {};
+    freqs.forEach((f, i) => voice({
+      f, at: i * (opts.step || 0.06), dur: opts.dur || 0.2,
+      vol: opts.vol || 0.07, type: opts.type || 'sine',
+    }));
+  }
+
+  /* The cue set. Each one is a distinct gesture, not a different pitch of the
+   * same beep — that distinctness is what lets a player parse what happened
+   * without looking away from the puzzle. */
+
+  // Key press / letter placed. Deliberately tiny: it fires up to ~14 times in a
+  // single spelling answer, so it has to disappear into the background.
+  const playSfxTick = () => voice({ f: 880, to: 620, dur: 0.035, vol: 0.022, type: 'triangle', cut: 2600, atk: 0.001 });
+
+  // Correct: a rising major third with a bright transient on top. Short enough
+  // to not delay the next puzzle.
+  const playSfxCorrect = () => chord([
+    { f: 587, to: 880, dur: 0.16, vol: 0.055, type: 'triangle', cut: 4200 },
+    { f: 1175, dur: 0.09, vol: 0.022, type: 'sine', at: 0.02 },
+  ]);
+
+  // Wrong: a low filtered thud. The old sawtooth buzz read as an error *beep*;
+  // a body-hit reads as "that cost you" without being shrill in a noisy room.
+  const playSfxWrong = () => chord([
+    { f: 196, to: 110, dur: 0.22, vol: 0.075, type: 'triangle', cut: 620, atk: 0.002 },
+    { f: 98,  to: 74,  dur: 0.26, vol: 0.05,  type: 'sine',     cut: 400 },
+  ]);
+
+  // Each second of the 5s lockout: a dry, quiet tick so the pause is felt.
+  const playSfxLockTick = () => voice({ f: 320, dur: 0.05, vol: 0.03, type: 'square', cut: 1200 });
+
+  // You took the lead — bright, confident, upward.
+  const playSfxLead = () => chord([
+    { f: 784, dur: 0.1, vol: 0.05, type: 'triangle', cut: 5000 },
+    { f: 1046, dur: 0.14, vol: 0.045, type: 'triangle', cut: 5000, at: 0.07 },
+  ]);
+
+  // Someone overtook you — the same interval inverted, so it is unmistakably
+  // the bad twin of the cue above.
+  const playSfxPassed = () => chord([
+    { f: 740, dur: 0.1, vol: 0.045, type: 'triangle', cut: 3000 },
+    { f: 494, dur: 0.16, vol: 0.05, type: 'triangle', cut: 2200, at: 0.07 },
+  ]);
+
+  // Final seconds of the vote window.
+  const playSfxUrgent = () => voice({ f: 440, dur: 0.07, vol: 0.04, type: 'square', cut: 1800 });
+
+  // All five locks cracked.
+  const playSfxGameComplete = () => chord([
+    { f: 523,  dur: 0.16, vol: 0.055, type: 'triangle', cut: 5200 },
+    { f: 659,  dur: 0.16, vol: 0.055, type: 'triangle', cut: 5200, at: 0.10 },
+    { f: 784,  dur: 0.18, vol: 0.055, type: 'triangle', cut: 5200, at: 0.20 },
+    { f: 1046, dur: 0.30, vol: 0.06,  type: 'triangle', cut: 6000, at: 0.30 },
+    { f: 1568, dur: 0.22, vol: 0.02,  type: 'sine',     at: 0.32 },
+  ]);
+
+  /* Press feedback for every lock, without touching a single component.
+   *
+   * A delegated listener on #play-mount catches any button press inside whichever
+   * lock is mounted — keypad digits, letter tiles, reels, pillars, options — and
+   * answers within a frame. Doing it here rather than in the five components keeps
+   * the 22 episodes silent and untouched, and survives the components replacing
+   * their own innerHTML (which is why per-element listeners would not work).
+   *
+   * Deliberately NOT fired for the Undo/Clear ghost buttons: those are corrections,
+   * and rewarding them with the same click as progress muddles the feedback. */
+  function attachPressSfx() {
+    const mount = document.getElementById('play-mount');
+    if (!mount || mount._sdPressSfx) return;
+    mount._sdPressSfx = true;
+    mount.addEventListener('pointerdown', (e) => {
+      const t = e.target && e.target.closest
+        ? e.target.closest('button, .wlock-reel, .splk-letter, .kpdlk-key, .wglk-option, .pillk-pillar')
+        : null;
+      if (!t) return;
+      if (t.classList.contains('splk-action')) return;  // Undo / Clear
+      if (t.disabled) return;
+      playSfxTick();
+    }, { passive: true });
+    // The reels are driven by wheel and keyboard too, so those get a tick as well.
+    mount.addEventListener('keydown', (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (/^([0-9a-zA-Z]|Enter|ArrowUp|ArrowDown)$/.test(e.key)) playSfxTick();
+    }, { passive: true });
+  }
+
+  /* Mute control, built at runtime (no showdown.html edits) and parked next to
+   * the existing theme toggle. Present on every screen from PLAY onward so a
+   * booth attendant can silence one machine without hunting through settings. */
+  function mountMuteToggle() {
+    if (document.getElementById('sd-mute')) { setMuted(sfxMuted); return; }
+    const btn = document.createElement('button');
+    btn.id = 'sd-mute';
+    btn.type = 'button';
+    btn.className = 'sd-mute';
+    btn.setAttribute('aria-pressed', sfxMuted ? 'true' : 'false');
+    btn.onclick = () => setMuted(!sfxMuted);
+    /* Parent to .sd-app, NOT next to the theme toggle. The theme toggle lives
+     * inside #screen-join, which is hidden the moment play starts — adopting its
+     * parent made the button zero-size and invisible exactly when it is needed.
+     * .sd-app spans every screen, and the CSS pins this `fixed`. */
+    const host = document.querySelector('.sd-app') || document.body || document.documentElement;
+    host.appendChild(btn);
+    setMuted(sfxMuted);
+  }
+
+  function setMuted(next) {
+    sfxMuted = !!next;
+    try { localStorage.setItem('sd_muted', sfxMuted ? '1' : '0'); } catch { /* ignore */ }
+    const btn = document.getElementById('sd-mute');
+    if (btn) {
+      btn.setAttribute('aria-pressed', sfxMuted ? 'true' : 'false');
+      btn.textContent = sfxMuted ? '🔇 Sound off' : '🔊 Sound on';
+      btn.title = sfxMuted ? 'Turn sound on' : 'Turn sound off';
+    }
+  }
   // Silence "unused" linters for symbols reserved for later phases / HTML FX.
   void SD_FLAG_SVG; void bankLookup;
 

@@ -1093,6 +1093,36 @@ img, svg { display: block; max-width: 100%; }
 .sd-theme-toggle:hover { border-color: var(--text-secondary); background: var(--panel-3); }
 .sd-theme-toggle:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
+/* Mute toggle (built at runtime by mountMuteToggle). Same material as the theme
+   toggle so the two machine-level controls read as a pair, but `fixed` and
+   parented to .sd-app: the theme toggle sits inside #screen-join and disappears
+   at play time, which is precisely when a booth attendant needs to silence a
+   machine. Offset left of the theme toggle's slot so they never overlap on JOIN. */
+.sd-mute {
+  /* BOTTOM-right, not top. The top-right corner belongs to the play header's
+     TIME readout — parking the control there covered the clock, which is the one
+     number a racer looks at most. Bottom-right is reachable, out of the way of
+     every screen's content column, and clear of the MOCK badge (top-left). */
+  position: fixed;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  right: 12px; z-index: 6;
+  width: auto; min-height: 0;
+  padding: 6px 11px;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  font: 600 11px/1 var(--font-display);
+  letter-spacing: .06em; text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color .16s ease-out, background .16s ease-out;
+}
+.sd-mute:hover { border-color: var(--text-secondary); background: var(--panel-3); }
+.sd-mute:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+/* Muted is a real state, so it looks switched off rather than just relabelled. */
+.sd-mute[aria-pressed="true"] { color: var(--text-muted); border-color: var(--line); }
+
+
 /* MOCK badge (built at runtime). */
 #sd-mock-badge {
   position: fixed; left: 10px; top: calc(10px + env(safe-area-inset-top)); z-index: 60;
@@ -1138,4 +1168,318 @@ img, svg { display: block; max-width: 100%; }
   .sd-join-hero { max-width: 360px; }
   .sd-card { padding: 18px; }
   .sdl-attract { min-height: auto; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LOCK CHASSIS — one material language for all five puzzle locks
+   ------------------------------------------------------------------
+   The five locks are SHARED with the episode game and carry its own visual
+   era: four of them hardcode a blue/slate palette (#3b82f6, #1e2a45,
+   #141b2d, #7a8ba8, #e0e6f0) and spelling-lock hardcodes a green chalkboard
+   with kraft borders (#2d4a2e, #5a3e1b, #8fbc8f, #f0e6c0). Rendered inside
+   Showdown's ink-plum/coral world they read as three different games bolted
+   together — the single biggest thing standing between this and a top-tier
+   feel.
+
+   Those values live in <style> blocks the components inject at runtime, so
+   the --accent alias remap above cannot reach them. This layer overrides
+   them explicitly.
+
+   WHY IT IS SAFE 6 DAYS FROM AN EVENT: every selector is scoped to
+   #play-mount, which exists only on the Showdown play screen, and every rule
+   is presentational. No component file is touched, so all 22 episodes render
+   exactly as before (proved by verify-episodes-regression.mjs). The ID
+   selector also out-specifies the components' class-based injected CSS
+   regardless of injection order.
+
+   THE MATERIAL: machined plates on the plum chassis. One resting state, one
+   hover, one committed state, coral as the only active hue, angular corners,
+   Chakra Petch for glyphs, tabular numerals. Depth comes from stepped planes
+   and edges — never from a glow (VS Select bans halos outside the sanctioned
+   attract wordmark).
+   ══════════════════════════════════════════════════════════════════ */
+
+#play-mount {
+  /* Plate tokens, so all five locks derive from one place. */
+  --lk-plate:        var(--panel-3);
+  --lk-plate-hover:  color-mix(in srgb, var(--mode-color) 14%, var(--panel-3));
+  --lk-edge:         var(--line-strong);
+  --lk-edge-hot:     var(--mode-color);
+  --lk-glyph:        var(--text);
+  --lk-glyph-dim:    var(--text-secondary);
+  --lk-well:         color-mix(in srgb, var(--ink) 55%, var(--panel));
+  --lk-radius:       3px;
+}
+
+/* ── Shared plate: every tappable glyph target across the locks ──────── */
+#play-mount .kpdlk-key,
+#play-mount .splk-letter,
+#play-mount .wglk-option,
+#play-mount .pillk-pillar {
+  background: var(--lk-plate);
+  border: 1px solid var(--lk-edge);
+  border-radius: var(--lk-radius);
+  color: var(--lk-glyph);
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  transition: background .12s ease-out, border-color .12s ease-out, color .12s ease-out;
+}
+#play-mount .kpdlk-key:hover,
+#play-mount .splk-letter:hover,
+#play-mount .wglk-option:hover,
+#play-mount .pillk-pillar:hover {
+  background: var(--lk-plate-hover);
+  border-color: var(--lk-edge-hot);
+}
+/* Committed/pressed reads as a coral flood with ink glyphs — the same
+   vocabulary as .sd-spec-badge, so "chosen" means one thing everywhere. */
+#play-mount .kpdlk-key:active,
+#play-mount .splk-letter:active,
+#play-mount .wglk-option:active,
+#play-mount .pillk-pillar:active {
+  background: var(--mode-color);
+  border-color: var(--mode-color);
+  color: var(--on-flood);
+  transition-duration: 0s;   /* press feedback must be instant */
+}
+#play-mount .kpdlk-key:focus-visible,
+#play-mount .splk-letter:focus-visible,
+#play-mount .wglk-option:focus-visible,
+#play-mount .pillk-pillar:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 2px;
+}
+
+/* ── keypad ─────────────────────────────────────────────────────────── */
+#play-mount .kpdlk-display {
+  background: var(--lk-well);
+  border: 1px solid var(--lk-edge);
+  border-radius: var(--lk-radius);
+  color: var(--lk-glyph);
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .18em;
+}
+#play-mount .kpdlk-enter {
+  background: var(--mode-color);
+  border-color: var(--mode-color);
+  color: var(--on-flood);
+}
+#play-mount .kpdlk-enter:hover {
+  background: color-mix(in srgb, var(--mode-color) 82%, #fff);
+  border-color: color-mix(in srgb, var(--mode-color) 82%, #fff);
+}
+/* 'C' is destructive-adjacent: ghost it so Enter is unmistakably the action. */
+#play-mount .kpdlk-fn:not(.kpdlk-enter) {
+  background: transparent;
+  color: var(--lk-glyph-dim);
+}
+#play-mount .kpdlk-display.kpdlk-correct { border-color: var(--success); color: var(--success); }
+#play-mount .kpdlk-display.kpdlk-wrong   { border-color: var(--danger);  color: var(--danger); }
+#play-mount .kpdlk-status { color: var(--text-secondary); font-family: var(--font-body); }
+
+/* ── word reels ─────────────────────────────────────────────────────── */
+#play-mount .wlock-reel {
+  background: var(--lk-well);
+  border: 1px solid var(--lk-edge);
+  border-radius: var(--lk-radius);
+}
+#play-mount .wlock-reel:hover { border-color: var(--lk-edge-hot); }
+/* The selected row is the whole point of the component — make the letters
+   legible (they were #7a8ba8 slate on near-black) and mark the window in
+   coral instead of episode blue. */
+/* Cells are full-brightness; the centre row then reads as the brightest thing
+   on the reel because the fades below dim the neighbours. The window overlay
+   is not tied to a cell, so "highlight the selected letter" has to be done by
+   darkening its neighbours rather than by selecting it. */
+#play-mount .wlock-cell {
+  color: var(--text);
+  font-family: var(--font-display);
+}
+#play-mount .wlock-window {
+  border-top: 2px solid var(--mode-color);
+  border-bottom: 2px solid var(--mode-color);
+  background: color-mix(in srgb, var(--mode-color) 12%, transparent);
+}
+#play-mount .wlock-fade-top { background: linear-gradient(to bottom, var(--lk-well) 62%, transparent); }
+#play-mount .wlock-fade-bot { background: linear-gradient(to top,    var(--lk-well) 62%, transparent); }
+
+/* DEFECT FIX: .wlock-hint is `position:absolute; inset:0`, so the first-run
+   coaching overlay covered the reels — including the centre row showing the
+   player's current letters — for its full 2s. It is shown once per browser,
+   i.e. precisely on the first word puzzle someone ever plays, in a race
+   measured in seconds. Re-seat it as a caption UNDER the reels: same
+   guidance, nothing obscured. */
+#play-mount .wlock-hint {
+  position: static; inset: auto;
+  background: none; padding: 8px 0 0; border-radius: 0;
+  z-index: auto;
+}
+#play-mount .wlock-hint-inner {
+  max-width: none;
+  color: var(--text-muted);
+  font: 500 12px/1.4 var(--font-body);
+  letter-spacing: .02em;
+}
+#play-mount .wlock-submit,
+#play-mount .wlock-btn {
+  background: var(--mode-color);
+  border: 1px solid var(--mode-color);
+  color: var(--on-flood);
+  font-family: var(--font-display);
+  letter-spacing: .06em; text-transform: uppercase;
+  border-radius: var(--lk-radius);
+  opacity: 1;
+}
+#play-mount .wlock-submit:hover,
+#play-mount .wlock-btn:hover {
+  background: color-mix(in srgb, var(--mode-color) 82%, #fff);
+  border-color: color-mix(in srgb, var(--mode-color) 82%, #fff);
+}
+
+/* ── pillar (True / False) ──────────────────────────────────────────── */
+#play-mount .pillk-card {
+  background: var(--panel);
+  border: 1px solid var(--lk-edge);
+  border-left: 3px solid var(--mode-color);
+  border-radius: var(--lk-radius);
+  color: var(--lk-glyph);
+  font-family: var(--font-body);
+}
+#play-mount .pillk-card.pillk-right { border-color: var(--success); border-left-color: var(--success); background: color-mix(in srgb, var(--success) 12%, var(--panel)); }
+#play-mount .pillk-card.pillk-wrong { border-color: var(--danger);  border-left-color: var(--danger);  background: color-mix(in srgb, var(--danger)  12%, var(--panel)); }
+#play-mount .pillk-pillar { font-size: 15px; letter-spacing: .06em; text-transform: uppercase; }
+#play-mount .pillk-progress,
+#play-mount .pillk-status { color: var(--text-secondary); font-family: var(--font-body); }
+
+/* ── spelling ───────────────────────────────────────────────────────── */
+/* This is the big one: a green chalkboard in kraft frames becomes a plum
+   machine bay. Every hardcoded green/brown below is replaced. */
+#play-mount .splk-board {
+  background: var(--panel);
+  border: 1px solid var(--lk-edge);
+  border-radius: var(--lk-radius);
+  box-shadow: none;
+}
+#play-mount .splk-count {
+  color: var(--text-muted);
+  font: 700 11px/1 var(--font-display);
+  letter-spacing: .1em; text-transform: uppercase;
+}
+#play-mount .splk-slots { border-bottom: 1px dashed var(--lk-edge); }
+#play-mount .splk-slot {
+  background: var(--lk-well);
+  border: 1px solid var(--lk-edge);
+  border-radius: var(--lk-radius);
+  color: var(--lk-glyph);
+  font-family: var(--font-display);
+}
+/* A filled slot is committed → coral flood, matching every other lock. */
+#play-mount .splk-slot.filled {
+  background: var(--mode-color);
+  border-color: var(--mode-color);
+  color: var(--on-flood);
+}
+#play-mount .splk-slot-btn { cursor: pointer; }
+#play-mount .splk-slot-btn:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--on-flood);
+}
+#play-mount .splk-letter.used {
+  background: transparent;
+  border-color: var(--border-subtle);
+  color: var(--border-subtle);
+}
+#play-mount .splk-action {
+  background: transparent;
+  border: 1px solid var(--lk-edge);
+  border-radius: var(--lk-radius);
+  color: var(--text-secondary);
+  font: 600 12px/1 var(--font-body);
+}
+#play-mount .splk-action:hover { border-color: var(--lk-edge-hot); color: var(--text); }
+#play-mount .splk-done,
+#play-mount .splk-complete-list { color: var(--text-secondary); font-family: var(--font-body); }
+#play-mount .splk-complete {
+  background: color-mix(in srgb, var(--success) 10%, var(--panel));
+  border: 1px solid var(--success);
+  border-radius: var(--lk-radius);
+}
+#play-mount .splk-complete-title {
+  color: var(--success);
+  font: 700 16px/1 var(--font-display);
+  letter-spacing: .04em; text-transform: uppercase;
+}
+
+/* ── wager (multiple choice) ────────────────────────────────────────── */
+#play-mount .wglk-option {
+  padding: 14px 16px;
+  font: 600 14px/1.35 var(--font-body);
+  text-align: left;
+}
+#play-mount .wglk-bar-wrap,
+#play-mount .wglk-bar-track {
+  background: var(--lk-well);
+  border: 1px solid var(--lk-edge);
+  border-radius: var(--lk-radius);
+}
+#play-mount .wglk-bar { background: var(--mode-color); }
+#play-mount .wglk-score-label,
+#play-mount .wglk-stakes-title,
+#play-mount .wglk-stake-info,
+#play-mount .wglk-hist-title { color: var(--text-secondary); font-family: var(--font-body); }
+#play-mount .wglk-question {
+  background: var(--panel);
+  border: 1px solid var(--lk-edge);
+  border-left: 3px solid var(--mode-color);
+  border-radius: var(--lk-radius);
+  color: var(--lk-glyph);
+}
+#play-mount .wglk-stake {
+  background: var(--lk-plate);
+  border: 1px solid var(--lk-edge);
+  border-radius: var(--lk-radius);
+  color: var(--lk-glyph);
+  font-family: var(--font-display);
+}
+#play-mount .wglk-stake:hover { background: var(--lk-plate-hover); border-color: var(--lk-edge-hot); }
+#play-mount .wglk-stake.selected,
+#play-mount .wglk-stake[aria-pressed="true"] {
+  background: var(--mode-color); border-color: var(--mode-color); color: var(--on-flood);
+}
+/* .wglk-correct / .wglk-wrong are the result PANEL, not text: the component gives
+   them a hardcoded rgba() wash (rgba(34,197,94,.1) / rgba(239,68,68,.1)) that the
+   --green/--red aliases cannot reach, which is why the "Correct!" panel read teal
+   in a plum world. Re-wash them from the VS Select tokens so they also follow the
+   light theme, which a fixed rgba() cannot. */
+#play-mount .wglk-round-result { border-radius: var(--lk-radius); }
+#play-mount .wglk-correct {
+  background: color-mix(in srgb, var(--success) 8%, var(--panel));
+  border-color: var(--success);
+}
+#play-mount .wglk-wrong {
+  background: color-mix(in srgb, var(--danger) 12%, var(--panel));
+  border-color: var(--danger);
+}
+#play-mount .wglk-correct .wglk-result-icon { color: var(--success); }
+#play-mount .wglk-wrong   .wglk-result-icon { color: var(--danger); }
+#play-mount .wglk-result-text { color: var(--text); font-family: var(--font-body); }
+#play-mount .wglk-result-delta { font-family: var(--font-display); font-variant-numeric: tabular-nums; }
+#play-mount .wglk-hist-stake {
+  background: var(--lk-well); color: var(--text-muted);
+  border: 1px solid var(--border-subtle); border-radius: var(--lk-radius);
+}
+#play-mount .wglk-next {
+  background: var(--mode-color); border: 1px solid var(--mode-color);
+  color: var(--on-flood);
+  font-family: var(--font-display); letter-spacing: .06em; text-transform: uppercase;
+  border-radius: var(--lk-radius);
+}
+
+/* Reduced motion: the plate transitions are the only motion added here. */
+@media (prefers-reduced-motion: reduce) {
+  #play-mount .kpdlk-key,
+  #play-mount .splk-letter,
+  #play-mount .wglk-option,
+  #play-mount .pillk-pillar { transition: none; }
 }
