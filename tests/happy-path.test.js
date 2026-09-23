@@ -859,3 +859,48 @@ describe('EP11 — War Room @ Tech Summit', () => {
     assertCompleted(engine);
   });
 });
+
+
+
+// ============================================================
+// EP — Inbox Zero (Booth Qualifier, 3 rooms, 5 puzzles + 1 NPC)
+// ============================================================
+describe('EP — Inbox Zero', () => {
+  let engine;
+  before(async () => { engine = await createEngine('ep-inbox-zero'); engine.start(); });
+
+  test('The Avalanche: read sticky note, solve word-lock (HELP) → unlocks Meet Quick', () => {
+    assert.equal(engine.currentRoom, 100);
+    discover(engine, 110, 'Sticky note lore');
+    solvePuzzle(engine, 'puzzle-urgent', 105, 'URGENT decoded');
+    assert.ok(engine.unlockedRooms.includes(200), 'Meet Quick should be unlocked');
+  });
+
+  test('Meet Quick: talk to Sam, sort capabilities, draft prompt → both items awarded', () => {
+    engine.navigateToRoom(200);
+    assert.equal(engine.currentRoom, 200);
+    discover(engine, 201, 'Sam NPC');
+    solvePuzzle(engine, 'puzzle-sort', 205, 'Capabilities sorted');
+    assert.ok(engine.inventory.includes(211), 'Category Map should be in inventory');
+    solvePuzzle(engine, 'puzzle-prompt', 215, 'First prompt sent');
+    assert.ok(engine.inventory.includes(212), 'Well-Formed Prompt should be in inventory');
+  });
+
+  test('Head back to the board: consume both items → unlocks Clear the Board', () => {
+    discover(engine, 220, 'Head back');
+    assert.ok(engine.unlockedRooms.includes(300), 'Clear the Board should be unlocked');
+  });
+
+  test('Clear the Board: read board-call lore, trim context → Clean Context awarded', () => {
+    engine.navigateToRoom(300);
+    assert.equal(engine.currentRoom, 300);
+    discover(engine, 310, '4 PM board call lore');
+    solvePuzzle(engine, 'puzzle-context', 305, 'Context stabilized');
+    assert.ok(engine.inventory.includes(213), 'Clean Context should be in inventory');
+  });
+
+  test('Clear the Board: defuse-lock → INBOX ZERO (ending)', () => {
+    solvePuzzle(engine, 'puzzle-defuse', 399, 'Inbox Zero');
+    assertCompleted(engine);
+  });
+});
