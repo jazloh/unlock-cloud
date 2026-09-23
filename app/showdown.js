@@ -1846,9 +1846,14 @@
           statements.push({ text: r.text, answer: r.answer });
         });
         if (statements.length) {
+          // immediateWrong: penalise each wrong sort as it happens. Defaults off in
+          // the component, so the episodes using pillar-lock keep the original
+          // end-of-sequence behaviour. wrongHoldMs matches WRONG_LOCK_SEC so the
+          // wrong card stays visible for the whole lockout.
           slots.push({ id: 'statement:' + ids.join(','), ui: 'pillar-lock', category: winningCategory,
             type, question: 'Sort each statement into True or False.',
-            config: { pillars: ['True', 'False'], statements } });
+            config: { pillars: ['True', 'False'], statements,
+                      immediateWrong: true, wrongHoldMs: (WRONG_LOCK_SEC * 1000) + 200 } });
         }
 
       } else if (type === 'spelling') {
@@ -1962,10 +1967,15 @@
             answer: cfg.answer,
             onSubmit: (word, correct) => correct ? hooks.onSolved() : hooks.onWrong('Wrong word: ' + word),
           });
+        // NOTE: these mounts pass an EXPLICIT field whitelist, not the whole cfg.
+        // Any new component option must be added here too or it silently never
+        // arrives — the component sees undefined and falls back to its default.
         case 'pillar-lock':
           return new PillarLock(mount, {
             pillars: cfg.pillars,
             statements: cfg.statements,
+            immediateWrong: cfg.immediateWrong,   // penalise each wrong sort at once
+            wrongHoldMs: cfg.wrongHoldMs,
             onSubmit: () => hooks.onSolved(),
             onWrong: (m) => hooks.onWrong(m),
           });
@@ -1975,6 +1985,9 @@
             words: cfg.words,
             sequential: cfg.sequential,
             scrambleLetters: cfg.scrambleLetters,
+            clickSlotToReturn: cfg.clickSlotToReturn, // click a slot to return a letter
+            keepOnWrong: cfg.keepOnWrong,             // don't wipe the whole attempt
+            upperCase: cfg.upperCase,
             onSubmit: () => hooks.onSolved(),
             onWrong: (m) => hooks.onWrong(m),
           });

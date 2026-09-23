@@ -24,6 +24,21 @@ class PillarLock {
     this.statements = opts.statements || [];
     this.onSubmit = opts.onSubmit || (() => {});
     this.onWrong = opts.onWrong || null;
+    /* immediateWrong (OPT-IN, default off so the episodes using this lock keep the
+     * original flow): fire onWrong the moment a statement is sorted incorrectly,
+     * rather than only after EVERY statement has been sorted. Previously the
+     * penalty arrived at the very end of the sequence, which reads to a player as
+     * "wrong answers cost nothing".
+     *
+     * It also holds the wrong card on screen for wrongHoldMs before advancing, so
+     * the card stays visible for the whole of Showdown's 5s input lockout instead
+     * of sliding on behind the scrim, and it suppresses the duplicate end-of-pass
+     * onWrong so one mistake costs exactly one penalty. */
+    const cfg = opts.config || {};
+    this.immediateWrong = !!(opts.immediateWrong != null ? opts.immediateWrong : cfg.immediateWrong);
+    const hold = opts.wrongHoldMs != null ? opts.wrongHoldMs : cfg.wrongHoldMs;
+    this.wrongHoldMs = Number(hold != null ? hold : 5200);
+    this._penalised = false;   // did this pass already report a wrong?
     this.current = 0;
     this.answers = [];
     this._render();
@@ -77,16 +92,25 @@ class PillarLock {
     const correct = pillar === this.statements[this.current].answer;
     this.answers.push({ pillar, correct });
 
+    let delay = 600;
     if (correct) {
       this.cardEl.classList.add('pillk-right');
     } else {
       this.cardEl.classList.add('pillk-wrong');
+      if (this.immediateWrong) {
+        // Penalise THIS mistake now, not at the end of the sequence.
+        this._penalised = true;
+        if (this.onWrong) this.onWrong('Wrong — that statement is on the other side.');
+        // Keep the wrong card up for the whole lockout so the player can see what
+        // they got wrong instead of it advancing behind the scrim.
+        delay = this.wrongHoldMs;
+      }
     }
 
     setTimeout(() => {
       this.current++;
       this._showCurrent();
-    }, 600);
+    }, delay);
   }
 
   _test() {
@@ -101,7 +125,11 @@ class PillarLock {
     } else {
       this.statusEl.textContent = `❌ ${score}/${this.statements.length} correct — try again`;
       this.cardEl.textContent = 'Review and retry';
-      if (this.onWrong) this.onWrong('Wrong — some statements are incorrect. Try again.');
+      // Under immediateWrong each mistake was already penalised as it happened, so
+      // reporting again here would charge a second lockout for the same errors.
+      if (this.onWrong && !(this.immediateWrong && this._penalised)) {
+        this.onWrong('Wrong — some statements are incorrect. Try again.');
+      }
       setTimeout(() => this.reset(), 2000);
     }
   }
@@ -109,6 +137,7 @@ class PillarLock {
   reset() {
     this.current = 0;
     this.answers = [];
+    this._penalised = false;   // a fresh pass can be penalised again
     this.pillarBtns.style.display = '';
     this.statusEl.textContent = '';
     this._showCurrent();
