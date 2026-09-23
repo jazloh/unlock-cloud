@@ -862,7 +862,12 @@
     const codeInput = $('join-code');
     if (codeInput) {
       codeInput.setAttribute('maxlength', String(PIN_LEN));
-      codeInput.setAttribute('placeholder', 'PIN');
+      /* No placeholder. The field is drawn as six character cells, so a centred
+       * "PIN" string straddles the cell dividers and reads as a rendering fault on
+       * the very first screen a walk-up participant sees. The "SEAT PIN" label
+       * directly above already names the field and the aria-label below covers
+       * assistive tech, so the placeholder carried no information. */
+      codeInput.removeAttribute('placeholder');
       codeInput.setAttribute('inputmode', 'latin');
       codeInput.setAttribute('autocapitalize', 'characters');
       codeInput.setAttribute('pattern', '[' + PIN_ALPHABET + ']{' + PIN_LEN + '}');
@@ -2081,6 +2086,24 @@
       onSolved: onPuzzleSolved,
       onWrong: onPuzzleWrong,
     });
+
+    /* Puzzle swaps were a hard cut: one lock vanished and the next appeared in the
+     * same frame, which is the clearest "unfinished" tell in a game's motion. A
+     * single short enter (VS Select's 160-180ms range) makes the sequence feel
+     * authored. Applied to the MOUNT, not the components, so it covers all five and
+     * touches nothing shared. Re-triggered by removing the class and forcing a
+     * reflow, because the class is already present from the previous puzzle.
+     * Reduced motion is handled in CSS — the class becomes a no-op. */
+    mount.classList.remove('sd-mount-enter');
+    void mount.offsetWidth;
+    mount.classList.add('sd-mount-enter');
+
+    // The question above it is part of the same beat, so it moves with the puzzle.
+    if (q) {
+      q.classList.remove('sd-q-enter');
+      void q.offsetWidth;
+      q.classList.add('sd-q-enter');
+    }
   }
 
   // Construct the right lock component (mirrors puzzle-test-showdown.html).

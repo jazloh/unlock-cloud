@@ -1483,3 +1483,30 @@ img, svg { display: block; max-width: 100%; }
   #play-mount .wglk-option,
   #play-mount .pillk-pillar { transition: none; }
 }
+
+/* ── Puzzle swap motion ──────────────────────────────────────────────
+   Puzzle-to-puzzle used to be a hard cut in a single frame. One short enter
+   per swap is what makes a sequence feel authored rather than assembled.
+
+   Kept inside VS Select's stated 160-180ms motion range, and deliberately a
+   small rise + fade rather than a slide across: the race strip sits directly
+   above and a horizontal move would read as the strip scrolling.
+
+   transform/opacity only, so this composites on the GPU and cannot cause the
+   layout thrash that would cost a racer milliseconds. */
+@keyframes sd-mount-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes sd-q-enter {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+.sd-mount-enter { animation: sd-mount-enter .18s ease-out both; }
+.sd-q-enter     { animation: sd-q-enter .16s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* No movement, and no fade either — a fade still reads as motion to someone
+     who asked for none, and the swap is already obvious from the content. */
+  .sd-mount-enter, .sd-q-enter { animation: none; }
+}
