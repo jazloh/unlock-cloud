@@ -751,7 +751,12 @@ img, svg { display: block; max-width: 100%; }
 .sd-progress-panel {
   width: 100%; max-width: 460px;
   display: flex; flex-direction: column; gap: 4px;
-  max-height: 168px; overflow-y: auto;
+  /* 186px, not 168px: at a 48px lane pitch the old height cut the 4th lane after
+     only 13px, which is too thin to read as "there is more below" — and a fade over
+     it erased the evidence entirely. 186px lands the cut around the middle of the
+     4th lane, so a partial row is unmistakable. No effect on a 3-player table, whose
+     ~160px of content never reaches either limit. */
+  max-height: 186px; overflow-y: auto;
   padding: 10px 12px;
   background: var(--panel);
   border: 1px solid var(--line);
@@ -760,6 +765,26 @@ img, svg { display: block; max-width: 100%; }
 }
 .sd-progress-panel[hidden] { display: none; }
 .sd-progress-panel::-webkit-scrollbar { display: none; }
+
+/* A table bigger than Hanoi's three overflows this panel — 8 players is ~400px of
+   lanes in 168px — and the scrollbar is hidden by the two rules above, so the extra
+   racers were completely unannounced. Fade the bottom edge when, and only when,
+   there is more below (JS sets .is-scrollable in renderRace).
+
+   A mask rather than a ::after: the pseudo-element of a scroll container scrolls
+   away with the content, whereas a mask applies to the element's own box and so
+   stays pinned to the bottom edge. No extra DOM either.
+
+   The fade length is load-bearing, and the first attempt at 22px was WORSE THAN
+   NOTHING: the partially-cut next lane IS the evidence of more content, and a fade
+   longer than that sliver erases precisely it, leaving a panel that looks like a
+   tidy 3-player list. The panel height above now leaves ~31px of the next lane, so
+   6px only softens its edge and the cut row stays plainly legible.
+   verify-scale.mjs measures what survives, so neither number can drift alone. */
+.sd-progress-panel.is-scrollable {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 6px), transparent);
+          mask-image: linear-gradient(to bottom, #000 calc(100% - 6px), transparent);
+}
 
 /* Lane columns: ghost | name | dots | done-flag.
    The name column was a hard 88px, which ellipsised at ~8 characters. 132px fits
@@ -805,7 +830,18 @@ img, svg { display: block; max-width: 100%; }
 .sd-lb-ghost[data-ghost="trailing"] { background-image: url("assets/showdown/ghost_teary_idle.gif"); }
 .sd-pg-ghost[data-ghost="done"],
 .sd-lb-ghost[data-ghost="done"]     { background-image: url("assets/showdown/ghost_sparkle_idle.gif"); }
-.sd-pg-player--me { order: -1; background: var(--panel-2); box-shadow: inset 3px 0 0 var(--mode-color); }
+/* Your own lane: hoisted to the top with order (NOT a DOM reorder — the server's
+   rank order is rendered verbatim), and STUCK there. Once the panel scrolls, a
+   player who is mid-table would otherwise scroll their own progress out of view,
+   which at a full table is the one lane they cannot afford to lose. The outer
+   shadow paints over the panel's 10px top padding so scrolled lanes do not show
+   through the gap above it. */
+.sd-pg-player--me {
+  order: -1;
+  position: sticky; top: 0; z-index: 2;
+  background: var(--panel-2);
+  box-shadow: inset 3px 0 0 var(--mode-color), 0 -12px 0 var(--panel);
+}
 .sd-pg-name {
   color: var(--text-secondary);
   font: 700 12px/1 var(--font-display); letter-spacing: .01em; text-transform: uppercase;

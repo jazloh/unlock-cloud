@@ -411,6 +411,34 @@
     return { t, sessionReady, stateName };
   }
 
+  /* Opponent bench for the mock. `&mockplayers=N` (2–12) sizes the table.
+   *
+   * Hanoi is 3 players, but the design is meant to support more and every suite
+   * ran against a hard-coded Alice and Bob — so the lane strip, the podium and the
+   * spectator card had only ever been seen at exactly 3. A global event with a
+   * fuller table would have been the first time anyone looked.
+   *
+   * The bench is chosen to be HOSTILE, not tidy, because a roster of three
+   * five-letter names proves nothing:
+   *   - "Nguyen Thi Minh Anh" exceeds NAME_MAX (12) and must be trimmed
+   *   - two "Minh"s must be disambiguated by seat, not shown as one name twice
+   *   - a name with a space and one with punctuation
+   * Deterministic: the same N always yields the same table. */
+  const MOCK_BENCH = [
+    'Alice', 'Bob', 'Nguyen Thi Minh Anh', 'Minh', 'Kavya', 'Minh',
+    "O'Brien", 'Long Nguyen', 'Sasha', 'Tuan', 'Priya',
+  ];
+  const MOCK_PLAYERS = (() => {
+    // Number(null) is 0, NOT NaN — so a plain `Number(params.get(...))` made the
+    // DEFAULT table clamp to 2 players instead of 3 whenever the param was absent.
+    // Test the raw string for presence before converting.
+    const raw = params.get('mockplayers');
+    if (raw == null || raw.trim() === '') return 3;
+    const n = Number(raw);
+    if (!Number.isFinite(n)) return 3;
+    return Math.max(2, Math.min(12, Math.round(n)));
+  })();
+
   function mockRoster(stateName) {
     // completion_pct: 0 in setup/voting; opponents grind during in_progress;
     // frozen at 100/partial in completed. "You" mirrors real progress.
@@ -418,28 +446,47 @@
     const playT = ph.t - (MOCK_SETUP_MS + MOCK_VOTING_MS);
     const pClamp = Math.max(0, Math.min(playT, MOCK_PLAY_MS));
     const clampPct = (v) => Math.max(0, Math.min(100, Math.round(v)));
-    let mePct = 0, alicePct = 0, bobPct = 0;
-    let meMs = 0, aliceMs = 0, bobMs = 0;
-    if (stateName === 'in_progress') {
+    const opponents = MOCK_PLAYERS - 1;
+
+    let mePct = 0, meMs = 0;
+    if (stateName === 'in_progress' || stateName === 'completed') {
       mePct = clampPct((mockMyCompleted() / MOCK_PUZZLE_COUNT) * 100);
-      alicePct = clampPct((playT / MOCK_PLAY_MS) * 120); // Alice pulls ahead
-      bobPct   = clampPct((playT / MOCK_PLAY_MS) * 80);
-      // Per-player elapsed_ms (matches live shape). YOUR clock only starts after
-      // the first solve — mirrors the server (elapsed begins at first /progress).
-      meMs = mockMyCompleted() > 0 ? pClamp : 0;
-      aliceMs = pClamp; bobMs = pClamp;
-    } else if (stateName === 'completed') {
-      mePct = clampPct((mockMyCompleted() / MOCK_PUZZLE_COUNT) * 100);
-      alicePct = 100; bobPct = 80; // Bob finishes <100% → DNF row
-      meMs = mockMyCompleted() > 0 ? MOCK_PLAY_MS : 0;
-      aliceMs = MOCK_PLAY_MS; bobMs = MOCK_PLAY_MS;
+      meMs = mockMyCompleted() > 0 ? (stateName === 'completed' ? MOCK_PLAY_MS : pClamp) : 0;
     }
     const meName = state.displayName || 'You';
     const rows = [
       { player_id: state.playerId || 'p-you', display_name: meName, seat_number: state.seatNumber || 1, completion_pct: mePct, elapsed_ms: meMs },
-      { player_id: 'p-alice', display_name: 'Alice', seat_number: 2, completion_pct: alicePct, elapsed_ms: aliceMs },
-      { player_id: 'p-bob',   display_name: 'Bob',   seat_number: 3, completion_pct: bobPct, elapsed_ms: bobMs },
     ];
+
+    /* Opponent pace fans out from 120% of the window (a clear leader) down to 55%
+     * (a clear DNF), so any table size produces finishers AND non-finishers — which
+     * is what the podium's DNF row and the spectator card's "still going" list need
+     * in order to be exercised at all. At 3 players this reproduces the previous
+     * Alice-120/Bob-80 behaviour closely enough that the existing suites' timing
+     * assumptions still hold. */
+    // At two opponents the endpoints are pinned to the original 1.2 / 0.8 so the
+    // default 3-player table behaves EXACTLY as before and no existing suite's
+    // timing assumptions shift underneath it.
+    const slowest = opponents <= 2 ? 0.8 : 0.55;
+    for (let i = 0; i < opponents; i++) {
+      const speed = opponents === 1 ? 1.2
+        : 1.2 - (i * ((1.2 - slowest) / (opponents - 1)));
+      let pct = 0, ms = 0;
+      if (stateName === 'in_progress') {
+        pct = clampPct((playT / MOCK_PLAY_MS) * 100 * speed);
+        ms = pClamp;
+      } else if (stateName === 'completed') {
+        pct = clampPct(100 * Math.min(1, speed));
+        ms = MOCK_PLAY_MS;
+      }
+      rows.push({
+        player_id: 'p-mock-' + i,
+        display_name: MOCK_BENCH[i % MOCK_BENCH.length],
+        seat_number: i + 2,
+        completion_pct: pct,
+        elapsed_ms: ms,
+      });
+    }
     // Server rank order (SSOT §6): by completion desc. Rendered verbatim.
     rows.sort((a, b) => b.completion_pct - a.completion_pct);
     rows.forEach((r, i) => { r.rank = i + 1; });
@@ -489,7 +536,14 @@
     }
     if (st === 'completed') {
       base.winner_player_id = rows[0].player_id;
-      base.end_reason = 'all_completed';
+      /* Derive it from the roster instead of always claiming 'all_completed'. With a
+       * fuller table the mock was printing "Every racer cracked the vault." under a
+       * podium where six of eight showed DNF — a mock that contradicts itself is one
+       * you stop trusting, and it can just as easily hide a real copy bug as show a
+       * fake one. The live backend picks countdown_expired when the window closes on
+       * unfinished players, which is what this now mirrors. */
+      base.end_reason = rows.every((r) => r.completion_pct >= 100)
+        ? 'all_completed' : 'countdown_expired';
     }
     return base;
   }
@@ -2605,6 +2659,13 @@
           '</span>';
       }).join('');
     }
+
+    /* A fuller table than Hanoi's three overflows the lane strip: at 8 players the
+     * content is ~400px inside a 168px panel, and the scrollbar is deliberately
+     * hidden — so five racers existed with nothing on screen to suggest it. Flag the
+     * overflow so CSS can fade the bottom edge, which is the whole hint needed.
+     * Measured after the lanes are in the DOM, and cheap: two layout reads. */
+    panel.classList.toggle('is-scrollable', panel.scrollHeight > panel.clientHeight + 1);
 
     const byId = {};
     rows.forEach((r) => { byId[r.player_id] = r; });
