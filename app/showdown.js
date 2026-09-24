@@ -2944,7 +2944,11 @@
       const Ctx = window.AudioContext || window.webkitAudioContext;
       if (!Ctx) return;
       if (!sfxCtx) sfxCtx = new Ctx();
-      if (sfxCtx.state === 'suspended') sfxCtx.resume();
+      // Same rejected-promise hazard as audioReady(): swallow it explicitly.
+      if (sfxCtx.state === 'suspended') {
+        const resumed = sfxCtx.resume();
+        if (resumed && typeof resumed.catch === 'function') resumed.catch(() => {});
+      }
     } catch {}
     document.removeEventListener('click', unlockAudio);
     document.removeEventListener('touchstart', unlockAudio);
@@ -2997,7 +3001,15 @@
       const Ctx = window.AudioContext || window.webkitAudioContext;
       if (!Ctx) return null;
       if (!sfxCtx) sfxCtx = new Ctx();
-      if (sfxCtx.state === 'suspended') sfxCtx.resume();
+      // resume() returns a PROMISE, and it rejects when the context cannot be
+      // resumed yet — no user gesture has landed, or (in the offline render the
+      // audio suite uses) the context has not started. The rejection was unhandled,
+      // so it printed an InvalidStateError to the console. Harmless to playback, but
+      // console noise at a booth is what hides the errors that do matter.
+      if (sfxCtx.state === 'suspended') {
+        const resumed = sfxCtx.resume();
+        if (resumed && typeof resumed.catch === 'function') resumed.catch(() => {});
+      }
       if (!sfxBus) {
         const gain = sfxCtx.createGain();
         gain.gain.value = 0.9;
@@ -3237,6 +3249,27 @@
         // through the form is not possible under ?mock=true, which synthesises a
         // game_id at boot and so never shows the editable paste field.
         extractGameId: (raw) => extractGameId(raw),
+        /* Audio seam. The cue set is pure Web Audio and therefore RENDERABLE: point
+         * the synth at an OfflineAudioContext and the exact samples a player would
+         * hear can be measured — level, length, dominant pitch, and whether
+         * overlapping cues clip the master limiter. Headless Chrome has no output
+         * device, so without this the suites could only prove the cues do not
+         * throw, and "the sound design has never been heard" stayed an open risk
+         * carried all the way to an event. This does not replace listening at booth
+         * volume, which is a taste judgement; it replaces GUESSING that a cue is
+         * audible at all. */
+        audio: {
+          cues: {
+            tick: playSfxTick, correct: playSfxCorrect, wrong: playSfxWrong,
+            lockTick: playSfxLockTick, lead: playSfxLead, passed: playSfxPassed,
+            urgent: playSfxUrgent, complete: playSfxGameComplete,
+          },
+          // Re-seat the synth on a supplied context and rebuild the master bus on
+          // it. Returns the bus so a caller can confirm the graph exists.
+          useContext(ctx) { sfxCtx = ctx; sfxBus = null; return audioReady() ? sfxBus : null; },
+          isMuted: () => sfxMuted,
+          setMuted: (v) => setMuted(v),
+        },
       };
     }
 
