@@ -283,18 +283,37 @@ img, svg { display: block; max-width: 100%; }
   border-color: var(--focus);
 }
 
-/* Session code: six angular instrument cells (readout, mode-color). The
-   ch-based cell grid keeps each glyph centered at any width; separators are
-   square (no rounding). */
+/* Session code: six angular instrument cells (readout, mode-color).
+ *
+ * BUG: the cell dividers came from a 2ch-period repeating gradient painted across
+ * a 12.5ch-wide field — 6.25 periods, so it drew a SEVENTH divider and left a
+ * narrow orphan cell hanging off the right end. It read as a rendering fault on
+ * the very first screen every participant sees.
+ *
+ * The dividers are now derived from the field's own width (five of them, at each
+ * sixth), so there are exactly six equal cells at ANY width, font, or font-size —
+ * the media-query step down to 20px included. Nothing can leave a partial period
+ * behind again.
+ *
+ * Why not simply narrow the field to 6 × 2ch so the old grid divided evenly: the
+ * glyph advance is 1ch of ink + 1ch of letter-spacing, and that TRAILING spacing
+ * plus the half-cell indent needed to centre the first glyph together overflow a
+ * 12ch box. The field then scrolls and drags every glyph ~8px off its cell —
+ * visibly worse than the ~2px drift that six width-derived cells cost.
+ *
+ * Left-aligned, not centred: centring re-centres the whole string on every
+ * keystroke, so a partly typed PIN sat ON the dividers (measured: 1–5 characters
+ * always straddle). Left + a half-cell indent puts character n in cell n, which is
+ * how every OTP field behaves. */
 .sd-input--code {
   font-family: var(--font-display);
   text-transform: uppercase;
-  text-align: center;
+  text-align: left;
   font-weight: 700;
   font-size: 24px;
   font-variant-numeric: tabular-nums;
   letter-spacing: 1ch;
-  text-indent: 0.25ch;
+  text-indent: 0.5ch;
   width: 12.5ch;
   max-width: 100%;
   margin-inline: auto;
@@ -303,9 +322,13 @@ img, svg { display: block; max-width: 100%; }
   color: var(--mode-color);
   background:
     var(--ink)
-    repeating-linear-gradient(90deg,
-      transparent 0 calc(2ch - 1px),
-      var(--line-strong) calc(2ch - 1px) 2ch);
+    linear-gradient(90deg,
+      transparent 0 calc(16.6667% - 1px), var(--line-strong) calc(16.6667% - 1px) 16.6667%,
+      transparent 16.6667% calc(33.3333% - 1px), var(--line-strong) calc(33.3333% - 1px) 33.3333%,
+      transparent 33.3333% calc(50% - 1px), var(--line-strong) calc(50% - 1px) 50%,
+      transparent 50% calc(66.6667% - 1px), var(--line-strong) calc(66.6667% - 1px) 66.6667%,
+      transparent 66.6667% calc(83.3333% - 1px), var(--line-strong) calc(83.3333% - 1px) 83.3333%,
+      transparent 83.3333% 100%);
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
@@ -763,16 +786,25 @@ img, svg { display: block; max-width: 100%; }
 /* The ghost art is white with a light outline — drawn for the dark ground. On the
    light theme it all but disappears, so give it an edge. drop-shadow follows the
    GIF's alpha, so this outlines the sprite itself rather than boxing it. */
-.sd-theme-light .sd-pg-ghost {
+.sd-theme-light .sd-pg-ghost,
+.sd-theme-light .sd-lb-ghost {
   filter: drop-shadow(0 0 1px rgba(26, 18, 38, .85))
           drop-shadow(0 1px 2px rgba(26, 18, 38, .35));
 }
 
-.sd-pg-ghost[data-ghost="idle"]    { background-image: url("assets/showdown/ghost_sleep_idle.gif"); opacity: .55; }
-.sd-pg-ghost[data-ghost="running"] { background-image: url("assets/showdown/ghost_run.gif"); }
-.sd-pg-ghost[data-ghost="leading"] { background-image: url("assets/showdown/ghost_sparkle_idle.gif"); }
-.sd-pg-ghost[data-ghost="trailing"]{ background-image: url("assets/showdown/ghost_teary_idle.gif"); }
-.sd-pg-ghost[data-ghost="done"]    { background-image: url("assets/showdown/ghost_sparkle_idle.gif"); }
+/* One art map for both places a ghost appears: the race lanes and the results
+   podium (.sd-lb-ghost). Keeping them on the same selector list is what guarantees
+   the winner's sparkle on the podium is the identical frame they were chasing. */
+.sd-pg-ghost[data-ghost="idle"],
+.sd-lb-ghost[data-ghost="idle"]     { background-image: url("assets/showdown/ghost_sleep_idle.gif"); opacity: .55; }
+.sd-pg-ghost[data-ghost="running"],
+.sd-lb-ghost[data-ghost="running"]  { background-image: url("assets/showdown/ghost_run.gif"); }
+.sd-pg-ghost[data-ghost="leading"],
+.sd-lb-ghost[data-ghost="leading"]  { background-image: url("assets/showdown/ghost_sparkle_idle.gif"); }
+.sd-pg-ghost[data-ghost="trailing"],
+.sd-lb-ghost[data-ghost="trailing"] { background-image: url("assets/showdown/ghost_teary_idle.gif"); }
+.sd-pg-ghost[data-ghost="done"],
+.sd-lb-ghost[data-ghost="done"]     { background-image: url("assets/showdown/ghost_sparkle_idle.gif"); }
 .sd-pg-player--me { order: -1; background: var(--panel-2); box-shadow: inset 3px 0 0 var(--mode-color); }
 .sd-pg-name {
   color: var(--text-secondary);
@@ -979,6 +1011,19 @@ img, svg { display: block; max-width: 100%; }
   border-top: 3px solid var(--text-muted);
 }
 #results-board .sd-lb-row:nth-child(n+4) { grid-column: 1 / -1; }
+
+/* Kiro on the podium (JS injects .sd-lb-ghost on the top three only; the art map
+   lives with .sd-pg-ghost so both places stay in step). The champion's is larger
+   because the plate is taller — the ghost should read as standing ON the plate, and
+   a uniform size made 1st look emptier than 2nd. */
+.sd-lb-ghost {
+  width: 40px; height: 40px; flex: 0 0 auto;
+  background-repeat: no-repeat; background-position: center bottom; background-size: contain;
+  image-rendering: pixelated;
+}
+#results-board .sd-lb-row:nth-child(1) .sd-lb-ghost { width: 54px; height: 54px; }
+/* 4th and below are flat rows, where a sprite would just push the name around. */
+#results-board .sd-lb-row:nth-child(n+4) .sd-lb-ghost { display: none; }
 
 #results-board .sd-lb-row:nth-child(1) .sd-lb-rank { color: var(--mode-color); font-size: 30px; }
 #results-board .sd-lb-row:nth-child(2) .sd-lb-rank { color: var(--text-secondary); font-size: 24px; }
@@ -1314,23 +1359,22 @@ img, svg { display: block; max-width: 100%; }
 #play-mount .wlock-fade-top { background: linear-gradient(to bottom, var(--lk-well) 62%, transparent); }
 #play-mount .wlock-fade-bot { background: linear-gradient(to top,    var(--lk-well) 62%, transparent); }
 
-/* DEFECT FIX: .wlock-hint is `position:absolute; inset:0`, so the first-run
-   coaching overlay covered the reels — including the centre row showing the
-   player's current letters — for its full 2s. It is shown once per browser,
-   i.e. precisely on the first word puzzle someone ever plays, in a race
-   measured in seconds. Re-seat it as a caption UNDER the reels: same
-   guidance, nothing obscured. */
-#play-mount .wlock-hint {
-  position: static; inset: auto;
-  background: none; padding: 8px 0 0; border-radius: 0;
-  z-index: auto;
-}
-#play-mount .wlock-hint-inner {
+/* Operating guide. This used to be .wlock-hint: a first-run-only overlay at
+   `position:absolute; inset:0` that covered the reels — including the centre row
+   showing the player's own letters — for a full 2s, and was then never shown again
+   because it was remembered per BROWSER, so only the first person to use a booth
+   laptop ever got it. word-lock now draws a standing caption plus ▲▼ steppers on
+   each reel; this only puts them on the VS Select type scale. */
+#play-mount .wlock-guide {
   max-width: none;
   color: var(--text-muted);
   font: 500 12px/1.4 var(--font-body);
   letter-spacing: .02em;
 }
+/* Brighter than the component default: the booth reads these at arm's length in a
+   bright hall, and a stepper nobody can see is a stepper nobody uses. */
+#play-mount .wlock-nudge { color: var(--text-secondary); }
+#play-mount .wlock-nudge:hover { color: var(--mode-color); }
 #play-mount .wlock-submit,
 #play-mount .wlock-btn {
   background: var(--mode-color);

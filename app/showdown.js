@@ -150,6 +150,9 @@
   // is persisted here so it survives in-session navigation; on a later boot with
   // no ?game= we fall back to this stored value before asking for a table code.
   const SS_GAME_ID = 'sd_game_id';
+  // Every accepted spelling of the game_id query parameter, used both for the URL
+  // this page was opened with and for a table link pasted into the join form.
+  const GAME_ID_PARAMS = ['game', 'game_id', 'gameId', 'gameid', 'gid'];
   function persistGameId(id) {
     if (!id) return;
     try { sessionStorage.setItem(SS_GAME_ID, id); } catch { /* storage off — non-fatal */ }
@@ -213,6 +216,7 @@
     puzzles: [],
     puzzleIndex: 0,
     puzzlesCompleted: 0,
+    _solvedIndex: null,   // last puzzleIndex already credited (see onPuzzleSolved)
     playStartMs: 0,
     instance: null,
     // misc UI
@@ -1415,14 +1419,17 @@
     return stripDashes(err.message) || 'Could not join. Please try again.';
   }
 
-  // Parse a game_id from a pasted full URL (…?game=<id>) or a bare id/code.
-  // Returns null for an empty value or a URL that carries no game param.
+  // Parse a game_id from a pasted full URL (…?game=<id>, …?game_id=<id>, …) or a
+  // bare id/code. Returns null for an empty value or a URL that carries no game
+  // param. Accepts the same aliases as the boot-time URL read (GAME_ID_PARAMS),
+  // so a link that works when opened also works when pasted.
+  const GAME_ID_IN_URL_RE = new RegExp('[?&](?:' + GAME_ID_PARAMS.join('|') + ')=([^&#\\s]+)', 'i');
   function extractGameId(raw) {
     const v = (raw || '').trim();
     if (!v) return null;
-    const m = v.match(/[?&]game=([^&#\s]+)/i);
+    const m = v.match(GAME_ID_IN_URL_RE);
     if (m) return decodeURIComponent(m[1]);
-    if (/^https?:\/\//i.test(v)) return null; // a link without ?game= is unusable
+    if (/^https?:\/\//i.test(v)) return null; // a link without a game param is unusable
     return v; // treat a bare token as the id/code
   }
 
@@ -1972,6 +1979,33 @@
           statements.push({ text: r.text, answer: r.answer });
         });
         if (statements.length) {
+          /* Replacement statements for the re-ask-on-wrong flow. A wrong sort costs
+           * the 5s hold and then re-asks the SAME slot with a different statement,
+           * instead of the legacy "answer the rest for nothing, then start the set
+           * over". The pool is every other usable statement in the category, in a
+           * deterministic session-seeded rotation, so two players who have made the
+           * same number of mistakes are looking at the same statement — the race
+           * stays fair without needing the server to arbitrate.
+           *
+           * Rotation rather than a shuffle: it is one modulo, and all it has to do
+           * is stop every race in a category opening with the same replacement. */
+          const picked = new Set(ids);
+          const spareStatements = [];
+          const sm = bucket.statement;
+          if (sm && typeof sm.forEach === 'function') {
+            const cands = [];
+            sm.forEach((entry, sid) => {
+              if (picked.has(sid) || !statementUsable(entry)) return;
+              cands.push({ id: sid, entry });
+            });
+            cands.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+            const start = cands.length ? fnv1a(String(sessionId) + ':stmt-spares') % cands.length : 0;
+            for (let k = 0; k < cands.length; k++) {
+              const c = cands[(start + k) % cands.length];
+              const r = resolveStatement(c.entry, sessionId);
+              if (!r.error) spareStatements.push({ text: r.text, answer: r.answer });
+            }
+          }
           // immediateWrong: penalise each wrong sort as it happens. Defaults off in
           // the component, so the episodes using pillar-lock keep the original
           // end-of-sequence behaviour. wrongHoldMs matches WRONG_LOCK_SEC so the
@@ -1986,7 +2020,8 @@
                       // statement — one of the ingredients in the credited-false-solve
                       // bug. Advancing just before the scrim lifts closes that window
                       // and the player still sees the wrong card for the whole pause.
-                      immediateWrong: true, wrongHoldMs: (WRONG_LOCK_SEC * 1000) - 150 } });
+                      immediateWrong: true, wrongHoldMs: (WRONG_LOCK_SEC * 1000) - 150,
+                      spareStatements } });
         }
 
       } else if (type === 'spelling') {
@@ -2088,6 +2123,7 @@
     const mount = $('play-mount');
     if (!mount) return;
     clearWrongLockout(); // drop any lingering lockout before swapping puzzles
+    state._solvedIndex = null; // this puzzle has not been credited yet (see onPuzzleSolved)
     mount.innerHTML = '';
     state.instance = mountPuzzle(mount, puzzle, {
       onSolved: onPuzzleSolved,
@@ -2133,15 +2169,27 @@
         // NOTE: these mounts pass an EXPLICIT field whitelist, not the whole cfg.
         // Any new component option must be added here too or it silently never
         // arrives — the component sees undefined and falls back to its default.
-        case 'pillar-lock':
+        case 'pillar-lock': {
+          /* Hand out replacement statements in order, so a wrong sort re-asks the
+           * slot instead of forfeiting the set. Every device walks the same
+           * deterministic list, so the nth mistake shows the same statement to
+           * everyone. With no pool at all (a category with nothing spare) the
+           * supplier returns the current statement, which still avoids a restart. */
+          const spares = Array.isArray(cfg.spareStatements) ? cfg.spareStatements.slice() : [];
+          let spareAt = 0;
+          const nextStatement = spares.length
+            ? () => spares[spareAt++ % spares.length]
+            : (i, cur) => cur;
           return new PillarLock(mount, {
             pillars: cfg.pillars,
             statements: cfg.statements,
             immediateWrong: cfg.immediateWrong,   // penalise each wrong sort at once
             wrongHoldMs: cfg.wrongHoldMs,
+            nextStatement,                        // re-ask the slot; never restart
             onSubmit: () => hooks.onSolved(),
             onWrong: (m) => hooks.onWrong(m),
           });
+        }
         case 'spelling-lock':
           return new SpellingLock(mount, {
             title: cfg.title,
@@ -2259,6 +2307,25 @@
   }
 
   function onPuzzleSolved() {
+    /* Credit each puzzle AT MOST ONCE.
+     *
+     * Nothing stopped a lock from reporting the same solve twice, and every lock
+     * leaves its submit affordance live across the delay between a correct answer
+     * and onSubmit (keypad and pillar defer by 400ms so their "unlocked" state is
+     * visible). So a player who clicks Unlock, sees nothing happen for a beat and
+     * clicks again — the single most ordinary thing anyone does in a timed race —
+     * got TWO solves for one answer: puzzlesCompleted incremented twice, an
+     * inflated /progress POST, and two queued advances 700ms apart, the second of
+     * which SKIPS the next puzzle entirely.
+     *
+     * Found while tracing an unrelated harness run that jumped puzzle 2 → 4.
+     * Guarding here rather than in five components: the index is Showdown's own
+     * bookkeeping, and every lock reaches the race through this one hook.
+     * renderPuzzle() clears the mark, so a loadPuzzles() retry that resets the
+     * index to 0 can still credit puzzle 1. */
+    if (state._solvedIndex === state.puzzleIndex) return;
+    state._solvedIndex = state.puzzleIndex;
+
     clearWrongLockout(); // a correct answer clears any residual lockout
     playSfxCorrect();
     const flash = $('play-solved-flash');
@@ -2697,8 +2764,19 @@
           ? '<span class="sd-lb-correct">' + pct + '%</span>' +
             (elapsed != null ? '<span class="sd-lb-time">' + fmtTime(elapsed) + '</span>' : '')
           : '<span class="sd-lb-dnf">DNF</span><span class="sd-lb-correct">' + pct + '%</span>';
+        /* Kiro on the podium. The ghost carried the whole race on the progress bar
+         * and then vanished at the one moment players actually screenshot, which
+         * made the results card read as a different product. Top three only — a
+         * ghost on every row down to 5th is noise, not a reward. Reuses the
+         * progress-bar art and its data-ghost states, so the winner's sparkle here
+         * is literally the same frame they were chasing. */
+        const ghost = i < 3
+          ? '<span class="sd-lb-ghost" data-ghost="' +
+            (isWin ? 'leading' : finished ? 'running' : 'trailing') + '" aria-hidden="true"></span>'
+          : '';
         return '<li class="sd-lb-row' + (isMe ? ' sd-lb-row--me' : '') + (isWin ? ' sd-lb-row--win' : '') +
           '" data-pid="' + escapeHtml(r.player_id || '') + '">' +
+          ghost +
           '<span class="sd-lb-rank">' + rank + '</span>' +
           '<span class="sd-lb-name">' + escapeHtml(sdName(r, dup)) + (isMe ? ' (you)' : '') + '</span>' +
           '<span class="sd-lb-stats">' + stats + '</span>' +
@@ -2724,10 +2802,23 @@
     const myPct = myRow ? Math.max(0, Math.min(100, Number(myRow.completion_pct) || 0)) : null;
     const yours = $('results-yours');
     if (yours && myRow) {
+      /* A player who did NOT finish has no time of their own to report: the server
+       * omits elapsed_ms for them, so myElapsed falls back to the SESSION clock \u2014
+       * the winner's time. That was then printed as "your" time and fed to
+       * starRating(), so a racer who cracked nothing was handed the winner's rating.
+       * Both are speed measurements, so both are shown only to finishers. */
+      const iFinished = myPct != null && myPct >= 100;
       const line = $('results-yours-line');
-      if (line) line.textContent = myPct + '% complete \u00b7 ' + fmtTime(myElapsed);
+      if (line) {
+        line.textContent = iFinished
+          ? myPct + '% complete \u00b7 ' + fmtTime(myElapsed)
+          : myPct + '% complete \u00b7 vault not cracked';
+      }
       const stars = $('results-yours-stars');
-      if (stars) stars.textContent = starRating(myElapsed);
+      if (stars) {
+        stars.textContent = iFinished ? starRating(myElapsed) : '';
+        stars.hidden = !iFinished;
+      }
       yours.hidden = false;
     }
 
@@ -3142,6 +3233,10 @@
         bankReady: () => loadBank(),
         getBankFlat: () => BANK_FLAT,
         getState: () => state,
+        // Exposed so the table-link parser can be asserted directly. Driving it
+        // through the form is not possible under ?mock=true, which synthesises a
+        // game_id at boot and so never shows the editable paste field.
+        extractGameId: (raw) => extractGameId(raw),
       };
     }
 
@@ -3150,7 +3245,12 @@
     // value. With no URL param, fall back to the stored sessionStorage id, then
     // a stored identity's game_id; normalise whatever we find back into
     // sessionStorage so later in-session navigation keeps it.
-    const urlGameId = params.get('game') || null;
+    /* Accept every spelling of the parameter. The table QR / host tooling emits
+     * `game_id`, but only `game` was read here, so a link carrying `?game_id=…`
+     * silently fell through to "No table code detected" and the player had to
+     * paste the UUID by hand at the booth. Aliases are cheap; a mistyped contract
+     * at a live event is not. First non-empty wins, in the order below. */
+    const urlGameId = GAME_ID_PARAMS.reduce((found, k) => found || params.get(k), null) || null;
     if (urlGameId) {
       state.gameId = urlGameId;
       persistGameId(urlGameId); // overwrite

@@ -66,6 +66,8 @@ class WordLock {
     }
     wrapper.appendChild(reels);
 
+    wrapper.appendChild(this._buildGuide());
+
     const btn = document.createElement('button');
     btn.className = 'wlock-submit';
     btn.textContent = 'Unlock';
@@ -77,41 +79,29 @@ class WordLock {
 
     this.container.appendChild(wrapper);
     this._injectStyles();
-    this._maybeHint();
   }
 
-  /* ── First-time instruction overlay ─────────────── */
-  _maybeHint() {
-    let shown = false;
-    try { shown = !!localStorage.getItem('resolve_hint_shown_wordlock'); } catch {}
-    if (shown) return;
-    try { localStorage.setItem('resolve_hint_shown_wordlock', '1'); } catch {}
-    const host = this.container;
-    if (typeof getComputedStyle === 'function' && getComputedStyle(host).position === 'static') host.style.position = 'relative';
-    const ov = document.createElement('div');
-    ov.className = 'wlock-hint';
-    const inner = document.createElement('div');
-    inner.className = 'wlock-hint-inner';
+  /* ── Standing operating guide ────────────────────
+   * Replaces a first-run-only overlay that appeared for 2s and then was never
+   * seen again — including by every later player on the same booth laptop, since
+   * it was remembered in localStorage per DEVICE, not per person. It also covered
+   * the reels' centre row, hiding the very letters it was explaining.
+   *
+   * A reel that can be dragged, scrolled, clicked and typed into still looks like
+   * static text until something says otherwise, so the affordance is now permanent:
+   * a caption here plus the ▲▼ steppers each reel draws in _createReel(). Costs one
+   * line of chrome and removes the "I don't know how to work this" pause, which in
+   * a timed race is the difference between playing and watching. */
+  _buildGuide() {
+    const el = document.createElement('div');
+    el.className = 'wlock-guide';
     // Name the input that actually works on the device in hand. Showdown runs on
     // laptops, where "swipe" is wrong and was the whole reason the reels felt hard.
     const touch = (typeof matchMedia === 'function' && matchMedia('(hover: none) and (pointer: coarse)').matches);
-    inner.textContent = touch
-      ? '↕ Swipe each reel up or down to change the letter'
-      : '↕ Scroll, click above/below, or use ↑↓ keys to change each letter';
-    ov.appendChild(inner);
-    host.appendChild(ov);
-    let done = false;
-    const finish = () => {
-      if (done) return; done = true;
-      clearTimeout(timer);
-      document.removeEventListener('touchstart', finish, true);
-      document.removeEventListener('mousedown', finish, true);
-      ov.style.opacity = '0';
-      setTimeout(() => { if (ov.parentNode) ov.remove(); }, 500);
-    };
-    const timer = setTimeout(finish, 2000);
-    document.addEventListener('touchstart', finish, true);
-    document.addEventListener('mousedown', finish, true);
+    el.textContent = touch
+      ? 'Drag a reel or tap ▲ ▼ to set each letter'
+      : 'Scroll a reel, click ▲ ▼, or use ↑ ↓ keys to set each letter';
+    return el;
   }
 
   _createReel(index) {
@@ -155,6 +145,30 @@ class WordLock {
     reel.appendChild(fadeBot);
 
     this._attachDrag(reel, strip, index, COUNT, CELL_H);
+
+    /* Visible ▲▼ steppers. The reel already stepped on a click above/below the
+     * window, but nothing on screen said so — an undiscoverable control is not a
+     * control. These sit in the faded prev/next rows, so they cost no legibility on
+     * the letter that matters. stopPropagation on both press and click keeps them
+     * out of the drag machinery and stops the reel's own click handler from
+     * counting the same tap a second time. */
+    [['up', -1, '▲'], ['down', 1, '▼']].forEach(([pos, delta, glyph]) => {
+      const nudge = document.createElement('button');
+      nudge.type = 'button';
+      nudge.className = 'wlock-nudge wlock-nudge-' + pos;
+      nudge.textContent = glyph;
+      nudge.tabIndex = -1; // the reel itself is the focusable control (role=spinbutton)
+      nudge.setAttribute('aria-label', (delta < 0 ? 'Previous' : 'Next') + ' letter for position ' + (index + 1));
+      const swallow = (e) => { e.stopPropagation(); };
+      nudge.addEventListener('mousedown', swallow);
+      nudge.addEventListener('touchstart', swallow, { passive: true });
+      nudge.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (reel._step) reel._step(delta);
+      });
+      reel.appendChild(nudge);
+    });
+
     requestAnimationFrame(() => {
       const target = -(COUNT + this.selected[index] - 1) * CELL_H;
       strip.style.transform = `translateY(${target}px)`;
@@ -340,8 +354,15 @@ class WordLock {
 .wlock-fade-bot{bottom:0;background:linear-gradient(to top,#0d1220 30%,transparent)}
 .wlock-submit{padding:12px 32px;border:none;border-radius:8px;background:var(--accent,#3b82f6);color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s;letter-spacing:.5px}
 .wlock-submit:active{opacity:.7}
-.wlock-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(6,9,17,.72);border-radius:10px;z-index:5;transition:opacity .5s;padding:16px;text-align:center;pointer-events:none}
-.wlock-hint-inner{color:#fff;font-size:14px;font-weight:600;line-height:1.4;max-width:240px}
+/* Standing operating guide + per-reel steppers (see _buildGuide). z-index 3 puts the
+   steppers above the edge fades (1) and the highlight window (2), both of which are
+   pointer-events:none; without it the fade would grey out the chevrons. */
+.wlock-guide{margin-top:-4px;color:var(--muted,#7a8ba8);font-size:12px;font-weight:600;line-height:1.35;text-align:center;max-width:300px}
+.wlock-nudge{position:absolute;left:0;right:0;height:18px;z-index:3;display:flex;align-items:center;justify-content:center;padding:0;border:none;background:transparent;color:var(--muted,#7a8ba8);font-size:10px;line-height:1;cursor:pointer;transition:opacity .15s,color .15s}
+.wlock-nudge-up{top:3px}
+.wlock-nudge-down{bottom:3px}
+.wlock-nudge:hover{opacity:1;color:var(--accent,#3b82f6)}
+.wlock-nudge:active{opacity:1;transform:scale(.88)}
 `;
     document.head.appendChild(s);
   }

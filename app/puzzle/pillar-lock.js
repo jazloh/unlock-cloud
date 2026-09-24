@@ -54,6 +54,21 @@ class PillarLock {
     this.immediateWrong = !!(opts.immediateWrong != null ? opts.immediateWrong : cfg.immediateWrong);
     const hold = opts.wrongHoldMs != null ? opts.wrongHoldMs : cfg.wrongHoldMs;
     this.wrongHoldMs = Number(hold != null ? hold : 5200);
+    /* nextStatement (OPT-IN, default null → unchanged behaviour for episodes):
+     * a supplier called after a wrong sort has served its hold, returning a
+     * REPLACEMENT statement for the same slot. With it, a mistake costs the hold
+     * and then re-asks the slot with fresh content; the set is never restarted and
+     * a correct run of statements.length always finishes the puzzle.
+     *
+     * Why: in a competitive race the legacy flow advanced past a wrong sort, ran
+     * out the remaining statements, and then threw the WHOLE pass away — so one
+     * mistake on statement 1 meant answering four more for nothing and starting
+     * over. The penalty was effectively unbounded and players read it as the puzzle
+     * being broken. Re-asking the slot keeps the cost exactly one hold.
+     *
+     * Requires immediateWrong (the hold is what the player is being charged) and is
+     * ignored under retryOnWrong, which already keeps the player on the statement. */
+    this.nextStatement = typeof opts.nextStatement === 'function' ? opts.nextStatement : null;
     this._penalised = false;   // did this pass already report a wrong?
     this._advanceTimer = null; // pending statement advance (cancellable; see _scheduleAdvance)
     this.current = 0;
@@ -149,11 +164,37 @@ class PillarLock {
       // Keep the wrong card up for the whole lockout so the player can see what
       // they got wrong instead of it advancing behind the scrim.
       delay = this.wrongHoldMs;
+
+      // Re-ask this slot with a fresh statement once the hold is served. No answer
+      // is recorded, so answers[] stays one-per-slot and all-correct — _test()
+      // therefore awards the puzzle as soon as the last slot is answered, with no
+      // restart. Pushing a wrong answer here instead would guarantee the pass fails.
+      if (this.nextStatement) { this._scheduleReroll(delay); return; }
     }
 
     // Legacy: advance on wrong; overall check happens at _test with soft reset.
     this.answers.push({ pillar, correct: false });
     this._scheduleAdvance(delay);
+  }
+
+  /* Replace the CURRENT statement and re-show it. Shares _advanceTimer with
+   * _scheduleAdvance so the single-pending-timer invariant still holds: the
+   * tap guard in _choose() and the cancellation in reset() both key off it, and
+   * that invariant is what closed the credited-false-solve bug. */
+  _scheduleReroll(delay) {
+    if (this._advanceTimer) clearTimeout(this._advanceTimer);
+    this._advanceTimer = setTimeout(() => {
+      this._advanceTimer = null;
+      let fresh = null;
+      try { fresh = this.nextStatement(this.current, this.statements[this.current]); } catch { fresh = null; }
+      // A supplier that runs dry just leaves the statement in place — the player
+      // retries the same one, which is still better than restarting the set.
+      if (fresh && fresh.text && fresh.answer) this.statements[this.current] = fresh;
+      this._showCurrent();
+      // _showCurrent() clears the status, so say this AFTER it: the card text
+      // changing without explanation reads as a glitch.
+      this.statusEl.textContent = 'New statement — try this one.';
+    }, delay);
   }
 
   /* All statement advances go through here so exactly one can be pending and
