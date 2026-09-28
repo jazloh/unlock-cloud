@@ -1027,12 +1027,13 @@ img, svg { display: block; max-width: 100%; }
 @keyframes sd-lb-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
 /* Top three as tiered podium plates (rows pre-sorted best-first by JS). */
+/* 1st is marked by height, centre position and the sparkle ghost — deliberately
+   NOT by the mode colour, which is reserved for the viewer's own row below. */
 #results-board .sd-lb-row:nth-child(1) {
   grid-column: 2; grid-row: 1;
   flex-direction: column; text-align: center; gap: 6px;
   padding-top: 26px; min-height: 128px;
-  border-top: 3px solid var(--mode-color);
-  background: color-mix(in srgb, var(--mode-color) 12%, var(--panel));
+  border-top: 3px solid var(--text-secondary);
 }
 #results-board .sd-lb-row:nth-child(2) {
   grid-column: 1; grid-row: 1;
@@ -1061,16 +1062,39 @@ img, svg { display: block; max-width: 100%; }
 /* 4th and below are flat rows, where a sprite would just push the name around. */
 #results-board .sd-lb-row:nth-child(n+4) .sd-lb-ghost { display: none; }
 
-#results-board .sd-lb-row:nth-child(1) .sd-lb-rank { color: var(--mode-color); font-size: 30px; }
+#results-board .sd-lb-row:nth-child(1) .sd-lb-rank { color: var(--text); font-size: 30px; }
 #results-board .sd-lb-row:nth-child(2) .sd-lb-rank { color: var(--text-secondary); font-size: 24px; }
 #results-board .sd-lb-row:nth-child(3) .sd-lb-rank { color: var(--text-secondary); font-size: 24px; }
 #results-board .sd-lb-row:nth-child(-n+3) .sd-lb-name { font-size: 14px; }
 #results-board .sd-lb-row:nth-child(-n+3) .sd-lb-stats { justify-content: center; flex-wrap: wrap; gap: 6px; font-size: 11px; }
 
-/* Champion (JS adds --win when finished & rank 1): mode-color ring. */
-.sd-lb-row--win { border-color: var(--mode-color); box-shadow: inset 0 0 0 1px var(--mode-color); }
-.sd-lb-row--me { box-shadow: inset 3px 0 0 var(--mode-color); }
-.sd-lb-row--win.sd-lb-row--me { box-shadow: inset 3px 0 0 var(--mode-color), inset 0 0 0 1px var(--mode-color); }
+/* YOUR row owns the mode colour: ring, tint, glow and a "YOU" tag. Three laptops
+   side by side all show the same podium, so the one thing each screen must answer
+   differently is "which one is me". (.sd-lb-row--win still marks the champion in
+   the DOM but carries no style — the podium position already says it.)
+   Placed after the nth-child plate rules: equal specificity, so order wins. */
+#results-board .sd-lb-row { position: relative; }
+#results-board .sd-lb-row.sd-lb-row--me {
+  border-color: var(--mode-color);
+  border-top-color: var(--mode-color);
+  background: color-mix(in srgb, var(--mode-color) 16%, var(--panel));
+  box-shadow: inset 0 0 0 1px var(--mode-color), 0 0 22px var(--sd-glow);
+}
+#results-board .sd-lb-row.sd-lb-row--me .sd-lb-rank { color: var(--mode-color); }
+.sd-lb-you {
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--mode-color);
+  color: var(--panel);
+  font: 700 10px/1 var(--font-display);
+  letter-spacing: .14em; text-transform: uppercase;
+  white-space: nowrap;
+}
+/* On a plate the tag sits on the top edge, clear of the name it would truncate. */
+#results-board .sd-lb-row:nth-child(-n+3) .sd-lb-you {
+  position: absolute; top: 0; left: 50%;
+  transform: translate(-50%, -50%);
+}
 
 .sd-lb-rank {
   color: var(--text);

@@ -2835,11 +2835,18 @@
           ? '<span class="sd-lb-ghost" data-ghost="' +
             (isWin ? 'leading' : finished ? 'running' : 'trailing') + '" aria-hidden="true"></span>'
           : '';
+        /* The highlight marks YOU, not the winner. Every player at the booth looks at
+         * their own laptop and the first question is "which one am I?" — the winner
+         * is already named by the headline, the crown, the centre plate and the
+         * sparkle ghost. A tag instead of a " (you)" suffix: on a 3-up plate the
+         * suffix ate the name's width and truncated it. */
+        const youTag = isMe ? '<span class="sd-lb-you">You</span>' : '';
         return '<li class="sd-lb-row' + (isMe ? ' sd-lb-row--me' : '') + (isWin ? ' sd-lb-row--win' : '') +
-          '" data-pid="' + escapeHtml(r.player_id || '') + '">' +
+          '" data-pid="' + escapeHtml(r.player_id || '') + '"' + (isMe ? ' aria-current="true"' : '') + '>' +
+          youTag +
           ghost +
           '<span class="sd-lb-rank">' + rank + '</span>' +
-          '<span class="sd-lb-name">' + escapeHtml(sdName(r, dup)) + (isMe ? ' (you)' : '') + '</span>' +
+          '<span class="sd-lb-name">' + escapeHtml(sdName(r, dup)) + '</span>' +
           '<span class="sd-lb-stats">' + stats + '</span>' +
           '</li>';
       }).join('');
