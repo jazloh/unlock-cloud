@@ -1,0 +1,16 @@
+{
+  "base_score": 80,
+  "time_bonus_per_minute": 4,
+  "hint_penalty": -3,
+  "wrong_combination_penalty": -2,
+  "lore_ids": [101, 201, 202, 301, 401, 501],
+  "lore_bonus": 3,
+  "stars": [
+    { "min": 120, "stars": 5 },
+    { "min": 100, "stars": 4 },
+    { "min": 75, "stars": 3 },
+    { "min": 50, "stars": 2 },
+    { "min": 0, "stars": 1 }
+  ],
+  "notes": "15-minute booth episode. 11 puzzles across 5 rooms. Branching path (rooms 3 and 4 in parallel). Generous scoring for booth use — most players should get 3+ stars."
+}

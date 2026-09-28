@@ -1,0 +1,81 @@
+{
+  "voices": {
+    "narrator": {
+      "voice_id": "Joanna",
+      "role": "Kiro Labs CTO \u2014 amused, direct, watching the leaderboard"
+    }
+  },
+  "intro": {
+    "segments": [
+      {
+        "voice": "narrator",
+        "text": "Welcome to Kiro Labs, Employee number four-oh-four.",
+        "pause_after_ms": 800
+      },
+      {
+        "voice": "narrator",
+        "text": "Yes. That's your actual employee number. HR says it was the next one in the system.",
+        "pause_after_ms": 600
+      },
+      {
+        "voice": "narrator",
+        "text": "Thirty seconds after you badged in, production returned HTTP 404. Everything is down. Coincidence? Probably.",
+        "pause_after_ms": 500
+      },
+      {
+        "voice": "narrator",
+        "text": "Our pipeline has five stages and all five just broke. You have fifteen minutes to prove your employee number is a coincidence and not a prophecy.",
+        "pause_after_ms": 400
+      },
+      {
+        "voice": "narrator",
+        "text": "No pressure. But the entire office is watching the leaderboard.",
+        "emphasis": "moderate"
+      }
+    ],
+    "audio": null
+  },
+  "ending": {
+    "success": {
+      "segments": [
+        {
+          "voice": "narrator",
+          "text": "Deployed. HTTP 200 OK.",
+          "pause_after_ms": 600
+        },
+        {
+          "voice": "narrator",
+          "text": "Employee four-oh-four just fixed a four-oh-four. I knew you had it in you.",
+          "pause_after_ms": 400
+        },
+        {
+          "voice": "narrator",
+          "text": "Welcome to Kiro Labs. Let's build something together.",
+          "emphasis": "strong"
+        }
+      ],
+      "audio": null,
+      "next_episode": null
+    },
+    "failure": {
+      "segments": [
+        {
+          "voice": "narrator",
+          "text": "Time's up.",
+          "pause_after_ms": 400
+        },
+        {
+          "voice": "narrator",
+          "text": "The pipeline's still returning 404. The betting pool says you'll get it next time.",
+          "pause_after_ms": 300
+        },
+        {
+          "voice": "narrator",
+          "text": "Try again. We don't give up here.",
+          "emphasis": "moderate"
+        }
+      ],
+      "audio": null
+    }
+  }
+}

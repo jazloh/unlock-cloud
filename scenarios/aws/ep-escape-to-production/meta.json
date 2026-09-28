@@ -1,0 +1,62 @@
+{
+  "id": "ep-escape-to-production",
+  "title": "Escape to Production",
+  "episode": "ETP",
+  "arc": "special-booth",
+  "category": "aws",
+  "description": "Welcome to Kiro Labs, Employee #404. Thirty seconds after you badge in, production returns HTTP 404. Coincidence? You have 15 minutes to prove it.",
+  "difficulty": {
+    "tier": 2,
+    "label": "Medium"
+  },
+  "duration_minutes": 15,
+  "players": {
+    "min": 1,
+    "max": 50,
+    "recommended": 10
+  },
+  "aws_topics": [
+    "Kiro",
+    "AI-DLC",
+    "Spec-Driven Development",
+    "AI-Driven Development Lifecycle",
+    "Kiro Specs",
+    "Kiro Hooks",
+    "Kiro Steering",
+    "Kiro Powers",
+    "Agent Client Protocol",
+    "Mob Elaboration",
+    "Mob Construction",
+    "Inception Phase",
+    "Construction Phase",
+    "Operations Phase",
+    "Bolt",
+    "Unit of Work"
+  ],
+  "mechanics_used": [
+    "sort-lock",
+    "pillar-lock",
+    "wager-lock",
+    "wire-lock",
+    "cascade-lock",
+    "word-lock",
+    "streak-lock",
+    "terminal-lock",
+    "chain-lock",
+    "defuse-lock",
+    "evidence-board-lock"
+  ],
+  "mechanics_taught": [
+    "puzzle_solving",
+    "knowledge_recall",
+    "sequencing",
+    "matching",
+    "deduction"
+  ],
+  "version": "1.0",
+  "start_button": "Start Day One",
+  "lore_label": "\ud83d\udcac Kiro Says",
+  "end_title": "404 \u2192 200 OK",
+  "quiz_mode": true,
+  "quiz_category": "kiro-ai-dlc"
+}

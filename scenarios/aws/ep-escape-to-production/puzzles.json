@@ -1,0 +1,670 @@
+{
+  "puzzles": [
+    {
+      "id": "log-crash",
+      "type": "puzzle",
+      "ui": "evidence-board-lock",
+      "card_ref": 102,
+      "success_card": 102,
+      "description": "The CTO pinned 5 investigation findings on the evidence board. Match each question to the correct finding to understand what went wrong.",
+      "config": {
+        "connections": [
+          {
+            "step": "What did the team skip?",
+            "finding": "No spec \u2014 vibe-coded from a prompt",
+            "icon": "\ud83d\udccb"
+          },
+          {
+            "step": "Why did AI build the wrong thing?",
+            "finding": "Prompt never specified PHP currency",
+            "icon": "\ud83e\udd16"
+          },
+          {
+            "step": "Why didn't tests catch it?",
+            "finding": "Tests check code, not business intent",
+            "icon": "\ud83e\uddea"
+          },
+          {
+            "step": "What prevents this?",
+            "finding": "Spec-driven development",
+            "icon": "\ud83d\udee1\ufe0f"
+          },
+          {
+            "step": "Core lesson?",
+            "finding": "All tests passed \u2260 right thing built",
+            "icon": "\ud83d\udca1"
+          }
+        ]
+      },
+      "hints": [
+        "\ud83d\udcac Kiro: \"Each investigation question has one matching finding. Think about what a spec would have prevented.\"",
+        "\ud83d\udcac Kiro: \"The team skipped specs. The AI followed the prompt exactly. Tests check code, not intent. I prevent this with spec-driven development.\"",
+        "\ud83d\udcac Kiro: \"\ud83d\udccb\u2192no spec, \ud83e\udd16\u2192prompt missing currency, \ud83e\uddea\u2192tests check code not intent, \ud83d\udee1\ufe0f\u2192spec-driven dev, \ud83d\udca1\u2192'all tests passed' \u2260 right thing.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "sort-crash",
+      "type": "puzzle",
+      "ui": "sort-lock",
+      "card_ref": 103,
+      "success_card": 103,
+      "description": "This crash happened because the team skipped structure. Put Kiro's spec-driven development flow in the correct order \u2014 this is how they should have built it.",
+      "config": {
+        "answer": [
+          "Prompt \u2014 describe what you want to build",
+          "Requirements \u2014 define what the system must do",
+          "Design \u2014 architecture decisions and trade-offs",
+          "Tasks \u2014 sequenced implementation steps",
+          "Parallel Agents \u2014 execute tasks simultaneously",
+          "Property-Based Tests \u2014 verify rules across all inputs",
+          "Deploy \u2014 ship verified code to production"
+        ],
+        "items": [
+          "Deploy \u2014 ship verified code to production",
+          "Prompt \u2014 describe what you want to build",
+          "Parallel Agents \u2014 execute tasks simultaneously",
+          "Property-Based Tests \u2014 verify rules across all inputs",
+          "Design \u2014 architecture decisions and trade-offs",
+          "Requirements \u2014 define what the system must do",
+          "Tasks \u2014 sequenced implementation steps"
+        ]
+      },
+      "hints": [
+        "\ud83d\udcac Kiro: \"Start with describing what you want. End with deploying. What comes between?\"",
+        "\ud83d\udcac Kiro: \"Think about it logically: you need to know WHAT to build before HOW. Requirements before Design. Design before Tasks.\"",
+        "\ud83d\udcac Kiro: \"Prompt \u2192 Requirements \u2192 Design \u2192 Tasks \u2192 Parallel Agents \u2192 Property-Based Tests \u2192 Deploy.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "pillar-crash",
+      "type": "puzzle",
+      "ui": "pillar-lock",
+      "card_ref": 104,
+      "success_card": 104,
+      "description": "The post-mortem has claims about what went wrong with the checkout crash. Sort fact from fiction.",
+      "config": {
+        "pillars": [
+          "TRUE",
+          "FALSE"
+        ],
+        "statements": [
+          {
+            "text": "The checkout crash happened because the team wrote code before defining requirements.",
+            "answer": "TRUE"
+          },
+          {
+            "text": "Spec-driven development writes code first, then generates requirements after.",
+            "answer": "FALSE"
+          },
+          {
+            "text": "Property-based tests check rules across ALL inputs \u2014 not just a few examples like unit tests.",
+            "answer": "TRUE"
+          },
+          {
+            "text": "The code passed all its unit tests but still shipped the wrong behavior to customers.",
+            "answer": "TRUE"
+          }
+        ]
+      },
+      "hints": [
+        "\ud83d\udcac Kiro: \"Think back to what Puzzles 1 and 2 showed you \u2014 the team skipped requirements, and the tests didn't catch the intent problem.\"",
+        "\ud83d\udcac Kiro: \"The crash was about building the wrong thing, not broken code. Spec-driven dev defines requirements BEFORE code, not after.\"",
+        "\ud83d\udcac Kiro: \"TRUE, FALSE, TRUE, TRUE.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "wire-kiro-features",
+      "type": "puzzle",
+      "ui": "wire-lock",
+      "card_ref": 210,
+      "success_card": 210,
+      "description": "Match each Kiro feature to its correct description. Connect the wires.",
+      "config": {
+        "wires": [
+          {
+            "id": "w1",
+            "color": "#ef4444",
+            "label": "Specs"
+          },
+          {
+            "id": "w2",
+            "color": "#3b82f6",
+            "label": "Hooks"
+          },
+          {
+            "id": "w3",
+            "color": "#22c55e",
+            "label": "Steering"
+          },
+          {
+            "id": "w4",
+            "color": "#eab308",
+            "label": "Powers"
+          },
+          {
+            "id": "w5",
+            "color": "#a855f7",
+            "label": "Permissions"
+          }
+        ],
+        "sockets": [
+          {
+            "id": "s1",
+            "label": "Requirements, design, tasks"
+          },
+          {
+            "id": "s2",
+            "label": "Automations on file changes"
+          },
+          {
+            "id": "s3",
+            "label": "Project standards & conventions"
+          },
+          {
+            "id": "s4",
+            "label": "Tools with built-in knowledge"
+          },
+          {
+            "id": "s5",
+            "label": "Rules for what agent may do"
+          }
+        ],
+        "solution": {
+          "w1": "s1",
+          "w2": "s2",
+          "w3": "s3",
+          "w4": "s4",
+          "w5": "s5"
+        },
+        "submitLabel": "\u26a1 Connect"
+      },
+      "hints": [
+        "\ud83d\udcac Kiro: \"Match my features to what they do. Specs = structured workflows. Hooks = event automations. Steering = project context.\"",
+        "\ud83d\udcac Kiro: \"Powers bring domain knowledge on demand. Permissions control what I can access. Each one has a specific job.\"",
+        "\ud83d\udcac Kiro: \"Specs\u2192workflows, Hooks\u2192automations, Steering\u2192context, Powers\u2192MCP knowledge, Permissions\u2192access rules.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "wager-kiro",
+      "type": "puzzle",
+      "ui": "wager-lock",
+      "card_ref": 211,
+      "success_card": 211,
+      "description": "Prove your deeper Kiro knowledge. Before each question pick a confidence stake \u2014 higher stakes show fewer choices but score more. Hit the target to restore the codebase.",
+      "config": {
+        "target": 10,
+        "questions": [
+          {
+            "question": "How do you connect Kiro to external tools and data sources?",
+            "options": [
+              "MCP \u2014 the Model Context Protocol for external tool servers",
+              "A curated plugins marketplace built into the IDE",
+              "Language-specific SDK adapters you install per project",
+              "Direct REST calls hard-coded into each steering file"
+            ],
+            "answer": "MCP \u2014 the Model Context Protocol for external tool servers"
+          },
+          {
+            "question": "What happens when Kiro's conversation approaches the context limit?",
+            "options": [
+              "Compaction summarizes older history so the session continues",
+              "The oldest messages are silently dropped from the thread",
+              "It automatically switches to a smaller, cheaper model",
+              "The session ends and must be restarted from scratch"
+            ],
+            "answer": "Compaction summarizes older history so the session continues"
+          },
+          {
+            "question": "Where does Kiro's shared project configuration live?",
+            "options": [
+              "In the .kiro/ directory committed to the repository",
+              "In a per-user cloud dashboard tied to your account",
+              "Inside package.json under a 'kiro' config key",
+              "In the .vscode/ workspace settings folder"
+            ],
+            "answer": "In the .kiro/ directory committed to the repository"
+          },
+          {
+            "question": "Which surfaces run Kiro's single unified agent?",
+            "options": [
+              "IDE, CLI, Web, and Mobile \u2014 all backed by one harness",
+              "The desktop IDE and a companion browser extension only",
+              "A cloud web console with a read-only mobile viewer",
+              "The CLI for CI plus a separate IDE-only agent"
+            ],
+            "answer": "IDE, CLI, Web, and Mobile \u2014 all backed by one harness"
+          },
+          {
+            "question": "How is a Kiro Power different from a plain MCP server?",
+            "options": [
+              "A Power bundles an MCP server with knowledge, loaded on demand",
+              "A Power is a paid, higher-throughput tier of an MCP server",
+              "A Power is an MCP server that runs on managed GPU hardware",
+              "A Power is a renamed MCP server with no functional change"
+            ],
+            "answer": "A Power bundles an MCP server with knowledge, loaded on demand"
+          },
+          {
+            "question": "In Kiro's permission system, how are conflicting rules resolved?",
+            "options": [
+              "Deny overrides ask, and ask overrides allow",
+              "Allow always wins so the agent is never blocked",
+              "The most recently added rule takes precedence",
+              "The user is prompted to resolve every conflict manually"
+            ],
+            "answer": "Deny overrides ask, and ask overrides allow"
+          },
+          {
+            "question": "What does Kiro's Checkpoints and rewind feature let you do?",
+            "options": [
+              "Undo agent changes or fork a conversation at an earlier turn",
+              "Save named snapshots of the IDE layout and settings",
+              "Roll back a deployed release to a previous version",
+              "Auto-commit the working tree every few minutes"
+            ],
+            "answer": "Undo agent changes or fork a conversation at an earlier turn"
+          }
+        ],
+        "stakes": [
+          {
+            "label": "Safe",
+            "wager": 1,
+            "penalty": 0,
+            "color": "#22c55e",
+            "showOptions": 4
+          },
+          {
+            "label": "Confident",
+            "wager": 2,
+            "penalty": -1,
+            "color": "#eab308",
+            "showOptions": 4
+          },
+          {
+            "label": "All-In",
+            "wager": 3,
+            "penalty": -2,
+            "color": "#ef4444",
+            "showOptions": 3
+          }
+        ],
+        "revealAnswerOnWrong": false
+      },
+      "hints": [
+        "\ud83d\udcac Kiro: \"These go deeper than the wire match. Think about how I connect to tools, manage long chats, and where my config lives.\"",
+        "\ud83d\udcac Kiro: \"MCP connects external tools. Compaction handles context limits. A Power = MCP + bundled knowledge, loaded on demand.\"",
+        "\ud83d\udcac Kiro: \"MCP, Compaction, .kiro/, IDE-CLI-Web-Mobile, Power = MCP + knowledge.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "chain-aidlc",
+      "type": "puzzle",
+      "ui": "chain-lock",
+      "card_ref": 310,
+      "success_card": 310,
+      "description": "AI-DLC flows in a fixed order. Put the phases in sequence \u2014 from business goal to running system.",
+      "config": {
+        "items": [
+          {
+            "id": "operations",
+            "label": "Operations",
+            "icon": "\ud83d\ude80"
+          },
+          {
+            "id": "inception",
+            "label": "Inception",
+            "icon": "\ud83d\udccb"
+          },
+          {
+            "id": "intent",
+            "label": "Business Intent",
+            "icon": "\ud83c\udfaf"
+          },
+          {
+            "id": "construction",
+            "label": "Construction",
+            "icon": "\ud83d\udcbb"
+          }
+        ],
+        "answer": [
+          "intent",
+          "inception",
+          "construction",
+          "operations"
+        ]
+      },
+      "hints": [
+        "\ud83d\udcac Kiro: \"Start with what the business wants. End with running in production. Three phases in between.\"",
+        "\ud83d\udcac Kiro: \"Intent first. Then the three phases: Inception \u2192 Construction \u2192 Operations. Each builds on the last.\"",
+        "\ud83d\udcac Kiro: \"Intent \u2192 Inception \u2192 Construction \u2192 Operations. That's the AI-DLC pipeline.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "spec-aidlc",
+      "type": "puzzle",
+      "ui": "wager-lock",
+      "card_ref": 311,
+      "success_card": 311,
+      "description": "Prove you understand WHY AI-DLC works. Pick a confidence stake before each question \u2014 higher stakes score more but show fewer choices. Hit the target to validate the design.",
+      "config": {
+        "target": 10,
+        "revealAnswerOnWrong": false,
+        "stakes": [
+          {
+            "label": "Safe",
+            "wager": 1,
+            "penalty": 0,
+            "color": "#22c55e",
+            "showOptions": 4
+          },
+          {
+            "label": "Confident",
+            "wager": 2,
+            "penalty": -1,
+            "color": "#eab308",
+            "showOptions": 4
+          },
+          {
+            "label": "All-In",
+            "wager": 3,
+            "penalty": -2,
+            "color": "#ef4444",
+            "showOptions": 3
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does 'Reimagine, don't retrofit' mean for AI-DLC?",
+            "options": [
+              "Design a new AI-native lifecycle rather than adding AI to Agile",
+              "Modernize the legacy codebase before adopting any AI tooling",
+              "Keep Scrum ceremonies but let AI run the daily standups",
+              "Automate the existing SDLC phases without changing the roles"
+            ],
+            "answer": "Design a new AI-native lifecycle rather than adding AI to Agile"
+          },
+          {
+            "question": "Why does AI-DLC 'reverse the conversation' between human and AI?",
+            "options": [
+              "AI proposes plans and asks clarifying questions; humans validate and decide",
+              "Humans author every requirement first and AI only fills in the code",
+              "AI runs end to end autonomously and reports results afterward",
+              "The product owner queues tasks that AI executes one by one"
+            ],
+            "answer": "AI proposes plans and asks clarifying questions; humans validate and decide"
+          },
+          {
+            "question": "Why does AI-DLC shorten cycles to hours or days instead of weeks?",
+            "options": [
+              "AI absorbs the manual heavy-lifting that forced long iteration cycles",
+              "Shorter cycles reduce cloud compute and licensing costs",
+              "It mirrors the two-week cadence teams already know from Scrum",
+              "Frequent restarts are needed because AI output is unreliable"
+            ],
+            "answer": "AI absorbs the manual heavy-lifting that forced long iteration cycles"
+          },
+          {
+            "question": "What does AI-DLC change that 'AI-assisted coding' alone does not?",
+            "options": [
+              "AI drives planning and design across the lifecycle, not just coding",
+              "It fine-tunes the model on your private repository automatically",
+              "It guarantees zero defects by generating exhaustive tests",
+              "It replaces the IDE with a fully cloud-based environment"
+            ],
+            "answer": "AI drives planning and design across the lifecycle, not just coding"
+          },
+          {
+            "question": "Why does AI-DLC keep humans in the loop instead of full autonomy?",
+            "options": [
+              "Humans own validation, risk, and the decisions AI shouldn't make alone",
+              "Current models cannot generate production code without help",
+              "Regulations require a human to sign off only at final release",
+              "It intentionally throttles AI so the team can keep pace"
+            ],
+            "answer": "Humans own validation, risk, and the decisions AI shouldn't make alone"
+          },
+          {
+            "question": "In AI-DLC, what is the human's role during an AI-proposed plan?",
+            "options": [
+              "Review, adjust, and approve at decision points before AI proceeds",
+              "Write the plan from scratch and hand it to the AI to execute",
+              "Stay hands-off until the AI has finished the whole task",
+              "Only estimate story points and assign the work"
+            ],
+            "answer": "Review, adjust, and approve at decision points before AI proceeds"
+          },
+          {
+            "question": "How does AI-DLC treat design techniques like domain modeling?",
+            "options": [
+              "They're woven into the AI-driven workflow, not left as an afterthought",
+              "They're skipped entirely to maximize raw coding speed",
+              "They're done once upfront and never revisited",
+              "They're outsourced to a separate architecture team"
+            ],
+            "answer": "They're woven into the AI-driven workflow, not left as an afterthought"
+          }
+        ]
+      },
+      "hints": [
+        "\ud83d\udcac Kiro: \"Think about the WHY, not the what. AI-DLC is a whole new lifecycle, not Agile-plus-AI. AI leads planning; humans own the decisions.\"",
+        "\ud83d\udcac Kiro: \"Reimagine = new AI-native lifecycle. Reverse conversation = AI drafts, humans validate. Rapid cycles = AI removed the manual heavy-lifting.\"",
+        "\ud83d\udcac Kiro: \"Pick the answer that keeps humans owning decisions while AI drives execution.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "streak-build",
+      "type": "puzzle",
+      "ui": "streak-lock",
+      "card_ref": 410,
+      "success_card": 410,
+      "description": "You're rebuilding the checkout feature the right way. As you drive each AI-DLC phase, know what it produces. Build your streak \u2014 wrong answers reset your combo!",
+      "config": {
+        "target": 5,
+        "timePerQuestion": 12,
+        "questions": [
+          {
+            "question": "You start Inception. What does this phase produce?",
+            "answer": "Requirements and user stories",
+            "decoys": [
+              "Compiled binaries ready to run",
+              "Server monitoring dashboards",
+              "The final production release"
+            ]
+          },
+          {
+            "question": "You move to Construction. What does this phase produce?",
+            "answer": "Architecture, code, and tests",
+            "decoys": [
+              "The initial business intent",
+              "User stories awaiting validation",
+              "Incident post-mortem reports"
+            ]
+          },
+          {
+            "question": "In Operations, what is AI-DLC mainly concerned with?",
+            "answer": "Monitoring and managing the running system",
+            "decoys": [
+              "Gathering the first requirements",
+              "Choosing the programming language",
+              "Writing the original user stories"
+            ]
+          },
+          {
+            "question": "Where is each phase's work saved so the next phase has context?",
+            "answer": "In the project repository",
+            "decoys": [
+              "Only in the developer's memory",
+              "In a throwaway chat session",
+              "In a separate wiki nobody reads"
+            ]
+          },
+          {
+            "question": "In AI-DLC, a Bolt delivers what?",
+            "answer": "Working software in hours or days",
+            "decoys": [
+              "A polished release once per quarter",
+              "A design document with no code",
+              "A backlog of unstarted tickets"
+            ]
+          },
+          {
+            "question": "What did the previous engineer skip that you're doing right this time?",
+            "answer": "Defining requirements first",
+            "decoys": [
+              "Running the unit test suite",
+              "Compiling the Docker image nightly",
+              "Opening a pull request for review"
+            ]
+          }
+        ]
+      },
+      "hints": [
+        "\ud83d\udcac Kiro: \"Quick \u2014 AI leads, humans validate. Bolts not Sprints. Mob means the whole team validates in real-time.\"",
+        "\ud83d\udcac Kiro: \"Reimagine, don't retrofit. 3 phases. Units replace Epics. Two dimensions: AI execution + team collaboration.\"",
+        "\ud83d\udcac Kiro: \"Read the AI-DLC lore card I gave you \u2014 all the answers are in there. I put them there on purpose.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "cascade-build",
+      "type": "puzzle",
+      "ui": "cascade-lock",
+      "card_ref": 411,
+      "success_card": 411,
+      "description": "Walk through the three AI-DLC phases. Each step builds on the last.",
+      "config": {
+        "steps": [
+          {
+            "narration": "Phase 1: INCEPTION. AI transforms business intent into detailed requirements. The team validates via...",
+            "question": "What is the collaborative validation ritual in the Inception phase?",
+            "options": [
+              "Code Review",
+              "Sprint Planning",
+              "Standup Meeting",
+              "Mob Elaboration"
+            ],
+            "answer": 3,
+            "after": "\u2713 Mob Elaboration \u2014 the entire team validates AI's questions and proposals in real time."
+          },
+          {
+            "narration": "Phase 2: CONSTRUCTION. Using validated context, AI proposes architecture, code, and tests. The team validates via...",
+            "question": "What is the collaborative ritual in the Construction phase?",
+            "options": [
+              "Sprint Demo",
+              "Architecture Review Board",
+              "Mob Construction",
+              "Pair Programming"
+            ],
+            "answer": 2,
+            "after": "\u2713 Mob Construction \u2014 developers provide clarification on technical decisions in real time."
+          },
+          {
+            "narration": "Phase 3: OPERATIONS. AI applies accumulated context to manage infrastructure and deployments. Who provides oversight?",
+            "question": "In the Operations phase, who approves AI's proposed actions?",
+            "options": [
+              "AI handles it autonomously",
+              "The QA team only",
+              "External contractors",
+              "The development team"
+            ],
+            "answer": 3,
+            "after": "\u2713 The development team provides oversight. AI proposes, humans approve \u2014 across all three phases."
+          }
+        ],
+        "cupNames": [
+          "Inception",
+          "Construction",
+          "Operations"
+        ]
+      },
+      "hints": [
+        "\ud83d\udcac Kiro: \"Each AI-DLC phase has a 'Mob' session where the whole team validates AI's work in real-time.\"",
+        "\ud83d\udcac Kiro: \"Inception = Mob Elaboration. Construction = Mob Construction. Operations = team oversight.\"",
+        "\ud83d\udcac Kiro: \"Mob Elaboration \u2192 Mob Construction \u2192 Team oversight. Three phases, three validation rituals.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "terminal-deploy",
+      "type": "code_entry",
+      "ui": "terminal-lock",
+      "card_ref": 510,
+      "success_card": 510,
+      "description": "Get back in control \u2014 launch the Kiro CLI. Type the command.",
+      "config": {
+        "answer": "kiro-cli",
+        "caseSensitive": false,
+        "history": [
+          "$ cd /app/kiro-labs",
+          "$ kiro-cli --version",
+          "kiro-cli 1.26.0",
+          "$ _"
+        ],
+        "falseOutputs": [
+          "Command not found. The binary is 'kiro-cli' \u2014 type it to launch.",
+          "Not quite. Just launch the CLI binary: kiro-cli",
+          "Hint: the command is 'kiro-cli' (it opens an interactive session by default)."
+        ]
+      },
+      "hints": [
+        "\ud83d\udcac Kiro: \"Launch my CLI. The binary name alone starts an interactive session.\"",
+        "\ud83d\udcac Kiro: \"It's one word \u2014 the CLI binary name.\"",
+        "\ud83d\udcac Kiro: \"kiro-cli\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "defuse-deploy",
+      "type": "puzzle",
+      "ui": "defuse-lock",
+      "card_ref": 511,
+      "success_card": 511,
+      "description": "\ud83d\udea8 FINAL REVIEW \u2014 45 seconds! Confirm the readiness checklist before time runs out.",
+      "config": {
+        "tasks": [
+          {
+            "type": "toggle",
+            "label": "Spec validation",
+            "answer": true
+          },
+          {
+            "type": "toggle",
+            "label": "Hook automations",
+            "answer": true
+          },
+          {
+            "type": "toggle",
+            "label": "Steering config",
+            "answer": true
+          },
+          {
+            "type": "code",
+            "label": "AI-DLC phase count",
+            "answer": "3"
+          },
+          {
+            "type": "code",
+            "label": "Development approach",
+            "answer": "spec"
+          }
+        ],
+        "onTimeout": "Deploy window closed. The pipeline resets \u2014 try again!",
+        "timeSeconds": 45
+      },
+      "hints": [
+        "\ud83d\udcac Kiro: \"Enable all three of my core features: Specs, Hooks, Steering. AI-DLC has 3 phases. You know this.\"",
+        "\ud83d\udcac Kiro: \"All toggles ON. Phase count = 3. Development approach = 4 letters, starts with S.\"",
+        "\ud83d\udcac Kiro: \"All ON, 3, spec. Defuse this thing. I believe in you, Employee #404.\""
+      ],
+      "mandatory": true,
+      "isFinal": true
+    }
+  ]
+}

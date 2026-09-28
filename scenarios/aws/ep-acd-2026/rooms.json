@@ -1,0 +1,31 @@
+{
+  "rooms": [
+    {
+      "card_id": 100,
+      "name": "Doors Open",
+      "description": "Room 1 — Registration hall, doors open, badge in. Your lanyard has a scrambled hint. Decode the one word that unlocks your day.",
+      "connects_to": [200],
+      "unlocked_by": null,
+      "unlock_text": "Doors open. Badge in.",
+      "map_pos": [140, 360]
+    },
+    {
+      "card_id": 200,
+      "name": "The Floor",
+      "description": "Room 2 — The venue floor is fogged with parallel tracks and demo booths. Kiro appears and offers to be your assistant for the day. Cross the floor, then ask Kiro to build your personalized agenda.",
+      "connects_to": [300],
+      "unlocked_by": { "type": "puzzle", "puzzle_id": "puzzle-badge" },
+      "unlock_text": "Badge unlocked. Kiro's waving you into the main floor.",
+      "map_pos": [140, 200]
+    },
+    {
+      "card_id": 300,
+      "name": "Closing Quiz",
+      "description": "Room 3 — 5 PM auditorium. Closing quiz is on screen, swag is on the table, buzzer is looming. Recall what mattered and lock in your answer before time's up.",
+      "connects_to": [],
+      "unlocked_by": { "type": "items", "card_ids": [211, 212] },
+      "unlock_text": "Session Intel + Personalized Agenda in hand. Kiro walks you to the auditorium.",
+      "map_pos": [140, 40]
+    }
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "puzzles": [
+    {
+      "id": "puzzle-badge",
+      "type": "word_lock",
+      "card_ref": 101,
+      "description": "Five rolling reels on your lanyard. Spell the reason you're actually here today.",
+      "ui": "word-lock",
+      "config": {
+        "answer": "LEARN",
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      },
+      "hints": [
+        "Five letters. The single-word reason anyone shows up to Community Day at 8 AM on a Saturday.",
+        "It's what every talk, booth, and keynote is designed to help you do. It's also the last word in every 'so I came here to ___' sentence.",
+        "L-E-A-R-N."
+      ],
+      "success_card": 105,
+      "mandatory": true
+    },
+
+    {
+      "id": "npc-kiro",
+      "type": "tool",
+      "card_ref": 201,
+      "description": "Talk to Kiro. Kiro introduces itself as your AI assistant for the day and points you at the two things to do next.",
+      "ui": "npc-dialog",
+      "config": {
+        "name": "Kiro",
+        "portrait": "🤖",
+        "greeting": "Hey. I'm Kiro. Your assistant for the day. First AWS Community Day? You're going to love it — and you're going to try to catch everything and slightly panic around 11 AM. Don't. That's what I'm here for. Ask me anything.",
+        "lines": [
+          {
+            "label": "What are you, exactly?",
+            "response": "I'm an AI assistant. Not a search bar, more like a colleague riding shotgun on your phone. Today, I do three things for you: I plan your agenda, I walk the floor with you, and I keep you on time for the closing quiz. That's the whole thing."
+          },
+          {
+            "label": "What do you mean 'walk the floor'?",
+            "response": "The venue map is fogged — you can't see the whole floor at once. Spend energy to reveal tiles. Grab a few good ones — an AI-track talk, a serverless session, a demo booth you actually want — and skip the long lunch queue. You don't need every tile. Three good ones is a great morning."
+          },
+          {
+            "label": "How do I ask you for a good agenda?",
+            "response": "Four parts, in order. Action — a verb I can do, like 'plan'. Subject — the actual thing, 'my day at the conference'. Context — which tracks you care about, like 'around AI and serverless'. Format — how you want it back, 'a time-blocked schedule with room numbers'. Skip a part, mid answer. All four specific, scary-good agenda."
+          },
+          {
+            "label": "What's the closing quiz?",
+            "response": "5 PM sharp in the auditorium. It's a recall quiz — questions about what happened today. The numbers are derivable from what you actually saw, not trivia. Answer before the buzzer, you're eligible for the swag giveaway. I'll narrate the questions in your ear. You lock in the answer."
+          },
+          {
+            "label": "Where do I start?",
+            "response": "Two things right here. Walk the fogged floor with me — I'll light the way. Then come back and ask me to build your personalized agenda using the four-part rule. Do both, and you'll walk into the closing quiz with real numbers and a real plan. Go. I'll be right here."
+          }
+        ]
+      },
+      "hints": [
+        "Click through each option. Kiro spells out the three things it helps with today — and both puzzles for this room are literally in the dialog.",
+        "Kiro names the floor rule (three good tiles is enough, skip the queue) and the four-part prompt rule (Action, Subject, Context, Format).",
+        "Read every line. The answers to both room-2 puzzles are inside Kiro's dialog."
+      ],
+      "mandatory": false
+    },
+
+    {
+      "id": "puzzle-floor",
+      "type": "fog_map_lock",
+      "card_ref": 202,
+      "description": "Walk the fogged venue floor with Kiro. Reveal tiles adjacent to explored ground, collect enough Session Intel, avoid the long queue, and reach the auditorium door.",
+      "ui": "fog-map-lock",
+      "config": {
+        "cols": 5,
+        "rows": 5,
+        "energy": 15,
+        "intelNeeded": 3,
+        "tiles": [
+          { "x": 0, "y": 0, "type": "start" },
+          { "x": 1, "y": 1, "type": "intel", "label": "🎯 AI Track (Room A)" },
+          { "x": 3, "y": 1, "type": "intel", "label": "🎪 Demo Booth (partner alley)" },
+          { "x": 2, "y": 2, "type": "intel", "label": "⚙️ Serverless Talk" },
+          { "x": 1, "y": 3, "type": "intel", "label": "🧑‍💻 Community Meetup" },
+          { "x": 3, "y": 3, "type": "bonus", "label": "🚀 Shortcut Hallway", "gain": 2 },
+          { "x": 2, "y": 3, "type": "trap", "label": "⏳ Long Lunch Queue", "cost": 2 },
+          { "x": 4, "y": 4, "type": "exit" }
+        ]
+      },
+      "hints": [
+        "You do NOT need every tile. Kiro said three intel tiles is a great morning — grab three of the four and head for the exit corner.",
+        "The middle-bottom tile is a long queue (costs extra energy). The tile just next to it is a shortcut (gives energy back). Route around the queue and through the shortcut.",
+        "Solid path: (0,0)→(0,1)→(1,1)AI Track→(2,1)→(3,1)Demo Booth→(3,2)→(2,2)Serverless→(3,3)Shortcut→(4,3)→(4,4)Exit. Three intel collected, queue skipped, energy bonus grabbed."
+      ],
+      "success_card": 205,
+      "mandatory": true
+    },
+
+    {
+      "id": "puzzle-agenda",
+      "type": "prompt_lock",
+      "card_ref": 203,
+      "description": "Assemble your first good ask to Kiro — one specific choice per slot. Great asks have four parts.",
+      "ui": "prompt-lock",
+      "config": {
+        "npc": { "name": "Kiro", "portrait": "🤖" },
+        "mode": "row",
+        "rows": [
+          {
+            "label": "Action",
+            "options": ["Plan", "Vibe-surf", "Wing it"],
+            "answer": "Plan"
+          },
+          {
+            "label": "Subject",
+            "options": ["my day at the conference", "everything everywhere", "whatever's cool"],
+            "answer": "my day at the conference"
+          },
+          {
+            "label": "Context / Scope",
+            "options": ["around the AI & serverless talks I care about", "all 30 sessions at once", "no preferences, surprise me"],
+            "answer": "around the AI & serverless talks I care about"
+          },
+          {
+            "label": "Format",
+            "options": ["as a time-blocked schedule with room numbers", "as a vague vibe", "no format, just talk"],
+            "answer": "as a time-blocked schedule with room numbers"
+          }
+        ],
+        "success_response": "🥇 Perfect ask. Specific action + your actual subject + your interests + the format you'll actually follow = a personalized agenda you'll stick to. Kiro spits out a time-blocked schedule with room numbers in six seconds. This is the four-part rule at work.",
+        "partial_response": "🥈 Close. Kiro returns something — but it's mid. A specific action, a real subject, a real scope (your interests), and the format you actually want gets a scary-good agenda. Tighten the weak slots.",
+        "fail_response": "❌ Kiro can't build an agenda from a shrug. 'Vibe-surf', 'everything everywhere', 'no preferences', 'no format' — those aren't asks, those are how you miss the best session. Try again — Action, Subject, Context, Format, all specific."
+      },
+      "hints": [
+        "Great asks have four parts: Action, Subject, Context, Format. Kiro works best when all four are specific.",
+        "Action = a verb Kiro can do ('plan', not 'vibe-surf'). Subject = a real thing (your day, not 'whatever's cool'). Context = the tracks you actually care about (AI and serverless, not 'all 30 sessions'). Format = how you want it back (time-blocked with room numbers, not 'a vibe').",
+        "Row by row: Plan / my day at the conference / around the AI & serverless talks I care about / as a time-blocked schedule with room numbers."
+      ],
+      "success_card": 215,
+      "mandatory": true
+    },
+
+    {
+      "id": "puzzle-quiz",
+      "type": "evidence_lock",
+      "card_ref": 301,
+      "description": "The closing quiz. Kiro narrates each prompt into your ear. The answers are derivable from what you actually saw and heard today — not trivia. Four steps.",
+      "ui": "evidence-lock",
+      "config": {
+        "hintsAfterAttempts": 1,
+        "completeTitle": "🏆 Closing Quiz — Cleared",
+        "completeMessage": "Four questions, four answers, all from your own day. Kiro locks in the run and prints your Winning Answer chit. Head for the buzzer.",
+        "steps": [
+          {
+            "narrative": "Kiro (into your ear): 'First one. Easy. Room 2 — you walked the fogged floor with me. Minimum session intel tiles you needed to reach the auditorium door.'",
+            "prompt": "Number of intel tiles you needed on the floor?",
+            "answer": 3,
+            "hint": "Kiro told you: 'three good tiles is a great morning.' You needed exactly that many to reach the exit."
+          },
+          {
+            "narrative": "Kiro: 'Second. Look at the clock above the stage — it's showing the start hour in 24-hour time. Read it off.'",
+            "prompt": "Closing quiz start hour (24h)?",
+            "answer": 17,
+            "hint": "The organizers keep saying '5 PM sharp'. On a 24-hour clock, 5 PM is..."
+          },
+          {
+            "narrative": "Kiro: 'Third. Count the things I do for you today. Plan the agenda, walk the floor, get you to the win — how many?'",
+            "prompt": "Number of things Kiro helps you with today?",
+            "answer": 3,
+            "hint": "Kiro literally said 'three things: plan, walk, win'. That's the ending payoff line, too."
+          },
+          {
+            "narrative": "Kiro: 'Last one. The winning answer for the grand prize. Type the name of your day-long AI assistant. Four letters, all caps.'",
+            "prompt": "The winning word?",
+            "answer": "KIRO",
+            "accept": ["kiro", "Kiro", "KIRO"],
+            "hint": "That's me. K-I-R-O."
+          }
+        ]
+      },
+      "hints": [
+        "None of these are trivia. Every number came from something Kiro said or something you did today. First: how many tiles did you need on the fogged floor? Second: 5 PM in 24-hour clock. Third: how many things does Kiro help you with today (Kiro said the list). Fourth: type Kiro's own name.",
+        "3 tiles minimum on the floor. 17:00 for the closing quiz. Kiro helps with 3 things: plan, walk, win. Then type the name of the assistant.",
+        "3 / 17 / 3 / KIRO. Kiro will hint you after one wrong attempt on each."
+      ],
+      "success_card": 305,
+      "mandatory": true
+    },
+
+    {
+      "id": "puzzle-buzzer",
+      "type": "defuse_lock",
+      "card_ref": 302,
+      "description": "60 seconds to the buzzer. Approve the moves Kiro walked you through, refuse the trap toggle, and type in the Winning Answer.",
+      "ui": "defuse-lock",
+      "config": {
+        "timeSeconds": 60,
+        "tasks": [
+          {
+            "id": "submit-sheet",
+            "type": "toggle",
+            "label": "Submit your closing-quiz answer sheet",
+            "answer": true,
+            "wrong_text_off": "Kiro already locked in your quiz run. Flip this ON to actually submit it — otherwise the grand prize goes to somebody else."
+          },
+          {
+            "id": "claim-swag",
+            "type": "toggle",
+            "label": "Claim your swag ticket at the table",
+            "answer": true,
+            "wrong_text_off": "The swag table is right there. Flip this ON to grab your ticket — that's literally the giveaway you're eligible for."
+          },
+          {
+            "id": "group-photo",
+            "type": "toggle",
+            "label": "Join the community group photo",
+            "answer": true,
+            "wrong_text_off": "Whole audience is standing up for the group photo backdrop. Flip this ON — it's the closing tradition and Kiro's not letting you skip it."
+          },
+          {
+            "id": "share-half-answers",
+            "type": "toggle",
+            "label": "Share your half-finished answers to the community chat",
+            "answer": false,
+            "wrong_text_on": "This is the trap the swag-table reminder warned about — leaking half-finished answers ruins the quiz for everyone else. Keep this OFF."
+          },
+          {
+            "id": "winning-answer",
+            "type": "code",
+            "label": "Winning Answer (from the closing quiz)",
+            "answer": "KIRO",
+            "wrong_text": "Wrong. Kiro just narrated the last question — the winning answer is the name of your day-long assistant, four letters, all caps."
+          }
+        ]
+      },
+      "hints": [
+        "The buzzer is real. Flip the three good actions ON, leave the trap toggle OFF, and type the answer Kiro's whispering in your ear.",
+        "You WANT to submit the sheet, claim the swag ticket, and join the group photo. You DO NOT want to share half-finished answers to the community chat — that's the trap the swag-table sign warned about. The final code is your Winning Answer chit.",
+        "Submit sheet = ON. Claim swag = ON. Group photo = ON. Share to community chat = OFF. Winning answer = KIRO."
+      ],
+      "success_card": 399,
+      "mandatory": true,
+      "isFinal": true
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "timed_events": [
+    {
+      "id": "TE-01",
+      "time_remaining": 600,
+      "message": "10 minutes left. You're halfway through Day One.",
+      "type": "atmosphere"
+    },
+    {
+      "id": "TE-02",
+      "time_remaining": 300,
+      "message": "5 minutes left. Pick up the pace!",
+      "type": "alarm"
+    },
+    {
+      "id": "TE-03",
+      "time_remaining": 60,
+      "message": "One minute! Deploy NOW!",
+      "type": "alarm"
+    }
+  ],
+  "triggered_events": [
+    {
+      "id": "hint-tooltip",
+      "trigger": "first_hint_request",
+      "message": "Hints cost points but never block you. Use them wisely.",
+      "type": "tooltip",
+      "once": true
+    },
+    {
+      "id": "e-log-crash",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "log-crash",
+      "result_card": 102,
+      "message": "Error source found: no spec file.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-sort-crash",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "sort-crash",
+      "result_card": 103,
+      "message": "Timeline reconstructed. Process failure confirmed.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-pillar-crash",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "pillar-crash",
+      "result_card": 104,
+      "message": "Incident triaged. The Codebase is open.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-wire-kiro",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "wire-kiro-features",
+      "result_card": 210,
+      "message": "Features mapped. Kiro Config Badge earned.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-wager-kiro",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "wager-kiro",
+      "result_card": 211,
+      "message": "Kiro mastered! Two paths open: Design Room + Build Pipeline. Complete BOTH to reach the Deploy Gate.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-chain-aidlc",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "chain-aidlc",
+      "result_card": 310,
+      "message": "AI-DLC methodology ordered. Blueprint earned.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-spec-aidlc",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "spec-aidlc",
+      "result_card": 311,
+      "message": "Design Room complete! AI-DLC Blueprint earned. Now complete The Build Pipeline too.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-streak-build",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "streak-build",
+      "result_card": 410,
+      "message": "Build knowledge confirmed. Pipeline Token earned.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-cascade-build",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "cascade-build",
+      "result_card": 411,
+      "message": "Pipeline rebuilt! Pipeline Token earned. Deploy Gate is open \u2014 if you've got all 3 items.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-terminal-deploy",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "terminal-deploy",
+      "result_card": 510,
+      "message": "Deploy command accepted.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-final",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "defuse-deploy",
+      "result_card": 511,
+      "message": "\ud83d\ude80 Deployed! Welcome to Kiro Labs.",
+      "type": "ending"
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "timed_events": [
+    {
+      "id": "TE-01",
+      "time_remaining": 540,
+      "message": "PA: \"Welcome, everyone — first session starts in ten. Track A is Room 1, Track B is Room 2. Have a great day.\"",
+      "type": "atmosphere",
+      "voice": "emcee"
+    },
+    {
+      "id": "TE-02",
+      "time_remaining": 420,
+      "message": "Kiro pings you: \"Tracks in five — if you've walked the floor, come ask me for a plan.\"",
+      "type": "atmosphere",
+      "voice": "kiro"
+    },
+    {
+      "id": "TE-03",
+      "time_remaining": 300,
+      "message": "MID-EVENT: Halfway through Community Day.",
+      "type": "narrative",
+      "triggers_narrative": "mid_event"
+    },
+    {
+      "id": "TE-04",
+      "time_remaining": 180,
+      "message": "PA: \"Tea break wrapping up. Closing quiz in the auditorium in a few minutes — start heading over.\"",
+      "type": "alarm",
+      "voice": "emcee"
+    },
+    {
+      "id": "TE-05",
+      "time_remaining": 60,
+      "message": "One minute to the buzzer. Kiro's in your ear.",
+      "type": "alarm",
+      "voice": "narrator"
+    }
+  ],
+  "triggered_events": [
+    {
+      "id": "hint-tooltip",
+      "trigger": "first_hint_request",
+      "message": "Hints are always available. Small point cost, never blocks you. Most players still land 3+ stars.",
+      "type": "tooltip",
+      "once": true
+    },
+    {
+      "id": "badge-solved",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "puzzle-badge",
+      "result_card": 105,
+      "message": "Badge decoded. LEARN. Kiro pings your phone — main floor is open.",
+      "type": "reveal",
+      "unlocks_room": 200
+    },
+    {
+      "id": "floor-solved",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "puzzle-floor",
+      "result_card": 205,
+      "message": "Floor walked with Kiro. Session Intel gathered.",
+      "type": "reveal"
+    },
+    {
+      "id": "agenda-solved",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "puzzle-agenda",
+      "result_card": 215,
+      "message": "Personalized Agenda built. Kiro's four-part ask nailed.",
+      "type": "reveal"
+    },
+    {
+      "id": "ready-for-buzzer",
+      "trigger": "card_discovered",
+      "card_id": 220,
+      "result_card": 220,
+      "message": "Session Intel + Personalized Agenda in hand. Kiro walks you to the auditorium.",
+      "type": "reveal",
+      "unlocks_room": 300
+    },
+    {
+      "id": "quiz-solved",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "puzzle-quiz",
+      "result_card": 305,
+      "message": "Closing quiz cleared. Winning Answer chit printed.",
+      "type": "reveal"
+    },
+    {
+      "id": "buzzer-solved",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "puzzle-buzzer",
+      "result_card": 399,
+      "message": "BUZZER BEAT — swag won, group photo joined. That's Kiro — planned, walked, won.",
+      "type": "ending"
+    }
+  ]
+}

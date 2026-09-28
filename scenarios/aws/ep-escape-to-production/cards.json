@@ -1,0 +1,432 @@
+{
+  "cards": [
+    {
+      "id": 100,
+      "type": "location",
+      "color": "green",
+      "title": "The Crash",
+      "description": "\ud83d\udea8 CUSTOMER COMPLAINTS FLOODING IN: The checkout feature shipped \u2014 and it charges customers in USD instead of PHP. The code works perfectly. But it does the wrong thing. Employee #404, figure out why.",
+      "image": "assets/the-crash.png",
+      "image_prompt": "Modern startup open-plan office in chaos, monitors showing red alerts, checkout screen with wrong currency, Slack notifications, coffee cups and sticky notes, warm lighting with red warning glow, isometric game art",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 101,
+          "label": "Read the incident report"
+        },
+        {
+          "card_id": 102,
+          "label": "Check the error logs",
+          "puzzle": "log-crash"
+        },
+        {
+          "card_id": 103,
+          "label": "Sort the incident timeline",
+          "puzzle": "sort-crash"
+        },
+        {
+          "card_id": 104,
+          "label": "Verify the facts",
+          "puzzle": "pillar-crash",
+          "requires_item": [
+            151,
+            152
+          ]
+        }
+      ],
+      "visible_to": "all",
+      "room": "the-crash"
+    },
+    {
+      "id": 101,
+      "type": "lore",
+      "color": "purple",
+      "title": "\ud83d\udcac Kiro: Your AI Companion",
+      "description": "A chat window pops open on your screen.\n\n\ud83d\udcac Kiro: \"Hey, Employee #404. I'm Kiro \u2014 the AI development environment your team uses. Or rather, should have been using. That checkout feature? They vibe-coded it. No specs, no requirements, no design. The AI built exactly what was prompted \u2014 which wasn't what the business needed.\n\nI'm going to guide you through fixing this. Five rooms, five layers of the pipeline. I'll give you hints along the way, but you'll need to prove you understand how I work and how AI-DLC keeps teams from shipping the wrong thing.\n\nLet's go. Clock's ticking.\"",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-crash"
+    },
+    {
+      "id": 102,
+      "type": "event",
+      "color": "yellow",
+      "title": "Root Cause Found",
+      "description": "The code matched the prompt. The prompt didn't match the business intent. No spec = no verification of intent.",
+      "reveals": [
+        151
+      ],
+      "visible_to": "all",
+      "room": "the-crash"
+    },
+    {
+      "id": 103,
+      "type": "event",
+      "color": "yellow",
+      "title": "Spec Flow Learned",
+      "description": "Prompt \u2192 Requirements \u2192 Design \u2192 Tasks \u2192 Agents \u2192 Tests \u2192 Deploy. Structure prevents vibe-coding disasters.",
+      "reveals": [
+        152
+      ],
+      "visible_to": "all",
+      "room": "the-crash"
+    },
+    {
+      "id": 104,
+      "type": "event",
+      "color": "yellow",
+      "title": "Incident Triaged",
+      "description": "Facts sorted. You understand Kiro basics. Time to dig into the codebase.",
+      "reveals": [
+        200
+      ],
+      "visible_to": "all",
+      "room": "the-crash"
+    },
+    {
+      "id": 200,
+      "type": "location",
+      "color": "green",
+      "title": "The Codebase",
+      "description": "The code is a mess \u2014 no conventions, no automation, no structure. Learn Kiro's features here, then TWO PATHS will open. You must complete both The Design Room AND The Build Pipeline before the Deploy Gate unlocks.",
+      "image": "assets/the-codebase.png",
+      "image_prompt": "Messy developer desk with three monitors showing chaotic unorganized code, browser tabs everywhere, one glowing folder icon as the solution, warm office ambient lighting, isometric game art",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 201,
+          "label": "Read the tech debt report"
+        },
+        {
+          "card_id": 202,
+          "label": "Read the architecture guide"
+        },
+        {
+          "card_id": 210,
+          "label": "Connect the features",
+          "puzzle": "wire-kiro-features"
+        },
+        {
+          "card_id": 211,
+          "label": "Quiz: Kiro deep knowledge",
+          "puzzle": "wager-kiro",
+          "requires_item": [
+            251
+          ]
+        }
+      ],
+      "visible_to": "all",
+      "room": "the-codebase"
+    },
+    {
+      "id": 201,
+      "type": "lore",
+      "color": "purple",
+      "title": "\ud83d\udcac Kiro: The Codebase",
+      "description": "\ud83d\udcac Kiro: \"Look at this mess. No .kiro/ config. No Specs defining requirements. No Hooks automating quality checks. No Steering enforcing coding standards.\n\nWhen teams use me properly, they configure three core features in .kiro/:\n\u2022 Specs \u2014 structured workflows: requirements \u2192 design \u2192 tasks\n\u2022 Hooks \u2014 event-driven automations on file save, create, delete\n\u2022 Steering \u2014 persistent project context and conventions\n\nThis team had none of it. That's why we're here.\"",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-codebase"
+    },
+    {
+      "id": 202,
+      "type": "lore",
+      "color": "purple",
+      "title": "\ud83d\udcac Kiro: One Agent, Every Surface",
+      "description": "\ud83d\udcac Kiro: \"Quick thing \u2014 I'm not just an IDE. I'm one unified agent that works across IDE, CLI, Web, and Mobile. Same harness, same behavior everywhere. Your .kiro/ config travels with the repo so the whole team gets the same setup.\n\nI also have Powers (domain knowledge on demand), Permissions (control what I can access), and Custom Agents (specialized profiles for different workflows). All of this could have prevented the crash.\"",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-codebase"
+    },
+    {
+      "id": 210,
+      "type": "event",
+      "color": "yellow",
+      "title": "Features Mapped",
+      "description": "Kiro's core features are connected: Specs define the workflow, Hooks automate it, Steering guides the agent. All configured from .kiro/.",
+      "reveals": [
+        251
+      ],
+      "visible_to": "all",
+      "room": "the-codebase"
+    },
+    {
+      "id": 211,
+      "type": "event",
+      "color": "yellow",
+      "title": "Kiro Knowledge Verified",
+      "description": "You've mastered Kiro's features. Two paths have opened ahead \u2014 The Design Room and The Build Pipeline. \u26a0\ufe0f You MUST complete BOTH to reach the Deploy Gate.",
+      "reveals": [
+        300
+      ],
+      "visible_to": "all",
+      "room": "the-codebase"
+    },
+    {
+      "id": 300,
+      "type": "location",
+      "color": "green",
+      "title": "The Design Room",
+      "description": "No architecture docs. No design decisions recorded. The team coded without a plan. AI-DLC's Inception phase would have prevented this.",
+      "image": "assets/the-design-room.png",
+      "image_prompt": "Empty glass-walled meeting room, blank whiteboard with no diagrams, scattered post-its, uncapped marker, empty chairs, warm afternoon sunlight, contemplative mood, isometric game art",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 301,
+          "label": "Read the AI-DLC primer"
+        },
+        {
+          "card_id": 310,
+          "label": "Order the methodology",
+          "puzzle": "chain-aidlc"
+        },
+        {
+          "card_id": 311,
+          "label": "Run the spec workflow",
+          "puzzle": "spec-aidlc",
+          "requires_item": [
+            351
+          ]
+        }
+      ],
+      "visible_to": "all",
+      "room": "the-design-room"
+    },
+    {
+      "id": 301,
+      "type": "lore",
+      "color": "purple",
+      "title": "\ud83d\udcac Kiro: Enter AI-DLC",
+      "description": "\ud83d\udcac Kiro: \"This room is about methodology \u2014 specifically AI-DLC. AI-Driven Development Lifecycle. Created by Raja SP at AWS.\n\nThe key insight: AI-DLC reverses the conversation. Instead of humans telling AI what to do, AI proposes plans and humans validate. I ask the questions, you approve the answers.\n\nNew vocabulary:\n\u2022 Bolts \u2014 replace Sprints (hours/days, not weeks)\n\u2022 Units \u2014 replace Epics (cohesive work elements)\n\u2022 Intent \u2014 your high-level business goal\n\nPrinciple #1: Reimagine, don't retrofit. AI-DLC isn't Agile with AI bolted on.\"",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-design-room"
+    },
+    {
+      "id": 310,
+      "type": "event",
+      "color": "yellow",
+      "title": "Methodology Ordered",
+      "description": "Intent drives Units, which break into Bolts. AI proposes, the team validates in Mob sessions. That's the AI-DLC flow.",
+      "reveals": [
+        351
+      ],
+      "visible_to": "all",
+      "room": "the-design-room"
+    },
+    {
+      "id": 311,
+      "type": "event",
+      "color": "yellow",
+      "title": "Spec Workflow Complete",
+      "description": "Design Room complete! You've earned the AI-DLC Blueprint. Now head to The Build Pipeline to earn the Pipeline Token \u2014 you need both to reach the Deploy Gate.",
+      "reveals": [
+        400
+      ],
+      "visible_to": "all",
+      "room": "the-design-room"
+    },
+    {
+      "id": 400,
+      "type": "location",
+      "color": "green",
+      "title": "The Build Pipeline",
+      "description": "Time to rebuild. The pipeline needs AI-DLC's three phases restored: Inception, Construction, Operations. Each phase builds on the previous one's context.",
+      "image": "assets/the-build-pipeline.png",
+      "image_prompt": "DevOps dashboard on wall-mounted monitor showing CI/CD pipeline with 3 stages being rebuilt, green amber grey indicators, terminal windows, warm office lighting with blue tech glow, isometric game art",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 401,
+          "label": "Read the rebuild plan"
+        },
+        {
+          "card_id": 410,
+          "label": "Rapid-fire: build knowledge",
+          "puzzle": "streak-build"
+        },
+        {
+          "card_id": 411,
+          "label": "Debug the pipeline step",
+          "puzzle": "cascade-build",
+          "requires_item": [
+            451
+          ]
+        }
+      ],
+      "visible_to": "all",
+      "room": "the-build-pipeline"
+    },
+    {
+      "id": 401,
+      "type": "lore",
+      "color": "purple",
+      "title": "\ud83d\udcac Kiro: The Three Phases",
+      "description": "\ud83d\udcac Kiro: \"AI-DLC has three phases. Think of them as the highway you're driving:\n\n\ud83d\udfe0 Inception \u2014 Mob Elaboration. I decompose your business intent into Units and User Stories. Your whole team validates in real-time. No solo architect making decisions alone.\n\n\ud83d\udd35 Construction \u2014 Mob Construction. I propose architecture, domain models, code + tests. Developers validate trade-offs and can override my decisions.\n\n\ud83d\udfe2 Operations \u2014 I monitor telemetry and propose actions. Developers approve.\n\nEach phase provides richer context for the next. That's how you build better systems faster.\"",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-build-pipeline"
+    },
+    {
+      "id": 410,
+      "type": "event",
+      "color": "yellow",
+      "title": "Build Knowledge Confirmed",
+      "description": "You nailed the rapid-fire round. AI leads, humans validate. Bolts, not Sprints. That's the AI-DLC way.",
+      "reveals": [
+        451
+      ],
+      "visible_to": "all",
+      "room": "the-build-pipeline"
+    },
+    {
+      "id": 411,
+      "type": "event",
+      "color": "yellow",
+      "title": "Pipeline Restored",
+      "description": "Pipeline rebuilt! You've earned the Pipeline Token. The Deploy Gate is now open \u2014 if you've completed both branches.",
+      "reveals": [
+        500
+      ],
+      "visible_to": "all",
+      "room": "the-build-pipeline"
+    },
+    {
+      "id": 500,
+      "type": "location",
+      "color": "green",
+      "title": "The Final Review",
+      "description": "The last checkpoint. Prove your Kiro and AI-DLC knowledge one more time \u2014 no shortcuts.",
+      "image": "assets/deploy-gate.png",
+      "image_prompt": "Startup office with big monitor showing glowing green deploy button, confetti cannons ready, celebration mode lighting, warm orange and green, party streamers, triumphant mood, isometric game art",
+      "reveals": [],
+      "discoveries": [
+        {
+          "card_id": 501,
+          "label": "Read the deploy checklist"
+        },
+        {
+          "card_id": 510,
+          "label": "Enter the deploy command",
+          "puzzle": "terminal-deploy",
+          "requires_item": [
+            251
+          ],
+          "consumes_item": [
+            215
+          ]
+        },
+        {
+          "card_id": 511,
+          "label": "Final deployment: ship it!",
+          "puzzle": "defuse-deploy",
+          "requires_item": [
+            351,
+            451,
+            551
+          ],
+          "consumes_item": [
+            315,
+            415
+          ]
+        }
+      ],
+      "visible_to": "all",
+      "room": "deploy-gate"
+    },
+    {
+      "id": 501,
+      "type": "lore",
+      "color": "purple",
+      "title": "\ud83d\udcac Kiro: The Final Review",
+      "description": "\ud83d\udcac Kiro: \"You've made it. You traced the crash, learned how I work, understood AI-DLC, and rebuilt the pipeline.\n\nTwo final checks. First, show me you can start a Kiro session from the CLI. Then run through the readiness checklist \u2014 the same things this team skipped the first time.\n\nGet these right and Employee #404 stops being a prophecy.\"",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "deploy-gate"
+    },
+    {
+      "id": 510,
+      "type": "event",
+      "color": "yellow",
+      "title": "Session Started",
+      "description": "kiro-cli \u2014 session started. You're back in control.",
+      "reveals": [
+        551
+      ],
+      "visible_to": "all",
+      "room": "deploy-gate"
+    },
+    {
+      "id": 511,
+      "type": "event",
+      "color": "yellow",
+      "title": "404 \u2192 200 OK \ud83c\udf89",
+      "description": "The server was throwing 404s \u2014 the 'page not found' error that means everything's broken. Now it's returning 200 OK \u2014 the code for 'everything's working.'\n\nEmployee #404 just turned a 404 into a 200. On your first day, thirty minutes after badging in.\n\nThe engineering team erupts. Someone posts 'THE PROPHECY WAS WRONG.' The CTO leans on your desk, nods once, and says: 'Okay. You belong here.'\n\nYou didn't just patch it \u2014 you rebuilt it right: specs first, AI-DLC throughout, humans owning the decisions. Welcome to the team, #404.",
+      "is_ending": true,
+      "reveals": [],
+      "visible_to": "all",
+      "room": "deploy-gate"
+    },
+    {
+      "id": 151,
+      "type": "item",
+      "color": "orange",
+      "title": "\u2705 Evidence Report",
+      "description": "You connected the evidence board correctly. The CTO's investigation findings are clear.",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-crash"
+    },
+    {
+      "id": 152,
+      "type": "item",
+      "color": "orange",
+      "title": "\u2705 Incident Timeline",
+      "description": "The spec-driven development flow is now clear. You understand what should have happened.",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-crash"
+    },
+    {
+      "id": 251,
+      "type": "item",
+      "color": "orange",
+      "title": "\u2705 Feature Map",
+      "description": "Kiro's features are mapped. Specs, Hooks, Steering, Powers, Permissions \u2014 all connected.",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-codebase"
+    },
+    {
+      "id": 351,
+      "type": "item",
+      "color": "orange",
+      "title": "\u2705 Methodology Chain",
+      "description": "The AI-DLC pipeline chain is ordered correctly. Intent \u2192 Elaboration \u2192 Inception \u2192 Construction \u2192 Operations.",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-design-room"
+    },
+    {
+      "id": 451,
+      "type": "item",
+      "color": "orange",
+      "title": "\u2705 Build Streak",
+      "description": "You aced the rapid-fire AI-DLC quiz. The build knowledge is confirmed.",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "the-build-pipeline"
+    },
+    {
+      "id": 551,
+      "type": "item",
+      "color": "orange",
+      "title": "\u2705 CLI Session",
+      "description": "You started a Kiro CLI session. One final review left.",
+      "reveals": [],
+      "visible_to": "all",
+      "room": "deploy-gate"
+    }
+  ]
+}
