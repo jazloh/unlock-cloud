@@ -137,7 +137,7 @@
 
   // Same-origin, versioned bank asset (SSOT §5). Tracks app/VERSION for the
   // ?v= cache-bust convention (NOT bumped by this task — local only).
-  const BANK_VERSION = '13';
+  const BANK_VERSION = '14';
   // Relocated under app/showdown/ (2026-09-21): the old app/data/ path was not
   // reliably present on S3. Local bundle stays the source (NOT the live
   // /showdown/bank proxy). ?v= cache-buster tracks app/VERSION (not bumped here).
@@ -326,6 +326,17 @@
       // cache-buster). If this ALSO fails, the promise rejects and loadPuzzles
       // surfaces its normal load-error UI (unchanged behavior).
       if (!raw) raw = await fetchBankJson(BANK_URL);
+
+      /* &mockfail=badword needs an unplayable word to exist. The bundled bank no
+       * longer has one (the four were rewritten 2026-09-28), but the LIVE bank
+       * still does, so the substitution path still ships and still needs
+       * exercising. Re-plant the old "/spec" answer in memory — mock only, so a
+       * real race can never see it. */
+      if (MOCK && MOCK_FAIL === 'badword') {
+        const w = raw && raw.categories && raw.categories['agentic-ai'] && raw.categories['agentic-ai'].word;
+        const hit = Array.isArray(w) && w.find((e) => e && e.id === 'agentic-word-001');
+        if (hit) hit.answer = '/spec';
+      }
 
       const stats = indexBank(raw);
       const src = usedLive ? 'live' : (MOCK ? 'local (mock)' : 'local fallback');
@@ -611,7 +622,8 @@
       const picks = JSON.parse(JSON.stringify(MOCK_PICKS));
       if (MOCK_FAIL === 'bankid') picks.numeric = ['agentic-num-DOES-NOT-EXIST'];
       // &mockfail=badword models the backend serving a word id whose answer
-      // word-lock cannot render (agentic-word-001 = "/spec", not alpha-only).
+      // word-lock cannot render (agentic-word-001, re-planted as "/spec" at bank
+      // load — see loadBank; the bundled bank itself is now clean).
       // Exercises resolveBank's deterministic substitution instead of a dead race.
       if (MOCK_FAIL === 'badword') picks.word = ['agentic-word-001'];
       return mockJson({ winning_category: 'agentic-ai', picks: picks });
@@ -1878,7 +1890,9 @@
    * word-lock renders one A-Z reel per character, so its answer MUST be
    * alpha-only and <= 8 characters. Several live bank entries are not
    * (awscore-word-001 "EC2", awscore-word-002 "S3", agentic-word-001 "/spec",
-   * cloudf-word-002 "On-prem").
+   * cloudf-word-002 "On-prem"). As of 2026-09-28 the bundled copy is rewritten
+   * to playable answers, but the backend's bank still serves the originals, and
+   * that is the bank a real race loads first.
    *
    * Previously such a pick pushed an error, and loadPuzzles() replaces the WHOLE
    * race with an error panel on any error — so one unusable word ID killed all
