@@ -137,7 +137,7 @@
 
   // Same-origin, versioned bank asset (SSOT §5). Tracks app/VERSION for the
   // ?v= cache-bust convention (NOT bumped by this task — local only).
-  const BANK_VERSION = '13';
+  const BANK_VERSION = '14';
   // Relocated under app/showdown/ (2026-09-21): the old app/data/ path was not
   // reliably present on S3. Local bundle stays the source (NOT the live
   // /showdown/bank proxy). ?v= cache-buster tracks app/VERSION (not bumped here).
@@ -150,6 +150,9 @@
   // is persisted here so it survives in-session navigation; on a later boot with
   // no ?game= we fall back to this stored value before asking for a table code.
   const SS_GAME_ID = 'sd_game_id';
+  // Every accepted spelling of the game_id query parameter, used both for the URL
+  // this page was opened with and for a table link pasted into the join form.
+  const GAME_ID_PARAMS = ['game', 'game_id', 'gameId', 'gameid', 'gid'];
   function persistGameId(id) {
     if (!id) return;
     try { sessionStorage.setItem(SS_GAME_ID, id); } catch { /* storage off — non-fatal */ }
@@ -213,6 +216,7 @@
     puzzles: [],
     puzzleIndex: 0,
     puzzlesCompleted: 0,
+    _solvedIndex: null,   // last puzzleIndex already credited (see onPuzzleSolved)
     playStartMs: 0,
     instance: null,
     // misc UI
@@ -323,6 +327,17 @@
       // surfaces its normal load-error UI (unchanged behavior).
       if (!raw) raw = await fetchBankJson(BANK_URL);
 
+      /* &mockfail=badword needs an unplayable word to exist. The bundled bank no
+       * longer has one (the four were rewritten 2026-09-28), but the LIVE bank
+       * still does, so the substitution path still ships and still needs
+       * exercising. Re-plant the old "/spec" answer in memory — mock only, so a
+       * real race can never see it. */
+      if (MOCK && MOCK_FAIL === 'badword') {
+        const w = raw && raw.categories && raw.categories['agentic-ai'] && raw.categories['agentic-ai'].word;
+        const hit = Array.isArray(w) && w.find((e) => e && e.id === 'agentic-word-001');
+        if (hit) hit.answer = '/spec';
+      }
+
       const stats = indexBank(raw);
       const src = usedLive ? 'live' : (MOCK ? 'local (mock)' : 'local fallback');
       console.info('[showdown] bank: ' + src);
@@ -407,6 +422,34 @@
     return { t, sessionReady, stateName };
   }
 
+  /* Opponent bench for the mock. `&mockplayers=N` (2–12) sizes the table.
+   *
+   * Hanoi is 3 players, but the design is meant to support more and every suite
+   * ran against a hard-coded Alice and Bob — so the lane strip, the podium and the
+   * spectator card had only ever been seen at exactly 3. A global event with a
+   * fuller table would have been the first time anyone looked.
+   *
+   * The bench is chosen to be HOSTILE, not tidy, because a roster of three
+   * five-letter names proves nothing:
+   *   - "Nguyen Thi Minh Anh" exceeds NAME_MAX (12) and must be trimmed
+   *   - two "Minh"s must be disambiguated by seat, not shown as one name twice
+   *   - a name with a space and one with punctuation
+   * Deterministic: the same N always yields the same table. */
+  const MOCK_BENCH = [
+    'Alice', 'Bob', 'Nguyen Thi Minh Anh', 'Minh', 'Kavya', 'Minh',
+    "O'Brien", 'Long Nguyen', 'Sasha', 'Tuan', 'Priya',
+  ];
+  const MOCK_PLAYERS = (() => {
+    // Number(null) is 0, NOT NaN — so a plain `Number(params.get(...))` made the
+    // DEFAULT table clamp to 2 players instead of 3 whenever the param was absent.
+    // Test the raw string for presence before converting.
+    const raw = params.get('mockplayers');
+    if (raw == null || raw.trim() === '') return 3;
+    const n = Number(raw);
+    if (!Number.isFinite(n)) return 3;
+    return Math.max(2, Math.min(12, Math.round(n)));
+  })();
+
   function mockRoster(stateName) {
     // completion_pct: 0 in setup/voting; opponents grind during in_progress;
     // frozen at 100/partial in completed. "You" mirrors real progress.
@@ -414,28 +457,47 @@
     const playT = ph.t - (MOCK_SETUP_MS + MOCK_VOTING_MS);
     const pClamp = Math.max(0, Math.min(playT, MOCK_PLAY_MS));
     const clampPct = (v) => Math.max(0, Math.min(100, Math.round(v)));
-    let mePct = 0, alicePct = 0, bobPct = 0;
-    let meMs = 0, aliceMs = 0, bobMs = 0;
-    if (stateName === 'in_progress') {
+    const opponents = MOCK_PLAYERS - 1;
+
+    let mePct = 0, meMs = 0;
+    if (stateName === 'in_progress' || stateName === 'completed') {
       mePct = clampPct((mockMyCompleted() / MOCK_PUZZLE_COUNT) * 100);
-      alicePct = clampPct((playT / MOCK_PLAY_MS) * 120); // Alice pulls ahead
-      bobPct   = clampPct((playT / MOCK_PLAY_MS) * 80);
-      // Per-player elapsed_ms (matches live shape). YOUR clock only starts after
-      // the first solve — mirrors the server (elapsed begins at first /progress).
-      meMs = mockMyCompleted() > 0 ? pClamp : 0;
-      aliceMs = pClamp; bobMs = pClamp;
-    } else if (stateName === 'completed') {
-      mePct = clampPct((mockMyCompleted() / MOCK_PUZZLE_COUNT) * 100);
-      alicePct = 100; bobPct = 80; // Bob finishes <100% → DNF row
-      meMs = mockMyCompleted() > 0 ? MOCK_PLAY_MS : 0;
-      aliceMs = MOCK_PLAY_MS; bobMs = MOCK_PLAY_MS;
+      meMs = mockMyCompleted() > 0 ? (stateName === 'completed' ? MOCK_PLAY_MS : pClamp) : 0;
     }
     const meName = state.displayName || 'You';
     const rows = [
       { player_id: state.playerId || 'p-you', display_name: meName, seat_number: state.seatNumber || 1, completion_pct: mePct, elapsed_ms: meMs },
-      { player_id: 'p-alice', display_name: 'Alice', seat_number: 2, completion_pct: alicePct, elapsed_ms: aliceMs },
-      { player_id: 'p-bob',   display_name: 'Bob',   seat_number: 3, completion_pct: bobPct, elapsed_ms: bobMs },
     ];
+
+    /* Opponent pace fans out from 120% of the window (a clear leader) down to 55%
+     * (a clear DNF), so any table size produces finishers AND non-finishers — which
+     * is what the podium's DNF row and the spectator card's "still going" list need
+     * in order to be exercised at all. At 3 players this reproduces the previous
+     * Alice-120/Bob-80 behaviour closely enough that the existing suites' timing
+     * assumptions still hold. */
+    // At two opponents the endpoints are pinned to the original 1.2 / 0.8 so the
+    // default 3-player table behaves EXACTLY as before and no existing suite's
+    // timing assumptions shift underneath it.
+    const slowest = opponents <= 2 ? 0.8 : 0.55;
+    for (let i = 0; i < opponents; i++) {
+      const speed = opponents === 1 ? 1.2
+        : 1.2 - (i * ((1.2 - slowest) / (opponents - 1)));
+      let pct = 0, ms = 0;
+      if (stateName === 'in_progress') {
+        pct = clampPct((playT / MOCK_PLAY_MS) * 100 * speed);
+        ms = pClamp;
+      } else if (stateName === 'completed') {
+        pct = clampPct(100 * Math.min(1, speed));
+        ms = MOCK_PLAY_MS;
+      }
+      rows.push({
+        player_id: 'p-mock-' + i,
+        display_name: MOCK_BENCH[i % MOCK_BENCH.length],
+        seat_number: i + 2,
+        completion_pct: pct,
+        elapsed_ms: ms,
+      });
+    }
     // Server rank order (SSOT §6): by completion desc. Rendered verbatim.
     rows.sort((a, b) => b.completion_pct - a.completion_pct);
     rows.forEach((r, i) => { r.rank = i + 1; });
@@ -485,7 +547,14 @@
     }
     if (st === 'completed') {
       base.winner_player_id = rows[0].player_id;
-      base.end_reason = 'all_completed';
+      /* Derive it from the roster instead of always claiming 'all_completed'. With a
+       * fuller table the mock was printing "Every racer cracked the vault." under a
+       * podium where six of eight showed DNF — a mock that contradicts itself is one
+       * you stop trusting, and it can just as easily hide a real copy bug as show a
+       * fake one. The live backend picks countdown_expired when the window closes on
+       * unfinished players, which is what this now mirrors. */
+      base.end_reason = rows.every((r) => r.completion_pct >= 100)
+        ? 'all_completed' : 'countdown_expired';
     }
     return base;
   }
@@ -553,7 +622,8 @@
       const picks = JSON.parse(JSON.stringify(MOCK_PICKS));
       if (MOCK_FAIL === 'bankid') picks.numeric = ['agentic-num-DOES-NOT-EXIST'];
       // &mockfail=badword models the backend serving a word id whose answer
-      // word-lock cannot render (agentic-word-001 = "/spec", not alpha-only).
+      // word-lock cannot render (agentic-word-001, re-planted as "/spec" at bank
+      // load — see loadBank; the bundled bank itself is now clean).
       // Exercises resolveBank's deterministic substitution instead of a dead race.
       if (MOCK_FAIL === 'badword') picks.word = ['agentic-word-001'];
       return mockJson({ winning_category: 'agentic-ai', picks: picks });
@@ -1415,14 +1485,17 @@
     return stripDashes(err.message) || 'Could not join. Please try again.';
   }
 
-  // Parse a game_id from a pasted full URL (…?game=<id>) or a bare id/code.
-  // Returns null for an empty value or a URL that carries no game param.
+  // Parse a game_id from a pasted full URL (…?game=<id>, …?game_id=<id>, …) or a
+  // bare id/code. Returns null for an empty value or a URL that carries no game
+  // param. Accepts the same aliases as the boot-time URL read (GAME_ID_PARAMS),
+  // so a link that works when opened also works when pasted.
+  const GAME_ID_IN_URL_RE = new RegExp('[?&](?:' + GAME_ID_PARAMS.join('|') + ')=([^&#\\s]+)', 'i');
   function extractGameId(raw) {
     const v = (raw || '').trim();
     if (!v) return null;
-    const m = v.match(/[?&]game=([^&#\s]+)/i);
+    const m = v.match(GAME_ID_IN_URL_RE);
     if (m) return decodeURIComponent(m[1]);
-    if (/^https?:\/\//i.test(v)) return null; // a link without ?game= is unusable
+    if (/^https?:\/\//i.test(v)) return null; // a link without a game param is unusable
     return v; // treat a bare token as the id/code
   }
 
@@ -1817,7 +1890,9 @@
    * word-lock renders one A-Z reel per character, so its answer MUST be
    * alpha-only and <= 8 characters. Several live bank entries are not
    * (awscore-word-001 "EC2", awscore-word-002 "S3", agentic-word-001 "/spec",
-   * cloudf-word-002 "On-prem").
+   * cloudf-word-002 "On-prem"). As of 2026-09-28 the bundled copy is rewritten
+   * to playable answers, but the backend's bank still serves the originals, and
+   * that is the bank a real race loads first.
    *
    * Previously such a pick pushed an error, and loadPuzzles() replaces the WHOLE
    * race with an error panel on any error — so one unusable word ID killed all
@@ -1972,6 +2047,33 @@
           statements.push({ text: r.text, answer: r.answer });
         });
         if (statements.length) {
+          /* Replacement statements for the re-ask-on-wrong flow. A wrong sort costs
+           * the 5s hold and then re-asks the SAME slot with a different statement,
+           * instead of the legacy "answer the rest for nothing, then start the set
+           * over". The pool is every other usable statement in the category, in a
+           * deterministic session-seeded rotation, so two players who have made the
+           * same number of mistakes are looking at the same statement — the race
+           * stays fair without needing the server to arbitrate.
+           *
+           * Rotation rather than a shuffle: it is one modulo, and all it has to do
+           * is stop every race in a category opening with the same replacement. */
+          const picked = new Set(ids);
+          const spareStatements = [];
+          const sm = bucket.statement;
+          if (sm && typeof sm.forEach === 'function') {
+            const cands = [];
+            sm.forEach((entry, sid) => {
+              if (picked.has(sid) || !statementUsable(entry)) return;
+              cands.push({ id: sid, entry });
+            });
+            cands.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+            const start = cands.length ? fnv1a(String(sessionId) + ':stmt-spares') % cands.length : 0;
+            for (let k = 0; k < cands.length; k++) {
+              const c = cands[(start + k) % cands.length];
+              const r = resolveStatement(c.entry, sessionId);
+              if (!r.error) spareStatements.push({ text: r.text, answer: r.answer });
+            }
+          }
           // immediateWrong: penalise each wrong sort as it happens. Defaults off in
           // the component, so the episodes using pillar-lock keep the original
           // end-of-sequence behaviour. wrongHoldMs matches WRONG_LOCK_SEC so the
@@ -1979,7 +2081,15 @@
           slots.push({ id: 'statement:' + ids.join(','), ui: 'pillar-lock', category: winningCategory,
             type, question: 'Sort each statement into True or False.',
             config: { pillars: ['True', 'False'], statements,
-                      immediateWrong: true, wrongHoldMs: (WRONG_LOCK_SEC * 1000) + 200 } });
+                      // Hold the wrong card slightly SHORTER than the lockout, not
+                      // longer. The scrim clears after WRONG_LOCK_SEC interval ticks;
+                      // a hold of +200ms left a ~200ms window where the scrim was gone
+                      // but the card had not advanced, so taps landed on a stale
+                      // statement — one of the ingredients in the credited-false-solve
+                      // bug. Advancing just before the scrim lifts closes that window
+                      // and the player still sees the wrong card for the whole pause.
+                      immediateWrong: true, wrongHoldMs: (WRONG_LOCK_SEC * 1000) - 150,
+                      spareStatements } });
         }
 
       } else if (type === 'spelling') {
@@ -2081,6 +2191,7 @@
     const mount = $('play-mount');
     if (!mount) return;
     clearWrongLockout(); // drop any lingering lockout before swapping puzzles
+    state._solvedIndex = null; // this puzzle has not been credited yet (see onPuzzleSolved)
     mount.innerHTML = '';
     state.instance = mountPuzzle(mount, puzzle, {
       onSolved: onPuzzleSolved,
@@ -2126,15 +2237,27 @@
         // NOTE: these mounts pass an EXPLICIT field whitelist, not the whole cfg.
         // Any new component option must be added here too or it silently never
         // arrives — the component sees undefined and falls back to its default.
-        case 'pillar-lock':
+        case 'pillar-lock': {
+          /* Hand out replacement statements in order, so a wrong sort re-asks the
+           * slot instead of forfeiting the set. Every device walks the same
+           * deterministic list, so the nth mistake shows the same statement to
+           * everyone. With no pool at all (a category with nothing spare) the
+           * supplier returns the current statement, which still avoids a restart. */
+          const spares = Array.isArray(cfg.spareStatements) ? cfg.spareStatements.slice() : [];
+          let spareAt = 0;
+          const nextStatement = spares.length
+            ? () => spares[spareAt++ % spares.length]
+            : (i, cur) => cur;
           return new PillarLock(mount, {
             pillars: cfg.pillars,
             statements: cfg.statements,
             immediateWrong: cfg.immediateWrong,   // penalise each wrong sort at once
             wrongHoldMs: cfg.wrongHoldMs,
+            nextStatement,                        // re-ask the slot; never restart
             onSubmit: () => hooks.onSolved(),
             onWrong: (m) => hooks.onWrong(m),
           });
+        }
         case 'spelling-lock':
           return new SpellingLock(mount, {
             title: cfg.title,
@@ -2252,6 +2375,25 @@
   }
 
   function onPuzzleSolved() {
+    /* Credit each puzzle AT MOST ONCE.
+     *
+     * Nothing stopped a lock from reporting the same solve twice, and every lock
+     * leaves its submit affordance live across the delay between a correct answer
+     * and onSubmit (keypad and pillar defer by 400ms so their "unlocked" state is
+     * visible). So a player who clicks Unlock, sees nothing happen for a beat and
+     * clicks again — the single most ordinary thing anyone does in a timed race —
+     * got TWO solves for one answer: puzzlesCompleted incremented twice, an
+     * inflated /progress POST, and two queued advances 700ms apart, the second of
+     * which SKIPS the next puzzle entirely.
+     *
+     * Found while tracing an unrelated harness run that jumped puzzle 2 → 4.
+     * Guarding here rather than in five components: the index is Showdown's own
+     * bookkeeping, and every lock reaches the race through this one hook.
+     * renderPuzzle() clears the mark, so a loadPuzzles() retry that resets the
+     * index to 0 can still credit puzzle 1. */
+    if (state._solvedIndex === state.puzzleIndex) return;
+    state._solvedIndex = state.puzzleIndex;
+
     clearWrongLockout(); // a correct answer clears any residual lockout
     playSfxCorrect();
     const flash = $('play-solved-flash');
@@ -2532,6 +2674,13 @@
       }).join('');
     }
 
+    /* A fuller table than Hanoi's three overflows the lane strip: at 8 players the
+     * content is ~400px inside a 168px panel, and the scrollbar is deliberately
+     * hidden — so five racers existed with nothing on screen to suggest it. Flag the
+     * overflow so CSS can fade the bottom edge, which is the whole hint needed.
+     * Measured after the lanes are in the DOM, and cheap: two layout reads. */
+    panel.classList.toggle('is-scrollable', panel.scrollHeight > panel.clientHeight + 1);
+
     const byId = {};
     rows.forEach((r) => { byId[r.player_id] = r; });
 
@@ -2690,10 +2839,28 @@
           ? '<span class="sd-lb-correct">' + pct + '%</span>' +
             (elapsed != null ? '<span class="sd-lb-time">' + fmtTime(elapsed) + '</span>' : '')
           : '<span class="sd-lb-dnf">DNF</span><span class="sd-lb-correct">' + pct + '%</span>';
+        /* Kiro on the podium. The ghost carried the whole race on the progress bar
+         * and then vanished at the one moment players actually screenshot, which
+         * made the results card read as a different product. Top three only — a
+         * ghost on every row down to 5th is noise, not a reward. Reuses the
+         * progress-bar art and its data-ghost states, so the winner's sparkle here
+         * is literally the same frame they were chasing. */
+        const ghost = i < 3
+          ? '<span class="sd-lb-ghost" data-ghost="' +
+            (isWin ? 'leading' : finished ? 'running' : 'trailing') + '" aria-hidden="true"></span>'
+          : '';
+        /* The highlight marks YOU, not the winner. Every player at the booth looks at
+         * their own laptop and the first question is "which one am I?" — the winner
+         * is already named by the headline, the crown, the centre plate and the
+         * sparkle ghost. A tag instead of a " (you)" suffix: on a 3-up plate the
+         * suffix ate the name's width and truncated it. */
+        const youTag = isMe ? '<span class="sd-lb-you">You</span>' : '';
         return '<li class="sd-lb-row' + (isMe ? ' sd-lb-row--me' : '') + (isWin ? ' sd-lb-row--win' : '') +
-          '" data-pid="' + escapeHtml(r.player_id || '') + '">' +
+          '" data-pid="' + escapeHtml(r.player_id || '') + '"' + (isMe ? ' aria-current="true"' : '') + '>' +
+          youTag +
+          ghost +
           '<span class="sd-lb-rank">' + rank + '</span>' +
-          '<span class="sd-lb-name">' + escapeHtml(sdName(r, dup)) + (isMe ? ' (you)' : '') + '</span>' +
+          '<span class="sd-lb-name">' + escapeHtml(sdName(r, dup)) + '</span>' +
           '<span class="sd-lb-stats">' + stats + '</span>' +
           '</li>';
       }).join('');
@@ -2717,10 +2884,23 @@
     const myPct = myRow ? Math.max(0, Math.min(100, Number(myRow.completion_pct) || 0)) : null;
     const yours = $('results-yours');
     if (yours && myRow) {
+      /* A player who did NOT finish has no time of their own to report: the server
+       * omits elapsed_ms for them, so myElapsed falls back to the SESSION clock \u2014
+       * the winner's time. That was then printed as "your" time and fed to
+       * starRating(), so a racer who cracked nothing was handed the winner's rating.
+       * Both are speed measurements, so both are shown only to finishers. */
+      const iFinished = myPct != null && myPct >= 100;
       const line = $('results-yours-line');
-      if (line) line.textContent = myPct + '% complete \u00b7 ' + fmtTime(myElapsed);
+      if (line) {
+        line.textContent = iFinished
+          ? myPct + '% complete \u00b7 ' + fmtTime(myElapsed)
+          : myPct + '% complete \u00b7 vault not cracked';
+      }
       const stars = $('results-yours-stars');
-      if (stars) stars.textContent = starRating(myElapsed);
+      if (stars) {
+        stars.textContent = iFinished ? starRating(myElapsed) : '';
+        stars.hidden = !iFinished;
+      }
       yours.hidden = false;
     }
 
@@ -2846,7 +3026,11 @@
       const Ctx = window.AudioContext || window.webkitAudioContext;
       if (!Ctx) return;
       if (!sfxCtx) sfxCtx = new Ctx();
-      if (sfxCtx.state === 'suspended') sfxCtx.resume();
+      // Same rejected-promise hazard as audioReady(): swallow it explicitly.
+      if (sfxCtx.state === 'suspended') {
+        const resumed = sfxCtx.resume();
+        if (resumed && typeof resumed.catch === 'function') resumed.catch(() => {});
+      }
     } catch {}
     document.removeEventListener('click', unlockAudio);
     document.removeEventListener('touchstart', unlockAudio);
@@ -2899,7 +3083,15 @@
       const Ctx = window.AudioContext || window.webkitAudioContext;
       if (!Ctx) return null;
       if (!sfxCtx) sfxCtx = new Ctx();
-      if (sfxCtx.state === 'suspended') sfxCtx.resume();
+      // resume() returns a PROMISE, and it rejects when the context cannot be
+      // resumed yet — no user gesture has landed, or (in the offline render the
+      // audio suite uses) the context has not started. The rejection was unhandled,
+      // so it printed an InvalidStateError to the console. Harmless to playback, but
+      // console noise at a booth is what hides the errors that do matter.
+      if (sfxCtx.state === 'suspended') {
+        const resumed = sfxCtx.resume();
+        if (resumed && typeof resumed.catch === 'function') resumed.catch(() => {});
+      }
       if (!sfxBus) {
         const gain = sfxCtx.createGain();
         gain.gain.value = 0.9;
@@ -3135,6 +3327,31 @@
         bankReady: () => loadBank(),
         getBankFlat: () => BANK_FLAT,
         getState: () => state,
+        // Exposed so the table-link parser can be asserted directly. Driving it
+        // through the form is not possible under ?mock=true, which synthesises a
+        // game_id at boot and so never shows the editable paste field.
+        extractGameId: (raw) => extractGameId(raw),
+        /* Audio seam. The cue set is pure Web Audio and therefore RENDERABLE: point
+         * the synth at an OfflineAudioContext and the exact samples a player would
+         * hear can be measured — level, length, dominant pitch, and whether
+         * overlapping cues clip the master limiter. Headless Chrome has no output
+         * device, so without this the suites could only prove the cues do not
+         * throw, and "the sound design has never been heard" stayed an open risk
+         * carried all the way to an event. This does not replace listening at booth
+         * volume, which is a taste judgement; it replaces GUESSING that a cue is
+         * audible at all. */
+        audio: {
+          cues: {
+            tick: playSfxTick, correct: playSfxCorrect, wrong: playSfxWrong,
+            lockTick: playSfxLockTick, lead: playSfxLead, passed: playSfxPassed,
+            urgent: playSfxUrgent, complete: playSfxGameComplete,
+          },
+          // Re-seat the synth on a supplied context and rebuild the master bus on
+          // it. Returns the bus so a caller can confirm the graph exists.
+          useContext(ctx) { sfxCtx = ctx; sfxBus = null; return audioReady() ? sfxBus : null; },
+          isMuted: () => sfxMuted,
+          setMuted: (v) => setMuted(v),
+        },
       };
     }
 
@@ -3143,7 +3360,12 @@
     // value. With no URL param, fall back to the stored sessionStorage id, then
     // a stored identity's game_id; normalise whatever we find back into
     // sessionStorage so later in-session navigation keeps it.
-    const urlGameId = params.get('game') || null;
+    /* Accept every spelling of the parameter. The table QR / host tooling emits
+     * `game_id`, but only `game` was read here, so a link carrying `?game_id=…`
+     * silently fell through to "No table code detected" and the player had to
+     * paste the UUID by hand at the booth. Aliases are cheap; a mistyped contract
+     * at a live event is not. First non-empty wins, in the order below. */
+    const urlGameId = GAME_ID_PARAMS.reduce((found, k) => found || params.get(k), null) || null;
     if (urlGameId) {
       state.gameId = urlGameId;
       persistGameId(urlGameId); // overwrite

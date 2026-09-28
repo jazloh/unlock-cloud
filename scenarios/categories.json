@@ -5,7 +5,7 @@
     "subtitle": "Cloud infrastructure, AI services, and security",
     "icon": "☁️",
     "color": "#f97316",
-    "episodes": 15,
+    "episodes": 16,
     "description": "From VPC networking to Generative AI — learn AWS by escaping."
   },
   {
@@ -23,7 +23,7 @@
     "subtitle": "Compliance, filings, and regulatory change",
     "icon": "📋",
     "color": "#dc2626",
-    "episodes": 2,
+    "episodes": 3,
     "description": "Navigate regulatory deadlines, impact assessments, and filing workflows under pressure."
   },
   {

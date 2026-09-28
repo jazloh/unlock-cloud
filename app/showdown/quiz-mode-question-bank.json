@@ -424,17 +424,17 @@
       "word": [
         {
           "id": "awscore-word-001",
-          "question": "Which AWS service acronym stands for 'Elastic Compute Cloud'?",
+          "question": "What is a single virtual server in Amazon EC2 called?",
 
-          "answer": "EC2",
+          "answer": "Instance",
 
           "_verified": false
         },
         {
           "id": "awscore-word-002",
-          "question": "Which AWS service acronym stands for 'Simple Storage Service'?",
+          "question": "In Amazon S3, what is the container that holds your objects called?",
 
-          "answer": "S3",
+          "answer": "Bucket",
 
           "_verified": false
         },
@@ -734,7 +734,7 @@
         {
           "id": "agentic-mcq-003",
           "question": "What does Kiro CLI 3.0's 'Tangent' feature let you do?",
-          "answer": "Branch into a named side-conversation that inherits context",
+          "answer": "Branch off a side-chat that keeps context",
           "decoys": [
             "Merge two chat sessions into one",
             "Fork the CLI into a separate process",
@@ -811,10 +811,10 @@
         {
           "id": "agentic-mcq-010",
           "question": "Which agent frameworks is Amazon Bedrock AgentCore compatible with?",
-          "answer": "CrewAI, LangGraph, LlamaIndex, Google ADK, OpenAI Agents SDK",
+          "answer": "Open-source ones like CrewAI and LangGraph",
           "decoys": [
-            "Only AWS-native SDKs",
-            "Only Strands Agents",
+            "Only AWS-native agent SDKs",
+            "Only Strands Agents, nothing else",
             "TensorFlow Agents and PyTorch Lightning"
           ],
           "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
@@ -833,11 +833,11 @@
         {
           "id": "agentic-mcq-012",
           "question": "What does the AgentCore Runtime provide for hosting agents?",
-          "answer": "Low-latency serverless environments with session isolation",
+          "answer": "Serverless hosting with session isolation",
           "decoys": [
-            "Dedicated EC2 clusters only",
+            "Dedicated EC2 clusters you manage",
             "A shared multi-tenant VM pool",
-            "On-premises hosting only"
+            "On-premises servers you provision"
           ],
           "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
         },
@@ -888,11 +888,11 @@
         {
           "id": "agentic-mcq-017",
           "question": "Which languages can AgentCore's Code Interpreter execute securely?",
-          "answer": "JavaScript, TypeScript, and Python",
+          "answer": "Python, JavaScript, TypeScript",
           "decoys": [
-            "Java, C++, and Go",
-            "Rust and Python only",
-            "Only Python"
+            "Python, Java, and Kotlin",
+            "Rust, Go, and C++ only",
+            "Only Python, nothing else"
           ],
           "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
         },
@@ -943,11 +943,11 @@
         {
           "id": "agentic-mcq-022",
           "question": "What do all four Nova 2 models share, besides a 1M token context window?",
-          "answer": "Built-in web grounding, code execution, and MCP tool support",
+          "answer": "Web grounding, code execution, MCP tools",
           "decoys": [
             "Built-in video generation only",
-            "On-device inference only",
-            "Support only for text input"
+            "On-device inference, no cloud API",
+            "Text-only input, no tool calling"
           ],
           "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
         },
@@ -965,7 +965,7 @@
         {
           "id": "agentic-mcq-024",
           "question": "What does Amazon Quick's multi-dataset analytics (June 2026) let users do?",
-          "answer": "Query across sources like Snowflake and relational DBs via natural language, without manual pre-joining",
+          "answer": "Query many sources in plain language",
           "decoys": [
             "Only query a single pre-joined dataset",
             "Only export to CSV for external analysis",
@@ -1020,9 +1020,9 @@
         {
           "id": "agentic-mcq-029",
           "question": "Besides Kiro Power integration, what else did AWS Security Agent add in June 2026?",
-          "answer": "Claude Code plugin support and simulated exploit validation in a sandbox",
+          "answer": "Claude Code plugin and sandboxed exploit tests",
           "decoys": [
-            "A built-in firewall appliance",
+            "A built-in network firewall appliance",
             "Support for on-premises-only deployments",
             "A manual penetration testing checklist generator"
           ],
@@ -1123,9 +1123,9 @@
       "word": [
         {
           "id": "agentic-word-001",
-          "question": "What slash command starts spec-driven development in Kiro CLI 3.0 (just the command, no arguments)?",
+          "question": "Which AgentCore component manages agent authentication and access to tools? 'AgentCore ___'",
 
-          "answer": "/spec",
+          "answer": "Identity",
 
           "source": "https://kiro.dev/docs/cli/v3/"
         },
@@ -3181,11 +3181,11 @@
         {
           "id": "startups-mcq-023",
           "question": "What is the purpose of Kiro Startup Credits, per AWS?",
-          "answer": "Help startups start building with Kiro before growing into full Activate Credits",
+          "answer": "Start building with Kiro before Activate",
           "decoys": [
             "Replace Activate Credits entirely",
-            "Fund office space for startups",
-            "Cover legal incorporation fees"
+            "Fund office space for new startups",
+            "Cover legal and incorporation fees"
           ],
           "source": "https://aws.amazon.com/startups/credits"
         },
@@ -3666,18 +3666,18 @@
         {
           "id": "cloudf-mcq-004",
           "question": "In cloud terminology, what is a 'Region'?",
-          "answer": "A separate geographic area containing multiple isolated data center locations",
+          "answer": "A geographic area of isolated data centers",
           "decoys": [
-            "A single physical server rack",
+            "A single rack of physical servers",
             "A billing category for enterprise customers",
-            "A type of virtual machine"
+            "A type of virtual machine instance"
           ],
           "_verified": false
         },
         {
           "id": "cloudf-mcq-005",
           "question": "What is an 'Availability Zone'?",
-          "answer": "One or more discrete data centers within a Region, isolated from failures in other zones",
+          "answer": "Isolated data centers within a Region",
           "decoys": [
             "A marketing term with no technical meaning",
             "A country-level division for tax purposes",
@@ -3688,7 +3688,7 @@
         {
           "id": "cloudf-mcq-006",
           "question": "Why do companies use multiple Availability Zones?",
-          "answer": "To improve resilience and reduce the impact of a single data center failure",
+          "answer": "To survive a single data center failure",
           "decoys": [
             "To increase their monthly bill intentionally",
             "Because it is legally required everywhere",
@@ -3732,7 +3732,7 @@
         {
           "id": "cloudf-mcq-010",
           "question": "What is a key business benefit of 'on-demand' cloud resources?",
-          "answer": "Resources can be provisioned in minutes without buying physical hardware",
+          "answer": "Provision in minutes, no hardware to buy",
           "decoys": [
             "Resources must be ordered a year in advance",
             "Only government agencies can access them",
@@ -3743,7 +3743,7 @@
         {
           "id": "cloudf-mcq-011",
           "question": "What does 'scalability' mean for a cloud-based business application?",
-          "answer": "The ability to handle increasing (or decreasing) workload by adjusting resources",
+          "answer": "Adjusting resources as workload rises or falls",
           "decoys": [
             "The physical size of the server hardware",
             "A fixed limit on how many users can log in",
@@ -3765,11 +3765,11 @@
         {
           "id": "cloudf-mcq-013",
           "question": "What is 'on-premises' IT infrastructure?",
-          "answer": "Computing hardware and servers owned and run in a company's own facilities",
+          "answer": "Hardware a company owns and runs itself",
           "decoys": [
             "Any system accessed through a web browser",
-            "A synonym for cloud computing",
-            "A type of software subscription"
+            "Another name for public cloud computing",
+            "A type of monthly software subscription"
           ],
           "_verified": false
         },
@@ -3787,10 +3787,10 @@
         {
           "id": "cloudf-mcq-015",
           "question": "What is a 'public cloud'?",
-          "answer": "Cloud services offered by a third-party provider over the internet, shared across multiple customers",
+          "answer": "Shared services from a provider, over the internet",
           "decoys": [
             "A cloud data center owned exclusively by one government",
-            "A free service with no billing",
+            "A free service with no billing of any kind",
             "A local network only accessible within one office"
           ],
           "_verified": false
@@ -3831,7 +3831,7 @@
         {
           "id": "cloudf-mcq-019",
           "question": "What is 'disaster recovery' in a cloud context?",
-          "answer": "Strategies and services to restore systems and data after an outage or failure",
+          "answer": "Restoring systems and data after an outage",
           "decoys": [
             "A marketing term with no real function",
             "A type of physical insurance policy",
@@ -3842,7 +3842,7 @@
         {
           "id": "cloudf-mcq-020",
           "question": "What does 'global reach' mean for a cloud provider?",
-          "answer": "The ability to deploy applications closer to customers in many locations worldwide",
+          "answer": "Deploying apps close to customers worldwide",
           "decoys": [
             "The ability to operate without any internet connection",
             "A limit on how many countries can use the service",
@@ -3875,7 +3875,7 @@
         {
           "id": "cloudf-mcq-023",
           "question": "What is the main idea behind 'economies of scale' in cloud pricing?",
-          "answer": "Costs per unit can decrease as a provider serves more customers at larger scale",
+          "answer": "Unit costs fall as the provider grows larger",
           "decoys": [
             "Prices always increase as more customers join",
             "It only applies to small businesses",
@@ -3897,10 +3897,10 @@
         {
           "id": "cloudf-mcq-025",
           "question": "What is a 'service level agreement' (SLA)?",
-          "answer": "A commitment defining the expected level of service, such as uptime, between provider and customer",
+          "answer": "A provider's commitment on uptime and service",
           "decoys": [
             "A legal document unrelated to technology",
-            "A one-time discount code",
+            "A one-time discount code for new customers",
             "A requirement to use only one data center"
           ],
           "_verified": false
@@ -3919,7 +3919,7 @@
         {
           "id": "cloudf-mcq-027",
           "question": "What does 'infrastructure as a service' (IaaS) generally provide?",
-          "answer": "Access to fundamental computing resources like servers and storage over the internet",
+          "answer": "Servers, storage, and networking on demand",
           "decoys": [
             "Only pre-built finished software applications",
             "Physical office space for employees",
@@ -3930,10 +3930,10 @@
         {
           "id": "cloudf-mcq-028",
           "question": "What does 'software as a service' (SaaS) generally mean for a business user?",
-          "answer": "Using ready-made software applications delivered over the internet, typically via subscription",
+          "answer": "Ready-made apps delivered over the internet",
           "decoys": [
             "Building and maintaining your own servers",
-            "A type of hardware warranty",
+            "A type of extended hardware warranty",
             "A one-time software purchase with no updates"
           ],
           "_verified": false
@@ -3952,9 +3952,9 @@
         {
           "id": "cloudf-mcq-030",
           "question": "What does 'agility' mean when business leaders talk about cloud computing?",
-          "answer": "The ability to quickly adapt and deploy new resources or services as business needs change",
+          "answer": "Adapting and deploying quickly as needs change",
           "decoys": [
-            "A fitness program for IT staff",
+            "A fitness program for the IT department",
             "A fixed schedule for quarterly hardware upgrades",
             "A legal term for contract termination"
           ],
@@ -4052,9 +4052,9 @@
         },
         {
           "id": "cloudf-word-002",
-          "question": "What common short term describes a company's own data center infrastructure, as opposed to the cloud?",
+          "question": "A company's own data center infrastructure is called 'on-___'. Fill in the blank.",
 
-          "answer": "On-prem",
+          "answer": "Premises",
 
           "_verified": false
         },
@@ -4355,11 +4355,11 @@
         {
           "id": "frugal-mcq-005",
           "question": "Law IV, 'unobserved systems lead to unknown costs,' is illustrated in the keynote using which historical example?",
-          "answer": "Amsterdam houses with hidden vs. visible energy meters",
+          "answer": "Amsterdam homes: hidden vs. visible meters",
           "decoys": [
-            "London Underground fare gates",
-            "New York water metering",
-            "Tokyo train punctuality"
+            "London Underground ticket fare gates",
+            "New York City apartment water meters",
+            "Tokyo's famously punctual train system"
           ],
           "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
           "_verified": false
@@ -4367,11 +4367,11 @@
         {
           "id": "frugal-mcq-006",
           "question": "Which example illustrates Law V (implementing cost controls) via a three-tier criticality model?",
-          "answer": "Amazon retail (search/browse/cart/checkout as Tier 1)",
+          "answer": "Amazon retail's search-to-checkout path",
           "decoys": [
             "Netflix's recommendation engine",
-            "Uber's surge pricing",
-            "Zoom's video codecs"
+            "Uber's surge pricing system",
+            "Zoom's video codec pipeline"
           ],
           "source": "https://www.youtube.com/watch?v=UTRBVPvzt9w",
           "_verified": false
