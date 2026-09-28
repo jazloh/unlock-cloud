@@ -1,0 +1,9 @@
+{
+  "style_prefix": "Digital illustration, bright energetic AWS Community Day tech-conference aesthetic, clean isometric style, deep-blue with vibrant orange and teal accent palette, friendly community-meetup vibe, lanyards and stickers and swag, warm natural lighting, mid-century modern furniture mixed with screens and demo booths, game card art.",
+  "style_prefix_location": "Digital illustration, AWS Community Day venue interior, isometric wide-angle, deep-blue with orange and teal accent palette, holographic session-track overlays and demo-booth screens, friendly community-conference aesthetic, warm energetic lighting, ergonomic seating, plants, sponsor booths, game environment art.",
+  "style_prefix_item": "Digital illustration, single conference-attendee prop on dark gradient background, deep-blue base with vibrant orange highlights, clean icon style, slightly cartoonish, centered, game inventory art.",
+  "style_prefix_object": "Digital illustration, community-conference interactive prop, soft moody background, deep-blue and warm-orange accents, close-up detail, friendly community-tech vibe, game card art.",
+  "style_prefix_character": "Digital illustration, single friendly stylized character portrait, community-day attendee or friendly robot-mascot AI assistant (Kiro — NOT a photorealistic human), warm cartoon-realistic style, dark gradient background, expressive pose, game NPC art.",
+  "negative_prompt": "readable text, words, letters, typography, watermark, blurry, low quality, ugly, dark dystopian, horror, gore",
+  "aspect_ratio": "16:9"
+}

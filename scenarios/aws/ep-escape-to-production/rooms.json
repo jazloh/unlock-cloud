@@ -1,0 +1,84 @@
+{
+  "rooms": [
+    {
+      "card_id": 100,
+      "name": "The Crash",
+      "description": "Your first task: a production incident just hit. Figure out what went wrong.",
+      "connects_to": [
+        200
+      ],
+      "unlocked_by": null,
+      "unlock_text": "Starting room \u2014 the incident.",
+      "map_pos": [
+        140,
+        380
+      ]
+    },
+    {
+      "card_id": 200,
+      "name": "The Codebase",
+      "description": "The bug traces back here. The codebase has no specs, no structure. Learn what Kiro does differently.",
+      "connects_to": [
+        300
+      ],
+      "unlocked_by": {
+        "type": "puzzle",
+        "puzzle_id": "pillar-crash"
+      },
+      "unlock_text": "Incident triaged. Tracing to the codebase.",
+      "map_pos": [
+        140,
+        280
+      ]
+    },
+    {
+      "card_id": 300,
+      "name": "The Design Room",
+      "description": "No architecture docs exist. Discover how AI-DLC's methodology prevents this.",
+      "connects_to": [
+        400
+      ],
+      "unlocked_by": {
+        "type": "puzzle",
+        "puzzle_id": "wager-kiro"
+      },
+      "unlock_text": "Kiro features understood. Choose your path.",
+      "map_pos": [
+        60,
+        180
+      ]
+    },
+    {
+      "card_id": 400,
+      "name": "The Build Pipeline",
+      "description": "Rebuild the pipeline using AI-DLC's three phases.",
+      "connects_to": [
+        500
+      ],
+      "unlocked_by": {
+        "type": "puzzle",
+        "puzzle_id": "spec-aidlc"
+      },
+      "unlock_text": "Kiro features understood. Choose your path.",
+      "map_pos": [
+        220,
+        180
+      ]
+    },
+    {
+      "card_id": 500,
+      "name": "The Final Review",
+      "description": "Everything's rebuilt. One last review to prove you understand Kiro and AI-DLC before you're hired.",
+      "connects_to": [],
+      "unlocked_by": {
+        "type": "puzzle",
+        "puzzle_id": "cascade-build"
+      },
+      "unlock_text": "The pipeline holds. Time for the final review.",
+      "map_pos": [
+        140,
+        60
+      ]
+    }
+  ]
+}

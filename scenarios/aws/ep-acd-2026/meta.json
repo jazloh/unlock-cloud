@@ -1,0 +1,20 @@
+{
+  "id": "ep-acd-2026",
+  "title": "Community Day",
+  "episode": "acd-2026",
+  "arc": "booth",
+  "category": "aws",
+  "description": "AWS Community Day. You badged in at 8, the schedule is chaos, and there's a 5 PM closing quiz with swag on the line. You can't catch it all solo. Meet Kiro — your AI companion for the day. Plan the agenda, walk the floor, and beat the buzzer.",
+  "difficulty": { "tier": 0, "label": "Booth Qualifier" },
+  "duration_minutes": 10,
+  "players": { "min": 1, "max": 6, "recommended": 2 },
+  "aws_topics": ["Kiro"],
+  "mechanics_taught": [
+    "kiro_plan_agenda",
+    "kiro_navigate_floor",
+    "kiro_recall_under_pressure"
+  ],
+  "version": "0.1",
+  "start_button": "Badge In",
+  "lore_label": "Lanyard Card"
+}

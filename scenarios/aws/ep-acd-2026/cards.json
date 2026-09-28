@@ -1,0 +1,259 @@
+{
+  "cards": [
+    {
+      "id": 100,
+      "type": "location",
+      "color": "green",
+      "title": "Doors Open — Registration Hall",
+      "description": "AWS Community Day. 8:00 AM. The doors are open and the badging line is already a snake — hoodies, laptop bags, coffee cups, the works. Volunteers scan lanyards, sponsor booths are pulling covers off displays, the breakfast table is being ambushed, and a giant wall behind the stage shows today's tracks: two rooms of parallel talks, a demo alley, and — bottom of the wall in cheerful capitals — a 5 PM CLOSING QUIZ with a swag table beside it.\n\nYour own lanyard just landed in your hand. Someone attached a little card with five rolling letter reels. It's scrambled. Decode it.\n\nSomeone left a curled Lanyard Card under the strap. Read it before the day eats you.",
+      "image": "assets/room-doors-open.png",
+      "image_prompt": "Bright energetic tech-conference registration hall at doors-open, community attendees badging in, volunteers scanning lanyards, a giant scheduling wall showing parallel tracks and a highlighted CLOSING QUIZ block, sponsor booths setting up, warm morning light, deep-blue with vibrant orange and teal accents, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 110, "label": "Read the Lanyard Card someone tucked under the strap" },
+        { "card_id": 105, "label": "Decode the five scrambled reels on your lanyard", "puzzle": "puzzle-badge" }
+      ],
+      "visible_to": "all",
+      "room": "doors-open"
+    },
+    {
+      "id": 101,
+      "type": "object",
+      "color": "blue",
+      "title": "Scrambled Lanyard Reels",
+      "description": "A tiny attachment on your badge with five rolling letter reels. It looks like it wants a five-letter word — the one thing you're actually here to do today. Roll the reels until the reveal clicks.",
+      "image": "assets/card-lanyard-reels.png",
+      "image_prompt": "Close-up of a conference lanyard badge with five glowing letter-reel dials mounted below it, deep-blue base with warm orange highlight, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "doors-open"
+    },
+    {
+      "id": 105,
+      "type": "event",
+      "color": "yellow",
+      "title": "Badge Unlocked.",
+      "description": "The reels click into place: L — E — A — R — N. Your lanyard flashes green, the badge scanner beeps you in properly, and the main-floor doors slide open.\n\nAlmost immediately a friendly little chime pings on your phone. A brand-new chat window opens by itself: 'Hi. I'm Kiro. I'll be your assistant for the day. Come find me on the floor.'",
+      "reveals": [200],
+      "consumes": [],
+      "awards": [],
+      "visible_to": "all",
+      "room": "doors-open"
+    },
+    {
+      "id": 110,
+      "type": "lore",
+      "color": "purple",
+      "title": "Lanyard Card — From a Veteran Attendee",
+      "description": "A curled printed card tucked under the lanyard strap:\n\n\"Welcome to Community Day. Two rooms of talks, a demo alley, and lunch queues that eat 40 minutes if you're not careful. Last year I tried to catch it all solo and missed the best session of the day. This year I brought a assistant. Ask Kiro. — a returning attendee\"\n\nHint: the assistant is real, and the reels want the reason you came.",
+      "image": "assets/card-lanyard-note.png",
+      "image_prompt": "Curled printed lanyard-note card with a handwritten welcome message from a returning attendee, warm registration-desk light, deep-blue with orange accent, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "doors-open"
+    },
+
+    {
+      "id": 200,
+      "type": "location",
+      "color": "green",
+      "title": "The Floor — Main Hall",
+      "description": "You step through onto the main floor and immediately get why last year's veterans warned you. Two parallel tracks are lit up on opposite sides of the hall, a demo alley runs down the middle, and the venue map on the wall is a fog of tiles — sessions, booths, meetups, hallway conversations. All you can see clearly from here is the tile you're standing on.\n\nA small friendly figure lights up in the corner of your phone: Kiro. Waves. 'Right. Two things and you're ready. Let's walk the floor together, then let's plan your day. Talk to me first.'",
+      "image": "assets/room-the-floor.png",
+      "image_prompt": "Wide isometric view of a bustling AWS community-day main hall — two parallel session-track wings, a central demo alley of sponsor booths with community swag, a large fogged venue map on the back wall glowing with hidden tiles, warm energetic lighting, deep-blue with orange and teal accents, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 201, "label": "Say hi to Kiro", "puzzle": "npc-kiro" },
+        { "card_id": 205, "label": "Walk the fogged venue floor with Kiro", "puzzle": "puzzle-floor" },
+        { "card_id": 215, "label": "Ask Kiro to build your personalized agenda", "puzzle": "puzzle-agenda" },
+        {
+          "card_id": 220,
+          "label": "Head to the auditorium — closing quiz is next",
+          "requires_item": [211, 212],
+          "consumes_item": [211, 212]
+        }
+      ],
+      "visible_to": "all",
+      "room": "the-floor"
+    },
+    {
+      "id": 201,
+      "type": "tool",
+      "color": "orange",
+      "title": "Kiro — Your AI Companion",
+      "description": "A friendly stylized assistant that appears on your phone the moment you badge in. Warm, sharp, a little witty. Introduces itself, explains what it does today, and points you at the two tasks that get you ready for the closing quiz.",
+      "image": "assets/card-kiro.png",
+      "image_prompt": "Friendly stylized robot mascot AI assistant, glowing turquoise eyes, orange accent panels on a deep-blue chassis, small round body, waving in greeting, warm-cartoon community-friendly aesthetic, NOT a photorealistic human, single character portrait on dark gradient background",
+      "visible_to": "all",
+      "room": "the-floor"
+    },
+    {
+      "id": 202,
+      "type": "object",
+      "color": "blue",
+      "title": "Fogged Venue Map",
+      "description": "The big wall-map of the venue is fogged over — you can only see tiles adjacent to where you've been. Each tile is a session, a booth, a meetup, or a hallway trap (queue). Spend energy to reveal tiles, collect enough intel to know what today is actually about, and get to the auditorium door.\n\nKiro is with you. 'I'll light the way. Grab three good tiles — you don't need every one — and skip the long queue. Save your energy.'",
+      "image": "assets/card-venue-map.png",
+      "image_prompt": "Large glowing wall-mounted venue map with a fogged tile grid, a handful of visible session and booth icons peeking through, warm main-hall lighting behind, deep-blue with orange and teal accents, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "the-floor"
+    },
+    {
+      "id": 203,
+      "type": "object",
+      "color": "blue",
+      "title": "Kiro Chat — Agenda Console",
+      "description": "Kiro's chat window on your phone has four labeled slot boxes above the message field: Action / Subject / Context / Format. Fill each slot with a specific choice and Kiro returns a personalized time-blocked agenda for the day. Skip a slot or pick a shrug, and Kiro returns a mid answer.",
+      "image": "assets/card-kiro-console.png",
+      "image_prompt": "Modern AI chat interface on a phone screen with four labeled input slots arranged in a row above a message box, clean deep-blue UI with warm orange accents, community-day vibe, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "the-floor"
+    },
+    {
+      "id": 205,
+      "type": "event",
+      "color": "yellow",
+      "title": "Floor Walked. Intel Gathered.",
+      "description": "You reached the far side of the fogged floor with three solid tiles noted — an AI-track talk, a serverless session, and a demo booth that looked genuinely useful. You skipped the lunch queue. Kiro's mini-map lights up green.\n\n'Nice route. That's your morning. I'll keep this bundle handy for the closing quiz.'\n\nA Session Intel bundle drops into your pocket.",
+      "reveals": [211],
+      "awards": [211],
+      "visible_to": "all",
+      "room": "the-floor"
+    },
+    {
+      "id": 211,
+      "type": "item",
+      "color": "red",
+      "title": "Session Intel",
+      "description": "A little bundle of the tiles you actually walked — AI track, serverless talk, demo booth, community meetup. Not every session in the building, just the three-ish that mattered. Hand this to the auditorium usher (Kiro) and they'll know what you saw.",
+      "image": "assets/card-session-intel.png",
+      "image_prompt": "Small folded card with three glowing session icons stacked and a green checkmark seal, warm-orange trim on deep-blue background, community-day aesthetic, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "the-floor"
+    },
+    {
+      "id": 215,
+      "type": "event",
+      "color": "yellow",
+      "title": "Personalized Agenda Built.",
+      "description": "You fill the four slots — a specific action, your actual day, the tracks you care about, and the format you'll actually follow — and hit send. Kiro spits out a time-blocked schedule with room numbers, coffee-break padding, and a note that says 'closing quiz starts at 5 sharp'. Solid.\n\n'Told you. Ask well, get well.'\n\nA printed Personalized Agenda drops into your bag.",
+      "reveals": [212],
+      "awards": [212],
+      "visible_to": "all",
+      "room": "the-floor"
+    },
+    {
+      "id": 212,
+      "type": "item",
+      "color": "red",
+      "title": "Personalized Agenda",
+      "description": "A time-blocked schedule Kiro built for you: action, subject, scope, format — all four filled specifically. This is the day you'll actually follow (not the 30-session firehose on the wall). Bring it to the auditorium — it's the other half of what you need for the closing quiz.",
+      "image": "assets/card-agenda.png",
+      "image_prompt": "Printed time-blocked schedule card with four highlighted colored slots labeled Action Subject Context Format and a green checkmark stamp, deep-blue background with orange accents, community-day aesthetic, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "the-floor"
+    },
+    {
+      "id": 220,
+      "type": "event",
+      "color": "yellow",
+      "title": "Ready for the buzzer. Head to the auditorium.",
+      "description": "Session Intel in one pocket. Personalized Agenda in the other. Kiro pings the auditorium usher automatically.\n\n'Right. That's the plan (obj 1) and that's the floor walked (obj 2). Third thing coming up — the closing quiz. I'll be in your ear at the buzzer. Let's go.'\n\nThe path to the auditorium lights up. Swag table's already visible from here.",
+      "reveals": [300],
+      "consumes": [211, 212],
+      "awards": [],
+      "visible_to": "all",
+      "room": "the-floor"
+    },
+
+    {
+      "id": 300,
+      "type": "location",
+      "color": "green",
+      "title": "Closing Quiz — Auditorium",
+      "description": "5:00 PM. Auditorium is full — the whole community day audience in one room, phones out, energy jittery. On the main screen: the closing quiz. To the left of the stage: the swag table stacked with community merch. Behind the stage: a group-photo backdrop. Above everything: a countdown to the buzzer. The big digital clock above the stage reads 17:00 — 5 PM sharp, quiz time.\n\nKiro is in your earpiece. 'Right. Recall time. Numbers you actually saw today. I'll narrate the questions. You lock in the answer before the buzzer. That's the whole game.'\n\nA reminder is pinned on the seat in front of you. Read that first.",
+      "image": "assets/room-closing-quiz.png",
+      "image_prompt": "Packed conference auditorium at 5 PM, big-screen closing quiz on stage, a large digital stage clock/countdown prominently displaying 17:00 (5 PM sharp — the clock face shows 17:00), swag table beside the stage stacked with community merch, group-photo backdrop, warm auditorium lighting, deep-blue with orange and teal accents, isometric digital illustration",
+      "reveals": [],
+      "discoveries": [
+        { "card_id": 310, "label": "Read the swag-table reminder pinned to the seat" },
+        { "card_id": 305, "label": "Answer Kiro's narrated closing-quiz questions", "puzzle": "puzzle-quiz" },
+        {
+          "card_id": 399,
+          "label": "Beat the buzzer — lock in your final answers",
+          "puzzle": "puzzle-buzzer",
+          "requires_item": [313],
+          "consumes_item": [313]
+        }
+      ],
+      "visible_to": "all",
+      "room": "closing-quiz"
+    },
+    {
+      "id": 301,
+      "type": "object",
+      "color": "blue",
+      "title": "Closing Quiz — Big Screen",
+      "description": "The big screen scrolls the closing quiz questions one at a time. Above it, the stage clock/countdown reads 17:00 in bright characters — the start hour, right there in 24-hour time. Each question asks for a number — and the number is derivable from what you actually saw today. Kiro narrates each prompt into your ear. Wrong answer, Kiro drops you a hint. Right answer, next question.",
+      "image": "assets/card-quiz-screen.png",
+      "image_prompt": "Large auditorium screen displaying a single closing-quiz question with a numeric input field and a hint icon in the corner, a prominent stage clock/countdown above the screen clearly reading 17:00 (5 PM sharp, in 24-hour time), deep-blue UI with orange accents, community-day aesthetic, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "closing-quiz"
+    },
+    {
+      "id": 302,
+      "type": "object",
+      "color": "blue",
+      "title": "Final Answer Console",
+      "description": "A small console at your seat with a countdown to the 5 PM buzzer, four toggle actions, and one final code entry for the winning answer. Above it Kiro whispers: 'Submit the sheet, claim the swag ticket, join the group photo — do NOT share your half-finished answers to the group chat. Then type in the winning answer.'",
+      "image": "assets/card-final-console.png",
+      "image_prompt": "Compact seat-side console with a large countdown timer, a row of toggle-switch buttons, one numeric-entry field labeled Winning Answer, one warning-taped toggle labeled DO NOT SHARE, deep-blue UI with orange accents, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "closing-quiz"
+    },
+    {
+      "id": 305,
+      "type": "event",
+      "color": "yellow",
+      "title": "Closing Quiz Cleared.",
+      "description": "Kiro walks you through four narrated prompts — one for each thing you actually saw today. You type the numbers, Kiro nods each one through, and the big screen locks in your run.\n\nOn the way to the buzzer, a Winning Answer chit prints from your seat console.",
+      "reveals": [313],
+      "awards": [313],
+      "visible_to": "all",
+      "room": "closing-quiz"
+    },
+    {
+      "id": 313,
+      "type": "item",
+      "color": "red",
+      "title": "Winning Answer",
+      "description": "A printed chit from your seat console: the single word answer for the closing quiz's grand prize. It's derived from the last narrated prompt — the name of your day-long assistant. Hand this to the final answer console before the buzzer.",
+      "image": "assets/card-winning-answer.png",
+      "image_prompt": "Small printed answer chit with a bold five-letter word icon and a green checkmark seal, deep-blue background with warm orange highlight, community-day aesthetic, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "closing-quiz"
+    },
+    {
+      "id": 310,
+      "type": "lore",
+      "color": "purple",
+      "title": "Lanyard Card — Swag Table Reminder",
+      "description": "A bright card pinned to the seat in front of you:\n\n\"CLOSING QUIZ — 5 PM SHARP. Answer before the buzzer to be eligible for the swag giveaway. Group photo right after. Please do NOT screenshot your half-finished answers to the community chat — it ruins the fun for everyone. — the organizers\"\n\nHint: the buzzer is real, and one of the console toggles is a trap.",
+      "image": "assets/card-swag-reminder.png",
+      "image_prompt": "Bright colored reminder card pinned to an auditorium seat back with the closing-quiz rules and a swag-table icon, warm auditorium light, single object on dark gradient background",
+      "visible_to": "all",
+      "room": "closing-quiz"
+    },
+    {
+      "id": 399,
+      "type": "event",
+      "color": "yellow",
+      "title": "BUZZER BEAT — SWAG WON.",
+      "description": "You flip the submit-answer-sheet toggle. Flip the claim-swag-ticket toggle. Flip the join-the-group-photo toggle. Leave the share-half-finished-answers toggle firmly OFF — that one was the trap. Type KIRO in the winning-answer field.\n\nThe defuse timer freezes with seconds to spare and lights green. The big screen flashes your name. The swag table calls you up. Kiro pings in your ear one more time: 'Told you we'd catch it all. Planned. Walked. Won. That's the whole day.'",
+      "is_ending": true,
+      "reveals": [],
+      "visible_to": "all",
+      "room": "closing-quiz",
+      "image": "assets/ending-success.png",
+      "image_prompt": "Triumphant attendee holding a community-day swag bag, big-screen behind them showing a winning-answer banner and a group-photo cluster of the whole audience, Kiro mascot floating beside them cheering, warm celebratory light, deep-blue with orange and teal accents, portrait game ending art"
+    }
+  ]
+}

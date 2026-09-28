@@ -93,7 +93,12 @@ class FogMapLock {
   _reveal(x, y) {
     if (this.won || this.failed) return;
     const key = `${x},${y}`;
-    if (this.revealed.has(key)) return;
+    const existing = this.grid[key];
+
+    if (this.revealed.has(key)) {
+      if (existing.type === 'exit') this._tryExit(existing);
+      return;
+    }
     if (this.energy <= 0) return;
 
     // Must be adjacent to a revealed tile
@@ -124,13 +129,7 @@ class FogMapLock {
         this.message = { text: `${tile.label || 'Bonus!'} +${gain} energy`, type: 'good' };
         break;
       case 'exit':
-        if (this.intel >= this.intelNeeded) {
-          this.won = true;
-          this.message = { text: 'Exit reached! Mission complete.', type: 'win' };
-          setTimeout(() => this.onSubmit(true), 600);
-        } else {
-          this.message = { text: `Exit found but need ${this.intelNeeded - this.intel} more intel`, type: 'warn' };
-        }
+        this._tryExit(tile);
         break;
       default:
         this.message = { text: 'Nothing here.', type: 'neutral' };
@@ -142,6 +141,16 @@ class FogMapLock {
     }
 
     this._render();
+  }
+
+  _tryExit(tile) {
+    if (this.intel >= this.intelNeeded) {
+      this.won = true;
+      this.message = { text: 'Exit reached! Mission complete.', type: 'win' };
+      setTimeout(() => this.onSubmit(true), 600);
+    } else {
+      this.message = { text: `Exit found but need ${this.intelNeeded - this.intel} more intel`, type: 'warn' };
+    }
   }
 
   _isAdjacent(x, y) {
@@ -189,6 +198,10 @@ class FogMapLock {
           cell.classList.add(`fmlk-type-${tile.type}`);
           cell.innerHTML = this._getTileIcon(tile);
           if (this.lastReveal === tile) cell.classList.add('fmlk-just-revealed');
+          if (tile.type === 'exit' && !this.won && !this.failed) {
+            cell.classList.add('fmlk-explorable');
+            cell.addEventListener('click', () => this._reveal(x, y));
+          }
         } else {
           cell.classList.add('fmlk-fog');
           if (isAdj && this.energy > 0 && !this.won && !this.failed) {

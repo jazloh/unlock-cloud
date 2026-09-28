@@ -1,0 +1,20 @@
+{
+  "style": "Digital illustration, futuristic tech startup",
+  "palette": ["#1a1a2e", "#16213e", "#0f3460", "#e94560", "#f97316", "#3b82f6"],
+  "mood": "Urgent but hopeful — production crisis resolving into triumph",
+  "lighting": "Dark ambient with warm orange and cool blue accent lighting, red alarm glow in early rooms transitioning to green success in final room",
+  "perspective": "Isometric game environment, clean lines, tech-forward aesthetic",
+  "elements": "Holographic displays, floating code panels, deployment dashboards, pipeline diagrams, .kiro/ config files",
+  "avoid": "People, readable text in images, cartoonish style",
+  "rooms": {
+    "the-crash": "Operations center with red alarm lights, crashed deployment dashboard",
+    "the-codebase": "Messy developer workspace with tangled code streams and error panels",
+    "the-design-room": "Empty architect's studio with blank holographic whiteboards",
+    "the-build-pipeline": "Pipeline construction zone with three glowing phase gates",
+    "deploy-gate": "Grand futuristic gate with green DEPLOY light, celebration mood"
+  },
+  "cover": {
+    "style": "Central futuristic gate with pipeline imagery, 'Escape to Production' title area, Kiro Labs logo subtly integrated",
+    "mood": "Exciting, challenging, professional"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "base_score": 50,
+  "time_bonus_per_minute": 2,
+  "hint_penalty": -2,
+  "wrong_combination_penalty": -3,
+  "lore_bonus": 3,
+  "lore_ids": [110, 310],
+  "all_lore_bonus": 5,
+  "stars": [
+    { "min": 60, "stars": 5 },
+    { "min": 45, "stars": 4 },
+    { "min": 30, "stars": 3 },
+    { "min": 15, "stars": 2 },
+    { "min":  0, "stars": 1 }
+  ],
+  "notes": "Booth-friendly. 2 lore cards + all_lore_bonus totals 11 pts. A no-hint finish with 3+ minutes remaining lands 5 stars; 3 stars (swag) is easy even with hints."
+}

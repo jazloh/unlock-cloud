@@ -2,10 +2,6 @@
 
 A mobile-first escape room card game that teaches through immersive storytelling. Players explore rooms, collect items, solve puzzles, and piece together narratives — all within a timed session.
 
-## Play Online
-
-https://beta.re-solve.cloud/app/home.html
-
 ## Run Locally
 
 1. Start a local server:
