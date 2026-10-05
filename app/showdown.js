@@ -137,7 +137,7 @@
 
   // Same-origin, versioned bank asset (SSOT §5). Tracks app/VERSION for the
   // ?v= cache-bust convention (NOT bumped by this task — local only).
-  const BANK_VERSION = '14';
+  const BANK_VERSION = '15';
   // Relocated under app/showdown/ (2026-09-21): the old app/data/ path was not
   // reliably present on S3. Local bundle stays the source (NOT the live
   // /showdown/bank proxy). ?v= cache-buster tracks app/VERSION (not bumped here).
@@ -174,6 +174,10 @@
     // icon on the ballot/reveal/share instead of the raw slug. Resolution itself
     // never depended on this map (it indexes BANK_INDEX[winning_category]).
     { id: 'FrugalArchitect',     label: 'Frugal Architect',      icon: '💰' },
+    // AWS Cloud & AI Day Kuala Lumpur, 2026-11-04 (docs/quiz-mode-question-bank-my2026.json).
+    { id: 'malaysia-aws',        label: 'Malaysia & AWS',        icon: '🇲🇾' },
+    { id: 'well-architected',    label: 'Well-Architected',      icon: '🏛️' },
+    { id: 'cio-playbook',        label: 'The CIO’s Playbook',    icon: '📘' },
   ];
   const CAT_BY_ID = Object.fromEntries(CATEGORIES.map(c => [c.id, c]));
 
@@ -187,6 +191,9 @@
     'startups-innovation': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c3.5 3 5 7 5 11l-2 3H9l-2-3c0-4 1.5-8 5-11z"/><path d="M9 18l3 4 3-4z"/></svg>',
     'cloud-fundamentals': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 2h11v16H7a2 2 0 0 0-2 2V4a2 2 0 0 1 2-2zm0 16h9v2H7a1 1 0 0 1 0-2z"/></svg>',
     'FrugalArchitect': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3.2c.5 0 .9.4.9.9v.6c1.4.2 2.5 1 2.8 2.2a.9.9 0 0 1-1.7.5c-.2-.6-.9-1-1.9-1-1.1 0-1.8.5-1.8 1.1 0 .5.4.8 1.9 1.1 1.9.4 3.4 1 3.4 2.8 0 1.4-1.1 2.3-2.7 2.5v.6a.9.9 0 0 1-1.8 0v-.6c-1.5-.2-2.6-1-3-2.2a.9.9 0 0 1 1.7-.6c.2.7 1 1.1 2.1 1.1 1.2 0 1.9-.5 1.9-1.1 0-.6-.5-.9-2-1.2-1.8-.4-3.3-1-3.3-2.7 0-1.3 1-2.2 2.6-2.5v-.6c0-.5.4-.9.9-.9z"/></svg>',
+    'malaysia-aws': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 3.2a8.8 8.8 0 1 0 6.9 14.4A7.2 7.2 0 1 1 13.5 3.2z"/><path d="M18 7.2l.9 1.9 2.1.2-1.6 1.4.5 2.1-1.9-1.1-1.9 1.1.5-2.1-1.6-1.4 2.1-.2z"/></svg>',
+    'well-architected': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5L2.5 7.5v1.5h19V7.5z"/><rect x="4.5" y="10.5" width="2.6" height="7.5"/><rect x="10.7" y="10.5" width="2.6" height="7.5"/><rect x="16.9" y="10.5" width="2.6" height="7.5"/><rect x="2.5" y="19.5" width="19" height="2"/></svg>',
+    'cio-playbook': '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3h10a3 3 0 0 1 3 3v15H7a2 2 0 0 1-2-2V3zm2 15v1h9v-1H7z"/><path d="M19 6h1v15h-1z"/></svg>',
   };
   const SD_FLAG_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3v18H3V3h2zm2 0h13l-2.6 4L20 11H7V3z"/></svg>';
   const iconSvg = (id) => SD_ICONS[id] || SD_ICONS.vault;
@@ -217,6 +224,7 @@
     puzzleIndex: 0,
     puzzlesCompleted: 0,
     _solvedIndex: null,   // last puzzleIndex already credited (see onPuzzleSolved)
+    _mountGen: 0,         // bumps per mounted lock; stale lock callbacks are ignored
     playStartMs: 0,
     instance: null,
     // misc UI
@@ -379,7 +387,11 @@
   const MOCK_SESSION_ID = 'mock-session-0001';
   const MOCK_GAME_STATUS = 'active';
 
-  const MOCK_CATEGORIES = CATEGORIES.map(c => c.id);
+  // The categories of the bundled bank (the KL bank since 2026-10-05), so the
+  // offline ballot shows what the event will. CATEGORIES above stays the full
+  // label registry, because a live bank may carry any of them.
+  const MOCK_CATEGORIES = ['agentic-ai', 'aws-core-services', 'security',
+    'malaysia-aws', 'well-architected', 'cio-playbook'];
 
   // REAL bank ids per type for the winning category (agentic-ai). Mixed shapes
   // so P4 exercises: mcq decoys→options, pillar True/False, spelling multi-word.
@@ -2094,6 +2106,11 @@
 
       } else if (type === 'spelling') {
         const words = [];
+        // Parallel to words: each entry's fill-in-the-blank `question` (the
+        // Malaysia bank has one per entry), '' when absent (the Hanoi bank).
+        // A substituted entry carries its own question, so a clue always matches
+        // its word. docs/showdown-spelling-clue-handoff.md.
+        const clues = [];
         ids.forEach((id) => {
           let e = lookup('spelling', id);
           if (!e) {
@@ -2104,6 +2121,7 @@
           const w = String(e.answer || '');
           if (!w) { errors.push(bad(winningCategory, type, id, 'empty spelling answer')); return; }
           words.push(w); // explicit deterministic order (picks[] order), NOT pool+pickCount
+          clues.push(nonEmpty(e.question) ? String(e.question) : '');
         });
         if (words.length) {
           // Showdown opts into all three spelling-lock affordances. They default
@@ -2112,8 +2130,8 @@
           // fills every slot the pool is empty, so returning a letter is the only
           // way to correct it.
           slots.push({ id: 'spelling:' + ids.join(','), ui: 'spelling-lock', category: winningCategory,
-            type, question: 'Unscramble each answer.',
-            config: { title: 'SPELL IT OUT', words, sequential: true, scrambleLetters: true,
+            type, question: clues.some(Boolean) ? 'Unscramble the letters to fill each blank.' : 'Unscramble each answer.',
+            config: { title: 'SPELL IT OUT', words, clues, sequential: true, scrambleLetters: true,
                       clickSlotToReturn: true, keepOnWrong: true, upperCase: true } });
         }
 
@@ -2137,16 +2155,38 @@
           questions.push({ question: e.question || '', options, answer });
         });
         if (questions.length) {
-          slots.push({ id: 'mcq:' + ids.join(','), ui: 'wager-lock', category: winningCategory, type,
-            question: 'Answer each question to reach the target.',
+          /* Replacement questions for a miss. A wrong answer used to bring back the
+           * SAME question, so clicking through its four options guaranteed success.
+           * Now a miss swaps in a fresh question from the same category, taken from
+           * this list in order. Ordered by a hash of session_id, so every device in
+           * a race gets the same replacements in the same order, and the picked
+           * questions are excluded so a replacement is never one already seen. */
+          const picked = new Set(questions.map((q) => q.question));
+          const spareQuestions = [];
+          const mcqBucket = (BANK_INDEX && BANK_INDEX[winningCategory] && BANK_INDEX[winningCategory].mcq) || null;
+          if (mcqBucket && typeof mcqBucket.forEach === 'function') {
+            const cands = [];
+            mcqBucket.forEach((entry, id) => {
+              if (!mcqUsable(entry) || picked.has(entry.question || '')) return;
+              cands.push({ id, entry });
+            });
+            cands.sort((a, b) => fnv1a(String(sessionId) + ':mcq-spare:' + a.id) -
+                                 fnv1a(String(sessionId) + ':mcq-spare:' + b.id));
+            cands.slice(0, 12).forEach(({ entry }) => {
+              const options = Array.isArray(entry.options) ? entry.options.slice() : [entry.answer].concat(entry.decoys);
+              spareQuestions.push({ question: entry.question || '', options, answer: entry.answer });
+            });
+          }
+          slots.push({ id: 'mcq:' + ids.join(','), ui: 'mcq-lock', category: winningCategory, type,
+            question: questions.length > 1 ? 'Answer ' + questions.length + ' questions in a row.' : 'Answer the question.',
             config: {
-              target: questions.length, questions,
-              // Single tier: Showdown has no stake CHOICE and no penalties, so this is
-              // informational only. Colour moved off the episode-era #eab308 onto the
-              // VS Select warning hue; wager/penalty/showOptions untouched because they
-              // drive the component's target logic and how many options are revealed.
-              stakes: [{ label: 'Confident', wager: 1, penalty: 0, color: '#ffb020', showOptions: 4 }],
-              revealAnswerOnWrong: false, repeatOnWrong: true,
+              target: questions.length, questions, spareQuestions,
+              // Same option order on every device in the race.
+              seed: String(sessionId) + ':mcq',
+              // Show a miss (with the right answer) for the whole lockout, then
+              // swap the question just before the scrim lifts, as pillar-lock does.
+              wrongHoldMs: (WRONG_LOCK_SEC * 1000) - 150,
+              autoAdvanceMs: 650,
             } });
         }
       }
@@ -2193,9 +2233,16 @@
     clearWrongLockout(); // drop any lingering lockout before swapping puzzles
     state._solvedIndex = null; // this puzzle has not been credited yet (see onPuzzleSolved)
     mount.innerHTML = '';
+    /* Callbacks are bound to THIS mount. Every lock fires onSubmit/onWrong from a
+     * timer (keypad and pillar wait 400ms, spelling 400ms, mcq 450ms), and a timer
+     * outlives the DOM it was created for. The per-index guard in onPuzzleSolved is
+     * reset right here, so a late callback from the PREVIOUS lock would otherwise
+     * be credited to this one: a solve the player never made. A stale callback is
+     * now a no-op, whatever the timing. */
+    const gen = ++state._mountGen;
     state.instance = mountPuzzle(mount, puzzle, {
-      onSolved: onPuzzleSolved,
-      onWrong: onPuzzleWrong,
+      onSolved: () => { if (gen === state._mountGen) onPuzzleSolved(); },
+      onWrong: (m) => { if (gen === state._mountGen) onPuzzleWrong(m); },
     });
 
     /* Puzzle swaps were a hard cut: one lock vanished and the next appeared in the
@@ -2259,9 +2306,11 @@
           });
         }
         case 'spelling-lock':
-          return new SpellingLock(mount, {
+          // Showdown's own copy (spelling-lock-showdown.js); episodes keep SpellingLock.
+          return new SpellingLockShowdown(mount, {
             title: cfg.title,
             words: cfg.words,
+            clues: cfg.clues,                         // fill-in-the-blank line per word
             sequential: cfg.sequential,
             scrambleLetters: cfg.scrambleLetters,
             clickSlotToReturn: cfg.clickSlotToReturn, // click a slot to return a letter
@@ -2270,16 +2319,20 @@
             onSubmit: () => hooks.onSolved(),
             onWrong: (m) => hooks.onWrong(m),
           });
-        case 'wager-lock':
-          return new WagerLock(mount, {
+        case 'mcq-lock': {
+          // Showdown's final puzzle (mcq-lock-showdown.js); episodes keep WagerLock.
+          const spares = Array.isArray(cfg.spareQuestions) ? cfg.spareQuestions : [];
+          return new McqLockShowdown(mount, {
             target: cfg.target,
             questions: cfg.questions,
-            stakes: cfg.stakes,
-            revealAnswerOnWrong: cfg.revealAnswerOnWrong,
-            repeatOnWrong: cfg.repeatOnWrong,
+            nextQuestion: (n) => (spares.length ? spares[(n - 1) % spares.length] : null),
+            seed: cfg.seed,
+            autoAdvanceMs: cfg.autoAdvanceMs,
+            wrongHoldMs: cfg.wrongHoldMs,
             onSubmit: () => hooks.onSolved(),
             onWrong: (m) => hooks.onWrong(m),
           });
+        }
         default:
           mount.innerHTML = '<div class="sd-error">Unknown puzzle type: ' + escapeHtml(puzzle.ui || 'undefined') + '</div>';
           return null;
@@ -2365,7 +2418,14 @@
     ov.setAttribute('role', 'status');
     host.appendChild(ov);
     let rem = WRONG_LOCK_SEC;
-    const paint = () => { ov.textContent = 'Wrong. Try again in ' + rem + 's'; };
+    // The final puzzle replaces the question after a miss, so "try again" would
+    // be wrong there.
+    const cur = state.puzzles[state.puzzleIndex];
+    const what = cur && cur.ui === 'mcq-lock' ? 'New question in ' : 'Wrong. Try again in ';
+    const pill = document.createElement('span');
+    pill.className = 'sd-lockout-pill';
+    ov.appendChild(pill);
+    const paint = () => { pill.textContent = what + rem + 's'; };
     paint();
     wrongTimer = setInterval(() => {
       rem -= 1;
@@ -3216,10 +3276,10 @@
     mount._sdPressSfx = true;
     mount.addEventListener('pointerdown', (e) => {
       const t = e.target && e.target.closest
-        ? e.target.closest('button, .wlock-reel, .splk-letter, .kpdlk-key, .wglk-option, .pillk-pillar')
+        ? e.target.closest('button, .wlock-reel, .splks-letter, .kpdlk-key, .mcqs-option, .pillk-pillar')
         : null;
       if (!t) return;
-      if (t.classList.contains('splk-action')) return;  // Undo / Clear
+      if (t.classList.contains('splks-action')) return; // Undo / Clear
       if (t.disabled) return;
       playSfxTick();
     }, { passive: true });

@@ -915,12 +915,23 @@ img, svg { display: block; max-width: 100%; }
 #play-mount.sd-locked { position: relative; }
 .sd-lockout {
   position: absolute; inset: 0; z-index: 5;
-  display: flex; align-items: center; justify-content: center;
-  padding: 12px; text-align: center;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 10px; text-align: center;
   border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--ink) 78%, transparent);
+  /* A light wash, not a blackout: the player should still read what they got
+     wrong — and on the final puzzle, the right answer it now reveals. Input is
+     blocked by `inert`, not by how opaque this is. */
+  background: color-mix(in srgb, var(--ink) 30%, transparent);
   color: var(--text);
-  font: 700 15px/1.3 var(--font-display); letter-spacing: .04em; text-transform: uppercase;
+}
+.sd-lockout-pill {
+  padding: 7px 14px;
+  background: var(--danger);
+  border-radius: var(--radius-sm);
+  color: var(--on-flood);
+  font: 700 13px/1.2 var(--font-display); letter-spacing: .05em; text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
 }
 
 /* SOLVED flash - restyled to a clean coral wash + display word, no neon halo. */
@@ -1318,8 +1329,8 @@ img, svg { display: block; max-width: 100%; }
 
 /* ── Shared plate: every tappable glyph target across the locks ──────── */
 #play-mount .kpdlk-key,
-#play-mount .splk-letter,
-#play-mount .wglk-option,
+#play-mount .splks-letter,
+#play-mount .mcqs-option,
 #play-mount .pillk-pillar {
   background: var(--lk-plate);
   border: 1px solid var(--lk-edge);
@@ -1330,8 +1341,8 @@ img, svg { display: block; max-width: 100%; }
   transition: background .12s ease-out, border-color .12s ease-out, color .12s ease-out;
 }
 #play-mount .kpdlk-key:hover,
-#play-mount .splk-letter:hover,
-#play-mount .wglk-option:hover,
+#play-mount .splks-letter:hover,
+#play-mount .mcqs-option:hover,
 #play-mount .pillk-pillar:hover {
   background: var(--lk-plate-hover);
   border-color: var(--lk-edge-hot);
@@ -1339,8 +1350,8 @@ img, svg { display: block; max-width: 100%; }
 /* Committed/pressed reads as a coral flood with ink glyphs — the same
    vocabulary as .sd-spec-badge, so "chosen" means one thing everywhere. */
 #play-mount .kpdlk-key:active,
-#play-mount .splk-letter:active,
-#play-mount .wglk-option:active,
+#play-mount .splks-letter:active,
+#play-mount .mcqs-option:active,
 #play-mount .pillk-pillar:active {
   background: var(--mode-color);
   border-color: var(--mode-color);
@@ -1348,8 +1359,8 @@ img, svg { display: block; max-width: 100%; }
   transition-duration: 0s;   /* press feedback must be instant */
 }
 #play-mount .kpdlk-key:focus-visible,
-#play-mount .splk-letter:focus-visible,
-#play-mount .wglk-option:focus-visible,
+#play-mount .splks-letter:focus-visible,
+#play-mount .mcqs-option:focus-visible,
 #play-mount .pillk-pillar:focus-visible {
   outline: 2px solid var(--focus); outline-offset: 2px;
 }
@@ -1469,19 +1480,19 @@ img, svg { display: block; max-width: 100%; }
 /* ── spelling ───────────────────────────────────────────────────────── */
 /* This is the big one: a green chalkboard in kraft frames becomes a plum
    machine bay. Every hardcoded green/brown below is replaced. */
-#play-mount .splk-board {
+#play-mount .splks-board {
   background: var(--panel);
   border: 1px solid var(--lk-edge);
   border-radius: var(--lk-radius);
   box-shadow: none;
 }
-#play-mount .splk-count {
+#play-mount .splks-count {
   color: var(--text-muted);
   font: 700 11px/1 var(--font-display);
   letter-spacing: .1em; text-transform: uppercase;
 }
-#play-mount .splk-slots { border-bottom: 1px dashed var(--lk-edge); }
-#play-mount .splk-slot {
+#play-mount .splks-slots { border-bottom: 1px dashed var(--lk-edge); }
+#play-mount .splks-slot {
   background: var(--lk-well);
   border: 1px solid var(--lk-edge);
   border-radius: var(--lk-radius);
@@ -1489,113 +1500,107 @@ img, svg { display: block; max-width: 100%; }
   font-family: var(--font-display);
 }
 /* A filled slot is committed → coral flood, matching every other lock. */
-#play-mount .splk-slot.filled {
+#play-mount .splks-slot.filled {
   background: var(--mode-color);
   border-color: var(--mode-color);
   color: var(--on-flood);
 }
-#play-mount .splk-slot-btn { cursor: pointer; }
-#play-mount .splk-slot-btn:hover {
+#play-mount .splks-slot-btn { cursor: pointer; }
+#play-mount .splks-slot-btn:hover {
   background: var(--danger);
   border-color: var(--danger);
   color: var(--on-flood);
 }
-#play-mount .splk-letter.used {
+#play-mount .splks-letter.used {
   background: transparent;
   border-color: var(--border-subtle);
   color: var(--border-subtle);
 }
-#play-mount .splk-action {
+#play-mount .splks-action {
   background: transparent;
   border: 1px solid var(--lk-edge);
   border-radius: var(--lk-radius);
   color: var(--text-secondary);
   font: 600 12px/1 var(--font-body);
 }
-#play-mount .splk-action:hover { border-color: var(--lk-edge-hot); color: var(--text); }
-#play-mount .splk-done,
-#play-mount .splk-complete-list { color: var(--text-secondary); font-family: var(--font-body); }
-#play-mount .splk-complete {
+#play-mount .splks-action:hover { border-color: var(--lk-edge-hot); color: var(--text); }
+#play-mount .splks-done,
+#play-mount .splks-complete-list { color: var(--text-secondary); font-family: var(--font-body); }
+#play-mount .splks-complete {
   background: color-mix(in srgb, var(--success) 10%, var(--panel));
   border: 1px solid var(--success);
   border-radius: var(--lk-radius);
 }
-#play-mount .splk-complete-title {
+#play-mount .splks-complete-title {
   color: var(--success);
   font: 700 16px/1 var(--font-display);
   letter-spacing: .04em; text-transform: uppercase;
 }
+/* Fill-in-the-blank clue (KL bank). It is the sentence the word completes, so it
+   reads as the question, not as fine print. */
+#play-mount .splks-clue {
+  color: var(--text);
+  font: 600 16px/1.45 var(--font-body);
+  text-align: center;
+}
+#play-mount .splks-blank { border-bottom-color: var(--mode-color); min-width: 3.4em; }
+#play-mount .splks-hint { color: var(--text-muted); font: 500 11px/1 var(--font-body); opacity: 1; }
+#play-mount .splks-done span {
+  padding: 3px 8px;
+  background: color-mix(in srgb, var(--success) 12%, var(--panel));
+  border: 1px solid var(--success); border-radius: var(--lk-radius);
+  color: var(--text); font: 700 11px/1.2 var(--font-display); letter-spacing: .06em;
+}
+#play-mount .splks-solved .splks-slot.filled { background: var(--success); border-color: var(--success); }
 
-/* ── wager (multiple choice) ────────────────────────────────────────── */
-#play-mount .wglk-option {
-  padding: 14px 16px;
-  font: 600 14px/1.35 var(--font-body);
-  text-align: left;
+/* ── multiple choice (mcq-lock-showdown.js) ─────────────────────────── */
+#play-mount .mcqs { gap: 12px; }
+#play-mount .mcqs-head {
+  color: var(--text-muted);
+  font: 700 11px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase;
 }
-#play-mount .wglk-bar-wrap,
-#play-mount .wglk-bar-track {
-  background: var(--lk-well);
-  border: 1px solid var(--lk-edge);
-  border-radius: var(--lk-radius);
-}
-#play-mount .wglk-bar { background: var(--mode-color); }
-#play-mount .wglk-score-label,
-#play-mount .wglk-stakes-title,
-#play-mount .wglk-stake-info,
-#play-mount .wglk-hist-title { color: var(--text-secondary); font-family: var(--font-body); }
-#play-mount .wglk-question {
+#play-mount .mcqs-pip { width: 26px; height: 5px; background: var(--lk-well); border: 1px solid var(--lk-edge); }
+#play-mount .mcqs-pip.is-done { background: var(--mode-color); border-color: var(--mode-color); }
+#play-mount .mcqs-pip.is-now:not(.is-done) { border-color: var(--mode-color); }
+#play-mount .mcqs-question {
   background: var(--panel);
   border: 1px solid var(--lk-edge);
   border-left: 3px solid var(--mode-color);
   border-radius: var(--lk-radius);
   color: var(--lk-glyph);
+  font: 600 16px/1.45 var(--font-body);
 }
-#play-mount .wglk-stake {
-  background: var(--lk-plate);
-  border: 1px solid var(--lk-edge);
-  border-radius: var(--lk-radius);
-  color: var(--lk-glyph);
-  font-family: var(--font-display);
+#play-mount .mcqs-option {
+  min-height: 56px;
+  padding: 10px 14px;
+  font: 600 14px/1.35 var(--font-body);
 }
-#play-mount .wglk-stake:hover { background: var(--lk-plate-hover); border-color: var(--lk-edge-hot); }
-#play-mount .wglk-stake.selected,
-#play-mount .wglk-stake[aria-pressed="true"] {
-  background: var(--mode-color); border-color: var(--mode-color); color: var(--on-flood);
+#play-mount .mcqs-key {
+  border-color: var(--lk-edge); color: var(--text-secondary);
+  font-family: var(--font-display); opacity: 1;
 }
-/* .wglk-correct / .wglk-wrong are the result PANEL, not text: the component gives
-   them a hardcoded rgba() wash (rgba(34,197,94,.1) / rgba(239,68,68,.1)) that the
-   --green/--red aliases cannot reach, which is why the "Correct!" panel read teal
-   in a plum world. Re-wash them from the VS Select tokens so they also follow the
-   light theme, which a fixed rgba() cannot. */
-#play-mount .wglk-round-result { border-radius: var(--lk-radius); }
-#play-mount .wglk-correct {
-  background: color-mix(in srgb, var(--success) 8%, var(--panel));
-  border-color: var(--success);
+#play-mount .mcqs-option:disabled { cursor: default; }
+/* A miss shows the right answer as well as the wrong pick — it's a teaching
+   game, and the question is replaced afterwards, so revealing it costs nothing. */
+#play-mount .mcqs-option.is-correct,
+#play-mount .mcqs-option.is-answer {
+  background: color-mix(in srgb, var(--success) 16%, var(--panel));
+  border-color: var(--success); color: var(--text);
 }
-#play-mount .wglk-wrong {
-  background: color-mix(in srgb, var(--danger) 12%, var(--panel));
-  border-color: var(--danger);
+#play-mount .mcqs-option.is-correct .mcqs-key,
+#play-mount .mcqs-option.is-answer .mcqs-key { border-color: var(--success); color: var(--success); }
+#play-mount .mcqs-option.is-wrong {
+  background: color-mix(in srgb, var(--danger) 16%, var(--panel));
+  border-color: var(--danger); color: var(--text);
 }
-#play-mount .wglk-correct .wglk-result-icon { color: var(--success); }
-#play-mount .wglk-wrong   .wglk-result-icon { color: var(--danger); }
-#play-mount .wglk-result-text { color: var(--text); font-family: var(--font-body); }
-#play-mount .wglk-result-delta { font-family: var(--font-display); font-variant-numeric: tabular-nums; }
-#play-mount .wglk-hist-stake {
-  background: var(--lk-well); color: var(--text-muted);
-  border: 1px solid var(--border-subtle); border-radius: var(--lk-radius);
-}
-#play-mount .wglk-next {
-  background: var(--mode-color); border: 1px solid var(--mode-color);
-  color: var(--on-flood);
-  font-family: var(--font-display); letter-spacing: .06em; text-transform: uppercase;
-  border-radius: var(--lk-radius);
-}
+#play-mount .mcqs-option.is-wrong .mcqs-key { border-color: var(--danger); color: var(--danger); }
+#play-mount .mcqs-foot { color: var(--text-muted); font: 500 12px/1.3 var(--font-body); opacity: 1; }
 
 /* Reduced motion: the plate transitions are the only motion added here. */
 @media (prefers-reduced-motion: reduce) {
   #play-mount .kpdlk-key,
-  #play-mount .splk-letter,
-  #play-mount .wglk-option,
+  #play-mount .splks-letter,
+  #play-mount .mcqs-option,
   #play-mount .pillk-pillar { transition: none; }
 }
 
@@ -1624,4 +1629,95 @@ img, svg { display: block; max-width: 100%; }
   /* No movement, and no fade either — a fade still reads as motion to someone
      who asked for none, and the swap is already obvious from the content. */
   .sd-mount-enter, .sd-q-enter { animation: none; }
+}
+
+/* ══════════════════ One screen, no scroll (2026-10-05) ══════════════════
+   Feedback from the Hanoi booth: the play screen scrolled on a laptop, and a
+   5-player race strip showed four lanes and hid the fifth behind an inner scroll.
+   Everything was one 460px column, so a 1366px-wide laptop stacked ~800px of UI
+   into ~650px of usable height while two thirds of the width sat empty.
+
+   Laptop width: two columns. Timer and race on the left (every lane visible), the
+   question and lock on the right. Half-screen pane: stacked, with the race strip
+   two lanes per row and the locks on tighter vertical rhythm. Targets, verified by
+   tools/verify-fit.mjs: no scroll and all 5 lanes visible at >= 680x600 CSS px,
+   which covers a 1366x768 laptop with browser chrome, and half of one. */
+
+@media (min-width: 900px) {
+  .sd-screen--play {
+    display: grid;
+    grid-template-columns: minmax(300px, 340px) minmax(0, 620px);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas: "bar puzzle" "race puzzle";
+    justify-content: center; align-content: start; align-items: start;
+    column-gap: 22px; row-gap: 12px;
+    height: 100vh; height: 100dvh; min-height: 0;
+    padding: 18px 24px 18px;
+    overflow-y: auto;   /* a safety valve only; the targets above fit without it */
+  }
+  .sd-screen--play > .sd-play-bar { grid-area: bar; max-width: none; }
+  .sd-screen--play > .sd-progress-panel {
+    grid-area: race; max-width: none;
+    max-height: 100%;   /* the grid row's height: lanes only scroll past ~10 players */
+  }
+  .sd-screen--play > .sd-puzzle-wrap { grid-area: puzzle; max-width: none; }
+}
+
+/* Half-pane / tablet width: lanes two per row once there are 4+ racers, so a
+   5-player table is three rows instead of five and nothing hides. */
+@media (min-width: 560px) and (max-width: 899px) {
+  .sd-screen--play > .sd-progress-panel:has(> .sd-pg-player:nth-child(4)) {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 10px; row-gap: 2px;
+    max-height: 168px;
+  }
+  .sd-progress-panel:has(> .sd-pg-player:nth-child(4)) .sd-pg-player {
+    grid-template-columns: 26px minmax(0, 1fr) auto auto; gap: 8px;
+  }
+  .sd-progress-panel:has(> .sd-pg-player:nth-child(4)) .sd-pg-ghost { width: 26px; height: 26px; }
+  .sd-screen--play > .sd-play-bar,
+  .sd-screen--play > .sd-progress-panel,
+  .sd-screen--play > .sd-puzzle-wrap { max-width: 640px; }
+}
+
+/* Short screens (a laptop once tabs and toolbars take their share): tighten the
+   vertical rhythm. Widths are untouched, so hit targets stay full size across. */
+@media (max-height: 820px) {
+  .sd-screen--play { padding-top: 10px; padding-bottom: 12px; gap: 10px; row-gap: 10px; }
+  .sd-play-bar { padding: 8px 14px; min-height: 40px; }
+  .sd-progress-panel { padding: 6px 10px; }
+  .sd-pg-player { padding: 4px 8px; }
+  .sd-puzzle-wrap { gap: 10px; }
+  .sd-question { padding: 10px 14px; font-size: 14px; }
+  .sd-puzzle-mount { padding: 10px 12px; }
+  .sd-play-log { min-height: 0; }
+  #play-mount .kpdlk-key { padding: 10px; }
+  #play-mount .kpdlk-display { min-height: 42px; }
+  #play-mount .mcqs-option { min-height: 48px; padding: 8px 12px; }
+  #play-mount .mcqs-question { padding: 10px 12px; font-size: 15px; }
+  #play-mount .splks-board { padding: 10px; gap: 8px; }
+  #play-mount .splks-clue { font-size: 15px; }
+}
+
+/* Short screens, every other screen: a 1280x720 display in Chrome leaves ~600px,
+   and the lobby and results cards were ~650px at 5 players. */
+@media (max-height: 680px) {
+  .sd-screen:not(.sd-screen--play) { padding-top: 12px; padding-bottom: 12px; gap: 10px; }
+  .sd-card { padding: 16px 18px; gap: 10px; }
+  .sd-code-banner { padding: 10px 14px; gap: 2px; }
+  .sd-code-value { font-size: 36px; }
+  .sd-player { min-height: 38px; padding: 6px 12px; }
+  .sd-player-list { gap: 4px; }
+  .sd-results-crown svg { width: 36px; height: 36px; }
+  .sd-your-results { padding: 8px 14px; gap: 2px; }
+  #results-board .sd-lb-row:nth-child(1) { min-height: 104px; padding-top: 18px; }
+  #results-board .sd-lb-row:nth-child(2) { min-height: 86px; padding-top: 14px; }
+  #results-board .sd-lb-row:nth-child(3) { min-height: 74px; padding-top: 14px; }
+  #results-board .sd-lb-row:nth-child(n+4) { padding-top: 8px; padding-bottom: 8px; }
+  #results-board .sd-lb-row:nth-child(1) .sd-lb-ghost { width: 44px; height: 44px; }
+  .sd-lb-ghost { width: 34px; height: 34px; }
+}
+@media (max-height: 700px) {
+  #play-mount .kpdlk-key { padding: 8px; }
+  .sd-puzzle-mount { padding-top: 8px; padding-bottom: 8px; }
 }

@@ -65,8 +65,10 @@ details pre{margin:0;padding:0 14px 14px;font-family:ui-monospace,'SF Mono',Cons
   <script src="puzzle/keypad-lock.js"></script>
   <script src="puzzle/word-lock.js"></script>
   <script src="puzzle/pillar-lock.js"></script>
-  <script src="puzzle/spelling-lock.js"></script>
-  <script src="puzzle/wager-lock.js"></script>
+  <!-- Showdown's own locks. spelling-lock.js / wager-lock.js are episode-only now;
+       verify-locks.mjs loads those separately to prove both can share a page. -->
+  <script src="puzzle/spelling-lock-showdown.js"></script>
+  <script src="puzzle/mcq-lock-showdown.js"></script>
 
   <script>
   /*
@@ -142,52 +144,67 @@ details pre{margin:0;padding:0 14px 14px;font-family:ui-monospace,'SF Mono',Cons
       key: 'spelling',
       tab: '4 · Spelling',
       kind: 'spelling-lock',
-      question: 'Unscramble each AWS service name.',
+      question: 'Unscramble the letters to fill each blank.',
       config: {
         title: 'SPELL IT OUT',
-        pool: ['DYNAMODB', 'CLOUDFRONT', 'LAMBDA'],
-        pickCount: 3,
+        // Explicit words + parallel clues, exactly as showdown.js builds the slot.
+        // The last entry has NO clue, to keep the Hanoi-bank look under test.
+        words: ['Service', 'Hooks', 'Lambda'],
+        clues: [
+          'In AWS, Simple Storage ___ is object storage.',
+          "Kiro's agent ___ run automated checks when a file is saved.",
+          ''
+        ],
         sequential: true,
-        scrambleLetters: true
+        scrambleLetters: true,
+        clickSlotToReturn: true,
+        keepOnWrong: true,
+        upperCase: true
       },
       init(mount, hooks) {
-        return new SpellingLock(mount, {
+        return new SpellingLockShowdown(mount, {
           title: this.config.title,
-          pool: this.config.pool,
-          pickCount: this.config.pickCount,
+          words: this.config.words,
+          clues: this.config.clues,
           sequential: this.config.sequential,
           scrambleLetters: this.config.scrambleLetters,
+          clickSlotToReturn: this.config.clickSlotToReturn,
+          keepOnWrong: this.config.keepOnWrong,
+          upperCase: this.config.upperCase,
           onSubmit: () => hooks.onSolved(),
           onWrong: (msg) => hooks.onWrong(msg)
         });
       }
     },
     {
-      key: 'wager',
-      tab: '5 · Wager',
-      kind: 'wager-lock',
-      question: 'Reach the target score. Answer each question to bank points.',
+      key: 'mcq',
+      tab: '5 · Multiple choice',
+      kind: 'mcq-lock',
+      question: 'Answer 2 questions in a row.',
       config: {
-        target: 6,
+        target: 2,
         questions: [
           { question: 'Which attack floods a server with traffic to take it offline?', options: ['DDoS', 'SQLi', 'XSS', 'CSRF'], answer: 'DDoS' },
-          { question: "What does '2FA' stand for?", options: ['Two-Factor Authentication', 'Two-File Access', 'Firewall Auth', 'Full Feature Access'], answer: 'Two-Factor Authentication' },
+          { question: "What does '2FA' stand for?", options: ['Two-Factor Authentication', 'Two-File Access', 'Firewall Auth', 'Full Feature Access'], answer: 'Two-Factor Authentication' }
+        ],
+        // A miss swaps in one of these instead of re-asking, so clicking through
+        // the options can never guarantee a solve.
+        spareQuestions: [
           { question: 'Which AWS service provides managed DDoS protection?', options: ['Shield', 'WAF', 'GuardDuty', 'Inspector'], answer: 'Shield' },
           { question: 'What does IAM stand for?', options: ['Identity and Access Management', 'Internet Access Monitor', 'Internal Auth Module', 'Integrated App Manager'], answer: 'Identity and Access Management' },
-          { question: 'Which encryption standard does AWS KMS use?', options: ['AES-256', 'RSA-128', 'MD5', 'SHA-1'], answer: 'AES-256' },
-          { question: 'What is the principle of granting minimum necessary permissions called?', options: ['Least privilege', 'Zero trust', 'Defense in depth', 'Separation of duties'], answer: 'Least privilege' }
+          { question: 'What is granting the minimum necessary permissions called?', options: ['Least privilege', 'Zero trust', 'Defense in depth', 'Separation of duties'], answer: 'Least privilege' }
         ],
-        stakes: [
-          { label: 'Confident', wager: 1, penalty: 0, color: '#eab308', showOptions: 4 }
-        ],
-        revealAnswerOnWrong: false
+        seed: 'puzzle-test',
+        wrongHoldMs: 2000
       },
       init(mount, hooks) {
-        return new WagerLock(mount, {
+        const spares = this.config.spareQuestions;
+        return new McqLockShowdown(mount, {
           target: this.config.target,
           questions: this.config.questions,
-          stakes: this.config.stakes,
-          revealAnswerOnWrong: this.config.revealAnswerOnWrong,
+          nextQuestion: (n) => spares[(n - 1) % spares.length],
+          seed: this.config.seed,
+          wrongHoldMs: this.config.wrongHoldMs,
           onSubmit: () => hooks.onSolved(),
           onWrong: (msg) => hooks.onWrong(msg)
         });

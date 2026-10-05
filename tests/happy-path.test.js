@@ -851,6 +851,11 @@ describe('EP-ETP — Escape to Production', () => {
     solvePuzzle(engine, 'terminal-deploy', 510, 'Deploy Command Accepted');
     // Defuse deploy requires and consumes AI-DLC Blueprint (315) + Pipeline Token (415)
     solvePuzzle(engine, 'defuse-deploy', 511, 'You\'re Hired!');
+    assertCompleted(engine);
+  });
+});
+
+// ============================================================
 // EP11 — War Room @ Tech Summit (booth walk-up, linear 100→600)
 // ============================================================
 describe('EP11 — War Room @ Tech Summit', () => {
