@@ -1,0 +1,4553 @@
+{
+  "_comment": "Showdown question bank for AWS Cloud & AI Day Kuala Lumpur (2026-11-04, Kuala Lumpur Convention Centre). Separate from the Hanoi bank. 6 categories: agentic-ai, aws-core-services, security (refreshed from the live bank snapshot of 2026-10-05, same IDs, Vietnam-specific and stale entries rewritten in place), malaysia-aws, well-architected, cio-playbook (VIP: Shaown Nandi, 'The CIO's Playbook'). Drafted 2026-10-05; per-category drafts and change log in docs/my2026-draft/. Authoring rules: .kiro/skills/showdown-question-bank/SKILL.md.",
+  "_type_to_lock_mapping": {
+    "numeric": "keypad-lock only.",
+    "word": "word-lock only. Answers here are 3-6 letters, matched against word-lock's per-position reel constraint — NOT the same pool as 'spelling'.",
+    "mcq": "wager-lock only (streak-lock was dropped from the lineup — see docs/quiz-mode-instructions-engine.md for why).",
+    "statement": "pillar-lock ONLY, repurposed as True/False sorter within a single category. TEMPLATE FORMAT: {correctValue|wrongValue} slot — the client picks the True (left) or False (right) side per session.",
+    "spelling": "spelling-lock only. Each entry's `answer` is the exact string passed into spelling-lock's `pool` config. Answers CAN be multi-word (e.g. 'Kiro Power', 'Direct Connect') — spelling-lock renders a visible gap between words in the slot layout and strips spaces only from the internal shuffled letter pool, so multi-word answers work fine and are not confusing. Rule applied when curating this array: letters and spaces only (no digits/symbols), 5-16 total letters excluding spaces. See docs/quiz-mode-instructions-engine.md for the length-range rationale. MALAYSIA BANK: every spelling entry also has a `question`, a fill-in-the-blank clue with exactly one ___ (the answer never appears in it). Needs the engine change in docs/showdown-spelling-clue-handoff.md; without it the clue is ignored."
+  },
+  "categories": {
+    "agentic-ai": {
+      "mcq": [
+        {
+          "id": "agentic-mcq-001",
+          "question": "What is Kiro CLI 3.0 built on, which is shared with Kiro IDE and Kiro Web?",
+          "answer": "A unified agent harness",
+          "decoys": [
+            "A distributed microkernel",
+            "A shared plugin marketplace",
+            "A universal container runtime"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-002",
+          "question": "What command starts spec-driven development in Kiro CLI 3.0?",
+          "answer": "/spec new <name>",
+          "decoys": [
+            "/create spec <name>",
+            "/spec init <name>",
+            "/new spec <name>"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-003",
+          "question": "What does Kiro CLI 3.0's 'Tangent' feature let you do?",
+          "answer": "Branch off a side-chat that keeps context",
+          "decoys": [
+            "Merge two chat sessions into one",
+            "Fork the CLI into a separate process",
+            "Schedule a task for later execution"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-004",
+          "question": "Which command converts 2.x agent configs inside a Kiro CLI V3 session?",
+          "answer": "/upgrade-agent",
+          "decoys": [
+            "/migrate-agent",
+            "/convert-agent",
+            "/agent-update"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-005",
+          "question": "In Kiro CLI V3, what was the 'Vibe' mode renamed to?",
+          "answer": "Default",
+          "decoys": [
+            "Classic",
+            "Freeform",
+            "Standard"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-006",
+          "question": "What must you use for AWS access in Kiro CLI 3.0, since the built-in aws_tool was removed?",
+          "answer": "MCP servers",
+          "decoys": [
+            "The legacy aws_tool",
+            "AWS CLI wrapper scripts",
+            "A dedicated aws-agent binary"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-007",
+          "question": "What replaced old trust flags like --trust-all-tools in Kiro CLI 3.0?",
+          "answer": "Capability-based permissions.yaml",
+          "decoys": [
+            "A GUI consent dialog",
+            "Environment variable flags",
+            "OAuth scopes"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-008",
+          "question": "How did Kiro CLI 3.0 change hook trigger naming?",
+          "answer": "From camelCase to PascalCase",
+          "decoys": [
+            "From snake_case to camelCase",
+            "From PascalCase to kebab-case",
+            "From camelCase to snake_case"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-009",
+          "question": "Is Kiro CLI 3.0's session format backward-compatible with 2.x?",
+          "answer": "No, it is not backward-compatible",
+          "decoys": [
+            "Yes, fully compatible",
+            "Only for spec sessions",
+            "Only with a migration flag enabled"
+          ],
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-mcq-010",
+          "question": "Which agent frameworks is Amazon Bedrock AgentCore compatible with?",
+          "answer": "Open-source ones like CrewAI and LangGraph",
+          "decoys": [
+            "Only AWS-native agent SDKs",
+            "Only Strands Agents, nothing else",
+            "TensorFlow Agents and PyTorch Lightning"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-mcq-011",
+          "question": "When did Amazon Bedrock AgentCore become generally available?",
+          "answer": "October 2025",
+          "decoys": [
+            "December 2025",
+            "June 2026",
+            "October 2026"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-mcq-012",
+          "question": "What does the AgentCore Runtime provide for hosting agents?",
+          "answer": "Serverless hosting with session isolation",
+          "decoys": [
+            "Dedicated EC2 clusters you manage",
+            "A shared multi-tenant VM pool",
+            "On-premises servers you provision"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-mcq-013",
+          "question": "Which AgentCore service turns APIs and Lambda functions into MCP-compatible tools?",
+          "answer": "Gateway",
+          "decoys": [
+            "Runtime",
+            "Browser",
+            "Code Interpreter"
+          ],
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-014",
+          "question": "Which AgentCore service gives agents a managed cloud browser to fill forms and navigate websites?",
+          "answer": "Browser",
+          "decoys": [
+            "Gateway",
+            "Memory",
+            "Policy"
+          ],
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-015",
+          "question": "Besides natural language, which policy language can you use to write AgentCore Policy rules?",
+          "answer": "Dogwood",
+          "decoys": [
+            "OPA Rego",
+            "XACML",
+            "HashiCorp Sentinel"
+          ],
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-016",
+          "question": "What format does AgentCore Observability use?",
+          "answer": "OpenTelemetry",
+          "decoys": [
+            "CloudWatch proprietary format",
+            "Prometheus format",
+            "AWS X-Ray only"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-017",
+          "question": "Which languages can AgentCore's Code Interpreter execute securely?",
+          "answer": "Python, JavaScript, TypeScript",
+          "decoys": [
+            "Python, Java, and Kotlin",
+            "Rust, Go, and C++ only",
+            "Only Python, nothing else"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-018",
+          "question": "Which Nova 2 model is described as the most intelligent, capable of complex reasoning and serving as a 'teacher' model?",
+          "answer": "Nova 2 Pro",
+          "decoys": [
+            "Nova 2 Lite",
+            "Nova 2 Sonic",
+            "Nova 2 Omni"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-019",
+          "question": "Which Nova 2 model is built for real-time voice conversations?",
+          "answer": "Nova 2 Sonic",
+          "decoys": [
+            "Nova 2 Lite",
+            "Nova 2 Pro",
+            "Nova 2 Omni"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-020",
+          "question": "Which Nova 2 model is the first reasoning model to both understand multimodal input AND generate text and images?",
+          "answer": "Nova 2 Omni",
+          "decoys": [
+            "Nova 2 Lite",
+            "Nova 2 Pro",
+            "Nova 2 Sonic"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-021",
+          "question": "Which Nova 2 model is positioned as fast and cost-effective for everyday tasks?",
+          "answer": "Nova 2 Lite",
+          "decoys": [
+            "Nova 2 Pro",
+            "Nova 2 Sonic",
+            "Nova 2 Omni"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-022",
+          "question": "Which AgentCore service is a central catalog of agents, MCP servers, tools, and skills?",
+          "answer": "Registry",
+          "decoys": [
+            "Gateway",
+            "Harness",
+            "Identity"
+          ],
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-023",
+          "question": "What new capability did Amazon Quick add in June 2026 with adjustable autonomy levels?",
+          "answer": "Autonomous agents",
+          "decoys": [
+            "Voice-only dashboards",
+            "Automated report scheduling",
+            "Manual approval-only workflows"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-mcq-024",
+          "question": "What does Amazon Quick's multi-dataset analytics (June 2026) let users do?",
+          "answer": "Query many sources in plain language",
+          "decoys": [
+            "Only query a single pre-joined dataset",
+            "Only export to CSV for external analysis",
+            "Require SQL joins written by hand first"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-mcq-025",
+          "question": "What was redesigned in Amazon Quick's June 2026 update to support thumbs up/down prioritization?",
+          "answer": "The activity feed",
+          "decoys": [
+            "The billing dashboard",
+            "The login screen",
+            "The dataset catalog"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-mcq-026",
+          "question": "What does Amazon Quick build per user to power personalization?",
+          "answer": "A personal knowledge graph",
+          "decoys": [
+            "A relational user profile table",
+            "A static preference file",
+            "A shared team ontology"
+          ],
+          "source": "https://aws.amazon.com/quick/faqs/"
+        },
+        {
+          "id": "agentic-mcq-027",
+          "question": "What is required to sign up for Amazon Quick's Free plan?",
+          "answer": "No AWS account or credit card",
+          "decoys": [
+            "An active AWS account with billing enabled",
+            "A corporate email domain only",
+            "A credit card for verification only"
+          ],
+          "source": "https://aws.amazon.com/quick/faqs/"
+        },
+        {
+          "id": "agentic-mcq-028",
+          "question": "What did AWS Security Agent's June 2026 Kiro Power integration let developers do?",
+          "answer": "Trigger security scans from their IDE",
+          "decoys": [
+            "Optimize their cloud costs automatically",
+            "Translate code between languages",
+            "Transcribe video calls in real time"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-029",
+          "question": "Besides Kiro Power, what else did AWS Security Agent add in June 2026?",
+          "answer": "A Claude Code plugin and exploit validation",
+          "decoys": [
+            "A built-in network firewall appliance",
+            "Support for on-premises-only installs",
+            "A manual pen testing checklist tool"
+          ],
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-030",
+          "question": "Which of these is NOT one of the three defining traits of 'Frontier Agents'?",
+          "answer": "Stateless",
+          "decoys": [
+            "Autonomous",
+            "Scalable",
+            "Long-running"
+          ],
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        }
+      ],
+      "numeric": [
+        {
+          "id": "agentic-num-001",
+          "question": "Amazon Nova 2 Omni supports text in more than how many languages?",
+          "answer": "200",
+          "unit": "languages",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-nova-2-omni-preview/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-num-002",
+          "question": "In what year did Amazon Bedrock AgentCore reach general availability?",
+          "answer": "2025",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-num-003",
+          "question": "In what month (as a number, 1-12) did Amazon Bedrock AgentCore become generally available?",
+          "answer": "10",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-num-004",
+          "question": "AWS Transform's agents are built on how many years of AWS migration and modernization experience?",
+          "answer": "20",
+          "unit": "years",
+          "source": "https://aws.amazon.com/transform/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-num-005",
+          "question": "Per AWS, Amazon Nova 2 Lite improves AWS Transform's tool-calling efficiency by up to what percent?",
+          "answer": "60",
+          "unit": "percent",
+          "source": "https://aws.amazon.com/nova/models/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-num-006",
+          "question": "AWS Transform says moving Windows workloads off costly licenses can cut operating costs by up to what percent?",
+          "answer": "70",
+          "unit": "percent",
+          "source": "https://aws.amazon.com/transform/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-num-007",
+          "question": "Amazon Nova 2 Omni accepts speech input in how many languages?",
+          "answer": "10",
+          "unit": "languages",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-nova-2-omni-preview/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-num-008",
+          "question": "In what year did Amazon Quick add autonomous agents with adjustable autonomy levels?",
+          "answer": "2026",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-num-009",
+          "question": "Every new Amazon Quick user gets a free trial of the Plus plan lasting how many days?",
+          "answer": "30",
+          "unit": "days",
+          "source": "https://aws.amazon.com/quick/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-num-010",
+          "question": "AgentCore Payments lets agents pay for APIs using the x___ protocol. What number completes the name?",
+          "answer": "402",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-num-011",
+          "question": "Per AWS, over how many customers use Amazon Nova models?",
+          "answer": "50000",
+          "unit": "customers",
+          "source": "https://aws.amazon.com/nova/models/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-num-012",
+          "question": "By default, how many AgentCore Evaluations configurations can you create per Region in an account?",
+          "answer": "1000",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluations.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-num-013",
+          "question": "In what year did AWS publish the Well-Architected Agentic AI Lens?",
+          "answer": "2026",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
+          "_verified": true
+        }
+      ],
+      "word": [
+        {
+          "id": "agentic-word-001",
+          "question": "Which AgentCore component manages agent authentication and access to tools? 'AgentCore ___'",
+          "answer": "Identity",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-word-002",
+          "question": "What is the name of Kiro CLI 3.0's feature for branching into a named side-conversation?",
+          "answer": "Tangent",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-word-003",
+          "question": "What is the last word naming the shared architecture underlying Kiro CLI 3.0, Kiro IDE, and Kiro Web: a 'unified agent ___'?",
+          "answer": "harness",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-word-004",
+          "question": "What file extension does the permissions file use in Kiro CLI 3.0's 'permissions.yaml', which replaced trust flags?",
+          "answer": "yaml",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-word-005",
+          "question": "What is the first word naming the built-in agent that handles spec-driven development in Kiro CLI 3.0, the '___ agent'?",
+          "answer": "Spec",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-word-006",
+          "question": "Which AgentCore component provides short/long-term and episodic memory for agents?",
+          "answer": "Memory",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-word-007",
+          "question": "AgentCore Policy's Dogwood language is compatible with which AWS open-source policy language?",
+          "answer": "Cedar",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-word-008",
+          "question": "What does Amazon Quick build per user: a personal knowledge ___?",
+          "answer": "graph",
+          "source": "https://aws.amazon.com/quick/faqs/"
+        },
+        {
+          "id": "agentic-word-009",
+          "question": "What is the second word naming the capability integrated into AWS Security Agent in June 2026 that lets developers trigger scans from their IDE: 'Kiro ___'?",
+          "answer": "Power",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "agentic-word-010",
+          "question": "Which Nova 2 model, built for real-time voice conversations, is named 'Nova 2 ___'?",
+          "answer": "Sonic",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-word-011",
+          "question": "Which Nova 2 model, generating both text and images, is named 'Nova 2 ___'?",
+          "answer": "Omni",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-word-012",
+          "question": "What is the first word describing AWS agents like Kiro Autonomous Agent, AWS Security Agent, and AWS DevOps Agent, announced at re:Invent 2025 as '___ Agents'?",
+          "answer": "Frontier",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-word-013",
+          "question": "Strands Agents supports three multi-agent patterns: Graph, Workflow, and ___.",
+          "answer": "Swarm",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
+          "_verified": true
+        }
+      ],
+      "statement": [
+        {
+          "id": "agentic-stmt-001",
+          "template": "Kiro CLI 3.0 is built on a {unified agent harness|standalone monolithic runtime} shared with Kiro IDE and Kiro Web.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-002",
+          "template": "Kiro CLI 3.0 introduces spec-driven development via a built-in {Spec agent|Debug agent}.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-003",
+          "template": "In Kiro CLI 3.0, the Tangent feature lets you {branch into a named side-conversation that inherits context|permanently delete the current conversation}.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-004",
+          "template": "Kiro CLI V3 {runs alongside 2.x, leaving your setup unchanged until you opt in|requires you to uninstall Kiro CLI 2.x before you can try it}.",
+          "source": "https://kiro.dev/docs/cli/v3/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-005",
+          "template": "Kiro CLI 3.0 {removed|kept unchanged} the built-in aws_tool, requiring MCP servers for AWS access.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-006",
+          "template": "Kiro CLI 3.0 replaced trust flags like --trust-all-tools with {capability-based permissions.yaml|a single global admin switch}.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-007",
+          "template": "Kiro CLI 3.0 changed hook trigger names from {camelCase to PascalCase|PascalCase to camelCase}.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-008",
+          "template": "Kiro CLI 3.0's session format is {not backward-compatible|fully backward-compatible} with 2.x.",
+          "source": "https://kiro.dev/docs/cli/v3/"
+        },
+        {
+          "id": "agentic-stmt-009",
+          "template": "Amazon Bedrock AgentCore reached general availability in {October 2025|March 2024}.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-stmt-010",
+          "template": "Amazon Bedrock AgentCore is {framework-agnostic, compatible with CrewAI, LangGraph, LlamaIndex, Google ADK, and OpenAI Agents SDK|locked exclusively to a single proprietary framework}.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-stmt-011",
+          "template": "AgentCore Runtime provides {low-latency serverless environments with session isolation|only single-tenant on-premises servers} for long-running agents.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available"
+        },
+        {
+          "id": "agentic-stmt-012",
+          "template": "AgentCore Gateway converts APIs and Lambda functions into MCP-compatible tools {with just a few lines of code|only after you rewrite each API by hand}.",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-013",
+          "template": "AgentCore Browser is a {fully managed cloud-based browser|browser that runs only on your own laptop} that lets agents fill forms and navigate websites.",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-014",
+          "template": "AgentCore's Code Interpreter can securely execute {JavaScript, TypeScript, and Python|only Java and Kotlin} code.",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-015",
+          "template": "AgentCore Observability uses the {OpenTelemetry|Syslog RFC 3164} format.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-016",
+          "template": "AgentCore Policy integrates with AgentCore {Gateway|Memory} to intercept every tool call before it runs.",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-017",
+          "template": "The Amazon Nova 2 family, announced at re:Invent December 2025, has {four|two} models.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-018",
+          "template": "Nova 2 Pro is described as the {most intelligent model, capable of serving as a teacher model|smallest and least capable model} in the Nova 2 family.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-019",
+          "template": "Nova 2 Sonic is built for {real-time voice conversations|batch image classification only}.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-020",
+          "template": "Nova 2 Omni is the first reasoning model to {understand multimodal input and generate text and images|only process plain text}.",
+          "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-stmt-021",
+          "template": "Amazon Nova 2 Lite includes built-in tools for {web grounding and code interpretation|video generation and music composition}.",
+          "source": "https://aws.amazon.com/nova/models/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-022",
+          "template": "In June 2026, Amazon Quick added autonomous agents with {adjustable autonomy levels, from step-by-step approval to goal-based execution|a single fixed autonomy level that cannot be changed}.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-023",
+          "template": "Amazon Quick's June 2026 update added multi-dataset analytics allowing natural-language queries across sources like Snowflake {without manual pre-joining|only after manually pre-joining every table}.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-stmt-024",
+          "template": "Amazon Quick's June 2026 update redesigned the activity feed to support {thumbs up/down prioritization|voice-only navigation}.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-quick/"
+        },
+        {
+          "id": "agentic-stmt-025",
+          "template": "Amazon Quick's Free plan requires {no AWS account or credit card|a valid AWS account with billing configured} to sign up.",
+          "source": "https://aws.amazon.com/quick/faqs/"
+        }
+      ],
+      "spelling": [
+        {
+          "id": "agentic-spell-001",
+          "question": "In Kiro, ___ files capture your team's standards so the agent follows them.",
+          "answer": "Steering",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-spell-002",
+          "question": "Kiro's agent ___ run automated checks when events like a file save happen.",
+          "answer": "Hooks",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-spell-003",
+          "question": "AgentCore ___ scores agent quality using LLM-as-a-Judge techniques.",
+          "answer": "Evaluations",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluations.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-spell-004",
+          "question": "___ is an open source, model-driven SDK from AWS for building AI agents.",
+          "answer": "Strands Agents",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-spell-005",
+          "question": "Amazon Bedrock ___ connect agents to your company documents for retrieval.",
+          "answer": "Knowledge Bases",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
+          "_verified": false
+        },
+        {
+          "id": "agentic-spell-006",
+          "question": "AgentCore ___ uses A/B testing to improve agent prompts and tool descriptions.",
+          "answer": "Optimization",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-spell-007",
+          "question": "Amazon Bedrock ___ help keep agents on topic and block harmful content.",
+          "answer": "Guardrails",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
+          "_verified": false
+        },
+        {
+          "id": "agentic-spell-008",
+          "question": "Amazon ___ is a service to build and manage fleets of agents that automate UI workflows.",
+          "answer": "Nova Act",
+          "source": "https://aws.amazon.com/nova/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-spell-009",
+          "question": "Amazon ___ lets you build your own frontier models using Nova.",
+          "answer": "Nova Forge",
+          "source": "https://aws.amazon.com/nova/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-spell-010",
+          "question": "AWS ___ uses agentic AI to modernize mainframe, Windows, and VMware workloads.",
+          "answer": "Transform",
+          "source": "https://aws.amazon.com/transform/",
+          "_verified": true
+        }
+      ]
+    },
+    "aws-core-services": {
+      "mcq": [
+        {
+          "id": "awscore-mcq-001",
+          "question": "Which AWS service provides resizable virtual servers in the cloud?",
+          "answer": "EC2",
+          "decoys": [
+            "S3",
+            "Lambda",
+            "DynamoDB"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-002",
+          "question": "Which AWS service is described as offering 'virtually unlimited secure object storage'?",
+          "answer": "S3",
+          "decoys": [
+            "EBS",
+            "EFS",
+            "Glacier"
+          ],
+          "source": "https://aws.amazon.com/s3/"
+        },
+        {
+          "id": "awscore-mcq-003",
+          "question": "Which relational database engine from AWS is compatible with both MySQL and PostgreSQL?",
+          "answer": "Aurora",
+          "decoys": [
+            "DynamoDB",
+            "Redshift",
+            "DocumentDB"
+          ],
+          "source": "https://aws.amazon.com/rds/aurora/"
+        },
+        {
+          "id": "awscore-mcq-004",
+          "question": "Which AWS service lets you run code without provisioning or managing servers?",
+          "answer": "Lambda",
+          "decoys": [
+            "EC2",
+            "Elastic Beanstalk",
+            "Lightsail"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-005",
+          "question": "Which AWS service is a fully managed key-value and document NoSQL database?",
+          "answer": "DynamoDB",
+          "decoys": [
+            "RDS",
+            "Aurora",
+            "ElastiCache"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-006",
+          "question": "Which AWS service is a global content delivery network (CDN)?",
+          "answer": "CloudFront",
+          "decoys": [
+            "Route 53",
+            "Global Accelerator",
+            "S3 Transfer Acceleration"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-007",
+          "question": "Which AWS service is a scalable Domain Name System (DNS) web service?",
+          "answer": "Route 53",
+          "decoys": [
+            "CloudFront",
+            "VPC",
+            "Direct Connect"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-008",
+          "question": "Which AWS service provides real-time search, observability, and security analytics?",
+          "answer": "OpenSearch Service",
+          "decoys": [
+            "Amazon Athena",
+            "CloudSearch",
+            "Kinesis Data Streams"
+          ],
+          "source": "https://aws.amazon.com/opensearch-service/",
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-009",
+          "question": "Which AWS service lets you provision a logically isolated section of the AWS Cloud to launch resources in a virtual network you define?",
+          "answer": "VPC",
+          "decoys": [
+            "Direct Connect",
+            "Transit Gateway",
+            "PrivateLink"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-010",
+          "question": "Which AWS service is a managed relational database service supporting engines like MySQL, PostgreSQL, and SQL Server?",
+          "answer": "RDS",
+          "decoys": [
+            "DynamoDB",
+            "Aurora Serverless",
+            "Redshift"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-011",
+          "question": "In what year did Amazon Web Services launch?",
+          "answer": "2006",
+          "decoys": [
+            "2002",
+            "2010",
+            "1998"
+          ],
+          "source": "https://aws.amazon.com/about-aws/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-mcq-012",
+          "question": "Which AWS service is used to store and manage Docker container images?",
+          "answer": "ECR",
+          "decoys": [
+            "ECS",
+            "EKS",
+            "CodeBuild"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-013",
+          "question": "Which AWS service is a fully managed container orchestration service built on AWS-native APIs?",
+          "answer": "ECS",
+          "decoys": [
+            "EKS",
+            "Fargate",
+            "Lightsail"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-014",
+          "question": "Which AWS service manages Kubernetes clusters without needing to install and operate your own control plane?",
+          "answer": "EKS",
+          "decoys": [
+            "ECS",
+            "ECR",
+            "App Runner"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-015",
+          "question": "Which AWS service is used to manage users, groups, roles, and permissions?",
+          "answer": "IAM",
+          "decoys": [
+            "KMS",
+            "Cognito",
+            "Organizations"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-016",
+          "question": "Which AWS service provides monitoring and observability through metrics, logs, and alarms?",
+          "answer": "CloudWatch",
+          "decoys": [
+            "CloudTrail",
+            "X-Ray",
+            "Config"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-017",
+          "question": "Which AWS service records account activity and API calls for auditing purposes?",
+          "answer": "CloudTrail",
+          "decoys": [
+            "CloudWatch",
+            "Config",
+            "GuardDuty"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-018",
+          "question": "Which AWS messaging service is a fully managed pub/sub notification service?",
+          "answer": "SNS",
+          "decoys": [
+            "SQS",
+            "EventBridge",
+            "SES"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-019",
+          "question": "Which AWS messaging service is a fully managed message queuing service?",
+          "answer": "SQS",
+          "decoys": [
+            "SNS",
+            "SES",
+            "Kinesis"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-020",
+          "question": "Which AWS service is used for block-level storage volumes attached to EC2 instances?",
+          "answer": "EBS",
+          "decoys": [
+            "S3",
+            "EFS",
+            "FSx"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-021",
+          "question": "Which AWS service provides a managed, scalable NFS file system for use with EC2?",
+          "answer": "EFS",
+          "decoys": [
+            "EBS",
+            "S3",
+            "Storage Gateway"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-022",
+          "question": "Which Amazon S3 storage class family is built for long-term archival at the lowest cost?",
+          "answer": "S3 Glacier",
+          "decoys": [
+            "S3 Standard",
+            "S3 Intelligent-Tiering",
+            "S3 One Zone-IA"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-023",
+          "question": "Aurora's storage auto-scales up to what maximum size per database instance?",
+          "answer": "256 TiB",
+          "decoys": [
+            "64 TiB",
+            "100 TiB",
+            "1 PiB"
+          ],
+          "source": "https://aws.amazon.com/aurora/faqs/"
+        },
+        {
+          "id": "awscore-mcq-024",
+          "question": "Which AWS service is a fully managed data warehouse used for analytics?",
+          "answer": "Redshift",
+          "decoys": [
+            "Athena",
+            "EMR",
+            "Glue"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-025",
+          "question": "Which AWS service lets you run SQL queries directly on data in S3 without loading it into a database?",
+          "answer": "Athena",
+          "decoys": [
+            "DynamoDB",
+            "Kinesis",
+            "Glue"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-026",
+          "question": "Which AWS service is used to establish a dedicated private network connection from an on-premises data center to AWS?",
+          "answer": "Direct Connect",
+          "decoys": [
+            "VPN Gateway",
+            "Transit Gateway",
+            "PrivateLink"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-027",
+          "question": "Which AWS service automatically distributes incoming application traffic across multiple targets?",
+          "answer": "Elastic Load Balancing",
+          "decoys": [
+            "Amazon Route 53",
+            "Amazon CloudFront",
+            "EC2 Auto Scaling"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-028",
+          "question": "Which AWS service automatically adjusts the number of EC2 instances based on demand?",
+          "answer": "Auto Scaling",
+          "decoys": [
+            "Elastic Load Balancing",
+            "Elastic Beanstalk",
+            "Systems Manager"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-029",
+          "question": "Which AWS service manages encryption keys used to protect data across AWS services?",
+          "answer": "KMS",
+          "decoys": [
+            "IAM",
+            "Secrets Manager",
+            "ACM"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "awscore-mcq-030",
+          "question": "Per the AWS Global Infrastructure page, how many geographic Regions does AWS operate?",
+          "answer": "39",
+          "decoys": [
+            "31",
+            "45",
+            "52"
+          ],
+          "source": "https://aws.amazon.com/about-aws/global-infrastructure/",
+          "_verified": true
+        }
+      ],
+      "numeric": [
+        {
+          "id": "awscore-num-001",
+          "question": "In what year did the AWS Asia Pacific (Malaysia) Region open?",
+          "answer": "2024",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-num-002",
+          "question": "Per the AWS Global Infrastructure page, how many Availability Zones does AWS operate?",
+          "answer": "124",
+          "source": "https://aws.amazon.com/about-aws/global-infrastructure/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-num-003",
+          "question": "Up to how many low-latency read replicas can an Aurora MySQL or PostgreSQL cluster have?",
+          "answer": "15",
+          "unit": "replicas",
+          "source": "https://docs.aws.amazon.com/rds/latest/auroraextendedcontent/aurora-faq.html",
+          "_verified": true
+        },
+        {
+          "id": "awscore-num-004",
+          "question": "Up to how many TiB of storage can a single Aurora database instance auto-scale to?",
+          "answer": "256",
+          "source": "https://aws.amazon.com/aurora/faqs/"
+        },
+        {
+          "id": "awscore-num-005",
+          "question": "Up to what percentage better performance did Aurora Serverless gain in its April 2026 update?",
+          "answer": "30",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/04/aurora-serverless-smarter-scaling/"
+        },
+        {
+          "id": "awscore-num-006",
+          "question": "What is the standard TCP port number for HTTPS traffic?",
+          "answer": "443",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-007",
+          "question": "What is the standard TCP port number for HTTP traffic?",
+          "answer": "80",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-008",
+          "question": "What is the standard TCP port number for SSH?",
+          "answer": "22",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-009",
+          "question": "As of AWS's December 2025 update, what is the maximum size, in TB, of a single Amazon S3 object?",
+          "answer": "50",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-s3-maximum-object-size-50-tb"
+        },
+        {
+          "id": "awscore-num-010",
+          "question": "How many bits make up an IPv4 address?",
+          "answer": "32",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-011",
+          "question": "What is the maximum item size, in KB, supported by a single DynamoDB item?",
+          "answer": "400",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-012",
+          "question": "What is the maximum timeout, in minutes, you can set for a single AWS Lambda invocation?",
+          "answer": "15",
+          "unit": "minutes",
+          "source": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-timeout.html",
+          "_verified": false
+        },
+        {
+          "id": "awscore-num-013",
+          "question": "How many digits are in a standard AWS account ID?",
+          "answer": "12",
+          "source": "https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-identifiers.html"
+        }
+      ],
+      "word": [
+        {
+          "id": "awscore-word-001",
+          "question": "What is a single virtual server in Amazon EC2 called?",
+          "answer": "Instance",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-002",
+          "question": "In Amazon S3, what is the container that holds your objects called?",
+          "answer": "Bucket",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-003",
+          "question": "Which AWS acronym stands for 'Virtual Private Cloud'?",
+          "answer": "VPC",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-004",
+          "question": "Which AWS service acronym stands for 'Relational Database Service'?",
+          "answer": "RDS",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-005",
+          "question": "Which AWS acronym stands for 'Identity and Access Management'?",
+          "answer": "IAM",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-006",
+          "question": "Which AWS service acronym stands for 'Simple Notification Service'?",
+          "answer": "SNS",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-007",
+          "question": "Which AWS service acronym stands for 'Simple Queue Service'?",
+          "answer": "SQS",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-008",
+          "question": "Which AWS service acronym stands for 'Elastic Block Store'?",
+          "answer": "EBS",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-009",
+          "question": "Which AWS service acronym stands for 'Elastic File System'?",
+          "answer": "EFS",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-010",
+          "question": "Which AWS service acronym stands for 'Key Management Service'?",
+          "answer": "KMS",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-011",
+          "question": "Which AWS service acronym stands for 'Elastic Container Service'?",
+          "answer": "ECS",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-012",
+          "question": "Which AWS service acronym stands for 'Elastic Kubernetes Service'?",
+          "answer": "EKS",
+          "_verified": false
+        },
+        {
+          "id": "awscore-word-013",
+          "question": "Which AWS acronym stands for 'Amazon Resource Name'?",
+          "answer": "ARN",
+          "_verified": false
+        }
+      ],
+      "statement": [
+        {
+          "id": "awscore-stmt-001",
+          "template": "Amazon Aurora auto-scales storage up to {256 TiB|64 TiB} per database instance, decoupled from compute.",
+          "source": "https://aws.amazon.com/aurora/faqs/"
+        },
+        {
+          "id": "awscore-stmt-002",
+          "template": "Amazon Aurora is compatible with {MySQL and PostgreSQL|Oracle and SQL Server}.",
+          "source": "https://aws.amazon.com/rds/aurora/"
+        },
+        {
+          "id": "awscore-stmt-003",
+          "template": "Aurora Serverless's April 2026 update delivered up to {30%|75%} better performance along with smarter scaling, while still scaling to zero.",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/04/aurora-serverless-smarter-scaling/"
+        },
+        {
+          "id": "awscore-stmt-004",
+          "template": "The AWS Asia Pacific (Malaysia) Region uses the API name {ap-southeast-5|ap-southeast-3}.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-stmt-005",
+          "template": "The AWS Asia Pacific (Malaysia) Region opened in 2024 with {three|two} Availability Zones.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-stmt-006",
+          "template": "Amazon Aurora replicates your data across {three|two} Availability Zones, and you pay for only one copy.",
+          "source": "https://docs.aws.amazon.com/rds/latest/auroraextendedcontent/aurora-faq.html",
+          "_verified": true
+        },
+        {
+          "id": "awscore-stmt-007",
+          "template": "Amazon S3 is marketed as offering {virtually unlimited secure object storage|fixed-capacity block storage}.",
+          "source": "https://aws.amazon.com/s3/"
+        },
+        {
+          "id": "awscore-stmt-008",
+          "template": "Amazon OpenSearch Service provides {real-time search, observability, and security analytics|batch-only ETL processing}.",
+          "source": "https://aws.amazon.com/opensearch-service/"
+        },
+        {
+          "id": "awscore-stmt-009",
+          "template": "Amazon EC2 provides {resizable virtual servers|serverless container orchestration} in the cloud.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-010",
+          "template": "AWS Lambda lets you run code {without provisioning or managing servers|only on dedicated bare-metal hosts}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-011",
+          "template": "Amazon DynamoDB is a fully managed {NoSQL key-value and document database|relational SQL database}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-012",
+          "template": "Amazon CloudFront is a {global content delivery network|regional-only load balancer}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-013",
+          "template": "Amazon Route 53 is a scalable {Domain Name System (DNS) web service|block storage service}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-014",
+          "template": "A VPC lets you provision a {logically isolated virtual network|physically separate data center} within AWS.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-015",
+          "template": "Amazon RDS supports managed relational engines such as {MySQL and PostgreSQL|MongoDB and Cassandra}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-016",
+          "template": "The standard TCP port for HTTPS traffic is {443|8080}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-017",
+          "template": "The standard TCP port for HTTP traffic is {80|21}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-018",
+          "template": "Amazon S3 storage classes include an archival tier called {Glacier|IceVault}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-019",
+          "template": "Amazon EBS provides {block-level storage volumes|object storage buckets} for use with EC2 instances.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-020",
+          "template": "Amazon EFS provides a {managed scalable NFS file system|managed relational database engine}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-021",
+          "template": "AWS IAM is used to manage {users, groups, roles, and permissions|EC2 instance hardware allocation}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-022",
+          "template": "Amazon CloudWatch is primarily used for {monitoring metrics, logs, and alarms|managing DNS records}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-023",
+          "template": "AWS CloudTrail is used to {record account activity and API calls for auditing|render server-side web pages}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-024",
+          "template": "Amazon Redshift is a fully managed {data warehouse for analytics|real-time video transcoding service}.",
+          "_verified": false
+        },
+        {
+          "id": "awscore-stmt-025",
+          "template": "AWS Direct Connect establishes a {dedicated private network connection|public internet VPN tunnel} from on-premises to AWS.",
+          "_verified": false
+        }
+      ],
+      "spelling": [
+        {
+          "id": "awscore-spell-001",
+          "question": "Amazon ___ global tables replicate your NoSQL data across multiple AWS Regions.",
+          "answer": "DynamoDB",
+          "source": "https://aws.amazon.com/dynamodb/global-tables/",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-002",
+          "question": "Amazon ___ delivers content through more than 750 points of presence worldwide.",
+          "answer": "CloudFront",
+          "source": "https://aws.amazon.com/about-aws/global-infrastructure/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-spell-003",
+          "question": "Amazon ___ alarms can notify you when a metric crosses a threshold you set.",
+          "answer": "CloudWatch",
+          "source": "https://aws.amazon.com/cloudwatch/",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-004",
+          "question": "AWS ___ Lake lets you run SQL queries over your account activity events.",
+          "answer": "CloudTrail",
+          "source": "https://aws.amazon.com/cloudtrail/lake/",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-005",
+          "question": "Amazon ___ Serverless runs data warehouse analytics without managing clusters.",
+          "answer": "Redshift",
+          "source": "https://aws.amazon.com/redshift/redshift-serverless/",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-006",
+          "question": "Uploading a file to S3 can trigger an AWS ___ function to process it.",
+          "answer": "Lambda",
+          "source": "https://aws.amazon.com/lambda/",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-007",
+          "question": "Amazon ___ DSQL is a serverless, distributed SQL database.",
+          "answer": "Aurora",
+          "source": "https://docs.aws.amazon.com/rds/latest/auroraextendedcontent/aurora-faq.html",
+          "_verified": true
+        },
+        {
+          "id": "awscore-spell-008",
+          "question": "Restoring an object from S3 ___ Flexible Retrieval can take minutes to hours.",
+          "answer": "Glacier",
+          "source": "https://aws.amazon.com/s3/storage-classes/glacier/",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-009",
+          "question": "Amazon ___ is serverless, so you pay per query for the data it scans.",
+          "answer": "Athena",
+          "source": "https://aws.amazon.com/athena/pricing/",
+          "_verified": false
+        },
+        {
+          "id": "awscore-spell-010",
+          "question": "AWS ___ gives you a dedicated private link from your data center to AWS, with locations in Malaysia.",
+          "answer": "Direct Connect",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": false
+        }
+      ]
+    },
+    "security": {
+      "mcq": [
+        {
+          "id": "security-mcq-001",
+          "question": "AWS Continuum penetration testing starts with which list before tailoring its attack plan to your app?",
+          "answer": "OWASP Top 10",
+          "options": [
+            "OWASP Top 10",
+            "CIS Benchmarks",
+            "NIST 800-53",
+            "PCI DSS checklist"
+          ],
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-002",
+          "question": "AWS Security Agent is now part of which AWS service?",
+          "answer": "AWS Continuum",
+          "options": [
+            "AWS Continuum",
+            "AWS Well-Architected Tool",
+            "AWS Trusted Advisor",
+            "AWS Control Tower"
+          ],
+          "source": "https://aws.amazon.com/security-agent/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-003",
+          "question": "AWS Security Agent encrypts customer data at rest using which service?",
+          "answer": "AWS KMS",
+          "options": [
+            "AWS KMS",
+            "AWS Secrets Manager",
+            "AWS CloudHSM",
+            "AWS Certificate Manager"
+          ],
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-004",
+          "question": "Where does AWS Continuum store its penetration test logs?",
+          "answer": "CloudWatch in your own account",
+          "options": [
+            "CloudWatch in your own account",
+            "A shared AWS analytics account",
+            "A third-party SIEM only",
+            "An S3 bucket owned by AWS"
+          ],
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-005",
+          "question": "Which AWS agent checks deployment health and dependencies, complementing AWS Continuum?",
+          "answer": "AWS DevOps Agent",
+          "options": [
+            "AWS DevOps Agent",
+            "AWS Cost Agent",
+            "AWS Migration Agent",
+            "AWS Support Agent"
+          ],
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-006",
+          "question": "Must an app be hosted on AWS for AWS Continuum to pen test it?",
+          "answer": "No, it can run anywhere",
+          "options": [
+            "No, it can run anywhere",
+            "Yes, it must run on EC2",
+            "Yes, it must run on Lambda",
+            "Only if hosted in GovCloud"
+          ],
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-007",
+          "question": "In the June 2026 update, which two developer tools got new plugin integration with AWS Security Agent?",
+          "options": [
+            "Kiro Power and Claude Code",
+            "Visual Studio and Eclipse",
+            "Postman and Insomnia",
+            "Jenkins and CircleCI"
+          ],
+          "answer": "Kiro Power and Claude Code",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-mcq-008",
+          "question": "What new capability did the June 2026 update add that executes findings in an isolated sandbox to prove exploitability?",
+          "options": [
+            "Simulated exploit validation",
+            "Automated patch deployment",
+            "Live production rollback",
+            "Continuous compliance scoring"
+          ],
+          "answer": "Simulated exploit validation",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-mcq-009",
+          "question": "Which of these was NOT listed among the June 2026 integration partners for AWS Security Agent?",
+          "options": [
+            "Jira Service Management",
+            "GitLab.com",
+            "GitHub Enterprise",
+            "Bitbucket"
+          ],
+          "answer": "Jira Service Management",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-mcq-010",
+          "question": "When was AWS Continuum introduced?",
+          "options": [
+            "June 2026",
+            "January 2025",
+            "December 2025",
+            "March 2026"
+          ],
+          "answer": "June 2026",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-mcq-011",
+          "question": "AWS Continuum is described as a security initiative operating at what speed?",
+          "options": [
+            "Machine speed",
+            "Human review speed",
+            "Quarterly audit speed",
+            "Batch processing speed"
+          ],
+          "answer": "Machine speed",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-mcq-012",
+          "question": "Which statement about AWS Continuum's use of customer data is TRUE?",
+          "answer": "It is not used for model training",
+          "options": [
+            "It is not used for model training",
+            "It is shared with third parties",
+            "It trains all future models",
+            "It is sold to security vendors"
+          ],
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-013",
+          "question": "During preview, how many free design reviews per account per month does AWS Continuum allow?",
+          "answer": "200",
+          "options": [
+            "200",
+            "50",
+            "1,000",
+            "500"
+          ],
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-014",
+          "question": "During preview, how many free code reviews per account per month does AWS Continuum allow?",
+          "answer": "1,000",
+          "options": [
+            "1,000",
+            "200",
+            "100",
+            "2,000"
+          ],
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-015",
+          "question": "What pricing model does AWS Continuum use for penetration testing?",
+          "answer": "Pay-as-you-go per task-hour",
+          "options": [
+            "Pay-as-you-go per task-hour",
+            "Flat annual license",
+            "Free forever",
+            "One-time setup fee only"
+          ],
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-016",
+          "question": "How long is the free trial for AWS Continuum penetration testing?",
+          "answer": "2 months",
+          "options": [
+            "2 months",
+            "30 days",
+            "1 year",
+            "6 months"
+          ],
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-017",
+          "question": "What is the core principle of Zero Trust security?",
+          "options": [
+            "Never trust, always verify",
+            "Trust internal networks by default",
+            "Verify once per session only",
+            "Trust but audit later"
+          ],
+          "answer": "Never trust, always verify",
+          "_verified": true,
+          "source": "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"
+        },
+        {
+          "id": "security-mcq-018",
+          "question": "Which AgentCore service intercepts every agent tool call to enforce your rules?",
+          "answer": "Policy",
+          "options": [
+            "Policy",
+            "Memory",
+            "Runtime",
+            "Browser"
+          ],
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-019",
+          "question": "Which of these is one of the four pillars of IAM (Identity and Access Management)?",
+          "options": [
+            "Authorization",
+            "Encryption",
+            "Firewalling",
+            "Load balancing"
+          ],
+          "answer": "Authorization",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-mcq-020",
+          "question": "Which IAM pillar answers the question 'who are you'?",
+          "options": [
+            "Authentication",
+            "Provisioning",
+            "Audit",
+            "Authorization"
+          ],
+          "answer": "Authentication",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-mcq-021",
+          "question": "Which IAM pillar involves tracking activity for later review?",
+          "options": [
+            "Audit",
+            "Provisioning",
+            "Authentication",
+            "Federation"
+          ],
+          "answer": "Audit",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-mcq-022",
+          "question": "What does the acronym MFA stand for?",
+          "options": [
+            "Multi-Factor Authentication",
+            "Managed File Access",
+            "Multiple Firewall Assignment",
+            "Master File Authorization"
+          ],
+          "answer": "Multi-Factor Authentication",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-023",
+          "question": "What does SQLi stand for in cybersecurity?",
+          "options": [
+            "SQL Injection",
+            "Secure Query Layer interface",
+            "Simple Query Language index",
+            "Server Query Load interceptor"
+          ],
+          "answer": "SQL Injection",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-024",
+          "question": "Which attack floods a system with traffic from many sources to make it unavailable?",
+          "answer": "DDoS",
+          "options": [
+            "DDoS",
+            "Phishing",
+            "SQL injection",
+            "Cross-site scripting"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-025",
+          "question": "Which social engineering attack tricks users into revealing sensitive information via fake emails or sites?",
+          "options": [
+            "Phishing",
+            "DDoS",
+            "Buffer overflow",
+            "Man-in-the-middle"
+          ],
+          "answer": "Phishing",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-026",
+          "question": "What does the 'S' in HTTPS stand for?",
+          "options": [
+            "Secure",
+            "System",
+            "Server",
+            "Session"
+          ],
+          "answer": "Secure",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-027",
+          "question": "Which security practice converts readable data into an unreadable format using a key?",
+          "answer": "Encryption",
+          "options": [
+            "Encryption",
+            "Compression",
+            "Deduplication",
+            "Caching"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-028",
+          "question": "Which principle limits a user's access to only what is needed to perform their job?",
+          "options": [
+            "Least privilege",
+            "Zero trust",
+            "Defense in depth",
+            "Separation of duties"
+          ],
+          "answer": "Least privilege",
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-029",
+          "question": "What is the primary purpose of a firewall?",
+          "answer": "Filter traffic based on rules",
+          "options": [
+            "Filter traffic based on rules",
+            "Encrypt data at rest",
+            "Generate random passwords",
+            "Compress log files"
+          ],
+          "_verified": false
+        },
+        {
+          "id": "security-mcq-030",
+          "question": "Which term describes malicious software designed to block access to a system or data until a ransom is paid?",
+          "options": [
+            "Ransomware",
+            "Adware",
+            "Spyware",
+            "Rootkit"
+          ],
+          "answer": "Ransomware",
+          "_verified": false
+        }
+      ],
+      "numeric": [
+        {
+          "id": "security-num-001",
+          "question": "AWS Continuum penetration testing is billed at how many US dollars per task-hour?",
+          "answer": "50",
+          "unit": "USD",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-num-002",
+          "question": "What is the standard port number for Remote Desktop Protocol (RDP)?",
+          "answer": "3389",
+          "unit": "port",
+          "_verified": false
+        },
+        {
+          "id": "security-num-003",
+          "question": "During preview, what is the maximum number of free design reviews per account per month in AWS Continuum?",
+          "answer": "200",
+          "unit": "reviews/month",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-num-004",
+          "question": "During preview, what is the maximum number of free code reviews per account per month in AWS Continuum?",
+          "answer": "1000",
+          "unit": "reviews/month",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-num-005",
+          "question": "In what year was AWS Continuum introduced?",
+          "answer": "2026",
+          "unit": "year",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-num-006",
+          "question": "What is the standard port number for DNS?",
+          "answer": "53",
+          "unit": "port",
+          "_verified": false
+        },
+        {
+          "id": "security-num-007",
+          "question": "How many characters long is an AWS access key ID?",
+          "answer": "20",
+          "unit": "characters",
+          "source": "https://docs.aws.amazon.com/IAM/latest/APIReference/API_AccessKey.html",
+          "_verified": false
+        },
+        {
+          "id": "security-num-008",
+          "question": "By default, how many days does AWS KMS wait before deleting a key you schedule for deletion?",
+          "answer": "30",
+          "unit": "days",
+          "source": "https://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html",
+          "_verified": false
+        },
+        {
+          "id": "security-num-009",
+          "question": "What is the standard port number for HTTPS traffic?",
+          "answer": "443",
+          "unit": "port",
+          "_verified": false
+        },
+        {
+          "id": "security-num-010",
+          "question": "What is the standard port number for unencrypted HTTP traffic?",
+          "answer": "80",
+          "unit": "port",
+          "_verified": false
+        },
+        {
+          "id": "security-num-011",
+          "question": "What is the standard port number for SSH?",
+          "answer": "22",
+          "unit": "port",
+          "_verified": false
+        },
+        {
+          "id": "security-num-012",
+          "question": "Per the NIST AES standard (FIPS 197), what is the smallest of the three standard AES key lengths, in bits?",
+          "answer": "128",
+          "unit": "bits",
+          "source": "https://csrc.nist.gov/pubs/fips/197/final"
+        },
+        {
+          "id": "security-num-013",
+          "question": "For how many days does AWS CloudTrail event history keep your management events?",
+          "answer": "90",
+          "unit": "days",
+          "source": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events.html",
+          "_verified": false
+        }
+      ],
+      "word": [
+        {
+          "id": "security-word-001",
+          "question": "AWS Security Agent is a frontier ___ that secures apps throughout the software development lifecycle.",
+          "answer": "agent",
+          "source": "https://aws.amazon.com/security-agent/",
+          "_verified": true
+        },
+        {
+          "id": "security-word-002",
+          "question": "AWS Continuum pen testing starts with the OWASP Top 10, from the Open Web Application Security _____.",
+          "answer": "Project",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-word-003",
+          "question": "AWS Continuum encrypts all customer data at rest using AWS _____ (Key Management Service).",
+          "answer": "KMS",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-word-004",
+          "question": "AWS Continuum stores penetration test logs in Cloud_____ within the customer's own account.",
+          "answer": "Watch",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-word-005",
+          "question": "The AWS agent that checks deployment health and dependencies, complementing AWS Continuum, is the AWS _____ Agent.",
+          "answer": "DevOps",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-word-006",
+          "question": "The June 2026 update added plugin integration with Kiro Power and _____ Code.",
+          "answer": "Claude",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-word-007",
+          "question": "The June 2026 update added simulated exploit validation executed in an isolated _____.",
+          "answer": "sandbox",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-word-008",
+          "question": "AWS Continuum was introduced as a security-at-machine-_____ initiative.",
+          "answer": "speed",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-word-009",
+          "question": "Zero Trust's core principle is 'never trust, always _____'.",
+          "answer": "verify",
+          "_verified": true,
+          "source": "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"
+        },
+        {
+          "id": "security-word-010",
+          "question": "In IAM, formally giving a user a permission is called a _____ (as in 'access ___').",
+          "answer": "grant",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-word-011",
+          "question": "What is the acronym for 'Multi-Factor Authentication'?",
+          "answer": "MFA",
+          "_verified": false
+        },
+        {
+          "id": "security-word-012",
+          "question": "What is the short form of 'SQL Injection', a common web attack technique?",
+          "answer": "SQLi",
+          "_verified": false
+        },
+        {
+          "id": "security-word-013",
+          "question": "DDoS stands for Distributed Denial of _____.",
+          "answer": "Service",
+          "_verified": false
+        }
+      ],
+      "statement": [
+        {
+          "id": "security-stmt-001",
+          "template": "AWS Security Agent is a frontier agent that {proactively|only reactively} secures applications throughout the software development lifecycle.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-002",
+          "template": "AWS Continuum penetration testing starts with the {OWASP Top 10|CIS Top 20 Controls} before customizing its attack plan to your application.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-003",
+          "template": "AWS Continuum {does not|does} use customer data for model training.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-004",
+          "template": "AWS Continuum {does not share|shares anonymized} customer data with third parties.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-005",
+          "template": "AWS Continuum encrypts customer data at rest using {AWS KMS|customer-managed PGP keys}.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-006",
+          "template": "AWS Continuum stores penetration test logs in CloudWatch within {the customer's own account|a shared AWS logging account}.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-007",
+          "template": "AWS Continuum penetration testing is billed at {$50|$500} per task-hour.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-008",
+          "template": "AWS Continuum penetration testing offers a {2-month|14-day} free trial.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-009",
+          "template": "In AWS Continuum, design review, code review, and threat modeling are in preview and {not billed|billed per review}.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-010",
+          "template": "AWS Continuum's preview allows up to {200|2,000} free design reviews per account per month.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-011",
+          "template": "AWS Continuum's preview allows up to {1,000|100} free code reviews per account per month.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-012",
+          "template": "AWS Continuum can pen test apps that are {on premises, hybrid, or in other clouds|hosted only on Amazon EC2}.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-013",
+          "template": "Customers {do|do not} need an AWS account to use AWS Continuum for penetration testing.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-014",
+          "template": "The AWS {DevOps|Cost Optimization} Agent checks deployment health and dependencies, while AWS Continuum handles threat modeling and penetration testing.",
+          "source": "https://aws.amazon.com/security-agent/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-015",
+          "template": "The June 2026 update added plugin integration with Kiro Power and {Claude Code|GitHub Copilot}.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-stmt-016",
+          "template": "The June 2026 update added simulated exploit validation that executes findings in {an isolated sandbox|the live production environment} to prove exploitability.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-stmt-017",
+          "template": "The June 2026 update added integrations including GitLab.com, GitLab Self Managed, GitHub Enterprise, Bitbucket, and {Confluence|Notion}.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-kiro-power-claude-code/"
+        },
+        {
+          "id": "security-stmt-018",
+          "template": "AWS Continuum was introduced in {June 2026|January 2026} as a security-at-machine-speed initiative.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/"
+        },
+        {
+          "id": "security-stmt-019",
+          "template": "AWS Security Agent is now part of {AWS Continuum|AWS Well-Architected Tool}.",
+          "_verified": true,
+          "source": "https://aws.amazon.com/security-agent/"
+        },
+        {
+          "id": "security-stmt-020",
+          "template": "Zero Trust security's core principle is '{never trust, always verify|trust internal networks by default}'.",
+          "_verified": true,
+          "source": "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"
+        },
+        {
+          "id": "security-stmt-021",
+          "template": "Under Zero Trust, a user or device is verified {every time, continuously|only once at first login}, regardless of its network location.",
+          "_verified": true,
+          "source": "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"
+        },
+        {
+          "id": "security-stmt-022",
+          "template": "IAM encompasses four pillars: authentication, authorization, provisioning, and {audit|encryption}.",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-stmt-023",
+          "template": "In IAM, {authorization|authentication} refers to what a user is allowed to do, as opposed to who they are.",
+          "_verified": true,
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary"
+        },
+        {
+          "id": "security-stmt-024",
+          "template": "AgentCore Identity works with existing identity providers such as {Okta and Microsoft Entra ID|Amazon Cognito only, with no third-party IdPs}.",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-025",
+          "template": "Multi-Factor Authentication (MFA) requires {two or more|exactly one} independent forms of verification, rather than just one.",
+          "_verified": false
+        }
+      ],
+      "spelling": [
+        {
+          "id": "security-spell-001",
+          "question": "Amazon ___ detects threats by analyzing sources such as CloudTrail events and VPC Flow Logs.",
+          "answer": "GuardDuty",
+          "source": "https://aws.amazon.com/guardduty/",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-002",
+          "question": "AWS ___ helps protect applications running on AWS against DDoS attacks.",
+          "answer": "Shield",
+          "source": "https://aws.amazon.com/shield/",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-003",
+          "question": "Amazon ___ continuously scans EC2 instances, container images, and Lambda functions for vulnerabilities.",
+          "answer": "Inspector",
+          "source": "https://aws.amazon.com/inspector/",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-004",
+          "question": "Amazon ___ uses machine learning to discover sensitive data stored in Amazon S3.",
+          "answer": "Macie",
+          "source": "https://aws.amazon.com/macie/",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-005",
+          "question": "AWS ___ gives you a central view of security findings across your AWS accounts.",
+          "answer": "Security Hub",
+          "source": "https://aws.amazon.com/security-hub/",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-006",
+          "question": "AWS ___ stores and automatically rotates credentials such as database passwords.",
+          "answer": "Secrets Manager",
+          "source": "https://aws.amazon.com/secrets-manager/",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-007",
+          "question": "AWS Continuum threat modeling outputs its results in ___ format.",
+          "answer": "STRIDE",
+          "source": "https://aws.amazon.com/about-aws/whats-new/2026/06/aws-continuum/",
+          "_verified": true
+        },
+        {
+          "id": "security-spell-008",
+          "question": "Amazon ___ adds user sign-up and sign-in to web and mobile apps.",
+          "answer": "Cognito",
+          "source": "https://aws.amazon.com/cognito/",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-009",
+          "question": "Automatically creating and removing user accounts as people join or leave is called user ___.",
+          "answer": "provisioning",
+          "source": "https://www.cloudskope.com/insights/post/cybersecurity-acronyms-glossary",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-010",
+          "question": "A ___ attack hides malicious instructions in content to hijack an AI agent.",
+          "answer": "Prompt injection",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-011",
+          "question": "AWS ___ gives users VPN-less, zero trust access to corporate applications.",
+          "answer": "Verified Access",
+          "source": "https://aws.amazon.com/verified-access/",
+          "_verified": false
+        },
+        {
+          "id": "security-spell-012",
+          "question": "AWS ___ is a managed service that filters traffic at the perimeter of your VPC.",
+          "answer": "Network Firewall",
+          "source": "https://aws.amazon.com/network-firewall/",
+          "_verified": false
+        }
+      ]
+    },
+    "malaysia-aws": {
+      "mcq": [
+        {
+          "id": "myaws-mcq-001",
+          "question": "What is the Region code of the AWS Asia Pacific (Malaysia) Region?",
+          "answer": "ap-southeast-5",
+          "decoys": [
+            "ap-southeast-3",
+            "ap-south-2",
+            "ap-east-2"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-002",
+          "question": "Where is AWS Cloud & AI Day Kuala Lumpur 2026 being held?",
+          "answer": "Kuala Lumpur Convention Centre",
+          "decoys": [
+            "Sunway Pyramid Convention Centre",
+            "Malaysia International Trade Centre",
+            "Putrajaya International Convention Centre"
+          ],
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-003",
+          "question": "What is the national flower of Malaysia?",
+          "answer": "Hibiscus (bunga raya)",
+          "decoys": [
+            "Orchid (bunga orkid)",
+            "Jasmine (bunga melur)",
+            "Lotus (bunga teratai)"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Hibiscus_rosa-sinensis",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-004",
+          "question": "Malaysian stock image firm 123RF built generative AI image variations with which AWS service?",
+          "answer": "Amazon SageMaker",
+          "decoys": [
+            "Amazon Redshift",
+            "Amazon Connect",
+            "AWS Glue"
+          ],
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-005",
+          "question": "Online broker Deriv cut onboarding time by 45% using which AWS AI assistant?",
+          "answer": "Amazon Q Business",
+          "decoys": [
+            "Amazon Lex",
+            "Amazon Polly",
+            "Amazon Comprehend"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-006",
+          "question": "Malaysian AWS customer Aerodyne Group is known for what kind of solutions?",
+          "answer": "Drone-based enterprise solutions",
+          "decoys": [
+            "Satellite broadband services",
+            "Electric vehicle charging",
+            "Semiconductor packaging"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-007",
+          "question": "Program AKAR, powered by AWS re/Start, prepares students for careers in which sector?",
+          "answer": "Financial services",
+          "decoys": [
+            "Oil and gas",
+            "Healthcare",
+            "Tourism and hospitality"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-008",
+          "question": "The AWS InCommunities Green Wira Programme trains educators to build what in schools?",
+          "answer": "Sustainability initiatives",
+          "decoys": [
+            "Coding clubs",
+            "Financial literacy classes",
+            "Sports programmes"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-009",
+          "question": "Hussein Mohd Ali is AWS Country Manager for Malaysia, Pakistan and which other country?",
+          "answer": "Brunei",
+          "decoys": [
+            "Singapore",
+            "Indonesia",
+            "Thailand"
+          ],
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-010",
+          "question": "What is keynote speaker Shaown Nandi's title at AWS?",
+          "answer": "Vice President, Technology",
+          "decoys": [
+            "Chief Financial Officer",
+            "Vice President, Marketing",
+            "Chief Information Security Officer"
+          ],
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-011",
+          "question": "Which question frames the AWS Cloud & AI Day Kuala Lumpur 2026 keynote?",
+          "answer": "Why not make every idea possible?",
+          "decoys": [
+            "What will you build next?",
+            "Why not dream bigger today?",
+            "What if the cloud had no limits?"
+          ],
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-012",
+          "question": "Per AWS's 2026 Malaysia AI report, where do most firms get their AI capabilities?",
+          "answer": "External consultants",
+          "decoys": [
+            "In-house research labs",
+            "University partnerships",
+            "Overseas parent companies"
+          ],
+          "source": "https://www.bernama.com/en/region/news.php?id=2613614",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-013",
+          "question": "What is the name of the AI agent activity at AWS Cloud & AI Day Kuala Lumpur?",
+          "answer": "8-Bit Agents Activation",
+          "decoys": [
+            "Pixel Bots Arena",
+            "Retro Robots Lab",
+            "Arcade Agents Quest"
+          ],
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-014",
+          "question": "After migrating to AWS, by how much did Pos Malaysia cut its IT costs?",
+          "answer": "By half",
+          "decoys": [
+            "By 10 percent",
+            "By a quarter",
+            "By 90 percent"
+          ],
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-015",
+          "question": "CARSOME, an AWS customer, is Southeast Asia's largest what?",
+          "answer": "Car e-commerce platform",
+          "decoys": [
+            "Food delivery app",
+            "Ride-hailing service",
+            "Online travel agency"
+          ],
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-016",
+          "question": "AWS customer RTM, which runs the RTMKlik streaming platform, stands for what?",
+          "answer": "Radio Televisyen Malaysia",
+          "decoys": [
+            "Rangkaian Teknologi Malaysia",
+            "Radio Teknologi Malaysia",
+            "Rangkaian Televisyen Media"
+          ],
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-017",
+          "question": "At launch, the AWS Malaysia Region was AWS's which Region in Asia Pacific?",
+          "answer": "Thirteenth",
+          "decoys": [
+            "Ninth",
+            "Eleventh",
+            "Fifteenth"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-018",
+          "question": "Which architect designed the Petronas Twin Towers?",
+          "answer": "Cesar Pelli",
+          "decoys": [
+            "Frank Gehry",
+            "Zaha Hadid",
+            "Norman Foster"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Petronas_Towers",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-019",
+          "question": "Which skyscraper is currently the tallest building in Malaysia?",
+          "answer": "Merdeka 118",
+          "decoys": [
+            "Petronas Tower 1",
+            "The Exchange 106",
+            "Menara Telekom"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Merdeka_118",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-020",
+          "question": "Malaysia's motto, Bersekutu Bertambah Mutu, means what in English?",
+          "answer": "Unity is Strength",
+          "decoys": [
+            "Forward Together Always",
+            "Peace and Prosperity",
+            "Faith and Progress"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-021",
+          "question": "Which Malaysian state is home to Tanjung Piai, the southernmost point of mainland Asia?",
+          "answer": "Johor",
+          "decoys": [
+            "Melaka",
+            "Negeri Sembilan",
+            "Pahang"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-022",
+          "question": "East Malaysia (Sabah and Sarawak) is on which island?",
+          "answer": "Borneo",
+          "decoys": [
+            "Sumatra",
+            "Java",
+            "Sulawesi"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-023",
+          "question": "What does the name of the popular Malaysian drink teh tarik mean?",
+          "answer": "Pulled tea",
+          "decoys": [
+            "Iced tea",
+            "Strong tea",
+            "Morning tea"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Teh_tarik",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-024",
+          "question": "The dessert cendol is sweetened with a syrup made from what?",
+          "answer": "Palm sugar",
+          "decoys": [
+            "Maple syrup",
+            "Honey",
+            "Rose water"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Cendol",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-025",
+          "question": "Which spiky, strong-smelling fruit is known as the 'king of fruits'?",
+          "answer": "Durian",
+          "decoys": [
+            "Mangosteen",
+            "Rambutan",
+            "Jackfruit"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Durian",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-026",
+          "question": "The Langkawi archipelago belongs to which Malaysian state?",
+          "answer": "Kedah",
+          "decoys": [
+            "Perlis",
+            "Penang",
+            "Perak"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Langkawi",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-027",
+          "question": "George Town, Penang shares its UNESCO World Heritage listing with which city?",
+          "answer": "Melaka",
+          "decoys": [
+            "Ipoh",
+            "Kuching",
+            "Kota Bharu"
+          ],
+          "source": "https://en.wikipedia.org/wiki/George_Town,_Penang",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-028",
+          "question": "In Malaysia, what is a wau bulan?",
+          "answer": "A traditional moon kite",
+          "decoys": [
+            "A rice-based dessert",
+            "A wooden spinning top",
+            "A woven bamboo hat"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Wau_bulan",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-029",
+          "question": "Which bird is Malaysia's national bird and Sarawak's state bird?",
+          "answer": "Rhinoceros hornbill",
+          "decoys": [
+            "Peacock",
+            "Brahminy kite",
+            "Oriental magpie-robin"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Rhinoceros_hornbill",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-030",
+          "question": "Sepak takraw, played with the feet, knees and head, is nicknamed what?",
+          "answer": "Kick volleyball",
+          "decoys": [
+            "Foot badminton",
+            "Rattan football",
+            "Shoulder netball"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Sepak_takraw",
+          "_verified": true
+        }
+      ],
+      "numeric": [
+        {
+          "id": "myaws-num-001",
+          "question": "In what year did the AWS Asia Pacific (Malaysia) Region open?",
+          "answer": "2024",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-002",
+          "question": "How many floors does each of the Petronas Twin Towers have?",
+          "answer": "88",
+          "source": "https://en.wikipedia.org/wiki/Petronas_Towers",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-003",
+          "question": "The AWS Malaysia Region will support on average more than how many full-time equivalent jobs a year through 2038?",
+          "answer": "3500",
+          "unit": "jobs",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-004",
+          "question": "In what year did AWS open its first office in Malaysia?",
+          "answer": "2016",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-005",
+          "question": "PETRONAS has been an AWS customer since which year?",
+          "answer": "2014",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-006",
+          "question": "As of 2024, how many students had AWS Academy trained in Malaysia since 2018?",
+          "answer": "23000",
+          "unit": "students",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-007",
+          "question": "According to AWS's 2026 report, Malaysia's business AI adoption rate rose from 27% to what?",
+          "answer": "38",
+          "unit": "percent",
+          "source": "https://www.bernama.com/en/region/news.php?id=2613614",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-008",
+          "question": "Program AKAR (AWS, PayNet and partners) committed to starting with how many students in 2024?",
+          "answer": "100",
+          "unit": "students",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-009",
+          "question": "How tall is Mount Kinabalu, Malaysia's highest mountain?",
+          "answer": "4095",
+          "unit": "metres",
+          "source": "https://en.wikipedia.org/wiki/Mount_Kinabalu",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-010",
+          "question": "How tall is the KL Tower, measured to the tip of its antenna?",
+          "answer": "421",
+          "unit": "metres",
+          "source": "https://en.wikipedia.org/wiki/KL_Tower",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-011",
+          "question": "In what year did the Federation of Malaya gain independence?",
+          "answer": "1957",
+          "source": "https://en.wikipedia.org/wiki/Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-012",
+          "question": "The Langkawi archipelago is made up of how many islands (not counting those seen only at low tide)?",
+          "answer": "99",
+          "unit": "islands",
+          "source": "https://en.wikipedia.org/wiki/Langkawi",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-013",
+          "question": "In what year was Malaysia's national carmaker Proton founded?",
+          "answer": "1983",
+          "source": "https://en.wikipedia.org/wiki/Proton_Holdings",
+          "_verified": true
+        }
+      ],
+      "word": [
+        {
+          "id": "myaws-word-001",
+          "question": "What is the name of Malaysia's currency?",
+          "answer": "Ringgit",
+          "source": "https://en.wikipedia.org/wiki/Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-002",
+          "question": "What is the title of Malaysia's national anthem?",
+          "answer": "Negaraku",
+          "source": "https://en.wikipedia.org/wiki/Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-003",
+          "question": "In Malay, 'lumpur' in Kuala Lumpur means what?",
+          "answer": "Mud",
+          "source": "https://en.wikipedia.org/wiki/Kuala_Lumpur",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-004",
+          "question": "Kuching, the capital of Sarawak, is nicknamed the city of which animal?",
+          "answer": "Cat",
+          "source": "https://en.wikipedia.org/wiki/Kuching",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-005",
+          "question": "Malaysia's national animal is the Malayan what?",
+          "answer": "Tiger",
+          "source": "https://en.wikipedia.org/wiki/Malayan_tiger",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-006",
+          "question": "Orangutan comes from the Malay 'orang hutan'. What does 'hutan' mean?",
+          "answer": "Forest",
+          "source": "https://en.wikipedia.org/wiki/Orangutan",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-007",
+          "question": "Asia Pacific University uses which AWS serverless compute service to cut costs?",
+          "answer": "Lambda",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-008",
+          "question": "Cameron Highlands in Pahang is famous for plantations of which crop?",
+          "answer": "Tea",
+          "source": "https://en.wikipedia.org/wiki/Cameron_Highlands",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-009",
+          "question": "Kuala Lumpur grew from around 1857 as a town serving mines of which metal?",
+          "answer": "Tin",
+          "source": "https://en.wikipedia.org/wiki/Kuala_Lumpur",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-010",
+          "question": "Program AKAR is powered by AWS re/what, a cloud skills program?",
+          "answer": "Start",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-011",
+          "question": "Rafflesia arnoldii produces the largest individual what on Earth?",
+          "answer": "Flower",
+          "source": "https://en.wikipedia.org/wiki/Rafflesia_arnoldii",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-012",
+          "question": "In 2023 PKT Logistics became the first Malaysian company to join The Climate what?",
+          "answer": "Pledge",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-013",
+          "question": "AWS trains PETRONAS employees through the AWS Skills what program?",
+          "answer": "Guild",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        }
+      ],
+      "statement": [
+        {
+          "id": "myaws-stmt-001",
+          "template": "AWS plans to invest {US$6.2 billion|US$2.5 billion} in Malaysia through 2038.",
+          "source": "https://www.thestar.com.my/news/nation/2024/08/23/aws039-rm292bil-investment-shows-confidence-in-malaysia-says-pm",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-002",
+          "template": "The AWS Asia Pacific (Malaysia) Region launched with {three|two} Availability Zones.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-003",
+          "template": "The AWS Asia Pacific (Malaysia) Region is the {first|second} AWS infrastructure Region in Malaysia.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-004",
+          "template": "AWS launched its first Amazon CloudFront edge location in Malaysia in {2017|2021}.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-005",
+          "template": "RTMKlik handled a {29 percent|92 percent} surge in viewership after scaling on AWS.",
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-006",
+          "template": "The AWS Malaysia Region is estimated to add about {US$12.1 billion|US$1.2 billion} to Malaysia's GDP through 2038.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-007",
+          "template": "AWS first announced its plan for a Malaysia Region in {March 2023|March 2021}.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-008",
+          "template": "As of 2024, AWS Academy ran courses in {48|12} Malaysian universities.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-009",
+          "template": "AWS Cloud & AI Day Kuala Lumpur 2026 takes place on {4 November|14 November} 2026.",
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-010",
+          "template": "AWS Cloud and AI Days are {complimentary|paid}, one-day, in-person events.",
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-011",
+          "template": "The AWS research behind the 2026 Malaysia AI report involved {1,000|10,000} business leaders.",
+          "source": "https://www.bernama.com/en/region/news.php?id=2613614",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-012",
+          "template": "After moving to AWS, Pos Malaysia improved development time for new services by {80|8} percent.",
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-013",
+          "template": "Malaysia is made up of {13|11} states and three federal territories.",
+          "source": "https://en.wikipedia.org/wiki/Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-014",
+          "template": "Malaysia Day, marking the formation of Malaysia, is celebrated on {16 September|31 August}.",
+          "source": "https://en.wikipedia.org/wiki/Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-015",
+          "template": "Mount Kinabalu is located in the state of {Sabah|Sarawak}.",
+          "source": "https://en.wikipedia.org/wiki/Mount_Kinabalu",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-016",
+          "template": "Kinabalu Park was named a UNESCO World Heritage Site in {2000|1985}.",
+          "source": "https://en.wikipedia.org/wiki/Mount_Kinabalu",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-017",
+          "template": "The Petronas Towers' double-decker skybridge links the towers on the {41st and 42nd|61st and 62nd} floors.",
+          "source": "https://en.wikipedia.org/wiki/Petronas_Towers",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-018",
+          "template": "The Petronas Towers were the world's tallest buildings until surpassed by {Taipei 101|Burj Khalifa}.",
+          "source": "https://en.wikipedia.org/wiki/Petronas_Towers",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-019",
+          "template": "Kuala Lumpur lies where the {Klang and Gombak|Pahang and Perak} rivers meet.",
+          "source": "https://en.wikipedia.org/wiki/Kuala_Lumpur",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-020",
+          "template": "Borneo is the world's {third|fifth} largest island.",
+          "source": "https://en.wikipedia.org/wiki/Borneo",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-021",
+          "template": "The longest river in Malaysia is the {Rajang|Pahang} River.",
+          "source": "https://en.wikipedia.org/wiki/Rajang_River",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-022",
+          "template": "The Penang Bridge links Penang Island to {Seberang Perai on the mainland|Langkawi Island in Kedah}.",
+          "source": "https://en.wikipedia.org/wiki/Penang_Bridge",
+          "_verified": false
+        },
+        {
+          "id": "myaws-stmt-023",
+          "template": "The Malaysian flag has {14|13} red and white stripes.",
+          "source": "https://en.wikipedia.org/wiki/Flag_of_Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-024",
+          "template": "Kuala Lumpur International Airport is located in {Sepang|Shah Alam}, Selangor.",
+          "source": "https://en.wikipedia.org/wiki/Kuala_Lumpur_International_Airport",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-025",
+          "template": "In Malaysia, cars drive on the {left|right} side of the road.",
+          "source": "https://en.wikipedia.org/wiki/Left-_and_right-hand_traffic",
+          "_verified": false
+        }
+      ],
+      "spelling": [
+        {
+          "id": "myaws-spell-001",
+          "question": "Malaysia's capital city, home of the Petronas Twin Towers, is ___.",
+          "answer": "Kuala Lumpur",
+          "source": "https://en.wikipedia.org/wiki/Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-002",
+          "question": "Malaysia's federal administrative capital, seat of the executive branch, is ___.",
+          "answer": "Putrajaya",
+          "source": "https://en.wikipedia.org/wiki/Putrajaya",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-003",
+          "question": "The highest point in Peninsular Malaysia is Mount ___.",
+          "answer": "Tahan",
+          "source": "https://en.wikipedia.org/wiki/Mount_Tahan",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-004",
+          "question": "Malaysia's national dish, rice cooked in coconut milk and pandan, is ___.",
+          "answer": "Nasi lemak",
+          "source": "https://en.wikipedia.org/wiki/Nasi_lemak",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-005",
+          "question": "The flaky flatbread served with dhal or curry at mamak stalls is ___.",
+          "answer": "Roti canai",
+          "source": "https://en.wikipedia.org/wiki/Roti_canai",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-006",
+          "question": "Malaysia's national payments network, which runs MyDebit on AWS, is ___.",
+          "answer": "PayNet",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-007",
+          "question": "The AWS Malaysia Region supports the government's Madani ___ Framework.",
+          "answer": "Economy",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-008",
+          "question": "Peninsular Malaysia's national park, one of the world's oldest rainforests, is ___.",
+          "answer": "Taman Negara",
+          "source": "https://en.wikipedia.org/wiki/Taman_Negara",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-009",
+          "question": "Malaysia's national flag, the Stripes of Glory, is called ___.",
+          "answer": "Jalur Gemilang",
+          "source": "https://en.wikipedia.org/wiki/Flag_of_Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-010",
+          "question": "AWS ___ extends AWS infrastructure to customer data centres in Malaysia.",
+          "answer": "Outposts",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        }
+      ]
+    },
+    "well-architected": {
+      "mcq": [
+        {
+          "id": "wa-mcq-001",
+          "question": "Which Well-Architected pillar focuses on minimizing the environmental impact of workloads?",
+          "answer": "Sustainability",
+          "decoys": [
+            "Cost Optimization",
+            "Operational Excellence",
+            "Performance Efficiency"
+          ],
+          "source": "https://aws.amazon.com/architecture/well-architected/",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-002",
+          "question": "Which pillar covers a workload's ability to recover from failures and meet demand?",
+          "answer": "Reliability",
+          "decoys": [
+            "Security",
+            "Performance Efficiency",
+            "Operational Excellence"
+          ],
+          "source": "https://aws.amazon.com/architecture/well-architected/",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-003",
+          "question": "What is a Well-Architected 'lens'?",
+          "answer": "Extra guidance for a specific industry or technology",
+          "decoys": [
+            "A dashboard that shows your monthly AWS bill",
+            "A security scanner that checks IAM policies",
+            "A paid support plan for architecture reviews"
+          ],
+          "source": "https://aws.amazon.com/architecture/well-architected/",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-004",
+          "question": "Which pillar has the design principle 'Analyze and attribute expenditure'?",
+          "answer": "Cost Optimization",
+          "decoys": [
+            "Operational Excellence",
+            "Performance Efficiency",
+            "Sustainability"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-005",
+          "question": "Which pillar has the design principle 'Experiment more often'?",
+          "answer": "Performance Efficiency",
+          "decoys": [
+            "Cost Optimization",
+            "Security",
+            "Sustainability"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-006",
+          "question": "Which pillar advises you to 'anticipate and adopt new, more efficient hardware'?",
+          "answer": "Sustainability",
+          "decoys": [
+            "Security",
+            "Reliability",
+            "Operational Excellence"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/design-principles-for-sustainability-in-the-cloud.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-007",
+          "question": "Which pillar has the design principle 'Maintain traceability'?",
+          "answer": "Security",
+          "decoys": [
+            "Cost Optimization",
+            "Sustainability",
+            "Performance Efficiency"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec-design.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-008",
+          "question": "Which pillar has the principle 'Implement observability for actionable insights'?",
+          "answer": "Operational Excellence",
+          "decoys": [
+            "Cost Optimization",
+            "Sustainability",
+            "Security"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/oe-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-009",
+          "question": "Which of these is one of the framework's general design principles?",
+          "answer": "Test systems at production scale",
+          "decoys": [
+            "Adopt a consumption model",
+            "Keep people away from data",
+            "Use serverless architectures"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/general-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-010",
+          "question": "Which of these is NOT one of the six Well-Architected pillars?",
+          "answer": "Scalability",
+          "decoys": [
+            "Sustainability",
+            "Security",
+            "Reliability"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-011",
+          "question": "How many pillars does the AWS Well-Architected Framework have today?",
+          "answer": "Six",
+          "decoys": [
+            "Four",
+            "Five",
+            "Seven"
+          ],
+          "source": "https://aws.amazon.com/architecture/well-architected/",
+          "_verified": false
+        },
+        {
+          "id": "wa-mcq-012",
+          "question": "In a Well-Architected review, what does 'HRI' stand for?",
+          "answer": "High risk issue",
+          "decoys": [
+            "High resilience index",
+            "Hybrid Region integration",
+            "Host resource inventory"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/identify-and-understand-risks.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-013",
+          "question": "Which pillar is about running and monitoring systems and improving processes?",
+          "answer": "Operational Excellence",
+          "decoys": [
+            "Reliability",
+            "Security",
+            "Cost Optimization"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-mcq-014",
+          "question": "What are the three phases of a Well-Architected Framework Review?",
+          "answer": "Prepare, Review, Improve",
+          "decoys": [
+            "Plan, Build, Operate",
+            "Assess, Migrate, Modernize",
+            "Design, Test, Deploy"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/wa-framework-review.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-015",
+          "question": "Which lens focuses on multi-tenant software as a service workloads?",
+          "answer": "SaaS Lens",
+          "decoys": [
+            "Serverless Applications Lens",
+            "Container Build Lens",
+            "DevOps Lens"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/saas-lens.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-016",
+          "question": "Which lens covers data residency and restricting operator access?",
+          "answer": "Digital Sovereignty Lens",
+          "decoys": [
+            "Financial Services Industry Lens",
+            "Hybrid Networking Lens",
+            "Migration Lens"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/digital-sovereignty-lens/digital-sovereignty-lens.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-017",
+          "question": "The Agentic AI Lens builds on which AWS service for running agents at scale?",
+          "answer": "Amazon Bedrock AgentCore",
+          "decoys": [
+            "Amazon Lex",
+            "AWS Glue",
+            "Amazon Kendra"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-018",
+          "question": "In the Lens Catalog, what does the 'FSI' lens stand for?",
+          "answer": "Financial Services Industry",
+          "decoys": [
+            "Federal Security Initiative",
+            "Fast Scaling Infrastructure",
+            "Full Stack Integration"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-019",
+          "question": "What do AWS Well-Architected Partners help customers do?",
+          "answer": "Review and improve their workloads",
+          "decoys": [
+            "Resell AWS Support plans",
+            "Run AWS data centers",
+            "Certify AWS employees"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-020",
+          "question": "The framework quotes 'Good intentions never work, you need good mechanisms.' Who said it?",
+          "answer": "Jeff Bezos",
+          "decoys": [
+            "Werner Vogels",
+            "Andy Jassy",
+            "Adam Selipsky"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/on-architecture.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-021",
+          "question": "What is the AWS Well-Architected Agent, launched in October 2026?",
+          "answer": "AI service giving prioritized recommendations",
+          "decoys": [
+            "A human architect assigned to you",
+            "A partner badge for consultancies",
+            "A plugin that writes the whitepaper"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/agent.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-022",
+          "question": "Which pillar covers protecting data, systems and assets?",
+          "answer": "Security",
+          "decoys": [
+            "Reliability",
+            "Sustainability",
+            "Performance Efficiency"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-mcq-023",
+          "question": "In development environments, AWS says you might cut cost at the expense of which pillar?",
+          "answer": "Reliability",
+          "decoys": [
+            "Security",
+            "Operational Excellence",
+            "Sustainability"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-024",
+          "question": "Which pillar helps most with avoiding a surprise AWS bill?",
+          "answer": "Cost Optimization",
+          "decoys": [
+            "Security",
+            "Reliability",
+            "Operational Excellence"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-mcq-025",
+          "question": "Who can run a Well-Architected review of your workload?",
+          "answer": "You, AWS, or an AWS Partner",
+          "decoys": [
+            "Only AWS Enterprise Support",
+            "Only a certified auditor",
+            "Only the AWS account owner"
+          ],
+          "source": "https://aws.amazon.com/well-architected-tool/faqs/",
+          "_verified": false
+        },
+        {
+          "id": "wa-mcq-026",
+          "question": "Which of these is a Reliability design principle?",
+          "answer": "Automatically recover from failure",
+          "decoys": [
+            "Never change a working system",
+            "Buy the largest servers available",
+            "Test only after launch"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-mcq-027",
+          "question": "What is the main goal of the Well-Architected Framework?",
+          "answer": "Help build secure, reliable, efficient workloads",
+          "decoys": [
+            "Certify AWS employees as architects",
+            "Sell more AWS Support plans",
+            "Replace your security team with AI"
+          ],
+          "source": "https://aws.amazon.com/architecture/well-architected/",
+          "_verified": false
+        },
+        {
+          "id": "wa-mcq-028",
+          "question": "In ecommerce, which pillar does AWS say can affect revenue and propensity to buy?",
+          "answer": "Performance Efficiency",
+          "decoys": [
+            "Sustainability",
+            "Operational Excellence",
+            "Security"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-029",
+          "question": "Sharing lessons learned after an outage is part of which pillar?",
+          "answer": "Operational Excellence",
+          "decoys": [
+            "Cost Optimization",
+            "Sustainability",
+            "Performance Efficiency"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/design-principles.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-mcq-030",
+          "question": "Which pillar has the design principle 'Manage change through automation'?",
+          "answer": "Reliability",
+          "decoys": [
+            "Cost Optimization",
+            "Sustainability",
+            "Security"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html",
+          "_verified": true
+        }
+      ],
+      "numeric": [
+        {
+          "id": "wa-num-001",
+          "question": "In what year did AWS add Sustainability as the sixth Well-Architected pillar?",
+          "answer": "2021",
+          "source": "https://aws.amazon.com/blogs/aws/sustainability-pillar-well-architected-framework/",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-002",
+          "question": "In what year was the AWS Well-Architected Tool launched in the console?",
+          "answer": "2018",
+          "source": "https://aws.amazon.com/blogs/aws/new-aws-well-architected-tool-review-workloads-against-best-practices/",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-003",
+          "question": "In what year was the AWS Well-Architected Framework first published?",
+          "answer": "2015",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/document-revisions.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-004",
+          "question": "In what year was the Operational Excellence pillar added to the framework?",
+          "answer": "2016",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/document-revisions.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-010",
+          "question": "Stopping dev and test resources outside work hours can save about what percent?",
+          "answer": "75",
+          "unit": "percent",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-011",
+          "question": "AWS says one host at 60% utilization beats two hosts each running at what percent?",
+          "answer": "30",
+          "unit": "percent",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/design-principles-for-sustainability-in-the-cloud.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-012",
+          "question": "In 2021 AWS said customers can cut energy use versus typical on-premises by nearly what percent?",
+          "answer": "80",
+          "unit": "percent",
+          "source": "https://aws.amazon.com/blogs/aws/sustainability-pillar-well-architected-framework/",
+          "_verified": true
+        }
+      ],
+      "word": [
+        {
+          "id": "wa-word-001",
+          "question": "The Well-Architected Framework is organized into six of these. What are they called?",
+          "answer": "Pillars",
+          "source": "https://aws.amazon.com/architecture/well-architected/",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-002",
+          "question": "The free console service for reviewing workloads is the AWS Well-Architected ___.",
+          "answer": "Tool",
+          "source": "https://aws.amazon.com/well-architected-tool/",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-003",
+          "question": "In Well-Architected terms, a set of components that together deliver business value is a ___.",
+          "answer": "Workload",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-004",
+          "question": "AWS says architecture reviews should use a ___-free approach that encourages diving deep.",
+          "answer": "Blame",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-005",
+          "question": "General design principle: improve through ___ days that simulate events in production.",
+          "answer": "Game",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/general-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-006",
+          "question": "Security design principle: apply security at all ___.",
+          "answer": "Layers",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec-design.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-007",
+          "question": "Performance efficiency design principle: go ___ in minutes.",
+          "answer": "Global",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-008",
+          "question": "General design principle: stop guessing your ___ needs.",
+          "answer": "Capacity",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/general-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-009",
+          "question": "User-defined lenses that are not official AWS content are called ___ lenses.",
+          "answer": "Custom",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-010",
+          "question": "Hard-to-reverse decisions that need more inspection are called one-way ___.",
+          "answer": "Doors",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-011",
+          "question": "General design principle: drive architectures using ___.",
+          "answer": "Data",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/general-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-012",
+          "question": "Operational excellence principle: make frequent, ___, reversible changes.",
+          "answer": "Small",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/oe-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-013",
+          "question": "For hands-on practice with code, AWS offers Well-Architected ___.",
+          "answer": "Labs",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+          "_verified": true
+        }
+      ],
+      "statement": [
+        {
+          "id": "wa-stmt-001",
+          "template": "The AWS Well-Architected Tool is available in the AWS console at {no additional charge|US$100 per review}.",
+          "source": "https://aws.amazon.com/well-architected-tool/pricing/",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-002",
+          "template": "In June 2026 AWS published a Well-Architected {Agentic AI Lens|Quantum Computing Lens} for building AI agents.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-003",
+          "template": "AWS says security and operational excellence are {generally not traded off|routinely traded off} against the other pillars.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-004",
+          "template": "AWS describes a Well-Architected review as {a conversation, not an audit|a formal compliance audit}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-005",
+          "template": "Well-Architected reviews are useful for {any workload, big or small|only workloads that cost over US$1 million a year}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-stmt-006",
+          "template": "The Cost Optimization pillar recommends {paying only for the resources you use|buying capacity up front for peak demand}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-stmt-007",
+          "template": "The Sustainability pillar encourages you to {maximize the utilization of resources|keep spare servers running just in case}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/design-principles-for-sustainability-in-the-cloud.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-stmt-008",
+          "template": "'Scale horizontally to increase aggregate workload availability' is a {Reliability|Cost Optimization} design principle.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-009",
+          "template": "'Democratize advanced technologies' is a {Performance Efficiency|Security} design principle.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-010",
+          "template": "'Implement cloud financial management' is a {Cost Optimization|Reliability} design principle.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-011",
+          "template": "'Keep people away from data' is a design principle of the {Security|Sustainability} pillar.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec-design.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-012",
+          "template": "'Anticipate failure' is a design principle of the {Operational Excellence|Cost Optimization} pillar.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/oe-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-013",
+          "template": "When the WA Tool launched in 2018, the framework had {five|six} pillars.",
+          "source": "https://aws.amazon.com/blogs/aws/new-aws-well-architected-tool-review-workloads-against-best-practices/",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-014",
+          "template": "In the sustainability shared responsibility model, AWS is responsible for sustainability {of|in} the cloud.",
+          "source": "https://aws.amazon.com/blogs/aws/sustainability-pillar-well-architected-framework/",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-015",
+          "template": "AWS recommends Well-Architected reviews {early in design and before go-live|only after a workload is in production}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-016",
+          "template": "The Security pillar recommends protecting data {both in transit and at rest|only when it is stored on disk}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/design-principles.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-stmt-017",
+          "template": "The Performance Efficiency pillar encourages {using serverless architectures|always running your own physical servers}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/design-principles.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-stmt-018",
+          "template": "The Well-Architected Framework guidance is {free to read online|available only to Enterprise Support customers}.",
+          "source": "https://aws.amazon.com/architecture/well-architected/",
+          "_verified": false
+        },
+        {
+          "id": "wa-stmt-019",
+          "template": "AWS Well-Architected Partners are members of the {AWS Partner Network|AWS Activate program}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-020",
+          "template": "In October 2026 AWS released the AI-powered AWS Well-Architected Agent in {preview|general availability}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/release-notes.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-021",
+          "template": "Under the AWS shared responsibility model, customers are responsible for security {in|of} the cloud.",
+          "source": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+          "_verified": false
+        },
+        {
+          "id": "wa-stmt-022",
+          "template": "The Reliability pillar recommends {testing how your systems recover from failure|waiting for a real outage to test recovery}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-stmt-023",
+          "template": "The Generative AI Lens covers models on {Amazon Bedrock and SageMaker AI|self-managed EC2 hosts only}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-024",
+          "template": "A Well-Architected review aims to {find and fix risks early|certify that a workload has zero bugs}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+          "_verified": false
+        },
+        {
+          "id": "wa-stmt-025",
+          "template": "AWS says a Well-Architected review should be lightweight, taking {hours, not days|days, not hours}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html",
+          "_verified": true
+        }
+      ],
+      "spelling": [
+        {
+          "id": "wa-spell-001",
+          "question": "In the WA Tool, a ___ records the state of a workload at a point in time.",
+          "answer": "Milestone",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-002",
+          "question": "After you answer the review questions, the WA Tool gives you a prioritized ___.",
+          "answer": "Improvement plan",
+          "source": "https://aws.amazon.com/well-architected-tool/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-003",
+          "question": "Data protection guidance suggests mechanisms such as ___, tokenization and access control.",
+          "answer": "Encryption",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec-design.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-004",
+          "question": "The pillar about delivering business value at the lowest price point is ___.",
+          "answer": "Cost optimization",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-005",
+          "question": "The ___ Applications Lens covers RESTful microservices, mobile backends and stream processing.",
+          "answer": "Serverless",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-006",
+          "question": "The WA Tool can show AWS ___ checks for the resources in a workload.",
+          "answer": "Trusted Advisor",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/getting-started.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-007",
+          "question": "A WA Tool ___ holds pre-filled best practice answers reused across workloads.",
+          "answer": "Review template",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/review-templates.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-008",
+          "question": "A general design principle says: consider ___ architectures.",
+          "answer": "Evolutionary",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/general-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-009",
+          "question": "A strong identity foundation applies the principle of ___ with separation of duties.",
+          "answer": "Least privilege",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec-design.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-010",
+          "question": "Both Operational Excellence and Sustainability advise you to use ___.",
+          "answer": "Managed services",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/oe-design-principles.html",
+          "_verified": true
+        }
+      ]
+    },
+    "cio-playbook": {
+      "mcq": [
+        {
+          "id": "cio-mcq-001",
+          "question": "Before joining AWS, Shaown Nandi was Chief Information Officer of which company?",
+          "answer": "Dow Jones",
+          "decoys": [
+            "Reuters",
+            "Bloomberg",
+            "The New York Times"
+          ],
+          "source": "https://blackstarsexperience.com/star/shaown-nandi/",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-002",
+          "question": "Before building a new product, Amazon teams first write what?",
+          "answer": "A press release and FAQ",
+          "decoys": [
+            "A project budget and timeline",
+            "A slide deck for leadership",
+            "A technical design document"
+          ],
+          "source": "https://www.aboutamazon.com/news/workplace/an-insider-look-at-amazons-culture-and-processes",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-003",
+          "question": "Shaown Nandi's first tip for generative AI: get your ___ in order.",
+          "answer": "Data house",
+          "decoys": [
+            "Budget plan",
+            "Org chart",
+            "Vendor list"
+          ],
+          "source": "https://venturebeat.com/business/chatbots-just-beginning-how-leverage-real-potential-generative-ai",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-004",
+          "question": "Shaown Nandi once served as Head of Shared Services at which company?",
+          "answer": "News Corp",
+          "decoys": [
+            "Comcast",
+            "Thomson Reuters",
+            "Warner Bros"
+          ],
+          "source": "https://blackstarsexperience.com/star/shaown-nandi/",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-005",
+          "question": "Earlier in his career, Shaown Nandi managed cloud product teams at which company?",
+          "answer": "IBM",
+          "decoys": [
+            "Oracle",
+            "Cisco",
+            "HP"
+          ],
+          "source": "https://blackstarsexperience.com/star/shaown-nandi/",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-006",
+          "question": "What is Shaown Nandi's title at AWS?",
+          "answer": "Vice President, Technology",
+          "decoys": [
+            "Vice President, Marketing",
+            "Chief Financial Officer",
+            "Vice President, HR"
+          ],
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-007",
+          "question": "Shaown Nandi's 2023 Techstrong article explored which topic?",
+          "answer": "GenAI questions CEOs ask their teams",
+          "decoys": [
+            "Cloud cost cutting tips for CFOs",
+            "Cybersecurity budgets for next year",
+            "Remote work tools for HR teams"
+          ],
+          "source": "https://techstrong.ai/articles/the-most-important-generative-ai-questions-ceos-are-asking-their-teams/",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-008",
+          "question": "On an AWS Executive Insights episode hosted by Shaown Nandi, which group discussed AI for conservation?",
+          "answer": "Jane Goodall Institute",
+          "decoys": [
+            "World Wildlife Fund",
+            "National Geographic Society",
+            "Smithsonian Institution"
+          ],
+          "source": "https://podcasts.apple.com/us/podcast/from-field-notes-to-gen-ai-modernizing-conservation/id1482820161?i=1000761314196",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-009",
+          "question": "Shaown Nandi's fifth genAI tip says to think hard about what?",
+          "answer": "Security, legal and compliance",
+          "decoys": [
+            "Hiring more data scientists",
+            "Buying the biggest models",
+            "Cutting IT headcount"
+          ],
+          "source": "https://venturebeat.com/business/chatbots-just-beginning-how-leverage-real-potential-generative-ai",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-010",
+          "question": "In what role did Shaown Nandi first attend AWS re:Invent?",
+          "answer": "As a customer",
+          "decoys": [
+            "As an AWS employee",
+            "As a keynote speaker",
+            "As a startup founder"
+          ],
+          "source": "https://www.linkedin.com/pulse/aws-reinvent-2022-shaown-nandi",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-011",
+          "question": "Which Leadership Principle says leaders have 'relentlessly high standards'?",
+          "answer": "Insist on the Highest Standards",
+          "decoys": [
+            "Deliver Results",
+            "Dive Deep",
+            "Think Big"
+          ],
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-012",
+          "question": "Which is NOT in Bezos's 2016 'starter pack' for Day 1 defense?",
+          "answer": "Consensus on every decision",
+          "decoys": [
+            "True customer obsession",
+            "A skeptical view of proxies",
+            "High-velocity decision making"
+          ],
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-013",
+          "question": "Bezos, 2016: 'Day 2 is ___. Followed by irrelevance.'",
+          "answer": "Stasis",
+          "decoys": [
+            "Growth",
+            "Chaos",
+            "Comfort"
+          ],
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-014",
+          "question": "Who wrote the book 'Working Backwards' about Amazon's culture?",
+          "answer": "Colin Bryar and Bill Carr",
+          "decoys": [
+            "Jeff Bezos and Andy Jassy",
+            "Brad Stone and Walter Isaacson",
+            "Werner Vogels and Matt Garman"
+          ],
+          "source": "https://www.aboutamazon.com/news/workplace/an-insider-look-at-amazons-culture-and-processes",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-015",
+          "question": "Which Leadership Principle begins 'Leaders start with the customer and work backwards'?",
+          "answer": "Customer Obsession",
+          "decoys": [
+            "Ownership",
+            "Think Big",
+            "Earn Trust"
+          ],
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-016",
+          "question": "How does an Amazon narrative-driven meeting usually begin?",
+          "answer": "Everyone silently reads the memo",
+          "decoys": [
+            "The author presents slides",
+            "Leaders vote on the agenda",
+            "Each attendee gives an update"
+          ],
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312518121161/d456916dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-017",
+          "question": "Which Leadership Principle says 'no extra points for growing headcount'?",
+          "answer": "Frugality",
+          "decoys": [
+            "Hire and Develop the Best",
+            "Deliver Results",
+            "Bias for Action"
+          ],
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-018",
+          "question": "Which Leadership Principle says leaders benchmark themselves against the best?",
+          "answer": "Earn Trust",
+          "decoys": [
+            "Invent and Simplify",
+            "Deliver Results",
+            "Are Right, A Lot"
+          ],
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-019",
+          "question": "Which is one of the two Leadership Principles Amazon added in 2021?",
+          "answer": "Strive to be Earth's Best Employer",
+          "decoys": [
+            "Insist on the Highest Standards",
+            "Invent and Simplify",
+            "Learn and Be Curious"
+          ],
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": false
+        },
+        {
+          "id": "cio-mcq-020",
+          "question": "Which Leadership Principle begins 'Speed matters in business'?",
+          "answer": "Bias for Action",
+          "decoys": [
+            "Deliver Results",
+            "Earn Trust",
+            "Customer Obsession"
+          ],
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-021",
+          "question": "Which Leadership Principle says leaders 'expect and require innovation and invention'?",
+          "answer": "Invent and Simplify",
+          "decoys": [
+            "Think Big",
+            "Learn and Be Curious",
+            "Bias for Action"
+          ],
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-022",
+          "question": "Andy Jassy: 'Speed is not preordained; speed is a ___.'",
+          "answer": "Choice",
+          "decoys": [
+            "Gift",
+            "Habit",
+            "Metric"
+          ],
+          "source": "https://aws.amazon.com/executive-insights/content/product-management-at-amazon/",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-023",
+          "question": "AWS product teams aim to release minimum ___ products.",
+          "answer": "Lovable",
+          "decoys": [
+            "Viable",
+            "Valuable",
+            "Lean"
+          ],
+          "source": "https://aws.amazon.com/executive-insights/content/product-management-at-amazon/",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-024",
+          "question": "Which AWS CAF perspective lists the CEO and CFO as common stakeholders?",
+          "answer": "Business",
+          "decoys": [
+            "Platform",
+            "Operations",
+            "Security"
+          ],
+          "source": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/foundational-capabilities.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-025",
+          "question": "Which is NOT one of the four AWS CAF transformation domains?",
+          "answer": "Finance",
+          "decoys": [
+            "Technology",
+            "Process",
+            "Product"
+          ],
+          "source": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/accelerating-business-outcomes.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-026",
+          "question": "In the 7 Rs of migration, 'lift and shift' with no app changes is called what?",
+          "answer": "Rehost",
+          "decoys": [
+            "Refactor",
+            "Repurchase",
+            "Retain"
+          ],
+          "source": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-027",
+          "question": "Which early company name did Bezos consider, per AWS's Day 1 article?",
+          "answer": "Relentless.com",
+          "decoys": [
+            "Bookworld.com",
+            "Everything.com",
+            "Swiftbuy.com"
+          ],
+          "source": "https://aws.amazon.com/executive-insights/content/how-amazon-defines-and-operationalizes-a-day-1-culture/",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-028",
+          "question": "An Amazon mechanism: build a tool, drive adoption, then do what?",
+          "answer": "Inspect the results",
+          "decoys": [
+            "Announce it once",
+            "Hire a new team",
+            "Freeze the process"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/building-mechanisms.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-029",
+          "question": "AWS cites Gartner: by 2028, what share of enterprise apps will include agentic AI?",
+          "answer": "One-third",
+          "decoys": [
+            "One-tenth",
+            "Two-thirds",
+            "Nine-tenths"
+          ],
+          "source": "https://aws.amazon.com/executive-insights/content/an-executives-guide-to-agentic-ai/",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-030",
+          "question": "Which AWS service uses AI agents to help modernize legacy applications?",
+          "answer": "AWS Transform",
+          "decoys": [
+            "AWS Glue",
+            "Amazon Lex",
+            "AWS Backup"
+          ],
+          "source": "https://aws.amazon.com/transform/",
+          "_verified": false
+        }
+      ],
+      "numeric": [
+        {
+          "id": "cio-num-001",
+          "question": "Shaown Nandi has been attending AWS re:Invent since which year?",
+          "answer": "2015",
+          "source": "https://www.linkedin.com/pulse/aws-reinvent-2022-shaown-nandi",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-002",
+          "question": "The shared IT services company Shaown Nandi created at News Corp drove over how many million US dollars in savings?",
+          "answer": "100",
+          "unit": "USD millions",
+          "source": "https://blackstarsexperience.com/star/shaown-nandi/",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-003",
+          "question": "In which year did Shaown Nandi publish five generative AI tips for leaders in VentureBeat?",
+          "answer": "2023",
+          "source": "https://venturebeat.com/business/chatbots-just-beginning-how-leverage-real-potential-generative-ai",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-004",
+          "question": "How many Leadership Principles does Amazon have?",
+          "answer": "16",
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-005",
+          "question": "Bezos: most decisions should be made with about what percent of the information you wish you had?",
+          "answer": "70",
+          "unit": "%",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-006",
+          "question": "Bezos attaches his original shareholder letter from which year to every annual report?",
+          "answer": "1997",
+          "source": "https://aws.amazon.com/executive-insights/content/how-amazon-defines-and-operationalizes-a-day-1-culture/",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-007",
+          "question": "In which year's shareholder letter did Bezos urge leaders to say 'disagree and commit'?",
+          "answer": "2016",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-008",
+          "question": "Around what percent of AWS features come directly from hearing what customers need?",
+          "answer": "90",
+          "unit": "%",
+          "source": "https://aws.amazon.com/executive-insights/content/how-amazon-defines-and-operationalizes-a-day-1-culture/",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-009",
+          "question": "In what year did Jeff Bezos found Amazon?",
+          "answer": "1994",
+          "source": "https://www.aboutamazon.com/about-us",
+          "_verified": false
+        },
+        {
+          "id": "cio-num-010",
+          "question": "Amazon's legacy application transformation saved more than how many years of development time?",
+          "answer": "4500",
+          "unit": "years",
+          "source": "https://aws.amazon.com/executive-insights/content/an-executives-guide-to-agentic-ai/",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-011",
+          "question": "Bezos, 2015: in business, unlike baseball, one swing can sometimes score how many runs?",
+          "answer": "1000",
+          "unit": "runs",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312516530910/d168744dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-012",
+          "question": "In what year did AWS launch its first service, Amazon S3?",
+          "answer": "2006",
+          "source": "https://aws.amazon.com/s3/",
+          "_verified": false
+        },
+        {
+          "id": "cio-num-013",
+          "question": "Amazon's 1997 shareholder letter reported revenue growth of what percent?",
+          "answer": "838",
+          "unit": "%",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "_verified": true
+        }
+      ],
+      "word": [
+        {
+          "id": "cio-word-001",
+          "question": "Amazon's small-team rule: a team should be small enough to be fed by two of these.",
+          "answer": "Pizzas",
+          "source": "https://aws.amazon.com/executive-insights/content/amazon-two-pizza-team/",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-002",
+          "question": "Jeff Bezos called a hard-to-reverse decision a 'one-way' what?",
+          "answer": "Door",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312516530910/d168744dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-003",
+          "question": "Shaown Nandi's tip: take generative AI outputs with a grain of what?",
+          "answer": "Salt",
+          "source": "https://venturebeat.com/business/chatbots-just-beginning-how-leverage-real-potential-generative-ai",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-004",
+          "question": "At his former employer, Shaown Nandi spearheaded a shared IT company named News___.",
+          "answer": "Tech",
+          "source": "https://blackstarsexperience.com/star/shaown-nandi/",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-005",
+          "question": "Shaown Nandi earned both his bachelor's degree and MBA at which university?",
+          "answer": "Cornell",
+          "source": "https://blackstarsexperience.com/star/shaown-nandi/",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-006",
+          "question": "Bezos works in an Amazon building named ___ 1.",
+          "answer": "Day",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-007",
+          "question": "Bezos warned large companies about managing to these, such as process instead of outcomes.",
+          "answer": "Proxies",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-008",
+          "question": "Leadership Principle 'Success and Scale': We started in a what?",
+          "answer": "Garage",
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-009",
+          "question": "Amazon's name for a virtuous cycle where feeding any part speeds up the whole loop.",
+          "answer": "Flywheel",
+          "source": "https://aws.amazon.com/executive-insights/content/the-human-side-of-innovation/",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-010",
+          "question": "Amazon says all Amazonians, technical or not, are at their core what?",
+          "answer": "Builders",
+          "source": "https://aws.amazon.com/executive-insights/content/the-human-side-of-innovation/",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-011",
+          "question": "The four AWS CAF phases: Envision, ___, Launch and Scale.",
+          "answer": "Align",
+          "source": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/your-cloud-transformation-journey.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-012",
+          "question": "In the 7 Rs, which strategy decommissions or archives apps you no longer need?",
+          "answer": "Retire",
+          "source": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-013",
+          "question": "Leadership Principle: Learn and Be ___.",
+          "answer": "Curious",
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        }
+      ],
+      "statement": [
+        {
+          "id": "cio-stmt-001",
+          "template": "Shaown Nandi advises treating generative AI outputs as {directional, not prescriptive|final answers that need no review}.",
+          "source": "https://venturebeat.com/business/chatbots-just-beginning-how-leverage-real-potential-generative-ai",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-002",
+          "template": "At Amazon, meetings use {six-page written narratives|slide-based PowerPoint decks} to present ideas.",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312518121161/d456916dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-003",
+          "template": "Shaown Nandi's former employer News Corp was {one of the first enterprises to adopt cloud|one of the last media groups to adopt cloud}.",
+          "source": "https://blackstarsexperience.com/star/shaown-nandi/",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-004",
+          "template": "Shaown Nandi advises envisioning generative AI use cases around {your own business data|generic public internet data}.",
+          "source": "https://venturebeat.com/business/chatbots-just-beginning-how-leverage-real-potential-generative-ai",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-005",
+          "template": "Shaown Nandi's 2023 Techstrong article shared views from leaders at {ADP, LexisNexis, Salesforce and Twilio|Google, Microsoft, Meta and Apple}.",
+          "source": "https://techstrong.ai/articles/the-most-important-generative-ai-questions-ceos-are-asking-their-teams/",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-006",
+          "template": "The AWS Cloud Adoption Framework (AWS CAF) is {free guidance from AWS|a paid certification program}.",
+          "source": "https://aws.amazon.com/cloud-adoption-framework/",
+          "_verified": false
+        },
+        {
+          "id": "cio-stmt-007",
+          "template": "Bezos argued that for most decisions, being {slow is more costly than being wrong|wrong is more costly than being slow}.",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-008",
+          "template": "Bezos said that when it comes to disagree and commit, {the boss should do it too|only junior staff need to do it}.",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-009",
+          "template": "Bezos said that without escalation, deep misalignment is usually settled by {exhaustion|a quick majority vote}.",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-010",
+          "template": "Bezos wrote that Amazon Prime was {never something customers asked for|created after customers requested it in surveys}.",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-011",
+          "template": "By tradition, Amazon memos {never show the authors' names|list every author on the first page}.",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312518121161/d456916dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-012",
+          "template": "Bezos wrote that high standards are {teachable|innate and cannot be taught}.",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312518121161/d456916dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-013",
+          "template": "Bezos said a great six-page memo can take {a week or more|only an hour or two} to write.",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312518121161/d456916dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-014",
+          "template": "Amazon's 'Day 1' mindset means acting {like a startup, always|like a mature company protecting its lead}.",
+          "source": "https://www.aboutamazon.com/news/company-news/2016-letter-to-shareholders",
+          "_verified": false
+        },
+        {
+          "id": "cio-stmt-015",
+          "template": "Amazon's Leadership Principles apply to {every Amazonian, not just managers|only senior executives}.",
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": false
+        },
+        {
+          "id": "cio-stmt-016",
+          "template": "Amazon Bedrock lets companies build generative AI apps with {a choice of foundation models|only one model made by Amazon}.",
+          "source": "https://aws.amazon.com/bedrock/",
+          "_verified": false
+        },
+        {
+          "id": "cio-stmt-017",
+          "template": "Two-pizza teams help counter the Ringelmann Effect, where individual effort {drops|rises} as groups grow.",
+          "source": "https://aws.amazon.com/executive-insights/content/amazon-two-pizza-team/",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-018",
+          "template": "At Amazon, product managers are single-threaded leaders who {work on one thing at a time|juggle many products at once}.",
+          "source": "https://aws.amazon.com/executive-insights/content/product-management-at-amazon/",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-019",
+          "template": "AWS Skill Builder offers {free and paid cloud training online|only in-person classroom training}.",
+          "source": "https://skillbuilder.aws/",
+          "_verified": false
+        },
+        {
+          "id": "cio-stmt-020",
+          "template": "The AWS Cloud Adoption Framework groups its capabilities into {six|eight} perspectives.",
+          "source": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/foundational-capabilities.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-021",
+          "template": "AWS guidance says refactoring is {not recommended|the preferred approach} for large migrations.",
+          "source": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-022",
+          "template": "AWS's Mark Schwartz sees a Cloud Center of Excellence as {a driver of change across the enterprise|just a help desk of cloud experts}.",
+          "source": "https://aws.amazon.com/blogs/enterprise-strategy/using-a-cloud-center-of-excellence-ccoe-to-transform-the-entire-enterprise/",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-023",
+          "template": "Bezos wrote that Amazon is {the best place in the world to fail|a place where failure is rarely tolerated}.",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312516530910/d168744dex991.htm",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-024",
+          "template": "AWS says agentic AI success goes to those who {start smart, learn fast, and scale thoughtfully|have the grandest plans}.",
+          "source": "https://aws.amazon.com/executive-insights/content/an-executives-guide-to-agentic-ai/",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-025",
+          "template": "Bezos said AWS reached $10 billion in annual sales {faster than Amazon did|slower than Amazon did}.",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312516530910/d168744dex991.htm",
+          "_verified": true
+        }
+      ],
+      "spelling": [
+        {
+          "id": "cio-spell-001",
+          "question": "Amazon's process that starts from the customer experience and works back to what to build is called ___.",
+          "answer": "Working Backwards",
+          "source": "https://www.aboutamazon.com/news/workplace/an-insider-look-at-amazons-culture-and-processes",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-002",
+          "question": "Shaown Nandi's third genAI tip: dive into developer ___ benefits.",
+          "answer": "Productivity",
+          "source": "https://venturebeat.com/business/chatbots-just-beginning-how-leverage-real-potential-generative-ai",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-003",
+          "question": "Shaown Nandi leads technology for AWS Global ___.",
+          "answer": "Sales",
+          "source": "https://blackstarsexperience.com/star/shaown-nandi/",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-004",
+          "question": "The Leadership Principle where leaders never say 'that's not my job' is ___.",
+          "answer": "Ownership",
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-005",
+          "question": "Jeff Bezos: Good intentions never work, you need good ___ to make anything happen.",
+          "answer": "Mechanisms",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/building-mechanisms.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-006",
+          "question": "An interviewer from outside the hiring team with veto power at Amazon is a ___.",
+          "answer": "Bar Raiser",
+          "source": "https://aws.amazon.com/executive-insights/content/the-human-side-of-innovation/",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-007",
+          "question": "The migration strategy nicknamed 'lift, tinker, and shift' is ___.",
+          "answer": "Replatform",
+          "source": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-008",
+          "question": "The AWS CAF perspective that orchestrates cloud initiatives while minimizing risk is ___.",
+          "answer": "Governance",
+          "source": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/foundational-capabilities.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-009",
+          "question": "The Leadership Principle that says thinking small is a self-fulfilling prophecy is ___.",
+          "answer": "Think Big",
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-010",
+          "question": "The Leadership Principle about staying connected to the details is ___.",
+          "answer": "Dive Deep",
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        }
+      ]
+    }
+  }
+}
