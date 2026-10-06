@@ -137,7 +137,7 @@
 
   // Same-origin, versioned bank asset (SSOT §5). Tracks app/VERSION for the
   // ?v= cache-bust convention (NOT bumped by this task — local only).
-  const BANK_VERSION = '15';
+  const BANK_VERSION = '16';
   // Relocated under app/showdown/ (2026-09-21): the old app/data/ path was not
   // reliably present on S3. Local bundle stays the source (NOT the live
   // /showdown/bank proxy). ?v= cache-buster tracks app/VERSION (not bumped here).
