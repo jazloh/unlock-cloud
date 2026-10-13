@@ -347,6 +347,126 @@
             "Long-running"
           ],
           "source": "https://www.theneuron.ai/explainer-articles/aws-re-invent-2025-everything-amazon-announced-at-re-invent-2025-in-one-place/"
+        },
+        {
+          "id": "agentic-mcq-031",
+          "question": "Which company open-sourced the Model Context Protocol (MCP) in November 2024?",
+          "answer": "Anthropic",
+          "decoys": [
+            "OpenAI",
+            "Google",
+            "Meta"
+          ],
+          "source": "https://www.anthropic.com/news/model-context-protocol",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-032",
+          "question": "The MCP docs compare MCP to which everyday connector for AI applications?",
+          "answer": "A USB-C port",
+          "decoys": [
+            "A power strip",
+            "An HDMI cable",
+            "A Wi-Fi router"
+          ],
+          "source": "https://modelcontextprotocol.io/docs/getting-started/intro",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-033",
+          "question": "Which AgentCore service has built-in semantic search to help agents find the right tools?",
+          "answer": "Gateway",
+          "decoys": [
+            "Memory",
+            "Identity",
+            "Observability"
+          ],
+          "source": "https://aws.amazon.com/bedrock/agentcore/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-034",
+          "question": "Per the Strands Agents launch, an agent combines a model, tools, and what?",
+          "answer": "A prompt",
+          "decoys": [
+            "A database",
+            "A container",
+            "A dashboard"
+          ],
+          "source": "https://aws.amazon.com/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-035",
+          "question": "Kiro is built on Code OSS, so you can import your settings from which editor?",
+          "answer": "VS Code",
+          "decoys": [
+            "IntelliJ IDEA",
+            "Xcode",
+            "Eclipse"
+          ],
+          "source": "https://kiro.dev/blog/introducing-kiro/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-036",
+          "question": "In a Kiro spec, what does EARS notation help you write?",
+          "answer": "Requirements acceptance criteria",
+          "decoys": [
+            "Infrastructure cost estimates",
+            "Database index definitions",
+            "Release note summaries"
+          ],
+          "source": "https://kiro.dev/blog/introducing-kiro/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-037",
+          "question": "In Amazon Bedrock multi-agent collaboration, which agent coordinates the specialized agents?",
+          "answer": "A supervisor agent",
+          "decoys": [
+            "A gateway agent",
+            "A replica agent",
+            "A monitor agent"
+          ],
+          "source": "https://aws.amazon.com/bedrock/agents/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-038",
+          "question": "Which Amazon Bedrock Guardrails safeguard blocks subjects you list as off-limits?",
+          "answer": "Denied topics",
+          "decoys": [
+            "Word stemming",
+            "Model distillation",
+            "Prompt caching"
+          ],
+          "source": "https://aws.amazon.com/bedrock/guardrails/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-039",
+          "question": "Which model in the original Amazon Nova lineup generates images?",
+          "answer": "Nova Canvas",
+          "decoys": [
+            "Nova Reel",
+            "Nova Micro",
+            "Nova Premier"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/introducing-amazon-nova-frontier-intelligence-and-industry-leading-price-performance/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-mcq-040",
+          "question": "Which Amazon Quick capability builds in-depth reports from your data and the web?",
+          "answer": "Quick Research",
+          "decoys": [
+            "Quick Sight",
+            "Quick Flows",
+            "Quick Index"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/reimagine-the-way-you-work-with-ai-agents-in-amazon-quick-suite/",
+          "_verified": true
         }
       ],
       "numeric": [
@@ -444,6 +564,28 @@
           "answer": "2026",
           "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
           "_verified": true
+        },
+        {
+          "id": "agentic-num-014",
+          "question": "In what year did Anthropic open-source the Model Context Protocol (MCP)?",
+          "answer": "2024",
+          "source": "https://www.anthropic.com/news/model-context-protocol",
+          "_verified": true
+        },
+        {
+          "id": "agentic-num-015",
+          "question": "In what year did AWS release the open source Strands Agents SDK?",
+          "answer": "2025",
+          "source": "https://aws.amazon.com/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-num-016",
+          "question": "Per AWS, Amazon Bedrock Guardrails blocks up to what percent of harmful content?",
+          "answer": "88",
+          "unit": "%",
+          "source": "https://aws.amazon.com/bedrock/guardrails/",
+          "_verified": true
         }
       ],
       "word": [
@@ -526,6 +668,34 @@
           "question": "Strands Agents supports three multi-agent patterns: Graph, Workflow, and ___.",
           "answer": "Swarm",
           "source": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html",
+          "_verified": true
+        },
+        {
+          "id": "agentic-word-014",
+          "question": "When a person must review and approve an agent's actions, the system is called human-in-the-___.",
+          "answer": "loop",
+          "source": "https://aws.amazon.com/what-is/agentic-ai/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-word-015",
+          "question": "MCP servers expose three core primitives: tools, resources, and ___.",
+          "answer": "prompts",
+          "source": "https://modelcontextprotocol.io/docs/learn/architecture",
+          "_verified": true
+        },
+        {
+          "id": "agentic-word-016",
+          "question": "The ReAct paper that inspired early AI agents stands for Reasoning and ___.",
+          "answer": "Acting",
+          "source": "https://aws.amazon.com/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-word-017",
+          "question": "Kiro's steering file that documents your technology stack is named ___.md.",
+          "answer": "tech",
+          "source": "https://kiro.dev/docs/steering/",
           "_verified": true
         }
       ],
@@ -661,6 +831,54 @@
           "id": "agentic-stmt-025",
           "template": "Amazon Quick's Free plan requires {no AWS account or credit card|a valid AWS account with billing configured} to sign up.",
           "source": "https://aws.amazon.com/quick/faqs/"
+        },
+        {
+          "id": "agentic-stmt-026",
+          "template": "In December 2025, MCP became a founding project of the {Linux Foundation's Agentic AI Foundation|Apache Software Foundation's AI Incubator}.",
+          "source": "https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-027",
+          "template": "MCP and the A2A protocol are {complementary, with MCP for agent-to-tool and A2A for agent-to-agent|rival standards, so an agent can only use one of them}.",
+          "source": "https://a2a-protocol.org/latest/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-028",
+          "template": "Strands Agents is an open source project licensed under the {Apache License 2.0|GNU General Public License v3}.",
+          "source": "https://aws.amazon.com/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-029",
+          "template": "Every Kiro spec produces three files: {requirements.md, design.md, and tasks.md|readme.md, budget.md, and roadmap.md}.",
+          "source": "https://kiro.dev/docs/specs/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-030",
+          "template": "Kiro powers {load tools and context on demand when relevant keywords come up|load every installed tool into context upfront at startup}.",
+          "source": "https://kiro.dev/docs/powers/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-031",
+          "template": "With Amazon Bedrock, your content is {not used to improve the base models|shared with model providers to improve their models}.",
+          "source": "https://aws.amazon.com/bedrock/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-032",
+          "template": "The Amazon Bedrock ApplyGuardrail API works with {any foundation model, including self-hosted ones|only models hosted on Amazon Bedrock}.",
+          "source": "https://aws.amazon.com/bedrock/guardrails/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-stmt-033",
+          "template": "AWS says AWS Transform can modernize Windows, mainframe, and VMware applications up to {5x|50x} faster.",
+          "source": "https://aws.amazon.com/transform/",
+          "_verified": true
         }
       ],
       "spelling": [
@@ -732,6 +950,34 @@
           "question": "AWS ___ uses agentic AI to modernize mainframe, Windows, and VMware workloads.",
           "answer": "Transform",
           "source": "https://aws.amazon.com/transform/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-spell-011",
+          "question": "Model Context ___ is an open standard for connecting AI apps to tools and data.",
+          "answer": "Protocol",
+          "source": "https://modelcontextprotocol.io/docs/getting-started/intro",
+          "_verified": true
+        },
+        {
+          "id": "agentic-spell-012",
+          "question": "Amazon ___ is the AWS model that generates short videos from text and images.",
+          "answer": "Nova Reel",
+          "source": "https://aws.amazon.com/blogs/aws/introducing-amazon-nova-frontier-intelligence-and-industry-leading-price-performance/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-spell-013",
+          "question": "AgentCore Identity stores agent credentials and access tokens in a secure token ___.",
+          "answer": "Vault",
+          "source": "https://aws.amazon.com/bedrock/agentcore/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "agentic-spell-014",
+          "question": "Amazon ___ consolidates documents, files, and app data into one searchable knowledge repository.",
+          "answer": "Quick Index",
+          "source": "https://aws.amazon.com/blogs/aws/reimagine-the-way-you-work-with-ai-agents-in-amazon-quick-suite/",
           "_verified": true
         }
       ]
@@ -1070,6 +1316,126 @@
           ],
           "source": "https://aws.amazon.com/about-aws/global-infrastructure/",
           "_verified": true
+        },
+        {
+          "id": "awscore-mcq-031",
+          "question": "Which EC2 purchase option runs fault-tolerant workloads on spare AWS capacity at a deep discount?",
+          "answer": "Spot Instances",
+          "decoys": [
+            "Reserved Instances",
+            "Dedicated Hosts",
+            "On-Demand Instances"
+          ],
+          "source": "https://aws.amazon.com/ec2/spot/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-mcq-032",
+          "question": "Which flexible AWS pricing model gives lower prices in exchange for a 1- or 3-year usage commitment?",
+          "answer": "Savings Plans",
+          "decoys": [
+            "Spot Instances",
+            "On-Demand pricing",
+            "AWS Free Tier"
+          ],
+          "source": "https://aws.amazon.com/savingsplans/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-mcq-033",
+          "question": "Which AWS service is serverless compute for containers?",
+          "answer": "AWS Fargate",
+          "decoys": [
+            "Amazon Lightsail",
+            "AWS Outposts",
+            "AWS Glue"
+          ],
+          "source": "https://aws.amazon.com/fargate/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-mcq-034",
+          "question": "Which AWS service lets you provision infrastructure as code using templates?",
+          "answer": "AWS CloudFormation",
+          "decoys": [
+            "AWS CloudTrail",
+            "Amazon CloudWatch",
+            "AWS Trusted Advisor"
+          ],
+          "source": "https://aws.amazon.com/cloudformation/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-mcq-035",
+          "question": "Which AWS service is used to build, train, and deploy machine learning models?",
+          "answer": "Amazon SageMaker",
+          "decoys": [
+            "Amazon Kinesis",
+            "AWS Glue",
+            "Amazon Lightsail"
+          ],
+          "source": "https://aws.amazon.com/sagemaker/ai/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-mcq-036",
+          "question": "Which AWS service lets you create, maintain, and secure APIs at any scale?",
+          "answer": "Amazon API Gateway",
+          "decoys": [
+            "AWS Storage Gateway",
+            "AWS Transit Gateway",
+            "AWS Direct Connect"
+          ],
+          "source": "https://aws.amazon.com/api-gateway/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-mcq-037",
+          "question": "Which AWS service offers simple, scalable, and serverless data integration (ETL)?",
+          "answer": "AWS Glue",
+          "decoys": [
+            "Amazon Neptune",
+            "AWS Outposts",
+            "Amazon Lightsail"
+          ],
+          "source": "https://aws.amazon.com/glue/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-mcq-038",
+          "question": "Which AWS tool lets you visualize and manage your AWS costs and usage over time?",
+          "answer": "AWS Cost Explorer",
+          "decoys": [
+            "AWS CloudTrail",
+            "AWS Config",
+            "Amazon Inspector"
+          ],
+          "source": "https://aws.amazon.com/aws-cost-management/aws-cost-explorer/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-mcq-039",
+          "question": "Which AWS offering runs AWS infrastructure and services in your own on-premises facility?",
+          "answer": "AWS Outposts",
+          "decoys": [
+            "AWS Local Zones",
+            "AWS Wavelength",
+            "AWS Direct Connect"
+          ],
+          "source": "https://aws.amazon.com/outposts/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-mcq-040",
+          "question": "Which AWS-designed, Arm-based processor family powers many Amazon EC2 instances?",
+          "answer": "Graviton",
+          "decoys": [
+            "Trainium",
+            "Inferentia",
+            "Nitro Enclaves"
+          ],
+          "source": "https://aws.amazon.com/ec2/graviton/",
+          "_verified": true
         }
       ],
       "numeric": [
@@ -1156,6 +1522,29 @@
           "question": "How many digits are in a standard AWS account ID?",
           "answer": "12",
           "source": "https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-identifiers.html"
+        },
+        {
+          "id": "awscore-num-014",
+          "question": "Amazon EC2 Spot Instances let you run fault-tolerant workloads for up to what percent off On-Demand prices?",
+          "answer": "90",
+          "unit": "percent",
+          "source": "https://aws.amazon.com/ec2/spot/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-num-015",
+          "question": "In what year did AWS launch AWS Lambda in preview?",
+          "answer": "2014",
+          "source": "https://aws.amazon.com/blogs/aws/run-code-cloud/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-num-016",
+          "question": "On the AWS Free Tier, new customers can get up to how many US dollars in credits?",
+          "answer": "200",
+          "unit": "USD",
+          "source": "https://aws.amazon.com/free/",
+          "_verified": true
         }
       ],
       "word": [
@@ -1236,6 +1625,34 @@
           "question": "Which AWS acronym stands for 'Amazon Resource Name'?",
           "answer": "ARN",
           "_verified": false
+        },
+        {
+          "id": "awscore-word-014",
+          "question": "An AWS Region is made up of multiple, isolated Availability what?",
+          "answer": "Zones",
+          "source": "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-word-015",
+          "question": "In AMI, the template used to launch an EC2 instance, what does the 'I' stand for?",
+          "answer": "Image",
+          "source": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html",
+          "_verified": true
+        },
+        {
+          "id": "awscore-word-016",
+          "question": "A load balancer routes traffic only to targets that pass what kind of check?",
+          "answer": "Health",
+          "source": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html",
+          "_verified": true
+        },
+        {
+          "id": "awscore-word-017",
+          "question": "Which EC2 pricing model, On-what, bills by the hour or second with no long-term commitment?",
+          "answer": "Demand",
+          "source": "https://aws.amazon.com/ec2/pricing/on-demand/",
+          "_verified": true
         }
       ],
       "statement": [
@@ -1366,6 +1783,54 @@
           "id": "awscore-stmt-025",
           "template": "AWS Direct Connect establishes a {dedicated private network connection|public internet VPN tunnel} from on-premises to AWS.",
           "_verified": false
+        },
+        {
+          "id": "awscore-stmt-026",
+          "template": "AWS Savings Plans can save you up to {72%|95%} compared with On-Demand prices.",
+          "source": "https://aws.amazon.com/savingsplans/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-stmt-027",
+          "template": "Before reclaiming a Spot Instance, Amazon EC2 typically gives a {two-minute|thirty-second} interruption warning.",
+          "source": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-instance-termination-notices.html",
+          "_verified": true
+        },
+        {
+          "id": "awscore-stmt-028",
+          "template": "Amazon S3 is designed for {eleven nines (99.999999999%)|three nines (99.9%)} of data durability.",
+          "source": "https://aws.amazon.com/s3/storage-classes/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-stmt-029",
+          "template": "AWS Step Functions lets you orchestrate distributed applications using {visual workflows|graph database queries}.",
+          "source": "https://aws.amazon.com/step-functions/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-stmt-030",
+          "template": "Amazon EventBridge helps you build {event-driven applications|static marketing websites} at scale.",
+          "source": "https://aws.amazon.com/eventbridge/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-stmt-031",
+          "template": "On the AWS Free plan, a new account closes on its own after {6 months|24 months} or when credits run out.",
+          "source": "https://aws.amazon.com/free/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-stmt-032",
+          "template": "Amazon Lightsail offers easy-to-use virtual private servers at a {cost-effective monthly price|fixed price per API call}.",
+          "source": "https://aws.amazon.com/lightsail/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-stmt-033",
+          "template": "AWS held its first re:Invent conference in Las Vegas in {2012|2009}.",
+          "source": "https://en.wikipedia.org/wiki/Amazon_Web_Services",
+          "_verified": true
         }
       ],
       "spelling": [
@@ -1438,6 +1903,34 @@
           "answer": "Direct Connect",
           "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
           "_verified": false
+        },
+        {
+          "id": "awscore-spell-011",
+          "question": "AWS ___ helps you optimize costs, improve performance, and address security gaps.",
+          "answer": "Trusted Advisor",
+          "source": "https://aws.amazon.com/premiumsupport/technology/trusted-advisor/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-spell-012",
+          "question": "Amazon ___ Data Streams is a serverless service for real-time data streaming.",
+          "answer": "Kinesis",
+          "source": "https://aws.amazon.com/kinesis/data-streams/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-spell-013",
+          "question": "AWS ___ lets you centrally manage your environment as you scale across many AWS accounts.",
+          "answer": "Organizations",
+          "source": "https://aws.amazon.com/organizations/",
+          "_verified": true
+        },
+        {
+          "id": "awscore-spell-014",
+          "question": "AWS Elastic ___ deploys your code and provisions and scales the infrastructure for you.",
+          "answer": "Beanstalk",
+          "source": "https://aws.amazon.com/elasticbeanstalk/",
+          "_verified": true
         }
       ]
     },
@@ -1823,6 +2316,126 @@
           ],
           "answer": "Ransomware",
           "_verified": false
+        },
+        {
+          "id": "security-mcq-031",
+          "question": "Under the AWS shared responsibility model, who patches the guest OS on Amazon EC2?",
+          "answer": "The customer",
+          "decoys": [
+            "AWS",
+            "The hardware vendor",
+            "The AWS Partner"
+          ],
+          "source": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-032",
+          "question": "Which AWS service blocks web attacks such as SQL injection and cross-site scripting?",
+          "answer": "AWS WAF",
+          "decoys": [
+            "AWS Config",
+            "Amazon Macie",
+            "AWS Artifact"
+          ],
+          "source": "https://aws.amazon.com/waf/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-033",
+          "question": "Which AWS service records user and API activity in your AWS accounts?",
+          "answer": "AWS CloudTrail",
+          "decoys": [
+            "Amazon Macie",
+            "AWS WAF",
+            "AWS Certificate Manager"
+          ],
+          "source": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-034",
+          "question": "Which AWS service shows how your resource configurations change over time?",
+          "answer": "AWS Config",
+          "decoys": [
+            "AWS WAF",
+            "Amazon Macie",
+            "AWS Shield"
+          ],
+          "source": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-035",
+          "question": "Which AWS service gives your workforce single sign-on across multiple AWS accounts?",
+          "answer": "AWS IAM Identity Center",
+          "decoys": [
+            "AWS Secrets Manager",
+            "AWS Artifact",
+            "Amazon Inspector"
+          ],
+          "source": "https://aws.amazon.com/iam/identity-center/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-036",
+          "question": "Where can you download AWS compliance documents such as SOC and ISO reports?",
+          "answer": "AWS Artifact",
+          "decoys": [
+            "AWS Shield",
+            "Amazon GuardDuty",
+            "AWS WAF"
+          ],
+          "source": "https://aws.amazon.com/artifact/faq/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-037",
+          "question": "Which AWS service provisions and manages SSL/TLS certificates?",
+          "answer": "AWS Certificate Manager",
+          "decoys": [
+            "AWS Secrets Manager",
+            "Amazon Macie",
+            "AWS Config"
+          ],
+          "source": "https://aws.amazon.com/certificate-manager/",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-038",
+          "question": "What is phishing carried out through SMS text messages called?",
+          "answer": "Smishing",
+          "decoys": [
+            "Vishing",
+            "Whaling",
+            "Quishing"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Phishing",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-039",
+          "question": "Which sign-in identity has complete access to everything in a new AWS account?",
+          "answer": "The root user",
+          "decoys": [
+            "The billing contact",
+            "The default IAM role",
+            "The security auditor"
+          ],
+          "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html",
+          "_verified": true
+        },
+        {
+          "id": "security-mcq-040",
+          "question": "Which Amazon Bedrock feature filters harmful content and blocks denied topics?",
+          "answer": "Amazon Bedrock Guardrails",
+          "decoys": [
+            "Amazon Bedrock Knowledge Bases",
+            "Amazon Bedrock Flows",
+            "Amazon Bedrock Model Distillation"
+          ],
+          "source": "https://aws.amazon.com/bedrock/guardrails/",
+          "_verified": true
         }
       ],
       "numeric": [
@@ -1923,6 +2536,29 @@
           "unit": "days",
           "source": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events.html",
           "_verified": false
+        },
+        {
+          "id": "security-num-014",
+          "question": "How many digits are in an AWS account ID?",
+          "answer": "12",
+          "source": "https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-identifiers.html",
+          "_verified": true
+        },
+        {
+          "id": "security-num-015",
+          "question": "By default, AWS KMS automatic key rotation rotates a key every how many days?",
+          "answer": "365",
+          "unit": "days",
+          "source": "https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html",
+          "_verified": true
+        },
+        {
+          "id": "security-num-016",
+          "question": "How many days long is the Amazon GuardDuty free trial for new accounts?",
+          "answer": "30",
+          "unit": "days",
+          "source": "https://aws.amazon.com/guardduty/pricing/",
+          "_verified": true
         }
       ],
       "word": [
@@ -2013,6 +2649,34 @@
           "question": "DDoS stands for Distributed Denial of _____.",
           "answer": "Service",
           "_verified": false
+        },
+        {
+          "id": "security-word-014",
+          "question": "The AWS ___ Responsibility Model splits security duties between AWS and the customer.",
+          "answer": "Shared",
+          "source": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+          "_verified": true
+        },
+        {
+          "id": "security-word-015",
+          "question": "An IAM ___ has no long-term password or keys; assuming it gives you temporary credentials.",
+          "answer": "role",
+          "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html",
+          "_verified": true
+        },
+        {
+          "id": "security-word-016",
+          "question": "In AWS IAM, a JSON document that defines permissions is called a ___.",
+          "answer": "policy",
+          "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html",
+          "_verified": true
+        },
+        {
+          "id": "security-word-017",
+          "question": "A ___ is a FIDO sign-in credential that can sync across your devices instead of a password.",
+          "answer": "passkey",
+          "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_fido.html",
+          "_verified": true
         }
       ],
       "statement": [
@@ -2164,6 +2828,54 @@
           "id": "security-stmt-025",
           "template": "Multi-Factor Authentication (MFA) requires {two or more|exactly one} independent forms of verification, rather than just one.",
           "_verified": false
+        },
+        {
+          "id": "security-stmt-026",
+          "template": "Under the shared responsibility model, AWS is responsible for security {of|in} the cloud.",
+          "source": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-027",
+          "template": "AWS Shield Standard protects all AWS customers against common DDoS events {at no additional charge|for a small monthly fee}.",
+          "source": "https://aws.amazon.com/shield/pricing/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-028",
+          "template": "In AWS KMS, plaintext keys {never leave the HSMs|can be downloaded to your laptop} that protect them.",
+          "source": "https://aws.amazon.com/kms/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-029",
+          "template": "AWS IAM is offered {at no additional charge|for a monthly fee per user}.",
+          "source": "https://aws.amazon.com/iam/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-030",
+          "template": "AWS best practice is for human users to access AWS {through federation with an identity provider|with long-term IAM access keys}.",
+          "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-031",
+          "template": "In Amazon Bedrock AgentCore Runtime, each session gets {its own dedicated microVM|a container shared with other sessions}.",
+          "source": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-sessions.html",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-032",
+          "template": "CISA calls {FIDO/WebAuthn authentication|SMS one-time codes} the only widely available phishing-resistant MFA.",
+          "source": "https://www.cisa.gov/sites/default/files/publications/fact-sheet-implementing-phishing-resistant-mfa-508c.pdf",
+          "_verified": true
+        },
+        {
+          "id": "security-stmt-033",
+          "template": "Since January 2023, Amazon S3 {automatically encrypts|leaves unencrypted} all new objects by default.",
+          "source": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/default-encryption-faq.html",
+          "_verified": true
         }
       ],
       "spelling": [
@@ -2250,6 +2962,20 @@
           "answer": "Network Firewall",
           "source": "https://aws.amazon.com/network-firewall/",
           "_verified": false
+        },
+        {
+          "id": "security-spell-013",
+          "question": "Amazon ___ helps you find the root cause of potential security issues.",
+          "answer": "Detective",
+          "source": "https://aws.amazon.com/detective/faqs/",
+          "_verified": true
+        },
+        {
+          "id": "security-spell-014",
+          "question": "AWS ___ continually audits your AWS usage and collects evidence for compliance.",
+          "answer": "Audit Manager",
+          "source": "https://aws.amazon.com/audit-manager/",
+          "_verified": true
         }
       ]
     },
@@ -2614,6 +3340,426 @@
           ],
           "source": "https://en.wikipedia.org/wiki/Sepak_takraw",
           "_verified": true
+        },
+        {
+          "id": "myaws-mcq-031",
+          "question": "Pos Malaysia migrated to AWS in 2022 with which AWS Partner?",
+          "answer": "Minfy Technologies",
+          "decoys": [
+            "Radmik Solutions",
+            "Fourtitude",
+            "Exabytes"
+          ],
+          "source": "https://aws.amazon.com/solutions/case-studies/pos-malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-032",
+          "question": "AWS signed Malaysia's public sector Cloud Framework Agreement with which local partner?",
+          "answer": "Radmik Solutions",
+          "decoys": [
+            "Minfy Technologies",
+            "Silverlake",
+            "Tapway"
+          ],
+          "source": "https://aws.amazon.com/blogs/publicsector/aws-signs-new-cloud-framework-agreement-malaysia-power-public-sector-innovation/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-033",
+          "question": "Which became the first Malaysian federal agency to migrate to AWS, in 2020?",
+          "answer": "Department of Statistics Malaysia",
+          "decoys": [
+            "Inland Revenue Board",
+            "Road Transport Department",
+            "Immigration Department"
+          ],
+          "source": "https://aws.amazon.com/blogs/publicsector/aws-signs-new-cloud-framework-agreement-malaysia-power-public-sector-innovation/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-034",
+          "question": "Bank Islam builds which digital bank on AWS?",
+          "answer": "Be U",
+          "decoys": [
+            "GX Bank",
+            "Boost Bank",
+            "AEON Bank"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/in-the-works-aws-region-in-malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-035",
+          "question": "AWS customer FarmByte is a digital innovator in which sector?",
+          "answer": "Agrofood",
+          "decoys": [
+            "Fintech",
+            "Healthcare",
+            "Logistics"
+          ],
+          "source": "https://aws.amazon.com/solutions/case-studies/farmbyte/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-036",
+          "question": "Aerodyne runs which drone software-as-a-service platform on AWS?",
+          "answer": "DRONOS",
+          "decoys": [
+            "SKYBASE",
+            "AEROHUB",
+            "FLYTRAX"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-037",
+          "question": "RTMKlik is Malaysia's first national free-to-air what?",
+          "answer": "Streaming (OTT) platform",
+          "decoys": [
+            "Satellite TV service",
+            "Digital radio network",
+            "Pay-TV channel"
+          ],
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-038",
+          "question": "Johor Corporation (JCorp), which runs on AWS, drives the economy of which state?",
+          "answer": "Johor",
+          "decoys": [
+            "Selangor",
+            "Pahang",
+            "Perak"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/in-the-works-aws-region-in-malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-039",
+          "question": "At AWS Cloud & AI Day KL, which zone has Fintech, AI and Commerce demos?",
+          "answer": "Startup Zone",
+          "decoys": [
+            "Builder Lounge",
+            "Partner Village",
+            "Innovation Hall"
+          ],
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-040",
+          "question": "In AWS's 2026 AI report, what did 69% say mattered more than the AI platform?",
+          "answer": "Local software providers",
+          "decoys": [
+            "Government grants",
+            "Overseas consultants",
+            "University research"
+          ],
+          "source": "https://www.bernama.com/en/region/news.php?id=2613614",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-041",
+          "question": "Deriv uses Amazon Q Business in customer support, marketing and which team?",
+          "answer": "Recruiting",
+          "decoys": [
+            "Legal",
+            "Trading",
+            "Procurement"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-042",
+          "question": "Malaysia's CIDOS learning system on AWS serves students at which institutions?",
+          "answer": "Polytechnics",
+          "decoys": [
+            "Primary schools",
+            "Medical colleges",
+            "Military academies"
+          ],
+          "source": "https://aws.amazon.com/blogs/publicsector/aws-signs-new-cloud-framework-agreement-malaysia-power-public-sector-innovation/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-043",
+          "question": "Selangor's CEPat platform, built on AWS, lets citizens do what?",
+          "answer": "Pay for government services",
+          "decoys": [
+            "Book clinic appointments",
+            "Report potholes",
+            "Renew driving licences"
+          ],
+          "source": "https://aws.amazon.com/blogs/publicsector/aws-signs-new-cloud-framework-agreement-malaysia-power-public-sector-innovation/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-044",
+          "question": "Who announced the plan for an AWS Region in Malaysia on the AWS News Blog in 2023?",
+          "answer": "Jeff Barr",
+          "decoys": [
+            "Werner Vogels",
+            "Andy Jassy",
+            "Matt Garman"
+          ],
+          "source": "https://aws.amazon.com/blogs/aws/in-the-works-aws-region-in-malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-045",
+          "question": "Grab was founded in Malaysia in 2012 under what name?",
+          "answer": "MyTeksi",
+          "decoys": [
+            "TeksiKu",
+            "GoTeksi",
+            "MyCab"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Grab_Holdings",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-046",
+          "question": "Which Malaysian state is nicknamed the 'Land Below the Wind'?",
+          "answer": "Sabah",
+          "decoys": [
+            "Sarawak",
+            "Kelantan",
+            "Perlis"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Sabah",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-047",
+          "question": "Which is the world's smallest bear species, found in Malaysia's forests?",
+          "answer": "Sun bear",
+          "decoys": [
+            "Sloth bear",
+            "Moon bear",
+            "Spectacled bear"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Sun_bear",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-048",
+          "question": "Which Bornean monkey is famous for its unusually large nose?",
+          "answer": "Proboscis monkey",
+          "decoys": [
+            "Pig-tailed macaque",
+            "Silvered leaf monkey",
+            "Bornean gibbon"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Proboscis_monkey",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-049",
+          "question": "Sipadan, Malaysia's only oceanic island, lies off the coast of which state?",
+          "answer": "Sabah",
+          "decoys": [
+            "Terengganu",
+            "Sarawak",
+            "Pahang"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Sipadan",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-050",
+          "question": "Gunung Mulu National Park, famous for its giant caves, is in which state?",
+          "answer": "Sarawak",
+          "decoys": [
+            "Sabah",
+            "Perak",
+            "Pahang"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Gunung_Mulu_National_Park",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-051",
+          "question": "Which Malaysian city gave its name to a famous 'white coffee'?",
+          "answer": "Ipoh",
+          "decoys": [
+            "Kuantan",
+            "Seremban",
+            "Alor Setar"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Ipoh_white_coffee",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-052",
+          "question": "Kota Bharu is the state capital of which Malaysian state?",
+          "answer": "Kelantan",
+          "decoys": [
+            "Terengganu",
+            "Kedah",
+            "Perlis"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Kota_Bharu",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-053",
+          "question": "What has carried visitors up Penang Hill since 1923?",
+          "answer": "A funicular railway",
+          "decoys": [
+            "A cable car",
+            "A monorail",
+            "A steam rack train"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Penang_Hill",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-054",
+          "question": "Penang's asam laksa gets its sour taste from which ingredient?",
+          "answer": "Tamarind",
+          "decoys": [
+            "Lime",
+            "Vinegar",
+            "Green mango"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Laksa",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-055",
+          "question": "What is the largest railway station in Malaysia?",
+          "answer": "KL Sentral",
+          "decoys": [
+            "Pudu Sentral",
+            "Bandar Tasik Selatan",
+            "Masjid Jamek"
+          ],
+          "source": "https://en.wikipedia.org/wiki/KL_Sentral",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-056",
+          "question": "What was Kota Kinabalu, the capital of Sabah, previously called?",
+          "answer": "Jesselton",
+          "decoys": [
+            "Victoria",
+            "Port Weld",
+            "Port Swettenham"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Kota_Kinabalu",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-057",
+          "question": "Which island off Sabah is one of Malaysia's federal territories?",
+          "answer": "Labuan",
+          "decoys": [
+            "Langkawi",
+            "Tioman",
+            "Pangkor"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Labuan",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-058",
+          "question": "Asia's first Legoland theme park opened in 2012 in which state?",
+          "answer": "Johor",
+          "decoys": [
+            "Selangor",
+            "Penang",
+            "Melaka"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Legoland_Malaysia_Resort",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-059",
+          "question": "Malaysia's Top Glove is the world's largest maker of what?",
+          "answer": "Rubber gloves",
+          "decoys": [
+            "Surgical masks",
+            "Disposable syringes",
+            "Rubber tyres"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Top_Glove",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-060",
+          "question": "Azizulhasni Awang, the 'Pocket Rocketman', won Olympic medals in which sport?",
+          "answer": "Cycling",
+          "decoys": [
+            "Badminton",
+            "Diving",
+            "Squash"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Azizulhasni_Awang",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-061",
+          "question": "How many Olympic silver medals did badminton star Lee Chong Wei win?",
+          "answer": "Three",
+          "decoys": [
+            "One",
+            "Two",
+            "Four"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Lee_Chong_Wei",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-062",
+          "question": "Who is traditionally credited with founding the Malacca Sultanate around 1400?",
+          "answer": "Parameswara",
+          "decoys": [
+            "Hang Tuah",
+            "Tun Perak",
+            "Mansur Shah"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Malacca_Sultanate",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-063",
+          "question": "Artist Ernest Zacharevic became famous for street murals in which city?",
+          "answer": "George Town",
+          "decoys": [
+            "Ipoh",
+            "Kuching",
+            "Johor Bahru"
+          ],
+          "source": "https://en.wikipedia.org/wiki/Ernest_Zacharevic",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-064",
+          "question": "Perodua's first car, the Kancil (1994), shares its name with which animal?",
+          "answer": "Mouse deer",
+          "decoys": [
+            "Tiger",
+            "Hornbill",
+            "Tapir"
+          ],
+          "source": "https://en.wiktionary.org/wiki/kancil",
+          "_verified": true
+        },
+        {
+          "id": "myaws-mcq-065",
+          "question": "What does the Malay phrase 'terima kasih' mean?",
+          "answer": "Thank you",
+          "decoys": [
+            "Good morning",
+            "Welcome",
+            "Goodbye"
+          ],
+          "source": "https://en.wiktionary.org/wiki/terima_kasih",
+          "_verified": true
         }
       ],
       "numeric": [
@@ -2714,6 +3860,120 @@
           "answer": "1983",
           "source": "https://en.wikipedia.org/wiki/Proton_Holdings",
           "_verified": true
+        },
+        {
+          "id": "myaws-num-014",
+          "question": "In what year did AWS sign its Cloud Framework Agreement with the Malaysian government?",
+          "answer": "2022",
+          "source": "https://aws.amazon.com/blogs/publicsector/aws-signs-new-cloud-framework-agreement-malaysia-power-public-sector-innovation/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-015",
+          "question": "Pos Malaysia, which cut IT costs by half on AWS, delivers to more than how many million addresses?",
+          "answer": "11",
+          "unit": "million",
+          "source": "https://aws.amazon.com/solutions/case-studies/pos-malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-016",
+          "question": "RTMKlik, scaled on AWS, broadcasts to more than how many million Malaysians?",
+          "answer": "20",
+          "unit": "million",
+          "source": "https://aws.amazon.com/solutions/case-studies/video-case-rtm/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-017",
+          "question": "CARSOME, which builds on AWS, serves about how many million unique visitors a month?",
+          "answer": "40",
+          "unit": "million",
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-018",
+          "question": "AWS Cloud & AI Day Kuala Lumpur 2026 offers more than how many sessions?",
+          "answer": "30",
+          "unit": "sessions",
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-019",
+          "question": "Under The Climate Pledge, Amazon aims to reach net-zero carbon by which year?",
+          "answer": "2040",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-020",
+          "question": "Pos Malaysia, an AWS customer, has provided postal services for about how many years?",
+          "answer": "200",
+          "unit": "years",
+          "source": "https://aws.amazon.com/solutions/case-studies/pos-malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-021",
+          "question": "Lee Chong Wei was ranked world No. 1 in badminton for a record how many weeks?",
+          "answer": "349",
+          "unit": "weeks",
+          "source": "https://en.wikipedia.org/wiki/Lee_Chong_Wei",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-022",
+          "question": "Squash legend Nicol David was world No. 1 for a record how many consecutive months?",
+          "answer": "108",
+          "unit": "months",
+          "source": "https://en.wikipedia.org/wiki/Nicol_David",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-023",
+          "question": "In what year was the national oil and gas company Petronas established?",
+          "answer": "1974",
+          "source": "https://en.wikipedia.org/wiki/Petronas",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-024",
+          "question": "What is Malaysia's international telephone calling code (the number after +)?",
+          "answer": "60",
+          "source": "https://en.wikipedia.org/wiki/Telephone_numbers_in_Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-025",
+          "question": "Bukit Jalil National Stadium, the largest stadium in Southeast Asia, seats how many people?",
+          "answer": "87500",
+          "unit": "seats",
+          "source": "https://en.wikipedia.org/wiki/Bukit_Jalil_National_Stadium",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-026",
+          "question": "How tall is the flagpole at Merdeka Square in Kuala Lumpur?",
+          "answer": "95",
+          "unit": "metres",
+          "source": "https://en.wikipedia.org/wiki/Merdeka_Square,_Kuala_Lumpur",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-027",
+          "question": "In what year did the Sepilok Orangutan Rehabilitation Centre in Sabah open?",
+          "answer": "1964",
+          "source": "https://en.wikipedia.org/wiki/Sepilok_Orang_Utan_Rehabilitation_Centre",
+          "_verified": true
+        },
+        {
+          "id": "myaws-num-028",
+          "question": "The Tour de Langkawi cycling race has been held since which year?",
+          "answer": "1996",
+          "source": "https://en.wikipedia.org/wiki/Tour_de_Langkawi",
+          "_verified": true
         }
       ],
       "word": [
@@ -2806,6 +4066,111 @@
           "question": "AWS trains PETRONAS employees through the AWS Skills what program?",
           "answer": "Guild",
           "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-014",
+          "question": "Gentari, which works with AWS and PETRONAS, is a global clean what company?",
+          "answer": "Energy",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-015",
+          "question": "FarmByte uses AI on AWS to help increase farmers' what?",
+          "answer": "Income",
+          "source": "https://aws.amazon.com/solutions/case-studies/farmbyte/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-016",
+          "question": "In the event's 8-Bit Agents Activation, your 8-Bit what solves challenges autonomously?",
+          "answer": "Sprite",
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-017",
+          "question": "Program AKAR is named after the Malay word 'akar'. What plant part does it mean?",
+          "answer": "Root",
+          "source": "https://en.wiktionary.org/wiki/akar",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-018",
+          "question": "At AWS Cloud & AI Day KL, the Expo features experiential technical what?",
+          "answer": "Demos",
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-019",
+          "question": "In Malay, 'air' (as in air bandung) means what?",
+          "answer": "Water",
+          "source": "https://en.wiktionary.org/wiki/air",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-020",
+          "question": "In Malay, 'sungai' (as in Sungai Klang) means what?",
+          "answer": "River",
+          "source": "https://en.wiktionary.org/wiki/sungai",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-021",
+          "question": "In Malay, what does the word 'makan' mean?",
+          "answer": "Eat",
+          "source": "https://en.wiktionary.org/wiki/makan",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-022",
+          "question": "In Malay, 'bukit' (as in Bukit Bintang) means what?",
+          "answer": "Hill",
+          "source": "https://en.wiktionary.org/wiki/bukit",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-023",
+          "question": "The rambutan fruit is named after the Malay word 'rambut', which means what?",
+          "answer": "Hair",
+          "source": "https://en.wikipedia.org/wiki/Rambutan",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-024",
+          "question": "Negeri Sembilan's name refers to settlements. What number is 'sembilan'?",
+          "answer": "Nine",
+          "source": "https://en.wikipedia.org/wiki/Negeri_Sembilan",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-025",
+          "question": "Introduced in 1985, the first Malaysian car was the Proton what?",
+          "answer": "Saga",
+          "source": "https://en.wikipedia.org/wiki/Proton_Saga",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-026",
+          "question": "Royal Selangor, founded in 1885, is the world's largest maker of goods in which metal?",
+          "answer": "Pewter",
+          "source": "https://en.wikipedia.org/wiki/Royal_Selangor",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-027",
+          "question": "The black-and-white Malayan what is the only living species of its kind outside the Americas?",
+          "answer": "Tapir",
+          "source": "https://en.wikipedia.org/wiki/Malayan_tapir",
+          "_verified": true
+        },
+        {
+          "id": "myaws-word-028",
+          "question": "Kedah, the 'Jelapang Padi' of Malaysia, grows about half the country's supply of which grain?",
+          "answer": "Rice",
+          "source": "https://en.wikipedia.org/wiki/Kedah",
           "_verified": true
         }
       ],
@@ -2959,6 +4324,186 @@
           "template": "In Malaysia, cars drive on the {left|right} side of the road.",
           "source": "https://en.wikipedia.org/wiki/Left-_and_right-hand_traffic",
           "_verified": false
+        },
+        {
+          "id": "myaws-stmt-026",
+          "template": "AWS was the {first|third} international cloud provider to sign a Cloud Framework Agreement with the Malaysian government.",
+          "source": "https://aws.amazon.com/blogs/publicsector/aws-signs-new-cloud-framework-agreement-malaysia-power-public-sector-innovation/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-027",
+          "template": "On AWS, the Department of Statistics Malaysia census portal handled a peak of {200,000|20,000} users.",
+          "source": "https://aws.amazon.com/blogs/publicsector/aws-signs-new-cloud-framework-agreement-malaysia-power-public-sector-innovation/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-028",
+          "template": "After moving to AWS, Pos Malaysia launched its new parcel ETA feature in just {six weeks|six months}.",
+          "source": "https://aws.amazon.com/solutions/case-studies/pos-malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-029",
+          "template": "With AWS, RTMKlik cut its time-to-market from 16 weeks to {8 weeks|12 weeks}.",
+          "source": "https://aws.amazon.com/solutions/case-studies/video-case-rtm/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-030",
+          "template": "AWS's 2026 report says more than {3.4 million|340,000} Malaysian businesses now use AI.",
+          "source": "https://www.bernama.com/en/region/news.php?id=2613614",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-031",
+          "template": "In 2024, Malaysia had about 9,000 members across {three|twelve} AWS User Groups.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-032",
+          "template": "The first 50 Program AKAR pilot students came from {Asia Pacific University|Universiti Malaya}.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-033",
+          "template": "AWS customer PETRONAS has a presence in over {50|150} countries.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-034",
+          "template": "At the 2024 Region launch, Malaysia had {two|six} AWS Direct Connect locations.",
+          "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-035",
+          "template": "CARSOME has about {20,000|2,000} car dealers active in its network.",
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-036",
+          "template": "Building on AWS, 123RF reached the market {two times|ten times} faster than doing it on its own.",
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-037",
+          "template": "The AWS Cloud & AI Day Kuala Lumpur keynote begins at {9:30 AM|1:30 PM}.",
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-038",
+          "template": "Malaya won the first Thomas Cup, beating {Denmark|Indonesia} in the 1949 final.",
+          "source": "https://en.wikipedia.org/wiki/Thomas_Cup",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-039",
+          "template": "Sepang International Circuit hosted the Formula One Malaysian Grand Prix from 1999 to {2017|2010}.",
+          "source": "https://en.wikipedia.org/wiki/Sepang_International_Circuit",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-040",
+          "template": "The 1998 Commonwealth Games in Kuala Lumpur were the first held in {Asia|the Southern Hemisphere}.",
+          "source": "https://en.wikipedia.org/wiki/1998_Commonwealth_Games",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-041",
+          "template": "{Perlis|Melaka} is Malaysia's smallest state by area.",
+          "source": "https://en.wikipedia.org/wiki/Perlis",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-042",
+          "template": "{Selangor|Johor} is Malaysia's most populous state.",
+          "source": "https://en.wikipedia.org/wiki/Selangor",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-043",
+          "template": "Sarawak is the {largest|second largest} of Malaysia's 13 states.",
+          "source": "https://en.wikipedia.org/wiki/Sarawak",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-044",
+          "template": "The Genting Highlands resort straddles the border of Pahang and {Selangor|Perak}.",
+          "source": "https://en.wikipedia.org/wiki/Genting_Highlands",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-045",
+          "template": "Kenyir Lake, the largest man-made lake in mainland Southeast Asia, is in {Terengganu|Kelantan}.",
+          "source": "https://en.wikipedia.org/wiki/Kenyir_Lake",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-046",
+          "template": "The Gawai Dayak harvest festival is celebrated in {Sarawak|Sabah} on 1 and 2 June.",
+          "source": "https://en.wikipedia.org/wiki/Gawai_Dayak",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-047",
+          "template": "Sabah celebrates the Kaamatan harvest festival at the end of {May|December}.",
+          "source": "https://en.wikipedia.org/wiki/Kaamatan",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-048",
+          "template": "The annual Rainforest World Music Festival is held in {Kuching|Kota Kinabalu}.",
+          "source": "https://en.wikipedia.org/wiki/Rainforest_World_Music_Festival",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-049",
+          "template": "Malaysia's time zone is {8|7} hours ahead of UTC.",
+          "source": "https://en.wikipedia.org/wiki/Time_in_Malaysia",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-050",
+          "template": "Francis Light founded George Town, Penang, in {1786|1886}.",
+          "source": "https://en.wikipedia.org/wiki/Francis_Light",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-051",
+          "template": "The Portuguese built the A Famosa fortress in Melaka around {1512|1712}.",
+          "source": "https://en.wikipedia.org/wiki/A_Famosa",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-052",
+          "template": "From Hokkien, the name bak kut teh literally means {meat bone tea|pork herb soup}.",
+          "source": "https://en.wikipedia.org/wiki/Bak_kut_teh",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-053",
+          "template": "The town of Kajang in Selangor is famous for its {satay|laksa}.",
+          "source": "https://en.wikipedia.org/wiki/Kajang",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-054",
+          "template": "The Bornean elephant is also known as the Borneo {pygmy|giant} elephant.",
+          "source": "https://en.wikipedia.org/wiki/Bornean_elephant",
+          "_verified": true
+        },
+        {
+          "id": "myaws-stmt-055",
+          "template": "Sabah's Kinabatangan River is Malaysia's {second|fourth} longest river.",
+          "source": "https://en.wikipedia.org/wiki/Kinabatangan_River",
+          "_verified": true
         }
       ],
       "spelling": [
@@ -3030,6 +4575,104 @@
           "question": "AWS ___ extends AWS infrastructure to customer data centres in Malaysia.",
           "answer": "Outposts",
           "source": "https://aws.amazon.com/blogs/aws/now-open-aws-asia-pacific-malaysia-region/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-011",
+          "question": "AWS's 2026 report on AI in Malaysia is titled Unlocking Malaysia's AI ___ 2026.",
+          "answer": "Potential",
+          "source": "https://www.bernama.com/en/region/news.php?id=2613614",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-012",
+          "question": "Malaysia's government guides agencies to adopt the cloud through its Cloud ___ Policy.",
+          "answer": "First",
+          "source": "https://aws.amazon.com/blogs/publicsector/aws-signs-new-cloud-framework-agreement-malaysia-power-public-sector-innovation/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-013",
+          "question": "AWS ___ is AWS's flagship program for startups in Malaysia and worldwide.",
+          "answer": "Activate",
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-014",
+          "question": "Pos Malaysia's AWS migration was advised by the AWS ___ Services team.",
+          "answer": "Professional",
+          "source": "https://aws.amazon.com/solutions/case-studies/pos-malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-015",
+          "question": "AWS published a Malaysia Economic Impact ___ on its Region investment.",
+          "answer": "Study",
+          "source": "https://aws.amazon.com/local/malaysia/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-016",
+          "question": "At AWS Cloud & AI Day KL, the Developer ___ Zone connects you with AWS communities.",
+          "answer": "Community",
+          "source": "https://aws.amazon.com/events/cloud-day-kuala-lumpur/",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-017",
+          "question": "During festive seasons, many Malaysians host a rumah terbuka, or ___, for all guests.",
+          "answer": "Open house",
+          "source": "https://en.wikipedia.org/wiki/Malaysian_cuisine",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-018",
+          "question": "The dry curry of meat slowly stewed in spiced coconut milk is ___.",
+          "answer": "Rendang",
+          "source": "https://en.wikipedia.org/wiki/Rendang",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-019",
+          "question": "The shaved-ice dessert often nicknamed ABC is ___.",
+          "answer": "Ais kacang",
+          "source": "https://en.wikipedia.org/wiki/Ais_kacang",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-020",
+          "question": "The Hokkien-named dish of stir-fried flat rice noodles is ___.",
+          "answer": "Char kway teow",
+          "source": "https://en.wikipedia.org/wiki/Char_kway_teow",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-021",
+          "question": "Penang's most popular beach strip, north of George Town, is ___.",
+          "answer": "Batu Ferringhi",
+          "source": "https://en.wikipedia.org/wiki/Batu_Ferringhi",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-022",
+          "question": "The state capital of Pahang, on the east coast, is ___.",
+          "answer": "Kuantan",
+          "source": "https://en.wikipedia.org/wiki/Kuantan",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-023",
+          "question": "Kuala Lumpur's bustling Chinatown is centred on ___ Street.",
+          "answer": "Petaling",
+          "source": "https://en.wikipedia.org/wiki/Petaling_Street",
+          "_verified": true
+        },
+        {
+          "id": "myaws-spell-024",
+          "question": "The stuffed pan-fried bread with minced meat and egg sold at mamak stalls is ___.",
+          "answer": "Murtabak",
+          "source": "https://en.wikipedia.org/wiki/Murtabak",
           "_verified": true
         }
       ]
@@ -3395,6 +5038,126 @@
           ],
           "source": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html",
           "_verified": true
+        },
+        {
+          "id": "wa-mcq-031",
+          "question": "Your website slows down badly at peak traffic. Which pillar is this mainly about?",
+          "answer": "Performance Efficiency",
+          "decoys": [
+            "Sustainability",
+            "Security",
+            "Cost Optimization"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-032",
+          "question": "Which AWS service collects metrics, logs and traces to monitor workloads?",
+          "answer": "Amazon CloudWatch",
+          "decoys": [
+            "AWS Backup",
+            "AWS Budgets",
+            "AWS Cost Explorer"
+          ],
+          "source": "https://aws.amazon.com/cloudwatch/",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-033",
+          "question": "Which AWS service centralizes and automates data protection (backups)?",
+          "answer": "AWS Backup",
+          "decoys": [
+            "Amazon CloudWatch",
+            "AWS Cost Explorer",
+            "AWS Budgets"
+          ],
+          "source": "https://aws.amazon.com/backup/",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-034",
+          "question": "Which AWS service helps you visualize your cost and usage over time?",
+          "answer": "AWS Cost Explorer",
+          "decoys": [
+            "AWS CloudTrail",
+            "Amazon GuardDuty",
+            "AWS Auto Scaling"
+          ],
+          "source": "https://aws.amazon.com/aws-cost-management/aws-cost-explorer/",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-035",
+          "question": "Which service automatically adds or removes capacity as demand changes?",
+          "answer": "AWS Auto Scaling",
+          "decoys": [
+            "AWS Backup",
+            "AWS Budgets",
+            "AWS CloudTrail"
+          ],
+          "source": "https://aws.amazon.com/autoscaling/",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-036",
+          "question": "Which AWS service records user activity and API usage for auditing?",
+          "answer": "AWS CloudTrail",
+          "decoys": [
+            "AWS Backup",
+            "AWS Budgets",
+            "AWS Compute Optimizer"
+          ],
+          "source": "https://aws.amazon.com/cloudtrail/",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-037",
+          "question": "Attackers get in because staff share one admin password. Which pillar was neglected?",
+          "answer": "Security",
+          "decoys": [
+            "Reliability",
+            "Sustainability",
+            "Cost Optimization"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec-design.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-038",
+          "question": "Your app goes down whenever one single server fails. Which pillar addresses this?",
+          "answer": "Reliability",
+          "decoys": [
+            "Sustainability",
+            "Cost Optimization",
+            "Security"
+          ],
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel-dp.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-039",
+          "question": "Which AWS service alerts you when spending goes over a threshold you set?",
+          "answer": "AWS Budgets",
+          "decoys": [
+            "AWS Backup",
+            "AWS CloudTrail",
+            "Amazon GuardDuty"
+          ],
+          "source": "https://aws.amazon.com/aws-cost-management/aws-budgets/",
+          "_verified": true
+        },
+        {
+          "id": "wa-mcq-040",
+          "question": "Which AWS service gives rightsizing advice for over-provisioned resources?",
+          "answer": "AWS Compute Optimizer",
+          "decoys": [
+            "AWS CloudTrail",
+            "AWS Backup",
+            "Amazon GuardDuty"
+          ],
+          "source": "https://aws.amazon.com/compute-optimizer/",
+          "_verified": true
         }
       ],
       "numeric": [
@@ -3448,6 +5211,73 @@
           "answer": "80",
           "unit": "percent",
           "source": "https://aws.amazon.com/blogs/aws/sustainability-pillar-well-architected-framework/",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-013",
+          "question": "Savings Plans, a flexible pricing model, can save you up to what percent?",
+          "answer": "72",
+          "unit": "percent",
+          "source": "https://aws.amazon.com/savingsplans/",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-014",
+          "question": "EC2 Spot Instances can cost up to what percent less than On-Demand prices?",
+          "answer": "90",
+          "unit": "percent",
+          "source": "https://aws.amazon.com/ec2/spot/",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-015",
+          "question": "Amazon S3 is designed for how many nines of data durability?",
+          "answer": "11",
+          "source": "https://aws.amazon.com/s3/storage-classes/",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-016",
+          "question": "AWS Graviton-based instances use up to what percent less energy than comparable EC2 instances?",
+          "answer": "60",
+          "unit": "percent",
+          "source": "https://aws.amazon.com/ec2/graviton/",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-017",
+          "question": "Per the Reliability pillar, 99.99% availability allows about how many minutes of downtime per year?",
+          "answer": "52",
+          "unit": "minutes",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/availability.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-018",
+          "question": "Amazon aims to reach net-zero carbon emissions across its operations by what year?",
+          "answer": "2040",
+          "source": "https://sustainability.aboutamazon.com/climate-solutions",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-019",
+          "question": "In what year did Amazon co-found The Climate Pledge?",
+          "answer": "2019",
+          "source": "https://sustainability.aboutamazon.com/climate-solutions",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-020",
+          "question": "AWS has committed to being water positive by what year?",
+          "answer": "2030",
+          "source": "https://aws.amazon.com/sustainability/",
+          "_verified": true
+        },
+        {
+          "id": "wa-num-021",
+          "question": "In what year did Amazon first match 100% of its electricity use with renewable energy?",
+          "answer": "2023",
+          "source": "https://sustainability.aboutamazon.com/climate-solutions/carbon-free-energy",
           "_verified": true
         }
       ],
@@ -3541,6 +5371,34 @@
           "question": "For hands-on practice with code, AWS offers Well-Architected ___.",
           "answer": "Labs",
           "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-014",
+          "question": "Security design principle: prepare for security ___.",
+          "answer": "Events",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec-design.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-015",
+          "question": "Sustainability design principle: understand your ___.",
+          "answer": "Impact",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sus-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-016",
+          "question": "Operational excellence design principle: safely ___ where possible.",
+          "answer": "Automate",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/oe-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-word-017",
+          "question": "Cost design principle: stop spending money on undifferentiated heavy ___.",
+          "answer": "Lifting",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/cost-dp.html",
           "_verified": true
         }
       ],
@@ -3694,6 +5552,54 @@
           "template": "AWS says a Well-Architected review should be lightweight, taking {hours, not days|days, not hours}.",
           "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html",
           "_verified": true
+        },
+        {
+          "id": "wa-stmt-026",
+          "template": "AWS Trusted Advisor checks cover {cost, performance, security and resilience|only security and compliance settings}.",
+          "source": "https://aws.amazon.com/premiumsupport/technology/trusted-advisor/",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-027",
+          "template": "'Measure overall efficiency' is a design principle of the {Cost Optimization|Security} pillar.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/cost-dp.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-028",
+          "template": "'Organize teams around business outcomes' is a design principle of the {Operational Excellence|Sustainability} pillar.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/oe-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-029",
+          "template": "'Automate security best practices' is a design principle of the {Security|Cost Optimization} pillar.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec-design.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-030",
+          "template": "The Sustainability pillar suggests {moving rarely used data to cold storage|keeping all data on the fastest storage}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sus-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-031",
+          "template": "The Reliability pillar says the KPIs that trigger recovery should measure {business value|only server CPU usage}.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel-dp.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-032",
+          "template": "EC2 Spot Instances are best suited to {fault-tolerant, flexible workloads|workloads that must never be interrupted}.",
+          "source": "https://aws.amazon.com/ec2/spot/",
+          "_verified": true
+        },
+        {
+          "id": "wa-stmt-033",
+          "template": "'Reduce the downstream impact of your cloud workloads' is a {Sustainability|Performance Efficiency} design principle.",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sus-design-principles.html",
+          "_verified": true
         }
       ],
       "spelling": [
@@ -3765,6 +5671,34 @@
           "question": "Both Operational Excellence and Sustainability advise you to use ___.",
           "answer": "Managed services",
           "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/oe-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-011",
+          "question": "Amazon ___ is a threat detection service that helps protect your accounts and data.",
+          "answer": "GuardDuty",
+          "source": "https://aws.amazon.com/guardduty/",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-012",
+          "question": "The AWS Customer Carbon ___ Tool shows estimated emissions from your AWS usage.",
+          "answer": "Footprint",
+          "source": "https://aws.amazon.com/aws-cost-management/aws-customer-carbon-footprint-tool/",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-013",
+          "question": "AWS ___ runs serverless containers, a managed service the Sustainability pillar cites.",
+          "answer": "Fargate",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sus-design-principles.html",
+          "_verified": true
+        },
+        {
+          "id": "wa-spell-014",
+          "question": "A common on-premises failure is resource ___, when demand exceeds capacity.",
+          "answer": "Saturation",
+          "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel-dp.html",
           "_verified": true
         }
       ]
@@ -3905,26 +5839,26 @@
         },
         {
           "id": "cio-mcq-012",
-          "question": "Which is NOT in Bezos's 2016 'starter pack' for Day 1 defense?",
-          "answer": "Consensus on every decision",
+          "question": "Shaown Nandi compares scaling AI agents to managing a team of what?",
+          "answer": "Personal advisers",
           "decoys": [
-            "True customer obsession",
-            "A skeptical view of proxies",
-            "High-velocity decision making"
+            "Factory robots",
+            "Sports players",
+            "Orchestra musicians"
           ],
-          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
           "_verified": true
         },
         {
           "id": "cio-mcq-013",
-          "question": "Bezos, 2016: 'Day 2 is ___. Followed by irrelevance.'",
-          "answer": "Stasis",
+          "question": "Per Shaown Nandi, when does cost really start to matter for AI agents?",
+          "answer": "When you scale",
           "decoys": [
-            "Growth",
-            "Chaos",
-            "Comfort"
+            "On day one",
+            "Only during the pilot",
+            "Before you pick a model"
           ],
-          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
           "_verified": true
         },
         {
@@ -3977,14 +5911,14 @@
         },
         {
           "id": "cio-mcq-018",
-          "question": "Which Leadership Principle says leaders benchmark themselves against the best?",
-          "answer": "Earn Trust",
+          "question": "Which small, text-only model did Shaown Nandi cite for simple, specific tasks?",
+          "answer": "Amazon Nova Micro",
           "decoys": [
-            "Invent and Simplify",
-            "Deliver Results",
-            "Are Right, A Lot"
+            "Amazon Nova Premier",
+            "Amazon Nova Reel",
+            "Amazon Titan Image"
           ],
-          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "source": "https://www.youtube.com/watch?v=2EGY802uIXY",
           "_verified": true
         },
         {
@@ -4049,26 +5983,26 @@
         },
         {
           "id": "cio-mcq-024",
-          "question": "Which AWS CAF perspective lists the CEO and CFO as common stakeholders?",
-          "answer": "Business",
+          "question": "Shaown Nandi cited which ad company for putting over 70,000 agents into production?",
+          "answer": "WPP",
           "decoys": [
-            "Platform",
-            "Operations",
-            "Security"
+            "Omnicom",
+            "Publicis",
+            "Dentsu"
           ],
-          "source": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/foundational-capabilities.html",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
           "_verified": true
         },
         {
           "id": "cio-mcq-025",
-          "question": "Which is NOT one of the four AWS CAF transformation domains?",
-          "answer": "Finance",
+          "question": "Shaown Nandi: if an AI feature is undifferentiated, you should usually do what?",
+          "answer": "Buy it from a vendor or partner",
           "decoys": [
-            "Technology",
-            "Process",
-            "Product"
+            "Build it in-house",
+            "Wait two years",
+            "Skip AI entirely"
           ],
-          "source": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/accelerating-business-outcomes.html",
+          "source": "https://www.youtube.com/watch?v=2EGY802uIXY",
           "_verified": true
         },
         {
@@ -4109,14 +6043,14 @@
         },
         {
           "id": "cio-mcq-029",
-          "question": "AWS cites Gartner: by 2028, what share of enterprise apps will include agentic AI?",
-          "answer": "One-third",
+          "question": "Shaown Nandi's advice for starting with agentic AI: think big, ___.",
+          "answer": "Act small",
           "decoys": [
-            "One-tenth",
-            "Two-thirds",
-            "Nine-tenths"
+            "Spend big",
+            "Move slowly",
+            "Build alone"
           ],
-          "source": "https://aws.amazon.com/executive-insights/content/an-executives-guide-to-agentic-ai/",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
           "_verified": true
         },
         {
@@ -4130,6 +6064,126 @@
           ],
           "source": "https://aws.amazon.com/transform/",
           "_verified": false
+        },
+        {
+          "id": "cio-mcq-031",
+          "question": "Which Leadership Principle says leaders have 'strong judgment and good instincts'?",
+          "answer": "Are Right, A Lot",
+          "decoys": [
+            "Think Big",
+            "Dive Deep",
+            "Learn and Be Curious"
+          ],
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-032",
+          "question": "Which Leadership Principle says leaders 'rise to the occasion and never settle'?",
+          "answer": "Deliver Results",
+          "decoys": [
+            "Bias for Action",
+            "Ownership",
+            "Think Big"
+          ],
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-033",
+          "question": "Which Leadership Principle asks leaders to respectfully challenge decisions they disagree with?",
+          "answer": "Have Backbone; Disagree and Commit",
+          "decoys": [
+            "Earn Trust",
+            "Are Right, A Lot",
+            "Insist on the Highest Standards"
+          ],
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-034",
+          "question": "Which Leadership Principle says leaders raise the performance bar with every hire and promotion?",
+          "answer": "Hire and Develop the Best",
+          "decoys": [
+            "Strive to be Earth's Best Employer",
+            "Deliver Results",
+            "Ownership"
+          ],
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-035",
+          "question": "In his 2016 letter, which 'obvious' external trend did Bezos urge companies to embrace?",
+          "answer": "Machine learning and AI",
+          "decoys": [
+            "Virtual reality",
+            "Blockchain and crypto",
+            "Social media"
+          ],
+          "source": "https://www.aboutamazon.com/news/company-news/2016-letter-to-shareholders",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-036",
+          "question": "In Andy Jassy's three-layer generative AI stack, where does Amazon Bedrock sit?",
+          "answer": "Middle layer",
+          "decoys": [
+            "Bottom layer",
+            "Top layer",
+            "Security layer"
+          ],
+          "source": "https://www.aboutamazon.com/news/company-news/amazon-ceo-andy-jassy-2023-letter-to-shareholders",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-037",
+          "question": "Which AWS CAF perspective focuses on culture, leadership and workforce?",
+          "answer": "People",
+          "decoys": [
+            "Business",
+            "Operations",
+            "Platform"
+          ],
+          "source": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/foundational-capabilities.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-038",
+          "question": "In a cloud migration, the secure, scalable foundational AWS environment is called a what?",
+          "answer": "Landing zone",
+          "decoys": [
+            "Launch pad",
+            "Base camp",
+            "Staging area"
+          ],
+          "source": "https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-migration/overview.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-039",
+          "question": "AWS migration guidance calls apps averaging under 5% CPU and memory use what?",
+          "answer": "Zombie applications",
+          "decoys": [
+            "Ghost applications",
+            "Orphan applications",
+            "Sleeper applications"
+          ],
+          "source": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-mcq-040",
+          "question": "Which AWS responsible AI dimension is about preventing harmful output and misuse?",
+          "answer": "Safety",
+          "decoys": [
+            "Fairness",
+            "Transparency",
+            "Explainability"
+          ],
+          "source": "https://aws.amazon.com/ai/responsible-ai/",
+          "_verified": true
         }
       ],
       "numeric": [
@@ -4209,10 +6263,9 @@
         },
         {
           "id": "cio-num-011",
-          "question": "Bezos, 2015: in business, unlike baseball, one swing can sometimes score how many runs?",
-          "answer": "1000",
-          "unit": "runs",
-          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312516530910/d168744dex991.htm",
+          "question": "In Shaown Nandi's example, an unbounded travel agent might fly to Paris and eat how many meals?",
+          "answer": "20",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
           "_verified": true
         },
         {
@@ -4224,10 +6277,31 @@
         },
         {
           "id": "cio-num-013",
-          "question": "Amazon's 1997 shareholder letter reported revenue growth of what percent?",
-          "answer": "838",
-          "unit": "%",
-          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "question": "Shaown Nandi expects AI inference costs to drop by about what percent over the next year or two?",
+          "answer": "90",
+          "source": "https://www.youtube.com/watch?v=2EGY802uIXY",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-014",
+          "question": "Amazon's AI Ready commitment aimed to give 2 million people free AI skills training by which year?",
+          "answer": "2025",
+          "source": "https://www.aboutamazon.com/news/aws/aws-free-ai-skills-training-courses",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-015",
+          "question": "In 2023, AWS committed how many million US dollars to its Generative AI Innovation Center?",
+          "answer": "100",
+          "unit": "million USD",
+          "source": "https://press.aboutamazon.com/2023/6/aws-announces-generative-ai-innovation-center",
+          "_verified": true
+        },
+        {
+          "id": "cio-num-016",
+          "question": "Andy Jassy quoted the AWS Vision document on building primitives. In what year was it written?",
+          "answer": "2003",
+          "source": "https://www.aboutamazon.com/news/company-news/amazon-ceo-andy-jassy-2023-letter-to-shareholders",
           "_verified": true
         }
       ],
@@ -4276,16 +6350,16 @@
         },
         {
           "id": "cio-word-007",
-          "question": "Bezos warned large companies about managing to these, such as process instead of outcomes.",
-          "answer": "Proxies",
-          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "question": "Shaown Nandi on build vs buy: ___ is the differentiator.",
+          "answer": "Data",
+          "source": "https://www.youtube.com/watch?v=2EGY802uIXY",
           "_verified": true
         },
         {
           "id": "cio-word-008",
-          "question": "Leadership Principle 'Success and Scale': We started in a what?",
-          "answer": "Garage",
-          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "question": "Shaown Nandi: before an agent may submit orders, let it ___ them first.",
+          "answer": "Draft",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
           "_verified": true
         },
         {
@@ -4304,9 +6378,9 @@
         },
         {
           "id": "cio-word-011",
-          "question": "The four AWS CAF phases: Envision, ___, Launch and Scale.",
-          "answer": "Align",
-          "source": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/your-cloud-transformation-journey.html",
+          "question": "Shaown Nandi says cloud cost management, which also applies to agents, is called what?",
+          "answer": "FinOps",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
           "_verified": true
         },
         {
@@ -4321,6 +6395,34 @@
           "question": "Leadership Principle: Learn and Be ___.",
           "answer": "Curious",
           "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-014",
+          "question": "AWS migration phases: Assess, ___, then Migrate.",
+          "answer": "Mobilize",
+          "source": "https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-migration/overview.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-015",
+          "question": "Bezos, 2017: yesterday's 'wow' quickly becomes today's what?",
+          "answer": "Ordinary",
+          "source": "https://www.aboutamazon.com/news/company-news/2017-letter-to-shareholders",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-016",
+          "question": "The AWS Cloud Value Framework pillar about releasing new features faster: Business ___.",
+          "answer": "Agility",
+          "source": "https://aws.amazon.com/economics/",
+          "_verified": true
+        },
+        {
+          "id": "cio-word-017",
+          "question": "Bezos, 1997 letter: 'this is Day 1 for the ___ and, if we execute well, for Amazon.com.'",
+          "answer": "Internet",
+          "source": "https://www.aboutamazon.com/news/company-news/amazons-original-1997-letter-to-shareholders",
           "_verified": true
         }
       ],
@@ -4357,9 +6459,9 @@
         },
         {
           "id": "cio-stmt-006",
-          "template": "The AWS Cloud Adoption Framework (AWS CAF) is {free guidance from AWS|a paid certification program}.",
-          "source": "https://aws.amazon.com/cloud-adoption-framework/",
-          "_verified": false
+          "template": "Shaown Nandi says an AI project's ROI depends on whether it {cuts cost or grows revenue|uses the newest model}.",
+          "source": "https://www.youtube.com/watch?v=2EGY802uIXY",
+          "_verified": true
         },
         {
           "id": "cio-stmt-007",
@@ -4375,8 +6477,8 @@
         },
         {
           "id": "cio-stmt-009",
-          "template": "Bezos said that without escalation, deep misalignment is usually settled by {exhaustion|a quick majority vote}.",
-          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm",
+          "template": "Shaown Nandi says enterprise AI needs security and privacy {built in from day one|bolted on after launch}.",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
           "_verified": true
         },
         {
@@ -4387,8 +6489,8 @@
         },
         {
           "id": "cio-stmt-011",
-          "template": "By tradition, Amazon memos {never show the authors' names|list every author on the first page}.",
-          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312518121161/d456916dex991.htm",
+          "template": "Shaown Nandi advises piloting agents on {narrow, bounded tasks first|the broadest possible tasks first}.",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
           "_verified": true
         },
         {
@@ -4399,8 +6501,8 @@
         },
         {
           "id": "cio-stmt-013",
-          "template": "Bezos said a great six-page memo can take {a week or more|only an hour or two} to write.",
-          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312518121161/d456916dex991.htm",
+          "template": "Shaown Nandi says most companies built their data foundations for BI and ML, {but not for agentic AI|and are already ready for agentic AI}.",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
           "_verified": true
         },
         {
@@ -4423,8 +6525,8 @@
         },
         {
           "id": "cio-stmt-017",
-          "template": "Two-pizza teams help counter the Ringelmann Effect, where individual effort {drops|rises} as groups grow.",
-          "source": "https://aws.amazon.com/executive-insights/content/amazon-two-pizza-team/",
+          "template": "Shaown Nandi sees AI compute shifting from training models toward {inference, or using the models|buying more data storage}.",
+          "source": "https://www.youtube.com/watch?v=2EGY802uIXY",
           "_verified": true
         },
         {
@@ -4453,8 +6555,8 @@
         },
         {
           "id": "cio-stmt-022",
-          "template": "AWS's Mark Schwartz sees a Cloud Center of Excellence as {a driver of change across the enterprise|just a help desk of cloud experts}.",
-          "source": "https://aws.amazon.com/blogs/enterprise-strategy/using-a-cloud-center-of-excellence-ccoe-to-transform-the-entire-enterprise/",
+          "template": "Shaown Nandi says the most successful companies {both buy and build AI|only build their own AI}.",
+          "source": "https://www.youtube.com/watch?v=2EGY802uIXY",
           "_verified": true
         },
         {
@@ -4471,8 +6573,56 @@
         },
         {
           "id": "cio-stmt-025",
-          "template": "Bezos said AWS reached $10 billion in annual sales {faster than Amazon did|slower than Amazon did}.",
-          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000119312516530910/d168744dex991.htm",
+          "template": "Shaown Nandi says that, with the right telemetry, {a smart agent can watch other agents|agents cannot be monitored in real time}.",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-026",
+          "template": "In the 7 Rs of migration, Retain means keeping an application {in your source environment for now|in the cloud with no changes}.",
+          "source": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-027",
+          "template": "Retrieval-augmented generation lets an AI model use company data {without retraining the model|only after fully retraining the model}.",
+          "source": "https://aws.amazon.com/what-is/retrieval-augmented-generation/",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-028",
+          "template": "The AWS Certified AI Business Strategist exam {does not test AWS services knowledge|requires hands-on AWS coding skills}.",
+          "source": "https://aws.amazon.com/certification/certified-ai-business-strategist/",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-029",
+          "template": "Amazon's AI Ready courses were designed for {both business and technical learners|software developers only}.",
+          "source": "https://www.aboutamazon.com/news/aws/aws-free-ai-skills-training-courses",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-030",
+          "template": "Bezos wrote that high standards are {domain specific, learned in each area|universal, so they carry over to every area}.",
+          "source": "https://www.aboutamazon.com/news/company-news/2017-letter-to-shareholders",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-031",
+          "template": "Bezos's 1997 letter promised Amazon would make {bold rather than timid|cautious rather than bold} investment decisions.",
+          "source": "https://www.aboutamazon.com/news/company-news/amazons-original-1997-letter-to-shareholders",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-032",
+          "template": "AWS lists {fairness and explainability|speed and profitability} among its core dimensions of responsible AI.",
+          "source": "https://aws.amazon.com/ai/responsible-ai/",
+          "_verified": true
+        },
+        {
+          "id": "cio-stmt-033",
+          "template": "Amazon's Customer Obsession principle says leaders focus on {customers more than competitors|competitors more than customers}.",
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
           "_verified": true
         }
       ],
@@ -4528,9 +6678,9 @@
         },
         {
           "id": "cio-spell-008",
-          "question": "The AWS CAF perspective that orchestrates cloud initiatives while minimizing risk is ___.",
-          "answer": "Governance",
-          "source": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/foundational-capabilities.html",
+          "question": "Shaown Nandi: one AgentCore module is all about ___, so teams can see what agents consume.",
+          "answer": "Observability",
+          "source": "https://www.youtube.com/watch?v=a_uoHdbSl14",
           "_verified": true
         },
         {
@@ -4545,6 +6695,34 @@
           "question": "The Leadership Principle about staying connected to the details is ___.",
           "answer": "Dive Deep",
           "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-011",
+          "question": "The migration strategy nicknamed 'drop and shop', such as moving to SaaS, is ___.",
+          "answer": "Repurchase",
+          "source": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-012",
+          "question": "The Leadership Principle about coaching and growing talent is Hire and ___ the Best.",
+          "answer": "Develop",
+          "source": "https://www.amazon.jobs/content/en/our-workplace/leadership-principles",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-013",
+          "question": "Amazon Bedrock ___ filter harmful content and redact personal data in AI apps.",
+          "answer": "Guardrails",
+          "source": "https://aws.amazon.com/bedrock/guardrails/",
+          "_verified": true
+        },
+        {
+          "id": "cio-spell-014",
+          "question": "A Migration Readiness ___ shows how far along your enterprise is in its cloud journey.",
+          "answer": "Assessment",
+          "source": "https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-migration/overview.html",
           "_verified": true
         }
       ]
