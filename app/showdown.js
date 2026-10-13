@@ -138,9 +138,9 @@
   // Same-origin, versioned bank asset (SSOT §5). Tracks app/VERSION for the
   // ?v= cache-bust convention (NOT bumped by this task — local only).
   const BANK_VERSION = '16';
-  // Relocated under app/showdown/ (2026-09-21): the old app/data/ path was not
-  // reliably present on S3. Local bundle stays the source (NOT the live
-  // /showdown/bank proxy). ?v= cache-buster tracks app/VERSION (not bumped here).
+  // The bundled FALLBACK copy, under app/showdown/ (2026-09-21: app/data/ was not
+  // reliably on S3). Since 2026-10-13 it is a deploy-time copy of LIVE_BANK_URL,
+  // not an independent source. ?v= is BANK_VERSION, bumped by deploy-showdown.sh.
   const BANK_URL = 'showdown/quiz-mode-question-bank.json?v=' + BANK_VERSION;
 
   // localStorage key for refresh/reconnect recovery (SSOT §7 deviation #5).
@@ -246,14 +246,17 @@
   let BANK_FLAT = null;   // Map<id, { category, type, entry }>  (convenience)
   let bankReady = null;   // Promise resolving when the bank is indexed
 
-  // Bank-parity fix (Option A): the backend resolves /puzzles picks from the
-  // bank served at [S] /showdown/bank, which carries ALL live categories (7+,
-  // incl. FrugalArchitect). Fetching THAT at boot makes category drift between
-  // the client and backend structurally impossible. The same-origin local
-  // bundle (BANK_URL) stays as the offline/failure fallback — it has the same
-  // JSON shape ({ categories: { <cat>: { <type>: [entries] } }, ... }). MOCK
-  // never touches the network (stays fully offline via the local bundle).
-  const LIVE_BANK_URL = BASE_S + '/showdown/bank';
+  // The question bank's single source of truth (Jaz, 2026-10-13): the backend's
+  // bank file on its own CloudFront. Every bank — this live fetch, the bundled
+  // fallback, the checks — refers to this one URL. It replaced [S] /showdown/bank,
+  // which kept serving the Hanoi bank after the backend moved on.
+  //
+  // The same-origin local bundle (BANK_URL) stays as the offline/failure fallback.
+  // deploy-showdown.sh now COPIES the bundle from this URL at deploy time, so the
+  // two cannot drift. A plain GET with no custom headers, so the browser sends no
+  // CORS preflight (the URL answers OPTIONS with 403, GET with ACAO *). MOCK never
+  // touches the network (stays fully offline via the local bundle).
+  const LIVE_BANK_URL = 'https://d3onwrtixwre6b.cloudfront.net/quiz-mode-question-bank-my2026.json';
   const LIVE_BANK_TIMEOUT_MS = 5000; // cap the boot fetch so a hang falls back
 
   // Index a parsed bank into BANK / BANK_INDEX / BANK_FLAT. Shared verbatim by
