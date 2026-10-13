@@ -137,7 +137,7 @@
 
   // Same-origin, versioned bank asset (SSOT §5). Tracks app/VERSION for the
   // ?v= cache-bust convention (NOT bumped by this task — local only).
-  const BANK_VERSION = '16';
+  const BANK_VERSION = '18';
   // The bundled FALLBACK copy, under app/showdown/ (2026-09-21: app/data/ was not
   // reliably on S3). Since 2026-10-13 it is a deploy-time copy of LIVE_BANK_URL,
   // not an independent source. ?v= is BANK_VERSION, bumped by deploy-showdown.sh.
