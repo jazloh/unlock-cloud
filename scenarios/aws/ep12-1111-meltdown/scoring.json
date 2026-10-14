@@ -1,0 +1,37 @@
+{
+  "base_score": 80,
+  "time_bonus_per_minute": 6,
+  "hint_penalty": -3,
+  "wrong_combination_penalty": -2,
+  "lore_ids": [
+    101,
+    201,
+    202,
+    301,
+    401
+  ],
+  "lore_bonus": 3,
+  "stars": [
+    {
+      "min": 110,
+      "stars": 5
+    },
+    {
+      "min": 95,
+      "stars": 4
+    },
+    {
+      "min": 75,
+      "stars": 3
+    },
+    {
+      "min": 50,
+      "stars": 2
+    },
+    {
+      "min": 0,
+      "stars": 1
+    }
+  ],
+  "notes": "8-minute booth episode for AWS Cloud & AI Day KL (4 Nov 2026). 9 puzzles across 4 rooms, linear. Each cleared room is a lead-score tier: Act 1 curious, Act 3 engaged, finale qualified. Generous scoring; most players should get 3+ stars."
+}

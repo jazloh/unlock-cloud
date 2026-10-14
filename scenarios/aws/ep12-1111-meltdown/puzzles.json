@@ -1,0 +1,406 @@
+{
+  "puzzles": [
+    {
+      "id": "log-act1",
+      "type": "puzzle",
+      "ui": "log-lock",
+      "card_ref": 102,
+      "success_card": 102,
+      "description": "The DevOps Agent lined up deployments against the errors. Select the 2 lines that show what changed right before checkout broke.",
+      "config": {
+        "prompt": "Select the 2 lines that show what changed just before checkout broke",
+        "lines": [
+          {
+            "text": "20:40:11 INFO  deploy  checkout-api v4.1.3 rollout complete (healthy)",
+            "correct": false
+          },
+          {
+            "text": "21:12:37 INFO  deploy  payment-service v2.8.1 rollout complete (healthy)",
+            "correct": false
+          },
+          {
+            "text": "21:47:02 INFO  deploy  checkout-api v4.2.0 \"flash-sale-banner\" by temp-hotfix-admin",
+            "correct": true
+          },
+          {
+            "text": "21:47:02 DIFF  config  PAYMENT_TIMEOUT_MS: 3000 -> 300",
+            "correct": true
+          },
+          {
+            "text": "21:48:15 ERROR checkout-api payment call timed out after 300 ms",
+            "correct": false
+          },
+          {
+            "text": "21:48:15 WARN  client  retry immediately (no backoff) attempt 2/5",
+            "correct": false
+          },
+          {
+            "text": "21:49:30 WARN  recommendation-service CPU 92%",
+            "correct": false
+          },
+          {
+            "text": "21:50:00 ALARM checkout-api 5xx rate 38%",
+            "correct": false
+          }
+        ]
+      },
+      "hints": [
+        "💬 Datin Sarah: \"Don't tell me what's broken. Tell me what changed.\"",
+        "🤖 DevOps Agent: \"Errors start at 21:48. Look at the deployment just before, and at what it changed.\"",
+        "🤖 DevOps Agent: \"The v4.2.0 deploy line and the PAYMENT_TIMEOUT_MS diff line.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "pillar-act1",
+      "type": "puzzle",
+      "ui": "pillar-lock",
+      "card_ref": 103,
+      "success_card": 103,
+      "description": "The DevOps Agent wrote up its findings. Sort fact from fiction.",
+      "config": {
+        "pillars": [
+          "TRUE",
+          "FALSE"
+        ],
+        "statements": [
+          {
+            "text": "The agent found the cause by lining up the deployment, the config change and the error graph.",
+            "answer": "TRUE"
+          },
+          {
+            "text": "The CPU alarm on recommendation-service is what broke checkout.",
+            "answer": "FALSE"
+          },
+          {
+            "text": "Clients retrying instantly with no backoff turned a small spike into a retry storm.",
+            "answer": "TRUE"
+          },
+          {
+            "text": "The right fix is to make clients retry faster.",
+            "answer": "FALSE"
+          }
+        ]
+      },
+      "hints": [
+        "💬 Datin Sarah: \"Which of these would you repeat to the board?\"",
+        "🤖 DevOps Agent: \"The CPU alarm isn't on the payment path. And faster retries add load, they don't remove it.\"",
+        "🤖 DevOps Agent: \"TRUE, FALSE, TRUE, FALSE.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "rollback-act1",
+      "type": "code_entry",
+      "ui": "terminal-lock",
+      "card_ref": 104,
+      "success_card": 104,
+      "description": "The DevOps Agent drafted a rollback plan and needs your approval. Type the version to restore.",
+      "config": {
+        "answer": "4.1.3",
+        "accept_variations": [
+          "v4.1.3",
+          "v413",
+          "413"
+        ],
+        "caseSensitive": false,
+        "prompt": "$ devops-agent plan --service checkout-api\ncurrent:      v4.2.0   (5xx 38%)\nlast healthy: see the 20:40 deploy\nrecommended:  rollback\n$ approve rollback checkout-api --to _",
+        "falseOutputs": [
+          "That version isn't the last healthy build. Check the deployment log.",
+          "Look for the checkout-api deploy marked healthy before 21:47.",
+          "It's the checkout-api version deployed at 20:40."
+        ]
+      },
+      "hints": [
+        "💬 Datin Sarah: \"Put it back the way it was when it worked.\"",
+        "🤖 DevOps Agent: \"The last healthy checkout-api build went out at 20:40.\"",
+        "🤖 DevOps Agent: \"4.1.3\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "wire-act2",
+      "type": "puzzle",
+      "ui": "wire-lock",
+      "card_ref": 210,
+      "success_card": 210,
+      "description": "Tonight needs four different defences. Connect each one to its job.",
+      "config": {
+        "wires": [
+          {
+            "id": "w1",
+            "color": "#ef4444",
+            "label": "AWS Security Agent"
+          },
+          {
+            "id": "w2",
+            "color": "#3b82f6",
+            "label": "Amazon GuardDuty"
+          },
+          {
+            "id": "w3",
+            "color": "#22c55e",
+            "label": "AWS WAF"
+          },
+          {
+            "id": "w4",
+            "color": "#eab308",
+            "label": "AWS Secrets Manager"
+          }
+        ],
+        "sockets": [
+          {
+            "id": "s1",
+            "label": "Pen-tests and reviews code before launch"
+          },
+          {
+            "id": "s2",
+            "label": "Detects threats at runtime"
+          },
+          {
+            "id": "s3",
+            "label": "Rate-limits and blocks the bots"
+          },
+          {
+            "id": "s4",
+            "label": "Keeps credentials out of code"
+          }
+        ],
+        "solution": {
+          "w1": "s1",
+          "w2": "s2",
+          "w3": "s3",
+          "w4": "s4"
+        },
+        "submitLabel": "⚡ Connect"
+      },
+      "hints": [
+        "💬 Datin Sarah: \"Who was supposed to catch this, and when?\"",
+        "🤖 Security Agent: \"I work before launch. GuardDuty watches at runtime. WAF sits in front of the login page.\"",
+        "🤖 Security Agent: \"Security Agent→before launch, GuardDuty→runtime threats, WAF→bots, Secrets Manager→credentials.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "cascade-act2",
+      "type": "puzzle",
+      "ui": "cascade-lock",
+      "card_ref": 211,
+      "success_card": 211,
+      "description": "The bots are the noise. Find the real breach.",
+      "config": {
+        "steps": [
+          {
+            "narration": "The botnet is loud, and WAF is already throttling it. Underneath, one key is in use from an unknown IP.",
+            "question": "Which pre-launch finding became tonight's breach?",
+            "options": [
+              "Finding 1: the SQL injection risk",
+              "Finding 2: the stack-trace error pages",
+              "Finding 3: the waived hard-coded admin key",
+              "None. The botnet was impossible to predict"
+            ],
+            "answer": 2,
+            "after": "✓ Finding 3. The Security Agent caught it three weeks ago. The team shipped past it, and the release that broke checkout was pushed with that same key."
+          },
+          {
+            "narration": "The key is revoked and the role deleted. Now make sure it can't happen again.",
+            "question": "Which guardrail stops this before the next launch?",
+            "options": [
+              "Block one country at the WAF",
+              "Block merges while a critical finding is open",
+              "Lock every account after one failed login",
+              "Run a pen test once a year"
+            ],
+            "answer": 1,
+            "after": "✓ A critical finding blocks the merge. Waiving it under deadline pressure is how tonight started."
+          }
+        ],
+        "cupNames": [
+          "The breach",
+          "The guardrail"
+        ]
+      },
+      "hints": [
+        "💬 Datin Sarah: \"Forget the loud part. What did we already know about?\"",
+        "🤖 Security Agent: \"Two findings were fixed. One was waived as temporary.\"",
+        "🤖 Security Agent: \"Finding 3, then block merges while a critical finding is open.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "wire-act3",
+      "type": "puzzle",
+      "ui": "wire-lock",
+      "card_ref": 310,
+      "success_card": 310,
+      "description": "Every line on the bill traces back to something you saw tonight. Connect each cost to its cause.",
+      "config": {
+        "wires": [
+          {
+            "id": "w1",
+            "color": "#ef4444",
+            "label": "RM 26k GPU instances, unused Region"
+          },
+          {
+            "id": "w2",
+            "color": "#3b82f6",
+            "label": "RM 15k Lambda + API Gateway requests"
+          },
+          {
+            "id": "w3",
+            "color": "#22c55e",
+            "label": "RM 7k log ingestion"
+          }
+        ],
+        "sockets": [
+          {
+            "id": "s1",
+            "label": "Crypto-mining with the leaked key"
+          },
+          {
+            "id": "s2",
+            "label": "The retry storm from Act 1"
+          },
+          {
+            "id": "s3",
+            "label": "Debug logging left on in v4.2.0"
+          }
+        ],
+        "solution": {
+          "w1": "s1",
+          "w2": "s2",
+          "w3": "s3"
+        },
+        "submitLabel": "🔗 Trace"
+      },
+      "hints": [
+        "💬 Datin Sarah: \"We didn't plan any of this. So who did?\"",
+        "🤖 FinOps Agent: \"I correlated each cost with CloudTrail. The GPUs were launched by temp-hotfix-admin.\"",
+        "🤖 FinOps Agent: \"GPUs→leaked key, requests→retry storm, logs→debug logging.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "chain-act3",
+      "type": "puzzle",
+      "ui": "chain-lock",
+      "card_ref": 311,
+      "success_card": 311,
+      "description": "The FinOps Agent can't switch anything off. It reports, your team acts. Tell them what to shut down first, biggest bleed first.",
+      "config": {
+        "items": [
+          {
+            "id": "logs",
+            "label": "Turn off debug logging (RM 7k)",
+            "icon": "📜"
+          },
+          {
+            "id": "gpu",
+            "label": "Terminate the rogue GPUs (RM 26k)",
+            "icon": "⛏️"
+          },
+          {
+            "id": "retry",
+            "label": "Confirm the retries have calmed (RM 15k)",
+            "icon": "🔁"
+          }
+        ],
+        "answer": [
+          "gpu",
+          "retry",
+          "logs"
+        ]
+      },
+      "hints": [
+        "💬 Datin Sarah: \"What's bleeding us fastest?\"",
+        "🤖 FinOps Agent: \"Sort by ringgit, largest first.\"",
+        "🤖 FinOps Agent: \"GPUs, then retries, then logs.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "evidence-final",
+      "type": "puzzle",
+      "ui": "evidence-board-lock",
+      "card_ref": 410,
+      "success_card": 410,
+      "description": "Before you answer the CEO, connect each of her questions to what you found.",
+      "config": {
+        "connections": [
+          {
+            "step": "Why are we down?",
+            "finding": "v4.2.0 cut the payment timeout to 300 ms",
+            "icon": "🛠️"
+          },
+          {
+            "step": "Were we breached?",
+            "finding": "Yes. The waived admin key leaked and was used",
+            "icon": "🔐"
+          },
+          {
+            "step": "What is it costing us?",
+            "finding": "RM 48k from mining, retries and debug logs",
+            "icon": "💸"
+          },
+          {
+            "step": "What caused all three?",
+            "finding": "One rushed release that shipped past a critical finding",
+            "icon": "💡"
+          }
+        ]
+      },
+      "hints": [
+        "💬 Datin Sarah: \"One line per question. Then tell me what links them.\"",
+        "🤖 Agents: \"DevOps answered the first, Security the second, FinOps the third.\"",
+        "🤖 Agents: \"🛠️→timeout, 🔐→waived key, 💸→RM 48k, 💡→one rushed release.\""
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "defuse-final",
+      "type": "puzzle",
+      "ui": "defuse-lock",
+      "card_ref": 411,
+      "success_card": 411,
+      "description": "⏰ 11:52 PM. 30 seconds. Datin Sarah asks: were we breached? Give her the honest answer.",
+      "config": {
+        "tasks": [
+          {
+            "type": "toggle",
+            "label": "\"It was just bots\"",
+            "answer": false
+          },
+          {
+            "type": "toggle",
+            "label": "\"An admin key was exposed and is now revoked\"",
+            "answer": true
+          },
+          {
+            "type": "toggle",
+            "label": "\"Customer-data access is under review\"",
+            "answer": true
+          },
+          {
+            "type": "code",
+            "label": "Which finding did we ship past? (number)",
+            "answer": "3"
+          },
+          {
+            "type": "code",
+            "label": "Checkout version restored",
+            "answer": "4.1.3"
+          }
+        ],
+        "onTimeout": "Midnight came and the CEO had no answer. Try again!",
+        "timeSeconds": 30
+      },
+      "hints": [
+        "💬 Datin Sarah: \"I can handle bad news. I can't handle surprises from the board.\"",
+        "🤖 Agents: \"The bots were noise. The key was real. Tell her both things that are true.\"",
+        "🤖 Agents: \"OFF, ON, ON, 3, 4.1.3.\""
+      ],
+      "mandatory": true,
+      "isFinal": true
+    }
+  ]
+}

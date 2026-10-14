@@ -1,0 +1,103 @@
+{
+  "timed_events": [
+    {
+      "id": "TE-01",
+      "time_remaining": 300,
+      "message": "11:55 PM. Five minutes to the sale.",
+      "type": "atmosphere"
+    },
+    {
+      "id": "TE-02",
+      "time_remaining": 120,
+      "message": "Two minutes! Datin Sarah is waiting.",
+      "type": "alarm"
+    },
+    {
+      "id": "TE-03",
+      "time_remaining": 30,
+      "message": "30 seconds to midnight!",
+      "type": "alarm"
+    }
+  ],
+  "triggered_events": [
+    {
+      "id": "hint-tooltip",
+      "trigger": "first_hint_request",
+      "message": "Hints cost points but never block you.",
+      "type": "tooltip",
+      "once": true
+    },
+    {
+      "id": "e-log-act1",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "log-act1",
+      "result_card": 102,
+      "message": "Culprit found: v4.2.0 changed the payment timeout.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-pillar-act1",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "pillar-act1",
+      "result_card": 103,
+      "message": "Findings verified. Time to roll back.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-rollback-act1",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "rollback-act1",
+      "result_card": 104,
+      "message": "✅ Checkout restored. Open alerts: 412. Act 2 unlocked.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-wire-act2",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "wire-act2",
+      "result_card": 210,
+      "message": "Defences mapped. Now find the breach.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-cascade-act2",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "cascade-act2",
+      "result_card": 211,
+      "message": "✅ Breach contained. Open alerts: 96. Act 3 unlocked.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-wire-act3",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "wire-act3",
+      "result_card": 310,
+      "message": "Every cost traced to tonight.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-chain-act3",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "chain-act3",
+      "result_card": 311,
+      "message": "✅ Bleeding stopped. Open alerts: 14. The CEO is back.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-evidence-final",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "evidence-final",
+      "result_card": 410,
+      "message": "The whole chain, in one view.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-final",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "defuse-final",
+      "result_card": 411,
+      "message": "🎉 00:00. 11.11 is LIVE.",
+      "type": "ending"
+    }
+  ]
+}

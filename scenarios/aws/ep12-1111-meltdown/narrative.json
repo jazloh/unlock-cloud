@@ -1,0 +1,76 @@
+{
+  "voices": {
+    "narrator": {
+      "voice_id": "Joanna",
+      "role": "Datin Sarah, BeliLah CEO. Calling from the airport, calm under pressure, no time to waste"
+    }
+  },
+  "intro": {
+    "segments": [
+      {
+        "voice": "narrator",
+        "text": "It's ten PM, the tenth of November. You're on call at BeliLah, Kuala Lumpur.",
+        "pause_after_ms": 700
+      },
+      {
+        "voice": "narrator",
+        "text": "At midnight the eleven-eleven sale opens. Three million shoppers are waiting to check out.",
+        "pause_after_ms": 600
+      },
+      {
+        "voice": "narrator",
+        "text": "This is Datin Sarah. I'm at the airport, and I'm told checkout is down. On the biggest night of our year.",
+        "pause_after_ms": 600
+      },
+      {
+        "voice": "narrator",
+        "text": "I have three questions. Why are we down? Were we breached? And what is this costing us?",
+        "pause_after_ms": 500
+      },
+      {
+        "voice": "narrator",
+        "text": "You have three Frontier Agents. Use them. You have eight minutes.",
+        "emphasis": "strong"
+      }
+    ],
+    "audio": null
+  },
+  "ending": {
+    "success": {
+      "segments": [
+        {
+          "voice": "narrator",
+          "text": "Thank you. That's the answer I can take to the board. The honest one.",
+          "pause_after_ms": 600
+        },
+        {
+          "voice": "narrator",
+          "text": "Midnight. Eleven-eleven is live, and checkout is holding.",
+          "pause_after_ms": 400
+        },
+        {
+          "voice": "narrator",
+          "text": "You escaped the war room.",
+          "emphasis": "strong"
+        }
+      ],
+      "audio": null,
+      "next_episode": null
+    },
+    "failure": {
+      "segments": [
+        {
+          "voice": "narrator",
+          "text": "It's midnight, and I still don't have my answers.",
+          "pause_after_ms": 400
+        },
+        {
+          "voice": "narrator",
+          "text": "The sale opened on a broken checkout. Come back and try again. The agents will be waiting.",
+          "emphasis": "moderate"
+        }
+      ],
+      "audio": null
+    }
+  }
+}

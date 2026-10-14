@@ -1,0 +1,89 @@
+{
+  "id": "ep12-1111-meltdown",
+  "title": "Escape the War Room: 11.11 Meltdown",
+  "episode": 12,
+  "arc": "Frontier Agents",
+  "category": "aws",
+  "description": "10 PM, the night before BeliLah's 11.11 sale. Checkout is failing, login is under attack and the bill has tripled. The CEO has three questions. Three AWS Frontier Agents can answer them. You have eight minutes.",
+  "difficulty": {
+    "tier": 1,
+    "label": "Booth (walk-up)"
+  },
+  "duration_minutes": 8,
+  "players": {
+    "min": 1,
+    "max": 1000,
+    "recommended": 1
+  },
+  "aws_topics": [
+    "AWS Frontier Agents",
+    "AWS DevOps Agent",
+    "AWS Security Agent (Continuum)",
+    "AWS FinOps Agent",
+    "Incident Response",
+    "Root Cause Analysis",
+    "Penetration Testing",
+    "Cost Anomaly Detection",
+    "AWS WAF",
+    "Amazon GuardDuty",
+    "AWS Secrets Manager",
+    "Cost Allocation Tags",
+    "Service Control Policies",
+    "AWS Enterprise Support"
+  ],
+  "mechanics_used": [
+    "log-lock",
+    "pillar-lock",
+    "terminal-lock",
+    "wire-lock",
+    "cascade-lock",
+    "chain-lock",
+    "evidence-board-lock",
+    "defuse-lock"
+  ],
+  "mechanics_taught": [
+    "puzzle_solving",
+    "knowledge_recall",
+    "sequencing",
+    "matching",
+    "deduction"
+  ],
+  "version": "0.1",
+  "start_button": "Take the call",
+  "lore_label": "💬 War Room",
+  "end_title": "11.11 is LIVE",
+  "map_style": "flow",
+  "has_narration_audio": false,
+  "learning_recap": {
+    "title": "🧠 What You Just Learned",
+    "cycle": [
+      {
+        "stage": "WHY DOWN",
+        "note": "AWS DevOps Agent: correlates deploys, config and telemetry to the root cause"
+      },
+      {
+        "stage": "BREACHED?",
+        "note": "AWS Security Agent (Continuum): finds the flaw in code and design before launch"
+      },
+      {
+        "stage": "COST",
+        "note": "AWS FinOps Agent (Preview): ties each cost to CloudTrail and an owner"
+      },
+      {
+        "stage": "DECIDE",
+        "note": "You connect the three and tell the CEO the truth"
+      }
+    ],
+    "benefits": [
+      "DevOps Agent recommends the rollback; your team approves it",
+      "Security Agent caught the waived key three weeks before it leaked",
+      "GuardDuty and WAF handle the live attack; Security Agent works before launch",
+      "FinOps Agent investigates and reports; your team shuts the spend down",
+      "One rushed release explained all three alarms"
+    ],
+    "link": {
+      "label": "AWS Frontier Agents",
+      "url": "https://aws.amazon.com/ai/frontier-agents"
+    }
+  }
+}

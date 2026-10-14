@@ -1,0 +1,67 @@
+{
+  "rooms": [
+    {
+      "card_id": 100,
+      "name": "Why Are We Down?",
+      "description": "DevOps Agent. Find what changed and roll it back.",
+      "connects_to": [
+        200
+      ],
+      "unlocked_by": null,
+      "unlock_text": "Starting room: the outage.",
+      "map_pos": [
+        140,
+        380
+      ]
+    },
+    {
+      "card_id": 200,
+      "name": "Were We Breached?",
+      "description": "Security Agent. The bots are noise. Find the real breach.",
+      "connects_to": [
+        300
+      ],
+      "unlocked_by": {
+        "type": "puzzle",
+        "puzzle_id": "rollback-act1"
+      },
+      "unlock_text": "Checkout restored. Login is under attack.",
+      "map_pos": [
+        140,
+        280
+      ]
+    },
+    {
+      "card_id": 300,
+      "name": "What Is It Costing Us?",
+      "description": "FinOps Agent (Preview). Trace the RM 48,000.",
+      "connects_to": [
+        400
+      ],
+      "unlocked_by": {
+        "type": "puzzle",
+        "puzzle_id": "cascade-act2"
+      },
+      "unlock_text": "Breach contained. Finance is calling.",
+      "map_pos": [
+        140,
+        180
+      ]
+    },
+    {
+      "card_id": 400,
+      "name": "Answer the CEO",
+      "description": "Put the night together and tell the truth.",
+      "connects_to": [],
+      "unlocked_by": {
+        "type": "puzzle",
+        "puzzle_id": "chain-act3"
+      },
+      "unlock_text": "Bleeding stopped. Datin Sarah is back on the line.",
+      "map_pos": [
+        140,
+        60
+      ]
+    }
+  ]
+}
