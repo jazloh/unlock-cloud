@@ -7,7 +7,7 @@
       "title": "Act 1: Why Are We Down?",
       "description": "🚨 CHECKOUT ERRORS: 38% and climbing. Open alerts: 999+.\n\nDatin Sarah's first question: why are we down? The DevOps Agent has already pulled the timeline. Find what changed, then roll it back.",
       "image": "assets/act1-outage.png",
-      "image_prompt": "Late-night network operations floor in Kuala Lumpur, one desk lamp, three monitors with red checkout error graphs, a cold glass of teh tarik, Petronas Towers through the window, red alert glow, isometric game art",
+      "image_prompt": "Red alert emergency: an operations room bathed in flashing crimson red light, every monitor glowing red with crashing graphs and red warning triangles, a red rotating alarm beacon on the ceiling, a stressed engineer leaning in at the desk, a half-drunk glass of teh tarik beside the keyboard, generic night city lights through the window, isometric game art",
       "discoveries": [
         {
           "card_id": 101,
@@ -117,7 +117,7 @@
       "title": "Act 2: Were We Breached?",
       "description": "🔐 LOGIN TRAFFIC: 40,000 requests a minute. Open alerts: 412.\n\nDatin Sarah's second question: were we breached? The Security Agent opens on a report from three weeks ago.",
       "image": "assets/act2-breach.png",
-      "image_prompt": "Cool blue flashback scene of a security review on a laptop, threat model diagram and three findings with one stamped WAIVED in red, then a login page lit up red with bot traffic, isometric game art",
+      "image_prompt": "Security breach: a large glowing padlock icon cracked open in the centre of the scene, a hooded shadowy intruder silhouette on a screen behind it, a swarm of small red bot icons streaming toward a login screen, a golden admin key glowing red on the desk, cool blue room with red warning light, isometric game art",
       "discoveries": [
         {
           "card_id": 201,
@@ -209,7 +209,7 @@
       "title": "Act 3: What Is It Costing Us?",
       "description": "💸 SPEND SINCE 6 PM: RM 48,000, three times budget. Open alerts: 96.\n\nDatin Sarah's third question: what is this costing us? The FinOps Agent has already broken the bill down. You'll recognise every line.",
       "image": "assets/act3-bill.png",
-      "image_prompt": "Finance dashboard with a steep red cost line, ringgit symbols, three highlighted cost bars, a world map with one unexpected region glowing, isometric game art",
+      "image_prompt": "Finance dashboard with a steep red cost line shooting upward, stacks of gold coins, three highlighted cost bars, a world map with one unexpected region glowing, isometric game art",
       "discoveries": [
         {
           "card_id": 301,
@@ -287,7 +287,7 @@
       "title": "Finale: Answer the CEO",
       "description": "⏰ 11:52 PM. Eight minutes to the sale. Datin Sarah is back on the bridge.\n\nPut the night together, then give her a straight answer.",
       "image": "assets/finale-bridge.png",
-      "image_prompt": "Video call on a large screen with a composed Malaysian CEO in an airport lounge, countdown clock at 11:52 PM, three green status lights for DevOps, Security and FinOps, isometric game art",
+      "image_prompt": "Over-the-shoulder view from behind an engineer at a desk, looking at one large monitor that shows a video call: on the monitor, a composed Malaysian businesswoman in a blazer sitting in a softly lit hotel lounge, framed head and shoulders like a webcam picture; three small round green indicator lamps glowing on the desk next to the monitor, dark ops room, calm teal light, isometric game art",
       "discoveries": [
         {
           "card_id": 401,

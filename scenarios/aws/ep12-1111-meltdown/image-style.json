@@ -1,6 +1,6 @@
 {
   "style_prefix": "Modern Malaysian e-commerce operations-center illustration, late night in Kuala Lumpur, dark control-room palette with orange and teal accents, high contrast, booth-friendly and mobile-first, game card art.",
-  "style_prefix_location": "Modern Malaysian e-commerce operations-center illustration, late night in Kuala Lumpur with the city skyline through the window, dark control-room palette with orange and teal accents, wide angle, isometric, high contrast, booth-friendly and mobile-first, game card art.",
+  "style_prefix_location": "Modern Malaysian e-commerce operations-center illustration, late night with generic city lights through the window, dark control-room palette with orange and teal accents, wide angle, isometric, high contrast, booth-friendly and mobile-first, game card art.",
   "style_prefix_item": "Modern ops-center illustration, single object on a clean dark surface, orange and teal accents, close-up, high contrast, game card art.",
   "style_prefix_object": "Modern ops-center illustration, single glowing console or agent icon on a dark surface, orange and teal accents, close-up, high contrast, game card art.",
   "palette": [
@@ -12,7 +12,7 @@
   ],
   "mood": "Countdown to the biggest sale of the year; urgent but controlled",
   "references": "e-commerce NOC at night, red checkout graphs, countdown clock, Kuala Lumpur skyline, teh tarik on the desk",
-  "negative_prompt": "no text, no words, no letters, no numbers, no logos, watermark, blurry, low quality, ugly, realistic photo, UI chrome",
+  "negative_prompt": "no text, no words, no letters, no numbers, no logos, watermark, blurry, low quality, ugly, realistic photo, UI chrome, Petronas Towers, twin towers, famous landmark, airplane, aircraft, user interface panels, sidebar, captions, subtitles, menus",
   "aspect_ratio": "16:9",
   "aspect_ratio_cover": "3:4"
 }
