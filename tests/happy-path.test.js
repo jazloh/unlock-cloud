@@ -1030,27 +1030,31 @@ describe('EP12 — 11.11 Meltdown', () => {
     assert.ok(engine.unlockedRooms.includes(200), 'Act 2 should be unlocked');
   });
 
-  test('Act 2: map defences, find the waived finding → Act 3', () => {
+  test('Act 2: map defences, replay the threat model, find the waived finding → Act 3', () => {
     engine.navigateToRoom(200);
     discover(engine, 201, 'Meet the Security Agent');
     discover(engine, 202, 'Pre-launch review');
     solvePuzzle(engine, 'wire-act2', 210, 'Roles Mapped');
+    assert.ok(engine.inventory.includes(251), 'Security Roles should be in inventory');
+    solvePuzzle(engine, 'timeline-act2', 212, 'The Predicted Path');
+    assert.ok(engine.inventory.includes(252), 'Attack Path should be in inventory');
     solvePuzzle(engine, 'cascade-act2', 211, 'Breach Contained');
+    assert.equal(engine.inventory.length, 0, 'Act 2 items should be consumed');
     assert.ok(engine.unlockedRooms.includes(300), 'Act 3 should be unlocked');
   });
 
-  test('Act 3: trace each cost, stop the bleed → Finale', () => {
+  test('Act 3: trace each cost, find why nobody acted → Finale', () => {
     engine.navigateToRoom(300);
     discover(engine, 301, 'Meet the FinOps Agent');
-    solvePuzzle(engine, 'wire-act3', 310, 'Costs Traced');
-    solvePuzzle(engine, 'chain-act3', 311, 'Bleeding Stopped');
+    solvePuzzle(engine, 'match-act3', 310, 'Costs Traced');
+    solvePuzzle(engine, 'sort-act3', 311, 'Bleeding Stopped');
     assert.ok(engine.unlockedRooms.includes(400), 'Finale should be unlocked');
   });
 
-  test('Finale: connect the night, answer the CEO → 11.11 is LIVE (ending)', () => {
+  test('Finale: add the guardrails, answer the CEO → 11.11 is LIVE (ending)', () => {
     engine.navigateToRoom(400);
     discover(engine, 401, 'Datin Sarah');
-    solvePuzzle(engine, 'evidence-final', 410, 'One Night, One Story');
+    solvePuzzle(engine, 'evidence-final', 410, 'One Rush, Three Alarms');
     solvePuzzle(engine, 'defuse-final', 411, '11.11 is LIVE');
     assertCompleted(engine);
   });

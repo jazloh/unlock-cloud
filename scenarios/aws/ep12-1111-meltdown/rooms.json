@@ -51,11 +51,11 @@
     {
       "card_id": 400,
       "name": "Answer the CEO",
-      "description": "Put the night together and tell the truth.",
+      "description": "Add the guardrails, then tell the truth.",
       "connects_to": [],
       "unlocked_by": {
         "type": "puzzle",
-        "puzzle_id": "chain-act3"
+        "puzzle_id": "sort-act3"
       },
       "unlock_text": "Bleeding stopped. Datin Sarah is back on the line.",
       "map_pos": [

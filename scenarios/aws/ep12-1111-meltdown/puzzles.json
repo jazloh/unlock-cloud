@@ -6,7 +6,7 @@
       "ui": "log-lock",
       "card_ref": 102,
       "success_card": 102,
-      "description": "The DevOps Agent lined up deployments against the errors. Select the 2 lines that show what changed right before checkout broke.",
+      "description": "The DevOps Agent lined up the deployments against the errors. Select the 2 lines that show what changed right before checkout broke.",
       "config": {
         "prompt": "Select the 2 lines that show what changed just before checkout broke",
         "lines": [
@@ -57,7 +57,7 @@
       "ui": "pillar-lock",
       "card_ref": 103,
       "success_card": 103,
-      "description": "The DevOps Agent wrote up its findings. Sort fact from fiction.",
+      "description": "The DevOps Agent wrote up its findings. Sort fact from fiction before you repeat any of it to the CEO.",
       "config": {
         "pillars": [
           "TRUE",
@@ -65,7 +65,7 @@
         ],
         "statements": [
           {
-            "text": "The agent found the cause by lining up the deployment, the config change and the error graph.",
+            "text": "The agent found the cause by correlating the deployment, the config change and the error graph.",
             "answer": "TRUE"
           },
           {
@@ -77,14 +77,14 @@
             "answer": "TRUE"
           },
           {
-            "text": "The right fix is to make clients retry faster.",
+            "text": "The DevOps Agent rolls production back by itself, without asking anyone.",
             "answer": "FALSE"
           }
         ]
       },
       "hints": [
         "💬 Datin Sarah: \"Which of these would you repeat to the board?\"",
-        "🤖 DevOps Agent: \"The CPU alarm isn't on the payment path. And faster retries add load, they don't remove it.\"",
+        "🤖 DevOps Agent: \"The CPU alarm isn't on the payment path. And I recommend the fix; your team approves it.\"",
         "🤖 DevOps Agent: \"TRUE, FALSE, TRUE, FALSE.\""
       ],
       "mandatory": true
@@ -95,7 +95,7 @@
       "ui": "terminal-lock",
       "card_ref": 104,
       "success_card": 104,
-      "description": "The DevOps Agent drafted a rollback plan and needs your approval. Type the version to restore.",
+      "description": "The DevOps Agent recommends a rollback and needs your approval. Type the version to restore.",
       "config": {
         "answer": "4.1.3",
         "accept_variations": [
@@ -104,7 +104,7 @@
           "413"
         ],
         "caseSensitive": false,
-        "prompt": "$ devops-agent plan --service checkout-api\ncurrent:      v4.2.0   (5xx 38%)\nlast healthy: see the 20:40 deploy\nrecommended:  rollback\n$ approve rollback checkout-api --to _",
+        "prompt": "DEVOPS AGENT · MITIGATION PLAN\nservice:      checkout-api\ncurrent:      v4.2.0  (5xx 38%)\nlast healthy: see the 20:40 deploy\nrecommended:  roll back, then add retry backoff\n> approve rollback checkout-api --to _",
         "falseOutputs": [
           "That version isn't the last healthy build. Check the deployment log.",
           "Look for the checkout-api deploy marked healthy before 21:47.",
@@ -124,7 +124,7 @@
       "ui": "wire-lock",
       "card_ref": 210,
       "success_card": 210,
-      "description": "Tonight needs four different defences. Connect each one to its job.",
+      "description": "Four defences, four different jobs. Connect each one to what it does.",
       "config": {
         "wires": [
           {
@@ -151,7 +151,7 @@
         "sockets": [
           {
             "id": "s1",
-            "label": "Pen-tests and reviews code before launch"
+            "label": "Reviews code and pen-tests before launch"
           },
           {
             "id": "s2",
@@ -182,6 +182,52 @@
       "mandatory": true
     },
     {
+      "id": "timeline-act2",
+      "type": "timeline-lock",
+      "ui": "timeline-lock",
+      "card_ref": 212,
+      "success_card": 212,
+      "description": "Three weeks ago the Security Agent's threat model predicted how Finding 3 could be exploited. Put its attack path in order.",
+      "config": {
+        "enhanced": true,
+        "answer": [
+          "script",
+          "public",
+          "found",
+          "assume",
+          "launch"
+        ],
+        "events": [
+          {
+            "id": "script",
+            "label": "🔑 Admin key hard-coded in the deploy script"
+          },
+          {
+            "id": "public",
+            "label": "🌐 Script pushed to a public repository"
+          },
+          {
+            "id": "found",
+            "label": "🕵️ Attacker finds the key"
+          },
+          {
+            "id": "assume",
+            "label": "👤 Attacker signs in as the no-MFA admin role"
+          },
+          {
+            "id": "launch",
+            "label": "⛏️ Instances launched in a Region you don't use"
+          }
+        ]
+      },
+      "hints": [
+        "💬 Datin Sarah: \"Walk me through it. Start with what we did wrong.\"",
+        "🤖 Security Agent: \"It starts with the key in the script, and ends with spend in a Region nobody watches.\"",
+        "🤖 Security Agent: \"Hard-coded key → public repo → attacker finds it → signs in as admin → launches instances.\""
+      ],
+      "mandatory": true
+    },
+    {
       "id": "cascade-act2",
       "type": "puzzle",
       "ui": "cascade-lock",
@@ -191,8 +237,7 @@
       "config": {
         "steps": [
           {
-            "narration": "The botnet is loud, and WAF is already throttling it. Underneath, one key is in use from an unknown IP.",
-            "question": "Which pre-launch finding became tonight's breach?",
+            "question": "The bots are loud, and the WAF is throttling them. Under the noise, CloudTrail shows temp-hotfix-admin calling from an IP nobody recognises. Which pre-launch finding became the breach?",
             "options": [
               "Finding 1: the SQL injection risk",
               "Finding 2: the stack-trace error pages",
@@ -200,121 +245,106 @@
               "None. The botnet was impossible to predict"
             ],
             "answer": 2,
-            "after": "✓ Finding 3. The Security Agent caught it three weeks ago. The team shipped past it, and the release that broke checkout was pushed with that same key."
+            "after": "✓ Finding 3. The Security Agent flagged it CRITICAL three weeks ago. The team waived it as \"temporary\"."
           },
           {
-            "narration": "The key is revoked and the role deleted. Now make sure it can't happen again.",
-            "question": "Which guardrail stops this before the next launch?",
+            "question": "CloudTrail's first call from that IP isn't from tonight. How long has the attacker had the key?",
+            "options": [
+              "Since 21:47 tonight, when v4.2.0 shipped",
+              "Since Friday 7 Nov, when the deploy scripts went to a public repo",
+              "Since the review three weeks ago",
+              "They haven't used it"
+            ],
+            "answer": 1,
+            "after": "✓ Since Friday. The leak is three days old. The botnet only made it look like tonight's problem."
+          },
+          {
+            "question": "The key is deactivated and the role deleted. Which guardrail stops this before the next launch?",
             "options": [
               "Block one country at the WAF",
-              "Block merges while a critical finding is open",
+              "No waivers on CRITICAL findings, and Security Agent reviews every pull request",
               "Lock every account after one failed login",
               "Run a pen test once a year"
             ],
             "answer": 1,
-            "after": "✓ A critical finding blocks the merge. Waiving it under deadline pressure is how tonight started."
+            "after": "✓ The agent did its job. Waiving a critical finding under deadline pressure is how this started."
           }
         ],
         "cupNames": [
-          "The breach",
+          "The finding",
+          "The timeline",
           "The guardrail"
-        ]
+        ],
+        "shuffle_options": true,
+        "pauseBetweenSteps": 2500,
+        "onComplete": {
+          "emojis": "🔑🌐🛡️",
+          "text": "The breach is three days old, and the Security Agent saw it coming three weeks ago.",
+          "subtext": "The agent did its job. The waiver is what let it through."
+        }
       },
       "hints": [
         "💬 Datin Sarah: \"Forget the loud part. What did we already know about?\"",
-        "🤖 Security Agent: \"Two findings were fixed. One was waived as temporary.\"",
-        "🤖 Security Agent: \"Finding 3, then block merges while a critical finding is open.\""
+        "🤖 Security Agent: \"Two findings were fixed. One was waived. And check when the scripts went public.\"",
+        "🤖 Security Agent: \"Finding 3, since Friday 7 Nov, then no waivers on CRITICAL findings.\""
       ],
       "mandatory": true
     },
     {
-      "id": "wire-act3",
+      "id": "match-act3",
       "type": "puzzle",
-      "ui": "wire-lock",
+      "ui": "match-lock",
       "card_ref": 310,
       "success_card": 310,
-      "description": "Every line on the bill traces back to something you saw tonight. Connect each cost to its cause.",
+      "description": "The FinOps Agent correlated each cost with CloudTrail. Match each line of the bill to its cause.",
       "config": {
-        "wires": [
-          {
-            "id": "w1",
-            "color": "#ef4444",
-            "label": "RM 26k GPU instances, unused Region"
-          },
-          {
-            "id": "w2",
-            "color": "#3b82f6",
-            "label": "RM 15k Lambda + API Gateway requests"
-          },
-          {
-            "id": "w3",
-            "color": "#22c55e",
-            "label": "RM 7k log ingestion"
-          }
+        "pairs": [
+          [
+            "💸 USD 5,800: load-test fleet",
+            "Friday's pre-sale test, never switched off"
+          ],
+          [
+            "💸 USD 3,400: instances in an unused Region",
+            "Launched with the leaked admin key"
+          ],
+          [
+            "💸 USD 1,600: log ingestion",
+            "Debug logging left on after the load test"
+          ]
         ],
-        "sockets": [
-          {
-            "id": "s1",
-            "label": "Crypto-mining with the leaked key"
-          },
-          {
-            "id": "s2",
-            "label": "The retry storm from Act 1"
-          },
-          {
-            "id": "s3",
-            "label": "Debug logging left on in v4.2.0"
-          }
-        ],
-        "solution": {
-          "w1": "s1",
-          "w2": "s2",
-          "w3": "s3"
-        },
-        "submitLabel": "🔗 Trace"
+        "cols": 2,
+        "faceUp": true
       },
       "hints": [
         "💬 Datin Sarah: \"We didn't plan any of this. So who did?\"",
-        "🤖 FinOps Agent: \"I correlated each cost with CloudTrail. The GPUs were launched by temp-hotfix-admin.\"",
-        "🤖 FinOps Agent: \"GPUs→leaked key, requests→retry storm, logs→debug logging.\""
+        "🤖 FinOps Agent: \"CloudTrail shows temp-hotfix-admin launched the instances in the unused Region.\"",
+        "🤖 FinOps Agent: \"Fleet→Friday's load test, unused Region→leaked key, logs→debug logging.\""
       ],
       "mandatory": true
     },
     {
-      "id": "chain-act3",
+      "id": "sort-act3",
       "type": "puzzle",
-      "ui": "chain-lock",
+      "ui": "sort-lock",
       "card_ref": 311,
       "success_card": 311,
-      "description": "The FinOps Agent can't switch anything off. It reports, your team acts. Tell them what to shut down first, biggest bleed first.",
+      "description": "This alert fired at 07:12 this morning and nobody acted. Put the FinOps Agent's steps in order. One card is a decoy: something the agent doesn't do.",
       "config": {
-        "items": [
-          {
-            "id": "logs",
-            "label": "Turn off debug logging (RM 7k)",
-            "icon": "📜"
-          },
-          {
-            "id": "gpu",
-            "label": "Terminate the rogue GPUs (RM 26k)",
-            "icon": "⛏️"
-          },
-          {
-            "id": "retry",
-            "label": "Confirm the retries have calmed (RM 15k)",
-            "icon": "🔁"
-          }
-        ],
         "answer": [
-          "gpu",
-          "retry",
-          "logs"
+          "Cost Anomaly Detection flags the spike",
+          "Agent correlates it with CloudTrail events",
+          "Agent names the root cause and the owner",
+          "Agent posts the findings to Jira or Slack",
+          "The owner shuts the spend down"
+        ],
+        "distractors": [
+          "Agent terminates the instances itself"
         ]
       },
       "hints": [
-        "💬 Datin Sarah: \"What's bleeding us fastest?\"",
-        "🤖 FinOps Agent: \"Sort by ringgit, largest first.\"",
-        "🤖 FinOps Agent: \"GPUs, then retries, then logs.\""
+        "💬 Datin Sarah: \"It found this at seven this morning? Then why am I hearing about it at eleven at night?\"",
+        "🤖 FinOps Agent: \"I investigate and report. I don't switch things off. My post went to a channel nobody owns.\"",
+        "🤖 FinOps Agent: \"Detect → correlate with CloudTrail → name cause and owner → post to Jira/Slack → owner acts. The decoy is 'terminates the instances itself'.\""
       ],
       "mandatory": true
     },
@@ -324,35 +354,35 @@
       "ui": "evidence-board-lock",
       "card_ref": 410,
       "success_card": 410,
-      "description": "Before you answer the CEO, connect each of her questions to what you found.",
+      "description": "Each agent had already flagged its part. Connect each failure to the guardrail that stops it next time.",
       "config": {
         "connections": [
           {
-            "step": "Why are we down?",
-            "finding": "v4.2.0 cut the payment timeout to 300 ms",
+            "step": "v4.2.0 shipped without a release review",
+            "finding": "DevOps Agent reviews every checkout pull request",
             "icon": "🛠️"
           },
           {
-            "step": "Were we breached?",
-            "finding": "Yes. The waived admin key leaked and was used",
+            "step": "A CRITICAL finding was waived",
+            "finding": "No waivers on CRITICAL findings",
             "icon": "🔐"
           },
           {
-            "step": "What is it costing us?",
-            "finding": "RM 48k from mining, retries and debug logs",
+            "step": "The cost alert went to a channel nobody owns",
+            "finding": "FinOps Agent findings go to the owner's Jira queue",
             "icon": "💸"
           },
           {
-            "step": "What caused all three?",
-            "finding": "One rushed release that shipped past a critical finding",
+            "step": "What linked all three?",
+            "finding": "The 11.11 rush skipped what the agents flagged",
             "icon": "💡"
           }
         ]
       },
       "hints": [
-        "💬 Datin Sarah: \"One line per question. Then tell me what links them.\"",
-        "🤖 Agents: \"DevOps answered the first, Security the second, FinOps the third.\"",
-        "🤖 Agents: \"🛠️→timeout, 🔐→waived key, 💸→RM 48k, 💡→one rushed release.\""
+        "💬 Datin Sarah: \"Don't tell me the agents failed. Tell me what we ignored.\"",
+        "🤖 Agents: \"Each guardrail answers one failure: review the release, respect the finding, route the alert.\"",
+        "🤖 Agents: \"🛠️→release review, 🔐→no waivers, 💸→owner's Jira queue, 💡→the 11.11 rush.\""
       ],
       "mandatory": true
     },
@@ -362,7 +392,7 @@
       "ui": "defuse-lock",
       "card_ref": 411,
       "success_card": 411,
-      "description": "⏰ 11:52 PM. 30 seconds. Datin Sarah asks: were we breached? Give her the honest answer.",
+      "description": "⏰ 11:52 PM. Datin Sarah asks: were we breached? Give her the honest answer.",
       "config": {
         "tasks": [
           {
@@ -372,7 +402,7 @@
           },
           {
             "type": "toggle",
-            "label": "\"An admin key was exposed and is now revoked\"",
+            "label": "\"An admin key leaked on Friday. It's revoked now\"",
             "answer": true
           },
           {
@@ -382,7 +412,7 @@
           },
           {
             "type": "code",
-            "label": "Which finding did we ship past? (number)",
+            "label": "Which finding did we waive? (number)",
             "answer": "3"
           },
           {
@@ -392,7 +422,7 @@
           }
         ],
         "onTimeout": "Midnight came and the CEO had no answer. Try again!",
-        "timeSeconds": 30
+        "timeSeconds": 45
       },
       "hints": [
         "💬 Datin Sarah: \"I can handle bad news. I can't handle surprises from the board.\"",

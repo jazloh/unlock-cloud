@@ -29,7 +29,7 @@
       },
       {
         "voice": "narrator",
-        "text": "You have three Frontier Agents. Use them. You have eight minutes.",
+        "text": "You have three Frontier Agents. Use them. You have until midnight.",
         "emphasis": "strong"
       }
     ],
@@ -55,7 +55,8 @@
         }
       ],
       "audio": null,
-      "next_episode": null
+      "next_episode": null,
+      "image": "assets/ending-success.png"
     },
     "failure": {
       "segments": [
@@ -70,7 +71,8 @@
           "emphasis": "moderate"
         }
       ],
-      "audio": null
+      "audio": null,
+      "image": "assets/ending-failure.png"
     }
   }
 }

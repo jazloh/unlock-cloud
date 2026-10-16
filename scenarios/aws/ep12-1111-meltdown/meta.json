@@ -4,12 +4,12 @@
   "episode": 12,
   "arc": "Frontier Agents",
   "category": "aws",
-  "description": "10 PM, the night before BeliLah's 11.11 sale. Checkout is failing, login is under attack and the bill has tripled. The CEO has three questions. Three AWS Frontier Agents can answer them. You have eight minutes.",
+  "description": "10 PM, the night before BeliLah's 11.11 sale. Checkout is failing, login is under attack and the bill has tripled. The CEO has three questions. Three AWS Frontier Agents already have the answers, if you can put them together before midnight.",
   "difficulty": {
     "tier": 1,
     "label": "Booth (walk-up)"
   },
-  "duration_minutes": 8,
+  "duration_minutes": 10,
   "players": {
     "min": 1,
     "max": 1000,
@@ -18,26 +18,28 @@
   "aws_topics": [
     "AWS Frontier Agents",
     "AWS DevOps Agent",
-    "AWS Security Agent (Continuum)",
-    "AWS FinOps Agent",
+    "AWS Security Agent (AWS Continuum)",
+    "AWS FinOps Agent (Preview)",
     "Incident Response",
     "Root Cause Analysis",
+    "Threat Modeling",
     "Penetration Testing",
-    "Cost Anomaly Detection",
+    "AWS Cost Anomaly Detection",
+    "AWS CloudTrail",
     "AWS WAF",
     "Amazon GuardDuty",
     "AWS Secrets Manager",
-    "Cost Allocation Tags",
-    "Service Control Policies",
-    "AWS Enterprise Support"
+    "Cost Allocation Tags"
   ],
   "mechanics_used": [
     "log-lock",
     "pillar-lock",
     "terminal-lock",
     "wire-lock",
+    "timeline-lock",
     "cascade-lock",
-    "chain-lock",
+    "match-lock",
+    "sort-lock",
     "evidence-board-lock",
     "defuse-lock"
   ],
@@ -48,7 +50,7 @@
     "matching",
     "deduction"
   ],
-  "version": "0.1",
+  "version": "0.2",
   "start_button": "Take the call",
   "lore_label": "💬 War Room",
   "end_title": "11.11 is LIVE",
@@ -59,11 +61,11 @@
     "cycle": [
       {
         "stage": "WHY DOWN",
-        "note": "AWS DevOps Agent: correlates deploys, config and telemetry to the root cause"
+        "note": "AWS DevOps Agent: correlates deploys, code and telemetry, then recommends the fix"
       },
       {
         "stage": "BREACHED?",
-        "note": "AWS Security Agent (Continuum): finds the flaw in code and design before launch"
+        "note": "AWS Security Agent (now part of AWS Continuum): flags risks in code and design, and maps attack paths, before launch"
       },
       {
         "stage": "COST",
@@ -71,19 +73,20 @@
       },
       {
         "stage": "DECIDE",
-        "note": "You connect the three and tell the CEO the truth"
+        "note": "You turn every finding into a guardrail and tell the CEO the truth"
       }
     ],
     "benefits": [
       "DevOps Agent recommends the rollback; your team approves it",
-      "Security Agent caught the waived key three weeks before it leaked",
+      "Security Agent flagged the key three weeks before it leaked",
       "GuardDuty and WAF handle the live attack; Security Agent works before launch",
-      "FinOps Agent investigates and reports; your team shuts the spend down",
-      "One rushed release explained all three alarms"
+      "FinOps Agent investigates and reports; the owner shuts the spend down",
+      "The agents saw all three problems. The guardrails make sure someone acts"
     ],
     "link": {
       "label": "AWS Frontier Agents",
       "url": "https://aws.amazon.com/ai/frontier-agents"
     }
-  }
+  },
+  "cover": "assets/cover.png"
 }

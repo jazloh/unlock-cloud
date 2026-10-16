@@ -56,7 +56,15 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "wire-act2",
       "result_card": 210,
-      "message": "Defences mapped. Now find the breach.",
+      "message": "Defences mapped. Now replay the threat model.",
+      "type": "reveal"
+    },
+    {
+      "id": "e-timeline-act2",
+      "trigger": "puzzle_solved",
+      "puzzle_id": "timeline-act2",
+      "result_card": 212,
+      "message": "Attack path rebuilt. Did it happen?",
       "type": "reveal"
     },
     {
@@ -68,17 +76,17 @@
       "type": "reveal"
     },
     {
-      "id": "e-wire-act3",
+      "id": "e-match-act3",
       "trigger": "puzzle_solved",
-      "puzzle_id": "wire-act3",
+      "puzzle_id": "match-act3",
       "result_card": 310,
-      "message": "Every cost traced to tonight.",
+      "message": "Every cost traced to its cause.",
       "type": "reveal"
     },
     {
-      "id": "e-chain-act3",
+      "id": "e-sort-act3",
       "trigger": "puzzle_solved",
-      "puzzle_id": "chain-act3",
+      "puzzle_id": "sort-act3",
       "result_card": 311,
       "message": "✅ Bleeding stopped. Open alerts: 14. The CEO is back.",
       "type": "reveal"
@@ -88,7 +96,7 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "evidence-final",
       "result_card": 410,
-      "message": "The whole chain, in one view.",
+      "message": "Guardrails in place.",
       "type": "reveal"
     },
     {
