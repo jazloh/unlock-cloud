@@ -57,7 +57,7 @@
       "ui": "pillar-lock",
       "card_ref": 103,
       "success_card": 103,
-      "description": "👆 Tap TRUE or FALSE for each statement.",
+      "description": "👆 What can the DevOps Agent really do? Tap TRUE or FALSE for each.",
       "config": {
         "pillars": [
           "TRUE",
@@ -65,27 +65,31 @@
         ],
         "statements": [
           {
-            "text": "The agent matched the deploy, the config change and the errors.",
+            "text": "It starts investigating the moment an alarm fires.",
             "answer": "TRUE"
           },
           {
-            "text": "The CPU alarm broke checkout.",
+            "text": "It maps how your services connect.",
+            "answer": "TRUE"
+          },
+          {
+            "text": "It only works with AWS tools.",
             "answer": "FALSE"
           },
           {
-            "text": "Instant retries made the spike 10× worse.",
+            "text": "It learns from past incidents to prevent the next one.",
             "answer": "TRUE"
           },
           {
-            "text": "The agent rolls production back by itself.",
+            "text": "It rolls back production without asking.",
             "answer": "FALSE"
           }
         ]
       },
       "hints": [
-        "💬 \"Which of these would you tell the board?\"",
-        "🤖 The CPU alarm isn't on the payment path. I recommend fixes; people approve them.",
-        "🤖 TRUE, FALSE, TRUE, FALSE."
+        "💬 \"What exactly are we paying for here?\"",
+        "🤖 I also work with Datadog, Splunk, GitHub, Slack and more. And I recommend; you approve.",
+        "🤖 TRUE, TRUE, FALSE, TRUE, FALSE."
       ],
       "mandatory": true
     },

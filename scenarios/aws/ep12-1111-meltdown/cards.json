@@ -48,8 +48,8 @@
       "id": 101,
       "type": "lore",
       "color": "purple",
-      "title": "💬 DevOps Agent",
-      "description": "Finds the root cause by matching deploys, code changes and errors. It recommends the fix. You approve it.\n\n🤖 \"One release lines up with the errors. Ignore the noise.\"",
+      "title": "🤖 DevOps Agent: Live Investigation",
+      "description": "Your TAM switched this on last month. It runs on your Enterprise Support credits.\n\n21:50 ⚠️ Alarm. Investigation started automatically\n✓ Mapped: checkout → payment-service\n✗ CPU alarm: not on the payment path\n✓ Errors began 1 min after a deploy\n→ Your turn: find what that deploy changed",
       "room": "why-are-we-down",
       "reveals": [],
       "visible_to": "all"
@@ -59,7 +59,7 @@
       "type": "event",
       "color": "yellow",
       "title": "Culprit Found",
-      "description": "v4.2.0 cut the payment timeout from 3000 ms to 300 ms. Every payment now times out.",
+      "description": "v4.2.0 cut the payment timeout from 3000 ms to 300 ms. Every payment now times out.\n\n🤖 \"Matches my finding. Minutes, not hours.\"",
       "reveals": [
         151
       ],
@@ -70,8 +70,8 @@
       "id": 103,
       "type": "event",
       "color": "yellow",
-      "title": "Retry Storm",
-      "description": "Instant retries turned a small spike into 10× the traffic.\n\n🤖 \"Roll back now. Add backoff after.\"",
+      "title": "What the Agent Can Do",
+      "description": "It investigates from the first alarm, maps your services, works across your tools and recommends the fix. You stay in control.\n\n🤖 \"I've written a spec for the retry fix. Hand it to your coding agent, like Kiro.\"",
       "reveals": [
         152
       ],
@@ -83,7 +83,7 @@
       "type": "event",
       "color": "yellow",
       "title": "Checkout Restored",
-      "description": "Errors: 38% → 0.2% ✅\n\n🤖 \"One more thing. v4.2.0 was deployed with temp-hotfix-admin, a break-glass admin key that skips release review. Who else has that key?\"",
+      "description": "Errors: 38% → 0.2% ✅\n\n🤖 \"Next time, my release review (preview) checks a change before it ships. I'd have flagged v4.2.0 BLOCK.\n\nOne more thing: it was deployed with temp-hotfix-admin, a break-glass admin key that skips review. Who else has that key?\"",
       "reveals": [
         200
       ],
@@ -104,8 +104,8 @@
       "id": 152,
       "type": "item",
       "color": "orange",
-      "title": "✅ Agent Findings",
-      "description": "Timeout + instant retries = retry storm",
+      "title": "✅ Agent Powers",
+      "description": "Investigates, maps, recommends. You approve.",
       "room": "why-are-we-down",
       "reveals": [],
       "visible_to": "all"
@@ -384,7 +384,7 @@
       "color": "yellow",
       "title": "11.11 is LIVE 🎉",
       "is_ending": true,
-      "description": "00:00. Checkout holding. You told the CEO the truth.\n\n🤖 DevOps Agent found why you were down.\n🤖 Security Agent flagged the key weeks before.\n🤖 FinOps Agent traced the bill to its owner.\n\nReal world: Western Governors University went from about 2 hours to 28 minutes per incident with DevOps Agent. HENNGE cut pen-test time by more than 90% with Security Agent.\n\n👋 See the agents live with the Enterprise Support team at this booth.",
+      "description": "00:00. Checkout holding. You told the CEO the truth.\n\n🤖 DevOps Agent investigated from the first alarm and found the cause in minutes.\n🤖 Security Agent flagged the key weeks before.\n🤖 FinOps Agent traced the bill to its owner.\n\nReal world: Western Governors University went from about 2 hours to 28 minutes per incident with DevOps Agent.\n\n💡 On Enterprise Support? Every month you get DevOps Agent credits worth 75% of last month's support charge. They expire at month-end, so use them.\n\n👋 Ask the Enterprise Support team at this booth to switch it on.",
       "room": "answer-the-ceo",
       "reveals": [],
       "visible_to": "all"

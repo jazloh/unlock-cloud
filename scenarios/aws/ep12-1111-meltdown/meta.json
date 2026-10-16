@@ -61,7 +61,7 @@
     "cycle": [
       {
         "stage": "WHY DOWN",
-        "note": "AWS DevOps Agent: correlates deploys, code and telemetry, then recommends the fix"
+        "note": "AWS DevOps Agent: investigates from the first alarm, maps services, finds the cause, recommends the fix"
       },
       {
         "stage": "BREACHED?",
@@ -77,11 +77,11 @@
       }
     ],
     "benefits": [
-      "DevOps Agent recommends the rollback; your team approves it",
+      "DevOps Agent investigates from the first alarm, maps your services and recommends the fix",
+      "You approve every production change",
       "Security Agent flagged the key three weeks before it leaked",
-      "GuardDuty and WAF handle the live attack; Security Agent works before launch",
-      "FinOps Agent investigates and reports; the owner shuts the spend down",
-      "The agents saw all three problems. The guardrails make sure someone acts"
+      "FinOps Agent reports and names the owner; people switch things off",
+      "Enterprise Support includes monthly DevOps Agent credits worth 75% of your support charge"
     ],
     "link": {
       "label": "AWS Frontier Agents",
