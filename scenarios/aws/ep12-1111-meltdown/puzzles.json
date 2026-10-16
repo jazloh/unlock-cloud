@@ -6,9 +6,9 @@
       "ui": "log-lock",
       "card_ref": 102,
       "success_card": 102,
-      "description": "The DevOps Agent lined up the deployments against the errors. Select the 2 lines that show what changed right before checkout broke.",
+      "description": "👆 Tap the 2 lines that show what changed, then tap Analyze.",
       "config": {
-        "prompt": "Select the 2 lines that show what changed just before checkout broke",
+        "prompt": "What changed just before checkout broke?",
         "lines": [
           {
             "text": "20:40:11 INFO  deploy  checkout-api v4.1.3 rollout complete (healthy)",
@@ -45,9 +45,9 @@
         ]
       },
       "hints": [
-        "💬 Datin Sarah: \"Don't tell me what's broken. Tell me what changed.\"",
-        "🤖 DevOps Agent: \"Errors start at 21:48. Look at the deployment just before, and at what it changed.\"",
-        "🤖 DevOps Agent: \"The v4.2.0 deploy line and the PAYMENT_TIMEOUT_MS diff line.\""
+        "💬 \"Don't tell me what broke. Tell me what changed.\"",
+        "🤖 Look just before the first error at 21:48.",
+        "🤖 The v4.2.0 deploy line and the timeout change line."
       ],
       "mandatory": true
     },
@@ -57,7 +57,7 @@
       "ui": "pillar-lock",
       "card_ref": 103,
       "success_card": 103,
-      "description": "The DevOps Agent wrote up its findings. Sort fact from fiction before you repeat any of it to the CEO.",
+      "description": "👆 Tap TRUE or FALSE for each statement.",
       "config": {
         "pillars": [
           "TRUE",
@@ -65,27 +65,27 @@
         ],
         "statements": [
           {
-            "text": "The agent found the cause by correlating the deployment, the config change and the error graph.",
+            "text": "The agent matched the deploy, the config change and the errors.",
             "answer": "TRUE"
           },
           {
-            "text": "The CPU alarm on recommendation-service is what broke checkout.",
+            "text": "The CPU alarm broke checkout.",
             "answer": "FALSE"
           },
           {
-            "text": "Clients retrying instantly with no backoff turned a small spike into a retry storm.",
+            "text": "Instant retries made the spike 10× worse.",
             "answer": "TRUE"
           },
           {
-            "text": "The DevOps Agent rolls production back by itself, without asking anyone.",
+            "text": "The agent rolls production back by itself.",
             "answer": "FALSE"
           }
         ]
       },
       "hints": [
-        "💬 Datin Sarah: \"Which of these would you repeat to the board?\"",
-        "🤖 DevOps Agent: \"The CPU alarm isn't on the payment path. And I recommend the fix; your team approves it.\"",
-        "🤖 DevOps Agent: \"TRUE, FALSE, TRUE, FALSE.\""
+        "💬 \"Which of these would you tell the board?\"",
+        "🤖 The CPU alarm isn't on the payment path. I recommend fixes; people approve them.",
+        "🤖 TRUE, FALSE, TRUE, FALSE."
       ],
       "mandatory": true
     },
@@ -95,7 +95,7 @@
       "ui": "terminal-lock",
       "card_ref": 104,
       "success_card": 104,
-      "description": "The DevOps Agent recommends a rollback and needs your approval. Type the version to restore.",
+      "description": "⌨️ Type the last healthy version, then tap Submit.",
       "config": {
         "answer": "4.1.3",
         "accept_variations": [
@@ -104,7 +104,7 @@
           "413"
         ],
         "caseSensitive": false,
-        "prompt": "DEVOPS AGENT · MITIGATION PLAN\nservice:      checkout-api\ncurrent:      v4.2.0  (5xx 38%)\nlast healthy: see the 20:40 deploy\nrecommended:  roll back, then add retry backoff\n> approve rollback checkout-api --to _",
+        "prompt": "DEVOPS AGENT · PLAN\ncurrent:  v4.2.0  (errors 38%)\nhealthy:  the 20:40 deploy\n> roll back checkout-api to _",
         "falseOutputs": [
           "That version isn't the last healthy build. Check the deployment log.",
           "Look for the checkout-api deploy marked healthy before 21:47.",
@@ -112,9 +112,9 @@
         ]
       },
       "hints": [
-        "💬 Datin Sarah: \"Put it back the way it was when it worked.\"",
-        "🤖 DevOps Agent: \"The last healthy checkout-api build went out at 20:40.\"",
-        "🤖 DevOps Agent: \"4.1.3\""
+        "💬 \"Put it back the way it was.\"",
+        "🤖 Check the 20:40 deploy in the log.",
+        "🤖 4.1.3"
       ],
       "mandatory": true
     },
@@ -124,7 +124,7 @@
       "ui": "wire-lock",
       "card_ref": 210,
       "success_card": 210,
-      "description": "Four defences, four different jobs. Connect each one to what it does.",
+      "description": "👆 Tap a defence, then tap its job. Then tap Connect.",
       "config": {
         "wires": [
           {
@@ -151,19 +151,19 @@
         "sockets": [
           {
             "id": "s1",
-            "label": "Reviews code and pen-tests before launch"
+            "label": "Checks code before launch"
           },
           {
             "id": "s2",
-            "label": "Detects threats at runtime"
+            "label": "Spots threats live"
           },
           {
             "id": "s3",
-            "label": "Rate-limits and blocks the bots"
+            "label": "Blocks the bots"
           },
           {
             "id": "s4",
-            "label": "Keeps credentials out of code"
+            "label": "Stores keys safely"
           }
         ],
         "solution": {
@@ -175,9 +175,9 @@
         "submitLabel": "⚡ Connect"
       },
       "hints": [
-        "💬 Datin Sarah: \"Who was supposed to catch this, and when?\"",
-        "🤖 Security Agent: \"I work before launch. GuardDuty watches at runtime. WAF sits in front of the login page.\"",
-        "🤖 Security Agent: \"Security Agent→before launch, GuardDuty→runtime threats, WAF→bots, Secrets Manager→credentials.\""
+        "💬 \"Who was supposed to catch this?\"",
+        "🤖 I work before launch. GuardDuty and WAF work live.",
+        "🤖 Security Agent→before launch, GuardDuty→live threats, WAF→bots, Secrets Manager→keys."
       ],
       "mandatory": true
     },
@@ -187,7 +187,7 @@
       "ui": "timeline-lock",
       "card_ref": 212,
       "success_card": 212,
-      "description": "Three weeks ago the Security Agent's threat model predicted how Finding 3 could be exploited. Put its attack path in order.",
+      "description": "👆 Put the predicted attack in order: tap two cards to swap them, then tap Confirm Order.",
       "config": {
         "enhanced": true,
         "answer": [
@@ -200,11 +200,11 @@
         "events": [
           {
             "id": "script",
-            "label": "🔑 Admin key hard-coded in the deploy script"
+            "label": "🔑 Admin key left in the deploy script"
           },
           {
             "id": "public",
-            "label": "🌐 Script pushed to a public repository"
+            "label": "🌐 Script pushed to a public repo"
           },
           {
             "id": "found",
@@ -212,18 +212,18 @@
           },
           {
             "id": "assume",
-            "label": "👤 Attacker signs in as the no-MFA admin role"
+            "label": "👤 Attacker signs in as admin"
           },
           {
             "id": "launch",
-            "label": "⛏️ Instances launched in a Region you don't use"
+            "label": "⛏️ Attacker launches GPU instances"
           }
         ]
       },
       "hints": [
-        "💬 Datin Sarah: \"Walk me through it. Start with what we did wrong.\"",
-        "🤖 Security Agent: \"It starts with the key in the script, and ends with spend in a Region nobody watches.\"",
-        "🤖 Security Agent: \"Hard-coded key → public repo → attacker finds it → signs in as admin → launches instances.\""
+        "💬 \"Start with what we did wrong.\"",
+        "🤖 It starts with the key in the script and ends with GPUs.",
+        "🤖 Script → public repo → attacker finds it → signs in → GPUs."
       ],
       "mandatory": true
     },
@@ -233,41 +233,41 @@
       "ui": "cascade-lock",
       "card_ref": 211,
       "success_card": 211,
-      "description": "The bots are the noise. Find the real breach.",
+      "description": "👆 Answer 3 quick questions.",
       "config": {
         "steps": [
           {
-            "question": "The bots are loud, and the WAF is throttling them. Under the noise, CloudTrail shows temp-hotfix-admin calling from an IP nobody recognises. Which pre-launch finding became the breach?",
+            "question": "Which finding became the breach?",
             "options": [
-              "Finding 1: the SQL injection risk",
-              "Finding 2: the stack-trace error pages",
-              "Finding 3: the waived hard-coded admin key",
-              "None. The botnet was impossible to predict"
+              "Finding 1: SQL injection",
+              "Finding 2: error pages",
+              "Finding 3: the waived admin key",
+              "None. It was just bots"
             ],
             "answer": 2,
-            "after": "✓ Finding 3. The Security Agent flagged it CRITICAL three weeks ago. The team waived it as \"temporary\"."
+            "after": "✓ Finding 3. Flagged CRITICAL, then waived."
           },
           {
-            "question": "CloudTrail's first call from that IP isn't from tonight. How long has the attacker had the key?",
+            "question": "CloudTrail shows the key's first use from the attacker's IP. When?",
             "options": [
-              "Since 21:47 tonight, when v4.2.0 shipped",
-              "Since Friday 7 Nov, when the deploy scripts went to a public repo",
-              "Since the review three weeks ago",
-              "They haven't used it"
+              "Tonight at 21:47",
+              "Friday 7 Nov, when the script went public",
+              "Three weeks ago",
+              "Never"
             ],
             "answer": 1,
-            "after": "✓ Since Friday. The leak is three days old. The botnet only made it look like tonight's problem."
+            "after": "✓ Friday. The breach is three days old."
           },
           {
-            "question": "The key is deactivated and the role deleted. Which guardrail stops this before the next launch?",
+            "question": "Which guardrail stops this next time?",
             "options": [
-              "Block one country at the WAF",
-              "No waivers on CRITICAL findings, and Security Agent reviews every pull request",
-              "Lock every account after one failed login",
-              "Run a pen test once a year"
+              "Block one country",
+              "No waivers on CRITICAL findings",
+              "Lock accounts after one bad login",
+              "Pen test once a year"
             ],
             "answer": 1,
-            "after": "✓ The agent did its job. Waiving a critical finding under deadline pressure is how this started."
+            "after": "✓ The agent did its job. The waiver let it through."
           }
         ],
         "cupNames": [
@@ -278,15 +278,15 @@
         "shuffle_options": true,
         "pauseBetweenSteps": 2500,
         "onComplete": {
-          "emojis": "🔑🌐🛡️",
-          "text": "The breach is three days old, and the Security Agent saw it coming three weeks ago.",
-          "subtext": "The agent did its job. The waiver is what let it through."
+          "emojis": "🔑🌐⛏️",
+          "text": "Breached since Friday.",
+          "subtext": "The Security Agent saw it coming three weeks ago."
         }
       },
       "hints": [
-        "💬 Datin Sarah: \"Forget the loud part. What did we already know about?\"",
-        "🤖 Security Agent: \"Two findings were fixed. One was waived. And check when the scripts went public.\"",
-        "🤖 Security Agent: \"Finding 3, since Friday 7 Nov, then no waivers on CRITICAL findings.\""
+        "💬 \"Forget the bots. What did we already know?\"",
+        "🤖 One finding was waived. When did the script go public?",
+        "🤖 Finding 3, Friday 7 Nov, no waivers on CRITICAL."
       ],
       "mandatory": true
     },
@@ -296,29 +296,29 @@
       "ui": "match-lock",
       "card_ref": 310,
       "success_card": 310,
-      "description": "The FinOps Agent correlated each cost with CloudTrail. Match each line of the bill to its cause.",
+      "description": "👆 Tap a cost, then tap its cause.",
       "config": {
         "pairs": [
           [
-            "💸 USD 5,800: load-test fleet",
-            "Friday's pre-sale test, never switched off"
+            "💸 USD 6,200: GPUs in an unused Region",
+            "Launched with the leaked key"
           ],
           [
-            "💸 USD 3,400: instances in an unused Region",
-            "Launched with the leaked admin key"
+            "💸 USD 3,000: load-test fleet",
+            "Friday's test, never switched off"
           ],
           [
             "💸 USD 1,600: log ingestion",
-            "Debug logging left on after the load test"
+            "Debug logs left on after the test"
           ]
         ],
         "cols": 2,
         "faceUp": true
       },
       "hints": [
-        "💬 Datin Sarah: \"We didn't plan any of this. So who did?\"",
-        "🤖 FinOps Agent: \"CloudTrail shows temp-hotfix-admin launched the instances in the unused Region.\"",
-        "🤖 FinOps Agent: \"Fleet→Friday's load test, unused Region→leaked key, logs→debug logging.\""
+        "💬 \"We didn't plan any of this. So who did?\"",
+        "🤖 CloudTrail shows temp-hotfix-admin launched the GPUs.",
+        "🤖 GPUs→leaked key, fleet→Friday's test, logs→debug logs."
       ],
       "mandatory": true
     },
@@ -328,23 +328,21 @@
       "ui": "sort-lock",
       "card_ref": 311,
       "success_card": 311,
-      "description": "This alert fired at 07:12 this morning and nobody acted. Put the FinOps Agent's steps in order. One card is a decoy: something the agent doesn't do.",
+      "description": "✋ The agent flagged this at 07:12 today. Drag its steps into order, then tap Confirm.",
       "config": {
         "answer": [
           "Cost Anomaly Detection flags the spike",
-          "Agent correlates it with CloudTrail events",
-          "Agent names the root cause and the owner",
-          "Agent posts the findings to Jira or Slack",
-          "The owner shuts the spend down"
+          "Agent checks CloudTrail",
+          "Agent names the cause and the owner",
+          "Agent posts to Jira or Slack",
+          "The owner (not the agent) shuts it down"
         ],
-        "distractors": [
-          "Agent terminates the instances itself"
-        ]
+        "distractors": []
       },
       "hints": [
-        "💬 Datin Sarah: \"It found this at seven this morning? Then why am I hearing about it at eleven at night?\"",
-        "🤖 FinOps Agent: \"I investigate and report. I don't switch things off. My post went to a channel nobody owns.\"",
-        "🤖 FinOps Agent: \"Detect → correlate with CloudTrail → name cause and owner → post to Jira/Slack → owner acts. The decoy is 'terminates the instances itself'.\""
+        "💬 \"It found this at 7 AM? Why am I hearing at 11 PM?\"",
+        "🤖 I detect, investigate, report. People act.",
+        "🤖 Flags → CloudTrail → cause and owner → post → owner shuts it down."
       ],
       "mandatory": true
     },
@@ -354,12 +352,12 @@
       "ui": "evidence-board-lock",
       "card_ref": 410,
       "success_card": 410,
-      "description": "Each agent had already flagged its part. Connect each failure to the guardrail that stops it next time.",
+      "description": "👆 For each problem, pick its fix from the list. Then tap Confirm.",
       "config": {
         "connections": [
           {
-            "step": "v4.2.0 shipped without a release review",
-            "finding": "DevOps Agent reviews every checkout pull request",
+            "step": "v4.2.0 skipped release review",
+            "finding": "Deploy only via the reviewed pipeline",
             "icon": "🛠️"
           },
           {
@@ -368,21 +366,21 @@
             "icon": "🔐"
           },
           {
-            "step": "The cost alert went to a channel nobody owns",
-            "finding": "FinOps Agent findings go to the owner's Jira queue",
+            "step": "The cost alert had no owner",
+            "finding": "Send agent findings to the owner",
             "icon": "💸"
           },
           {
-            "step": "What linked all three?",
-            "finding": "The 11.11 rush skipped what the agents flagged",
+            "step": "What caused all three?",
+            "finding": "One break-glass admin key",
             "icon": "💡"
           }
         ]
       },
       "hints": [
-        "💬 Datin Sarah: \"Don't tell me the agents failed. Tell me what we ignored.\"",
-        "🤖 Agents: \"Each guardrail answers one failure: review the release, respect the finding, route the alert.\"",
-        "🤖 Agents: \"🛠️→release review, 🔐→no waivers, 💸→owner's Jira queue, 💡→the 11.11 rush.\""
+        "💬 \"Don't blame the agents. What did we ignore?\"",
+        "🤖 One fix per problem: the pipeline, the waiver, the owner.",
+        "🤖 🛠️→reviewed pipeline, 🔐→no waivers, 💸→the owner, 💡→one admin key."
       ],
       "mandatory": true
     },
@@ -392,7 +390,7 @@
       "ui": "defuse-lock",
       "card_ref": 411,
       "success_card": 411,
-      "description": "⏰ 11:52 PM. Datin Sarah asks: were we breached? Give her the honest answer.",
+      "description": "⏰ 45 seconds. Switch ON only what's true, fill both boxes, then tap Defuse.",
       "config": {
         "tasks": [
           {
@@ -402,22 +400,22 @@
           },
           {
             "type": "toggle",
-            "label": "\"An admin key leaked on Friday. It's revoked now\"",
+            "label": "\"An admin key leaked on Friday. It's revoked.\"",
             "answer": true
           },
           {
             "type": "toggle",
-            "label": "\"Customer-data access is under review\"",
+            "label": "\"Customer data access is under review.\"",
             "answer": true
           },
           {
             "type": "code",
-            "label": "Which finding did we waive? (number)",
+            "label": "Finding we waived (number)",
             "answer": "3"
           },
           {
             "type": "code",
-            "label": "Checkout version restored",
+            "label": "Version restored",
             "answer": "4.1.3"
           }
         ],
@@ -425,9 +423,9 @@
         "timeSeconds": 45
       },
       "hints": [
-        "💬 Datin Sarah: \"I can handle bad news. I can't handle surprises from the board.\"",
-        "🤖 Agents: \"The bots were noise. The key was real. Tell her both things that are true.\"",
-        "🤖 Agents: \"OFF, ON, ON, 3, 4.1.3.\""
+        "💬 \"I can take bad news. Not surprises.\"",
+        "🤖 The bots were noise. The key was real.",
+        "🤖 OFF, ON, ON, 3, 4.1.3."
       ],
       "mandatory": true,
       "isFinal": true

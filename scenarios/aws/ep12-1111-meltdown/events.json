@@ -32,7 +32,7 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "log-act1",
       "result_card": 102,
-      "message": "Culprit found: v4.2.0 changed the payment timeout.",
+      "message": "Found it: v4.2.0.",
       "type": "reveal"
     },
     {
@@ -40,7 +40,7 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "pillar-act1",
       "result_card": 103,
-      "message": "Findings verified. Time to roll back.",
+      "message": "Facts checked.",
       "type": "reveal"
     },
     {
@@ -48,7 +48,7 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "rollback-act1",
       "result_card": 104,
-      "message": "✅ Checkout restored. Open alerts: 412. Act 2 unlocked.",
+      "message": "✅ Checkout back. Next: the key.",
       "type": "reveal"
     },
     {
@@ -56,7 +56,7 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "wire-act2",
       "result_card": 210,
-      "message": "Defences mapped. Now replay the threat model.",
+      "message": "Roles clear.",
       "type": "reveal"
     },
     {
@@ -64,7 +64,7 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "timeline-act2",
       "result_card": 212,
-      "message": "Attack path rebuilt. Did it happen?",
+      "message": "Path rebuilt.",
       "type": "reveal"
     },
     {
@@ -72,7 +72,7 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "cascade-act2",
       "result_card": 211,
-      "message": "✅ Breach contained. Open alerts: 96. Act 3 unlocked.",
+      "message": "✅ Breach contained. Next: the bill.",
       "type": "reveal"
     },
     {
@@ -80,7 +80,7 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "match-act3",
       "result_card": 310,
-      "message": "Every cost traced to its cause.",
+      "message": "Every cost traced.",
       "type": "reveal"
     },
     {
@@ -88,7 +88,7 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "sort-act3",
       "result_card": 311,
-      "message": "✅ Bleeding stopped. Open alerts: 14. The CEO is back.",
+      "message": "✅ Spend stopped. The CEO is back.",
       "type": "reveal"
     },
     {
@@ -96,7 +96,7 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "evidence-final",
       "result_card": 410,
-      "message": "Guardrails in place.",
+      "message": "Guardrails set.",
       "type": "reveal"
     },
     {
@@ -104,7 +104,7 @@
       "trigger": "puzzle_solved",
       "puzzle_id": "defuse-final",
       "result_card": 411,
-      "message": "🎉 00:00. 11.11 is LIVE.",
+      "message": "🎉 11.11 is LIVE.",
       "type": "ending"
     }
   ]

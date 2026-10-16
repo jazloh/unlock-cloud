@@ -9,27 +9,22 @@
     "segments": [
       {
         "voice": "narrator",
-        "text": "It's ten PM, the tenth of November. You're on call at BeliLah, Kuala Lumpur.",
-        "pause_after_ms": 700
-      },
-      {
-        "voice": "narrator",
-        "text": "At midnight the eleven-eleven sale opens. Three million shoppers are waiting to check out.",
+        "text": "10 PM, 10 November. You're on call at BeliLah, Kuala Lumpur.",
         "pause_after_ms": 600
       },
       {
         "voice": "narrator",
-        "text": "This is Datin Sarah. I'm at the airport, and I'm told checkout is down. On the biggest night of our year.",
+        "text": "At midnight, the 11.11 sale opens to three million shoppers.",
         "pause_after_ms": 600
       },
       {
         "voice": "narrator",
-        "text": "I have three questions. Why are we down? Were we breached? And what is this costing us?",
+        "text": "Datin Sarah, the CEO, calls: \"Checkout is down. Why are we down? Were we breached? What is it costing us?\"",
         "pause_after_ms": 500
       },
       {
         "voice": "narrator",
-        "text": "You have three Frontier Agents. Use them. You have until midnight.",
+        "text": "Three AWS Frontier Agents can answer her. Beat midnight.",
         "emphasis": "strong"
       }
     ],
@@ -40,17 +35,12 @@
       "segments": [
         {
           "voice": "narrator",
-          "text": "Thank you. That's the answer I can take to the board. The honest one.",
-          "pause_after_ms": 600
+          "text": "\"Thank you. That's the honest answer, and it's the one I can take to the board.\"",
+          "pause_after_ms": 500
         },
         {
           "voice": "narrator",
-          "text": "Midnight. Eleven-eleven is live, and checkout is holding.",
-          "pause_after_ms": 400
-        },
-        {
-          "voice": "narrator",
-          "text": "You escaped the war room.",
+          "text": "Midnight. 11.11 is live. You escaped the war room.",
           "emphasis": "strong"
         }
       ],
@@ -62,12 +52,12 @@
       "segments": [
         {
           "voice": "narrator",
-          "text": "It's midnight, and I still don't have my answers.",
+          "text": "Midnight, and still no answers. The sale opened on a broken checkout.",
           "pause_after_ms": 400
         },
         {
           "voice": "narrator",
-          "text": "The sale opened on a broken checkout. Come back and try again. The agents will be waiting.",
+          "text": "Try again. The agents will be waiting.",
           "emphasis": "moderate"
         }
       ],

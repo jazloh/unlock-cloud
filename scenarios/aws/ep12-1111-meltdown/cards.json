@@ -5,7 +5,7 @@
       "type": "location",
       "color": "green",
       "title": "Act 1: Why Are We Down?",
-      "description": "🚨 CHECKOUT ERRORS: 38% and climbing. Open alerts: 999+.\n\nDatin Sarah's first question: why are we down? The DevOps Agent has already pulled the timeline. Find what changed, then roll it back.",
+      "description": "🚨 Checkout errors: 38%\n\nDatin Sarah: \"Why are we down?\"\nFind what changed, then roll it back.",
       "image": "assets/act1-outage.png",
       "image_prompt": "Red alert emergency in a modern e-commerce operations room at night: every monitor glowing red with crashing line graphs and red warning triangles, a red rotating alarm beacon on the ceiling, a stressed young engineer leaning toward the screens, a half-drunk glass of teh tarik beside the keyboard, generic night city lights through the window, isometric game art",
       "discoveries": [
@@ -15,12 +15,12 @@
         },
         {
           "card_id": 102,
-          "label": "Read the deployment log",
+          "label": "Find what changed",
           "puzzle": "log-act1"
         },
         {
           "card_id": 103,
-          "label": "Check the agent's findings",
+          "label": "True or false?",
           "puzzle": "pillar-act1",
           "requires_item": [
             151
@@ -28,7 +28,7 @@
         },
         {
           "card_id": 104,
-          "label": "Approve the rollback",
+          "label": "Roll back",
           "puzzle": "rollback-act1",
           "requires_item": [
             151,
@@ -48,8 +48,8 @@
       "id": 101,
       "type": "lore",
       "color": "purple",
-      "title": "💬 Meet the DevOps Agent",
-      "description": "WHAT IT DOES: AWS DevOps Agent starts investigating the moment an alert fires. It correlates telemetry, code changes and deployment data to find the root cause, then recommends mitigation steps. Your team approves them.\n\n🤖 DevOps Agent: \"Checkout is returning 5xx errors, 38% and rising. Something changed just before the alarms. I've lined up the last two hours of deployments next to the error graph, and one release stands out. Ignore anything that isn't on the payment path. There's plenty of noise tonight.\"",
+      "title": "💬 DevOps Agent",
+      "description": "Finds the root cause by matching deploys, code changes and errors. It recommends the fix. You approve it.\n\n🤖 \"One release lines up with the errors. Ignore the noise.\"",
       "room": "why-are-we-down",
       "reveals": [],
       "visible_to": "all"
@@ -59,7 +59,7 @@
       "type": "event",
       "color": "yellow",
       "title": "Culprit Found",
-      "description": "checkout-api v4.2.0, the \"flash-sale-banner\" release, also changed the payment timeout from 3000 ms to 300 ms. Under sale traffic, every payment call now times out. One missing zero took down checkout.\n\n🤖 DevOps Agent: \"One more thing. v4.2.0 was merged with its release review skipped.\"",
+      "description": "v4.2.0 cut the payment timeout from 3000 ms to 300 ms. Every payment now times out.",
       "reveals": [
         151
       ],
@@ -70,8 +70,8 @@
       "id": 103,
       "type": "event",
       "color": "yellow",
-      "title": "Retry Storm Explained",
-      "description": "The timeout started it. Clients retrying instantly with no backoff made it worse: a 20% traffic bump became ten times the backend calls.\n\nThe DevOps Agent recommends rolling back now, then adding exponential backoff with jitter. It's a recommendation. Production changes need your approval.",
+      "title": "Retry Storm",
+      "description": "Instant retries turned a small spike into 10× the traffic.\n\n🤖 \"Roll back now. Add backoff after.\"",
       "reveals": [
         152
       ],
@@ -83,7 +83,7 @@
       "type": "event",
       "color": "yellow",
       "title": "Checkout Restored",
-      "description": "Rollback approved and run. Error rate: 38%… 12%… 2%… 0.2%. Open alerts: 412.\n\n🛡️ GUARDRAIL: retries use exponential backoff with jitter.\n\n🤖 DevOps Agent: \"Checkout's healthy. Two things you should know. First, v4.2.0 skipped release review. My release management preview reviews pull requests before they ship and would have recommended BLOCK on that timeout change. Second, it was deployed with an admin role I don't recognise, temp-hotfix-admin. And login just took 40,000 requests in sixty seconds. Over to the Security Agent.\"",
+      "description": "Errors: 38% → 0.2% ✅\n\n🤖 \"One more thing. v4.2.0 was deployed with temp-hotfix-admin, a break-glass admin key that skips release review. Who else has that key?\"",
       "reveals": [
         200
       ],
@@ -95,7 +95,7 @@
       "type": "item",
       "color": "orange",
       "title": "✅ Culprit Release",
-      "description": "checkout-api v4.2.0: payment timeout changed from 3000 ms to 300 ms.",
+      "description": "v4.2.0: timeout 3000 → 300 ms",
       "room": "why-are-we-down",
       "reveals": [],
       "visible_to": "all"
@@ -105,7 +105,7 @@
       "type": "item",
       "color": "orange",
       "title": "✅ Agent Findings",
-      "description": "Timeout plus retries with no backoff made a retry storm. Roll back first.",
+      "description": "Timeout + instant retries = retry storm",
       "room": "why-are-we-down",
       "reveals": [],
       "visible_to": "all"
@@ -115,7 +115,7 @@
       "type": "location",
       "color": "green",
       "title": "Act 2: Were We Breached?",
-      "description": "🔐 LOGIN TRAFFIC: 40,000 requests a minute. Open alerts: 412.\n\nDatin Sarah's second question: were we breached? The Security Agent opens on a report from three weeks ago.",
+      "description": "🔐 Login: 40,000 requests a minute\n\nDatin Sarah: \"Were we breached?\"\nFind out who has that key.",
       "image": "assets/act2-breach.png",
       "image_prompt": "Security breach scene: a large glowing padlock cracked open in the centre, a hooded shadowy intruder silhouette on a screen behind it, a swarm of small red bot icons streaming toward a login screen, a golden key glowing red on the desk, cool blue room with red warning light, isometric game art",
       "discoveries": [
@@ -125,16 +125,16 @@
         },
         {
           "card_id": 202,
-          "label": "Read the pre-launch review"
+          "label": "Read the review"
         },
         {
           "card_id": 210,
-          "label": "Who handles what?",
+          "label": "Who does what?",
           "puzzle": "wire-act2"
         },
         {
           "card_id": 212,
-          "label": "Replay the threat model",
+          "label": "Replay the attack",
           "puzzle": "timeline-act2",
           "requires_item": [
             251
@@ -142,7 +142,7 @@
         },
         {
           "card_id": 211,
-          "label": "Find the breach",
+          "label": "Were we breached?",
           "puzzle": "cascade-act2",
           "requires_item": [
             251,
@@ -162,8 +162,8 @@
       "id": 201,
       "type": "lore",
       "color": "purple",
-      "title": "💬 Meet the Security Agent",
-      "description": "WHAT IT DOES: AWS Security Agent (now part of AWS Continuum) works before you ship. It reviews designs and code against your organisation's security requirements, comments on pull requests, builds threat models, and runs on-demand penetration tests that validate multi-step attack chains.\n\n🤖 Security Agent: \"You don't call me in the middle of an attack. That's what your runtime defences are for. I work on your code and your designs before launch, and I already flagged tonight's problem. Let's rewind three weeks.\"",
+      "title": "💬 Security Agent",
+      "description": "AWS Security Agent (now part of AWS Continuum) finds risks in code and designs before launch: reviews, threat models, pen tests.\n\n🤖 \"I flagged that key three weeks ago, as Finding 3. Your team waived it as 'temporary'.\"",
       "room": "were-we-breached",
       "reveals": [],
       "visible_to": "all"
@@ -172,8 +172,8 @@
       "id": 202,
       "type": "lore",
       "color": "purple",
-      "title": "📋 Flashback: 11.11 Readiness Review",
-      "description": "SECURITY AGENT · PRE-LAUNCH REVIEW · 3 weeks ago\n\nFINDING 1 (fixed): SQL injection risk in product search.\nFINDING 2 (fixed): error pages leaking stack traces.\nFINDING 3 (WAIVED): breaks your requirement \"no long-lived credentials in code; admin roles need MFA\". A break-glass key for role temp-hotfix-admin (full admin, no MFA) is hard-coded in the deploy script. Rated CRITICAL. Waived as \"temporary\".\n\nThe threat model attached an attack path for Finding 3.\n\nBack to tonight: a botnet is hammering the login page from thousands of IPs. AWS WAF and Amazon GuardDuty are already on it.",
+      "title": "📋 Pre-launch Review, 3 weeks ago",
+      "description": "Finding 1: SQL injection, fixed\nFinding 2: leaking error pages, fixed\nFinding 3: admin key hard-coded in the deploy script, no MFA. CRITICAL. WAIVED\n\nTonight's botnet on the login page is noise. WAF and GuardDuty are handling it.",
       "room": "were-we-breached",
       "reveals": [],
       "visible_to": "all"
@@ -183,7 +183,7 @@
       "type": "event",
       "color": "yellow",
       "title": "Roles Mapped",
-      "description": "Security Agent finds weaknesses before launch. GuardDuty detects threats at runtime. WAF throttles the bots. Secrets Manager keeps credentials out of code.",
+      "description": "Security Agent works before launch. GuardDuty and WAF work at runtime.",
       "reveals": [
         251
       ],
@@ -195,7 +195,7 @@
       "type": "event",
       "color": "yellow",
       "title": "The Predicted Path",
-      "description": "Hard-coded key → public repository → attacker finds it → signs in as the no-MFA admin → launches instances in a Region you don't use.\n\nThe Security Agent mapped this attack path three weeks ago. Now check CloudTrail for whether it happened.",
+      "description": "The agent mapped this path for Finding 3. CloudTrail shows it really happened.",
       "reveals": [
         252
       ],
@@ -207,7 +207,7 @@
       "type": "event",
       "color": "yellow",
       "title": "Breach Contained",
-      "description": "It happened, step for step. Your team deactivates the leaked key and deletes the temp-hotfix-admin role. The Security Agent opens a fix pull request that moves the credential into Secrets Manager. The botnet stays throttled at the WAF. Open alerts: 96.\n\n🛡️ GUARDRAIL: no waivers on CRITICAL findings, and Security Agent reviews every pull request.\n\n📱 New message from Finance: \"WHY ARE WE AT RM 48,000 SINCE FRIDAY??\"",
+      "description": "Key revoked. Role deleted. Bots still blocked at the WAF.\n\n🛡️ No more waivers on CRITICAL findings.\n\n📱 Finance: \"WHY ARE WE AT RM 48,000 SINCE FRIDAY??\"",
       "reveals": [
         300
       ],
@@ -219,7 +219,7 @@
       "type": "item",
       "color": "orange",
       "title": "✅ Security Roles",
-      "description": "Who does what: Security Agent before launch, GuardDuty and WAF at runtime.",
+      "description": "Before launch: Security Agent. At runtime: GuardDuty, WAF.",
       "room": "were-we-breached",
       "reveals": [],
       "visible_to": "all"
@@ -229,7 +229,7 @@
       "type": "item",
       "color": "orange",
       "title": "✅ Attack Path",
-      "description": "The Security Agent's threat model for Finding 3, from key to rogue instances.",
+      "description": "Key in script → public repo → attacker → admin → instances",
       "room": "were-we-breached",
       "reveals": [],
       "visible_to": "all"
@@ -239,17 +239,17 @@
       "type": "location",
       "color": "green",
       "title": "Act 3: What Is It Costing Us?",
-      "description": "💸 SPEND SINCE FRIDAY: RM 48,000 (about USD 10,800), three times budget. Open alerts: 96.\n\nDatin Sarah's third question: what is this costing us? The FinOps Agent investigated it this morning.",
+      "description": "💸 Spend since Friday: RM 48,000\n\nDatin Sarah: \"What is this costing us?\"\nTrace every line of the bill.",
       "image": "assets/act3-bill.png",
       "image_prompt": "Cloud cost dashboard on a large curved monitor with one steep red cost line shooting upward, three highlighted cost bars, a world map with one unexpected region glowing red, stacks of gold coins on the desk, dark ops room with orange and teal light, isometric game art",
       "discoveries": [
         {
           "card_id": 301,
-          "label": "Meet the FinOps Agent (Preview)"
+          "label": "Meet the FinOps Agent"
         },
         {
           "card_id": 310,
-          "label": "Trace each cost",
+          "label": "Trace the bill",
           "puzzle": "match-act3"
         },
         {
@@ -272,8 +272,8 @@
       "id": 301,
       "type": "lore",
       "color": "purple",
-      "title": "💬 Meet the FinOps Agent (Preview)",
-      "description": "WHAT IT DOES: AWS FinOps Agent (preview) investigates cost anomalies. It correlates the cost change with AWS CloudTrail events, names the likely root cause and the responsible owner from the owner mapping you give it, and posts its findings to Jira or Slack. It's read-only by default: it reports, and your team acts.\n\n🤖 FinOps Agent: \"Cost Anomaly Detection flagged this at 07:12 this morning. Billing data runs up to a day behind, so this is the weekend catching up. I investigated and posted to #finops-alerts. Nobody owns that channel. The breakdown, since Friday 7 Nov:\n• USD 5,800: a load-test fleet\n• USD 3,400: instances in a Region you don't use\n• USD 1,600: log ingestion\"",
+      "title": "💬 FinOps Agent (Preview)",
+      "description": "Explains cost spikes by checking CloudTrail, and names the owner. It reports. It doesn't switch anything off.\n\n🤖 \"Since Friday, USD 10,800. The biggest line was launched with temp-hotfix-admin.\"",
       "room": "what-is-it-costing",
       "reveals": [],
       "visible_to": "all"
@@ -283,7 +283,7 @@
       "type": "event",
       "color": "yellow",
       "title": "Costs Traced",
-      "description": "One rushed weekend. Friday's pre-sale load test was never switched off, and its debug logging stayed on. The leaked admin key launched instances in a Region nobody watches.",
+      "description": "The leaked key ran GPUs. Friday's load test was never switched off.",
       "reveals": [
         351
       ],
@@ -295,7 +295,7 @@
       "type": "event",
       "color": "yellow",
       "title": "Bleeding Stopped",
-      "description": "The agent did every step except the last one. Its findings landed in a channel with no owner, so nobody acted. Now the owners have it. They stop the load-test fleet, terminate the rogue instances and turn debug logging off. The red line flattens. Open alerts: 14. That's a normal Tuesday.\n\n🛡️ GUARDRAIL: FinOps Agent findings go to the owner's Jira queue, with cost allocation tags on every workload.",
+      "description": "The agent flagged it at 07:12 this morning, in a channel nobody owns. Now the owners have it and the spend is off.\n\n🛡️ Findings go straight to the owner.\n\n🤖 \"One key, three alarms. The CEO is back.\"",
       "reveals": [
         400
       ],
@@ -307,7 +307,7 @@
       "type": "item",
       "color": "orange",
       "title": "✅ Cost Map",
-      "description": "Load-test fleet → Friday's test. Unused Region → leaked key. Logs → debug logging.",
+      "description": "GPUs → leaked key. Fleet + logs → Friday's test.",
       "room": "what-is-it-costing",
       "reveals": [],
       "visible_to": "all"
@@ -317,13 +317,13 @@
       "type": "location",
       "color": "green",
       "title": "Finale: Answer the CEO",
-      "description": "⏰ 11:52 PM. Eight minutes to the sale. Datin Sarah is back on the bridge.\n\nPut the night together, then give her a straight answer.",
+      "description": "⏰ 11:52 PM. Eight minutes to the sale.\n\nAdd the guardrails, then answer the CEO.",
       "image": "assets/finale-bridge.png",
       "image_prompt": "Over-the-shoulder view from behind an engineer at a desk, looking at one large monitor that shows a video call with a composed Malaysian businesswoman in a blazer, framed head and shoulders like a webcam picture, three small round green indicator lamps glowing on the desk, dark ops room, calm teal light, isometric game art",
       "discoveries": [
         {
           "card_id": 401,
-          "label": "Datin Sarah is on the line"
+          "label": "Datin Sarah is back"
         },
         {
           "card_id": 410,
@@ -351,7 +351,7 @@
       "type": "lore",
       "color": "purple",
       "title": "💬 Datin Sarah",
-      "description": "💬 Datin Sarah: \"I don't have long, and neither do you. Tell me what we'll do differently, and then tell me straight: were we breached?\"\n\nEverything in you wants to say it was just bots. That's what you watched all night. But you remember what the Security Agent said: the loudest alarm was never the real story.",
+      "description": "\"Tell me what we'll fix. Then tell me straight: were we breached?\"\n\nRemember: the bots were never the real story.",
       "room": "answer-the-ceo",
       "reveals": [],
       "visible_to": "all"
@@ -360,8 +360,8 @@
       "id": 410,
       "type": "event",
       "color": "yellow",
-      "title": "One Rush, Three Alarms",
-      "description": "Three alarms that looked like three problems had one cause. In the 11.11 rush, the team shipped past every warning: a release review was skipped, a critical finding was waived, and a cost alert went to a channel nobody owned.\n\nThe agents saw all three. The guardrails make sure someone acts.",
+      "title": "One Shortcut, Three Alarms",
+      "description": "One break-glass key took down checkout, let an attacker in, and ran up the bill. The agents flagged every part. Now someone acts on what they find.",
       "reveals": [
         451
       ],
@@ -373,7 +373,7 @@
       "type": "item",
       "color": "orange",
       "title": "✅ The Whole Story",
-      "description": "Skipped review → outage. Waived finding → breach since Friday. Unowned alert → RM 48,000.",
+      "description": "One key: outage, breach and bill.",
       "room": "answer-the-ceo",
       "reveals": [],
       "visible_to": "all"
@@ -384,7 +384,7 @@
       "color": "yellow",
       "title": "11.11 is LIVE 🎉",
       "is_ending": true,
-      "description": "00:00. 3.2 million shoppers. Checkout holding.\n\nYou answered all three questions, and you told the CEO the truth.\n\n🤖 AWS DevOps Agent correlated the deploy with the errors and recommended the rollback.\n🤖 AWS Security Agent (now part of AWS Continuum) had flagged the key, and its attack path, three weeks before.\n🤖 AWS FinOps Agent (preview) traced every dollar to its cause and its owner.\n\nIN THE REAL WORLD\n• Western Governors University cut resolution time from about 2 hours to 28 minutes with AWS DevOps Agent.\n• HENNGE cut penetration-testing time by more than 90% with AWS Security Agent.\n\nYOUR PATH FORWARD\n1. Start with one agent and the pain point that hurts most.\n2. Connect the tools you already use: CloudWatch, your repo, tickets and chat.\n3. Send every finding to an owner, and measure time to resolve, test coverage and time to explain a cost spike.\n4. Scale to more accounts and more agents.\n\n👋 Talk to the Enterprise Support team at the booth to see the agents on a real environment.",
+      "description": "00:00. Checkout holding. You told the CEO the truth.\n\n🤖 DevOps Agent found why you were down.\n🤖 Security Agent flagged the key weeks before.\n🤖 FinOps Agent traced the bill to its owner.\n\nReal world: Western Governors University went from about 2 hours to 28 minutes per incident with DevOps Agent. HENNGE cut pen-test time by more than 90% with Security Agent.\n\n👋 See the agents live with the Enterprise Support team at this booth.",
       "room": "answer-the-ceo",
       "reveals": [],
       "visible_to": "all"
