@@ -49,7 +49,7 @@
       "type": "lore",
       "color": "purple",
       "title": "🤖 DevOps Agent: Live Investigation",
-      "description": "Your TAM switched this on last month. It runs on your Enterprise Support credits.\n\n21:50 ⚠️ Alarm. Investigation started automatically\n✓ Mapped: checkout → payment-service\n✗ CPU alarm: not on the payment path\n✓ Errors began 1 min after a deploy\n→ Your turn: find what that deploy changed",
+      "description": "Your TAM recommended it last month. Enterprise Support includes monthly credits for it.\n\n21:50 ⚠️ Alarm. Investigation started automatically\n✓ Mapped: checkout → payment-service\n✗ CPU alarm: not on the payment path\n✓ Errors began 1 min after a deploy\n→ Your turn: find what that deploy changed",
       "room": "why-are-we-down",
       "reveals": [],
       "visible_to": "all"
@@ -384,7 +384,7 @@
       "color": "yellow",
       "title": "11.11 is LIVE 🎉",
       "is_ending": true,
-      "description": "00:00. Checkout holding. You told the CEO the truth.\n\n🤖 DevOps Agent investigated from the first alarm and found the cause in minutes.\n🤖 Security Agent flagged the key weeks before.\n🤖 FinOps Agent traced the bill to its owner.\n\nReal world: Western Governors University went from about 2 hours to 28 minutes per incident with DevOps Agent.\n\n💡 On Enterprise Support? Every month you get DevOps Agent credits worth 75% of last month's support charge. They expire at month-end, so use them.\n\n👋 Ask the Enterprise Support team at this booth to switch it on.",
+      "description": "00:00. Checkout holding. You told the CEO the truth.\n\n🤖 DevOps Agent investigated from the first alarm and found the cause in minutes.\n🤖 Security Agent flagged the key weeks before.\n🤖 FinOps Agent traced the bill to its owner.\n\nReal world: Western Governors University went from about 2 hours to 28 minutes per incident with DevOps Agent.\n\n💡 On Enterprise Support? Every month you get DevOps Agent credits worth 75% of last month's support charge. They expire at month-end, so use them.\n\n👋 Talk to the Enterprise Support team at this booth about getting started.",
       "room": "answer-the-ceo",
       "reveals": [],
       "visible_to": "all"
