@@ -765,7 +765,7 @@ function buildDiscoveryHtml() {
     const puzzle = d.puzzle ? engine.puzzles[d.puzzle] : null;
     const isTool = puzzle && puzzle.type === 'tool';
     const isNpc = isTool && puzzle.ui === 'npc-dialog';
-    let icon = isNpc ? (puzzle.config?.portrait || '🧑') : isTool ? '🔧' : d.puzzle ? '🔒' : '👁';
+    let icon = isNpc ? (puzzle.config?.portrait || '🧑') : isTool ? '🔧' : d.puzzle ? '🧩' : '👁';
     const cls = isTool ? 'discover-btn tool-btn' : 'discover-btn';
     let subtitle = '';
     if (d.requires_item) {
@@ -2380,12 +2380,13 @@ function useHint() {
   const result = engine.getHint(unsolved.puzzle);
   if (!result) return;
   if (result.tooltip) showToast(result.tooltip, false);
-  const existing = document.querySelector('.hint-box');
+  const container = document.getElementById('room-container');
+  const existing = container.querySelector('.hint-box');
   if (existing) existing.remove();
   const div = document.createElement('div');
   div.className = 'hint-box';
   div.innerHTML = `<div style="font-size:11px;color:var(--accent);margin-bottom:4px">${engine.puzzles[unsolved.puzzle]?.description || unsolved.label}</div>${result.hint}`;
-  document.getElementById('room-container').appendChild(div);
+  container.appendChild(div);
 }
 
 // --- Admin ---
