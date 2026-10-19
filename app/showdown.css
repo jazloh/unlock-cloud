@@ -1721,3 +1721,120 @@ img, svg { display: block; max-width: 100%; }
   #play-mount .kpdlk-key { padding: 8px; }
   .sd-puzzle-mount { padding-top: 8px; padding-bottom: 8px; }
 }
+
+/* ══════════════════ Player feedback panels (2026-10-19) ══════════════════
+   "Do you know Kiro?" after the name, "Recommend re:Solve?" before the score.
+   A panel over the current screen (see the PLAYER FEEDBACK block in showdown.js),
+   z-index 45: above the solved flash (40), below the vote reveal (50) and confetti.
+
+   Design rules, in order of how much they matter at a booth:
+   - ONE tap answers. No submit button: the second step is where people drop.
+   - Every option is a full-size plate in a single row on a laptop. A 10-point
+     scale in a row reads as a ruler, which is the mental model; wrapping it
+     breaks that, so phones get two rows of five, never a ragged wrap.
+   - Neutral plates, no red-to-green ramp: colouring the ends tells people which
+     answer is "good", and coloured scales measurably bias ratings.
+   - The pick lights coral and the note line thanks them, so a tap never feels
+     swallowed before the panel leaves (420ms). */
+.sd-ask {
+  position: fixed; inset: 0; z-index: 45;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  background: color-mix(in srgb, var(--ink) 86%, transparent);
+  -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+  animation: sd-ask-in .18s ease-out both;
+}
+.sd-ask.is-leaving { animation: sd-ask-out .16s ease-in both; }
+@keyframes sd-ask-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sd-ask-out { from { opacity: 1; } to { opacity: 0; } }
+
+.sd-ask-card {
+  width: 100%; max-width: 560px;
+  display: flex; flex-direction: column; gap: 14px;
+  padding: 26px 24px 18px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--mode-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  animation: sd-ask-rise .2s ease-out both;
+}
+@keyframes sd-ask-rise { from { transform: translateY(10px); } to { transform: none; } }
+.sd-ask--recommend .sd-ask-card { max-width: 640px; }
+
+.sd-ask-eyebrow {
+  color: var(--mode-color);
+  font: 700 11px/1 var(--font-display); letter-spacing: .14em; text-transform: uppercase;
+}
+.sd-ask-q {
+  color: var(--text);
+  font: 700 24px/1.25 var(--font-display); letter-spacing: -.005em;
+  text-wrap: balance;
+}
+
+.sd-ask-scale {
+  display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 8px;
+  margin-top: 6px;
+}
+.sd-ask-opt {
+  min-height: 60px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--panel-3, var(--panel-2));
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font: 700 22px/1 var(--font-display); font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background .12s ease-out, border-color .12s ease-out, transform .08s ease-out;
+}
+.sd-ask--recommend .sd-ask-opt { min-height: 54px; font-size: 19px; }
+.sd-ask-opt:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--mode-color) 16%, var(--panel-3, var(--panel-2)));
+  border-color: var(--mode-color);
+}
+.sd-ask-opt:active:not(:disabled) { transform: scale(.96); }
+.sd-ask-opt:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.sd-ask-opt:disabled { cursor: default; }
+.sd-ask-opt.is-picked {
+  background: var(--mode-color); border-color: var(--mode-color); color: var(--on-flood);
+  animation: sd-ask-pick .24s ease-out;
+}
+.sd-ask-opt:disabled:not(.is-picked) { opacity: .45; }
+@keyframes sd-ask-pick { 0% { transform: scale(.92); } 60% { transform: scale(1.06); } 100% { transform: none; } }
+
+.sd-ask-ends {
+  display: flex; justify-content: space-between; gap: 12px;
+  color: var(--text-secondary);
+  font: 600 12px/1.2 var(--font-body);
+}
+.sd-ask-ends span:last-child { text-align: right; }
+
+.sd-ask-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-top: 4px; padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+.sd-ask-note { color: var(--text-muted); font: 500 13px/1.3 var(--font-body); }
+.sd-ask-skip {
+  padding: 8px 12px;
+  background: transparent; border: 0;
+  color: var(--text-secondary);
+  font: 600 12px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase;
+  cursor: pointer;
+}
+.sd-ask-skip:hover:not(:disabled) { color: var(--text); }
+.sd-ask-skip:disabled { opacity: .4; cursor: default; }
+
+/* Phones: two rows of five for the 10-point scale; the 5-point stays one row. */
+@media (max-width: 520px) {
+  .sd-ask { padding: 14px; align-items: flex-end; }
+  .sd-ask-card { padding: 20px 16px 14px; }
+  .sd-ask-q { font-size: 20px; }
+  .sd-ask--recommend .sd-ask-scale { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .sd-ask-opt { min-height: 52px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-ask, .sd-ask.is-leaving, .sd-ask-card, .sd-ask-opt.is-picked { animation: none; }
+  .sd-ask-opt { transition: none; }
+}
