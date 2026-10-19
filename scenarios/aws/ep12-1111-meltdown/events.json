@@ -84,9 +84,9 @@
       "type": "reveal"
     },
     {
-      "id": "e-sort-act3",
+      "id": "e-chain-act3",
       "trigger": "puzzle_solved",
-      "puzzle_id": "sort-act3",
+      "puzzle_id": "chain-act3",
       "result_card": 311,
       "message": "✅ Spend stopped. The CEO is back.",
       "type": "reveal"

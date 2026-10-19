@@ -35,7 +35,6 @@
             152
           ],
           "consumes_item": [
-            151,
             152
           ]
         }
@@ -94,8 +93,8 @@
       "id": 151,
       "type": "item",
       "color": "orange",
-      "title": "✅ Culprit Release",
-      "description": "v4.2.0: timeout 3000 → 300 ms",
+      "title": "📝 Release diff",
+      "description": "4.1.3 (20:40) ✅ healthy\n4.2.0 (21:47) ❌ timeout 3000 → 300 ms",
       "room": "why-are-we-down",
       "reveals": [],
       "visible_to": "all"
@@ -175,7 +174,9 @@
       "title": "📋 Pre-launch Review, 3 weeks ago",
       "description": "Finding 1: SQL injection, fixed\nFinding 2: leaking error pages, fixed\nFinding 3: admin key hard-coded in the deploy script, no MFA. CRITICAL. WAIVED\n\nTonight's botnet on the login page is noise. WAF and GuardDuty are handling it.",
       "room": "were-we-breached",
-      "reveals": [],
+      "reveals": [
+        253
+      ],
       "visible_to": "all"
     },
     {
@@ -255,7 +256,7 @@
         {
           "card_id": 311,
           "label": "Why nobody acted",
-          "puzzle": "sort-act3",
+          "puzzle": "chain-act3",
           "requires_item": [
             351
           ],
@@ -386,6 +387,16 @@
       "is_ending": true,
       "description": "00:00. Checkout holding. You told the CEO the truth.\n\n🤖 DevOps Agent investigated from the first alarm and found the cause in minutes.\n🤖 Security Agent flagged the key weeks before.\n🤖 FinOps Agent traced the bill to its owner.\n\nReal world: Western Governors University went from about 2 hours to 28 minutes per incident with DevOps Agent.\n\n💡 On Enterprise Support? Every month you get DevOps Agent credits worth 75% of last month's support charge. They expire at month-end, so use them.\n\n👋 Talk to the Enterprise Support team at this booth about getting started.",
       "room": "answer-the-ceo",
+      "reveals": [],
+      "visible_to": "all"
+    },
+    {
+      "id": 253,
+      "type": "item",
+      "color": "orange",
+      "title": "📝 Finding 3 (waived)",
+      "description": "Admin key in the deploy script, no MFA. CRITICAL. Waived.\nLeaked Fri 7 Nov.",
+      "room": "were-we-breached",
       "reveals": [],
       "visible_to": "all"
     }

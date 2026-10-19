@@ -1026,7 +1026,7 @@ describe('EP12 — 11.11 Meltdown', () => {
     assert.ok(engine.inventory.includes(152), 'Agent Findings should be in inventory');
     // terminal-lock answer (4.1.3) is checked in the UI; mark solved like EP-ETP's terminal-deploy
     solvePuzzle(engine, 'rollback-act1', 104, 'Checkout Restored');
-    assert.equal(engine.inventory.length, 0, 'Act 1 items should be consumed by the rollback');
+    assert.deepEqual(engine.inventory, [151], 'Only the release-diff note should survive the rollback');
     assert.ok(engine.unlockedRooms.includes(200), 'Act 2 should be unlocked');
   });
 
@@ -1039,7 +1039,7 @@ describe('EP12 — 11.11 Meltdown', () => {
     solvePuzzle(engine, 'timeline-act2', 212, 'The Predicted Path');
     assert.ok(engine.inventory.includes(252), 'Attack Path should be in inventory');
     solvePuzzle(engine, 'cascade-act2', 211, 'Breach Contained');
-    assert.equal(engine.inventory.length, 0, 'Act 2 items should be consumed');
+    assert.deepEqual(engine.inventory.sort(), [151, 253], 'Only the two notes (release diff, Finding 3) should remain');
     assert.ok(engine.unlockedRooms.includes(300), 'Act 3 should be unlocked');
   });
 
@@ -1047,7 +1047,7 @@ describe('EP12 — 11.11 Meltdown', () => {
     engine.navigateToRoom(300);
     discover(engine, 301, 'Meet the FinOps Agent');
     solvePuzzle(engine, 'match-act3', 310, 'Costs Traced');
-    solvePuzzle(engine, 'sort-act3', 311, 'Bleeding Stopped');
+    solvePuzzle(engine, 'chain-act3', 311, 'Bleeding Stopped');
     assert.ok(engine.unlockedRooms.includes(400), 'Finale should be unlocked');
   });
 

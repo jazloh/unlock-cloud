@@ -39,7 +39,7 @@
     "timeline-lock",
     "cascade-lock",
     "match-lock",
-    "sort-lock",
+    "chain-lock",
     "evidence-board-lock",
     "defuse-lock"
   ],
@@ -88,5 +88,6 @@
       "url": "https://aws.amazon.com/ai/frontier-agents"
     }
   },
-  "cover": "assets/cover.png"
+  "cover": "assets/cover.png",
+  "notes_mode": true
 }

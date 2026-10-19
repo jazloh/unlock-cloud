@@ -453,6 +453,7 @@ function renderIntro() {
   document.getElementById('intro-cover').src = `${ASSET_BASE}/assets/cover.png`;
   document.getElementById('intro-cover').alt = metaTitle;
   document.getElementById('start-btn').textContent = engine.t('meta', null, 'start_button') || engine.meta.start_button || 'Start';
+  if (engine.meta.notes_mode) applyNotesMode();
 
   // Language toggle — only shown if the episode ships with locales/index.json
   const langContainer = document.getElementById('lang-toggle-container');
@@ -802,6 +803,21 @@ function buildDiscoveryHtml() {
 }
 
 // --- Combine mode ---
+// Opt-in (meta.notes_mode): for an episode with no objects and no combinations,
+// the Interact tab is just the clues collected so far. Relabel it "Notes" and
+// drop the combine controls. Episodes without the flag are untouched.
+function applyNotesMode() {
+  const tab = document.getElementById('btn-combine-mode');
+  const badge = document.getElementById('badge-interact');
+  tab.textContent = '📝 Notes ';
+  tab.appendChild(badge);
+  document.getElementById('combine-label').textContent = 'Your case notes';
+  document.getElementById('combine-btn').style.display = 'none';
+  document.querySelector('#combine-screen .btn-cancel').textContent = 'Close';
+  document.querySelector('#combine-screen .combine-col-red h4').textContent = 'Notes';
+  document.querySelector('#combine-screen .combine-col-blue').style.display = 'none';
+}
+
 function enterCombineMode() {
   combineMode = true;
   selectedCards = [];
@@ -861,6 +877,7 @@ function toggleSelect(id) {
 function updateCombineLabel() {
   const label = document.getElementById('combine-label');
   const btn = document.getElementById('combine-btn');
+  if (engine.meta.notes_mode) { label.textContent = 'Your case notes'; btn.disabled = true; return; }
   if (selectedCards.length === 0) { label.innerHTML = 'Select one Item + one Object to interact'; btn.disabled = true; }
   else if (selectedCards.length === 1) { label.innerHTML = `<span>${engine.cards[selectedCards[0]].title}</span> + ?`; btn.disabled = true; }
   else { label.innerHTML = `<span>${engine.cards[selectedCards[0]].title}</span> + <span>${engine.cards[selectedCards[1]].title}</span>`; btn.disabled = false; }
@@ -1347,7 +1364,9 @@ function showPuzzlePopup(puzzleId, awardCardId) {
   } else if (puzzle.ui === 'chain-lock') {
     new ChainLock(mount, {
       items: cfg.items, answer: cfg.answer,
-      onSubmit(correct) { correct ? onSolve() : onFail('Wrong chain. Check the dependencies.'); }
+      title: cfg.title, submitLabel: cfg.submitLabel, placeholder: cfg.placeholder,
+      successText: cfg.successText, wrongText: cfg.wrongText,
+      onSubmit(correct) { correct ? onSolve() : onFail(cfg.failMessage || 'Wrong chain. Check the dependencies.'); }
     });
   } else if (puzzle.ui === 'key-lock') {
     new KeyLock(mount, {

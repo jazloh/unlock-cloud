@@ -14,6 +14,8 @@
  *       { id: 'ddb', label: 'DynamoDB', icon: '🗄️' },
  *     ],
  *     answer: ['api','fn1','sqs','fn2','ddb'],
+ *     // optional labels; each defaults to the original pipeline wording
+ *     title, submitLabel, placeholder, successText, wrongText,
  *     onSubmit(correct) { ... }
  *   });
  */
@@ -24,6 +26,13 @@ class ChainLock {
     this.items = opts.items || [];
     this.answer = opts.answer || [];
     this.onSubmit = opts.onSubmit || (() => {});
+    // Optional labels. Defaults are the original text, so episodes that don't
+    // pass them render exactly as before.
+    this.title = opts.title || 'Build the event pipeline';
+    this.submitLabel = opts.submitLabel || 'Deploy Pipeline';
+    this.placeholder = opts.placeholder || 'Tap items to build chain →';
+    this.successText = opts.successText || '✅ Pipeline deployed!';
+    this.wrongText = opts.wrongText || '❌ Wrong pipeline order';
     this.chain = [];
     this._render();
   }
@@ -35,7 +44,7 @@ class ChainLock {
 
     const title = document.createElement('div');
     title.className = 'chnlk-title';
-    title.textContent = 'Build the event pipeline';
+    title.textContent = this.title;
     wrap.appendChild(title);
 
     // Pipeline display
@@ -57,7 +66,7 @@ class ChainLock {
     bar.appendChild(resetBtn);
     const btn = document.createElement('button');
     btn.className = 'chnlk-btn';
-    btn.textContent = 'Deploy Pipeline';
+    btn.textContent = this.submitLabel;
     btn.addEventListener('click', () => this._test());
     bar.appendChild(btn);
     wrap.appendChild(bar);
@@ -85,7 +94,7 @@ class ChainLock {
     });
     // Pipeline
     this.pipeEl.innerHTML = '';
-    if (!this.chain.length) { this.pipeEl.innerHTML = '<span style="color:var(--muted)">Tap items to build chain →</span>'; return; }
+    if (!this.chain.length) { this.pipeEl.innerHTML = '<span style="color:var(--muted)"></span>'; this.pipeEl.firstChild.textContent = this.placeholder; return; }
     this.chain.forEach((id, i) => {
       const item = this.items.find(x => x.id === id);
       const el = document.createElement('div');
@@ -105,11 +114,11 @@ class ChainLock {
   _test() {
     const correct = this.chain.length === this.answer.length && this.chain.every((id, i) => id === this.answer[i]);
     if (correct) {
-      this.statusEl.textContent = '✅ Pipeline deployed!';
+      this.statusEl.textContent = this.successText;
       this.pipeEl.querySelectorAll('.chnlk-node').forEach(el => el.classList.add('chnlk-done'));
       setTimeout(() => this.onSubmit(true), 400);
     } else {
-      this.statusEl.textContent = '❌ Wrong pipeline order';
+      this.statusEl.textContent = this.wrongText;
       this.pipeEl.classList.add('chnlk-shake');
       setTimeout(() => this.pipeEl.classList.remove('chnlk-shake'), 600);
     }

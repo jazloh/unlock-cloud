@@ -327,26 +327,58 @@
       "mandatory": true
     },
     {
-      "id": "sort-act3",
+      "id": "chain-act3",
       "type": "puzzle",
-      "ui": "sort-lock",
+      "ui": "chain-lock",
       "card_ref": 311,
       "success_card": 311,
-      "description": "✋ The agent flagged this at 07:12 today. Drag its steps into order, then tap Confirm.",
+      "description": "👆 The agent flagged this at 07:12 today. Tap its steps in order, first to last. Then tap Check.",
       "config": {
-        "answer": [
-          "Cost Anomaly Detection flags the spike",
-          "Agent checks CloudTrail",
-          "Agent names the cause and the owner",
-          "Agent posts to Jira or Slack",
-          "The owner (not the agent) shuts it down"
+        "title": "What happened at 07:12",
+        "submitLabel": "Check",
+        "placeholder": "Tap the first step ↓",
+        "successText": "✅ Right order",
+        "wrongText": "❌ Not quite. Tap a step to remove it.",
+        "failMessage": "Not quite. Try again.",
+        "items": [
+          {
+            "id": "post",
+            "label": "Post to Jira/Slack",
+            "icon": "📨"
+          },
+          {
+            "id": "owner",
+            "label": "Name cause + owner",
+            "icon": "👤"
+          },
+          {
+            "id": "act",
+            "label": "Owner shuts it down",
+            "icon": "🛑"
+          },
+          {
+            "id": "flag",
+            "label": "Anomaly flagged",
+            "icon": "🚨"
+          },
+          {
+            "id": "trail",
+            "label": "Check CloudTrail",
+            "icon": "🔎"
+          }
         ],
-        "distractors": []
+        "answer": [
+          "flag",
+          "trail",
+          "owner",
+          "post",
+          "act"
+        ]
       },
       "hints": [
         "💬 \"It found this at 7 AM? Why am I hearing at 11 PM?\"",
         "🤖 I detect, investigate, report. People act.",
-        "🤖 Flags → CloudTrail → cause and owner → post → owner shuts it down."
+        "🤖 Flagged → CloudTrail → cause + owner → post → owner acts."
       ],
       "mandatory": true
     },
