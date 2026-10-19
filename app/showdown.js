@@ -919,7 +919,6 @@
         renderLobby(standings);
         break;
       case 'voting':
-        dismissAsk('kiro');   // never let the survey cost someone their vote
         showScreen('vote');
         renderVote(standings);
         break;
@@ -928,12 +927,10 @@
         // the header timer moves before the first solve (server elapsed_ms is 0
         // until the first /progress POST). Set once — never re-stamped.
         if (!state._raceAnchorAt) state._raceAnchorAt = Date.now();
-        dismissAsk('kiro');
         showScreen('play');
         enterPlay(standings);
         break;
       case 'completed': {
-        dismissAsk('kiro');
         const reveal = () => { showScreen('results'); renderResults(standings); };
         // The recommend question comes BEFORE the score (FRONTEND.md step 4).
         if (!askRecommendThen(reveal)) reveal();
@@ -954,22 +951,21 @@
    * Built as a PANEL OVER the current screen, never as a screen of its own, so
    * standings.state stays the only thing that moves a player between screens
    * (invariant 8). Consequences, all deliberate:
-   *   - The Kiro panel steps aside on its own if the host opens the vote: the
-   *     ballot is a ~15s window and a survey must never cost someone their vote.
+   *   - BOTH ARE COMPULSORY (Jaz, 2026-10-19): no Skip, no Escape, no timeout.
+   *     The Kiro panel therefore stays up over the vote until answered — one tap
+   *     is ~1s against a ~15s ballot.
    *   - The recommend panel holds the RESULTS reveal (not the state): the podium,
-   *     its sound and its confetti start the moment the player taps, so the
-   *     winner's moment is never spent behind a question.
-   *   - Both are skippable, and neither ever waits on the network. Feedback is
-   *     fire-and-forget; a stuck player at a booth costs more than a lost answer.
-   *   - No play_id (the Kiro question was skipped, or the register call failed)
-   *     → no recommend question: asking something we cannot save wastes a tap.
+   *     its sound and its confetti start the moment the player taps.
+   *   - Compulsory to ANSWER, never blocked on the NETWORK. Saving is
+   *     fire-and-forget; the Kiro answer is kept in sessionStorage, so if the
+   *     register call failed it is re-sent before the recommend score, and the
+   *     recommend score always has a play to attach to.
    *
    * Mock mode never touches the network (as everywhere else): calls are recorded
    * in window.__sdFeedback with a synthetic play_id, which is what the tests read. */
   const FEEDBACK_API = 'https://xsf33zo179.execute-api.ap-southeast-5.amazonaws.com';
   const SS_PLAY_ID = 'sd_play_id';
-  const SS_KIRO_ASKED = 'sd_kiro_asked';     // a refresh mid-lobby must not re-ask
-  const RECO_AUTO_CONTINUE_MS = 45000;       // a walked-away player must not hold the podium
+  const SS_KIRO_ANSWER = 'sd_kiro_answer';   // set on answer: a refresh must not re-ask
 
   const ssGet = (k) => { try { return sessionStorage.getItem(k); } catch { return null; } };
   const ssSet = (k, v) => { try { sessionStorage.setItem(k, v); } catch { /* storage off */ } };
@@ -980,6 +976,12 @@
     if (MOCK) {
       window.__sdFeedback = window.__sdFeedback || [];
       window.__sdFeedback.push({ path, body });
+      // &mockfail=feedback drops the FIRST register, as flaky booth WiFi would, so
+      // the re-send before the recommend score can be exercised offline.
+      if (path === '/plays' && MOCK_FAIL === 'feedback' && !window.__sdFeedbackFailed) {
+        window.__sdFeedbackFailed = true;
+        return { status: 0, data: null };
+      }
       if (path === '/plays') return { status: 201, data: { play_id: 'mock-play-' + Date.now().toString(36), ...body } };
       return { status: 200, data: { ok: true } };
     }
@@ -1008,8 +1010,18 @@
     const { status, data } = await feedbackPost('/plays', { display_name: name, kiro_familiarity: kiro });
     if (status === 201 && data && data.play_id) ssSet(SS_PLAY_ID, data.play_id);
   }
+  // Single-flight: the Kiro tap and the recommend fallback can both ask to register.
+  let registering = null;
+  function ensureRegistered() {
+    if (ssGet(SS_PLAY_ID)) return Promise.resolve();
+    const kiro = +ssGet(SS_KIRO_ANSWER);
+    if (!(kiro >= 1 && kiro <= 5)) return Promise.resolve();
+    if (!registering) registering = registerPlay(state.displayName, kiro).finally(() => { registering = null; });
+    return registering;
+  }
 
   async function submitRecommend(score) {
+    await ensureRegistered();   // the Kiro register may have failed on booth WiFi
     const playId = ssGet(SS_PLAY_ID);
     if (!playId || !(score >= 1 && score <= 10)) return;
     const { status } = await feedbackPost('/plays/' + encodeURIComponent(playId) + '/recommend', { recommend_score: score });
@@ -1044,16 +1056,14 @@
           '<span>' + escapeHtml(cfg.highLabel) + '</span></div>' +
         '<div class="sd-ask-foot">' +
           '<span class="sd-ask-note">' + escapeHtml(cfg.note) + '</span>' +
-          '<button type="button" class="sd-ask-skip">Skip</button>' +
         '</div>' +
       '</div>';
     document.body.appendChild(el);
 
-    let done = false, autoTimer = null;
+    let done = false;
     const close = (answered) => {
       if (done) return;
       done = true;
-      if (autoTimer) clearTimeout(autoTimer);
       document.removeEventListener('keydown', onKey, true);
       document.removeEventListener('focusin', onFocusIn, true);
       el.classList.add('is-leaving');
@@ -1069,7 +1079,6 @@
         b.setAttribute('aria-checked', on ? 'true' : 'false');
         b.disabled = true;
       });
-      el.querySelector('.sd-ask-skip').disabled = true;
       el.querySelector('.sd-ask-note').textContent = cfg.thanks;
       playSfxTick();
       cfg.onAnswer(v);
@@ -1077,7 +1086,7 @@
     };
     const onKey = (e) => {
       if (done || e.metaKey || e.ctrlKey || e.altKey) return;
-      if (e.key === 'Escape') { e.preventDefault(); close(false); return; }
+      if (e.key === 'Escape') { e.preventDefault(); return; }   // compulsory: no way out but an answer
       let v = /^[0-9]$/.test(e.key) ? +e.key : NaN;
       if (v === 0 && cfg.max === 10) v = 10;
       if (v >= cfg.min && v <= cfg.max) { e.preventDefault(); e.stopPropagation(); pick(v); }
@@ -1085,10 +1094,8 @@
     el.addEventListener('click', (e) => {
       const b = e.target.closest('.sd-ask-opt');
       if (b) pick(+b.dataset.v);
-      else if (e.target.closest('.sd-ask-skip')) close(false);
     });
     document.addEventListener('keydown', onKey, true);
-    if (cfg.autoContinueMs) autoTimer = setTimeout(() => close(false), cfg.autoContinueMs);
     // Focus the middle option, not the first: a reflexive Enter must not record a 1.
     // And keep focus INSIDE the dialog: the join flow focuses its own controls a
     // beat after submit, which pulled focus out from under the panel, so a
@@ -1102,12 +1109,13 @@
     askOpen = { kind: cfg.kind, el, close };
     return askOpen;
   }
-  // The race moved on underneath an open Kiro panel: step aside, unanswered.
-  function dismissAsk(kind) { if (askOpen && askOpen.kind === kind) askOpen.close(false); }
 
+  // Test harness only: the other suites drive the vote and the locks and would be
+  // blocked by a compulsory panel. Honoured in mock mode alone, so a real race can
+  // never be configured to skip the questions.
+  const NO_FEEDBACK = MOCK && params.get('nofeedback') === '1';
   function askKiro() {
-    if (ssGet(SS_KIRO_ASKED)) return;
-    ssSet(SS_KIRO_ASKED, '1');
+    if (NO_FEEDBACK || ssGet(SS_KIRO_ANSWER) || (askOpen && askOpen.kind === 'kiro')) return;
     openAsk({
       kind: 'kiro',
       eyebrow: 'Quick question',
@@ -1116,14 +1124,16 @@
       lowLabel: 'Never heard of it', highLabel: 'I use it',
       note: 'One tap, then you’re in.',
       thanks: 'Thanks — you’re in.',
-      onAnswer: (v) => { registerPlay(state.displayName, v); },
+      onAnswer: (v) => { ssSet(SS_KIRO_ANSWER, String(v)); ensureRegistered(); },
     });
   }
 
   // Returns true when the recommend panel took over (results revealed on close).
   let recoAsked = false;
   function askRecommendThen(reveal) {
-    if (recoAsked || !ssGet(SS_PLAY_ID)) return false;
+    // Asked of everyone who answered the Kiro question (i.e. everyone who joined
+    // through the name screen), whether or not that answer reached the backend yet.
+    if (recoAsked || !(ssGet(SS_PLAY_ID) || ssGet(SS_KIRO_ANSWER))) return false;
     recoAsked = true;
     openAsk({
       kind: 'recommend',
@@ -1133,13 +1143,8 @@
       lowLabel: 'Not likely', highLabel: 'Very likely',
       note: 'One tap, then your score.',
       thanks: 'Thanks! Here’s your score…',
-      autoContinueMs: RECO_AUTO_CONTINUE_MS,
       onAnswer: (v) => { submitRecommend(v); },
-      onClose: (answered) => {
-        // The round is over either way: the next player on this device starts clean.
-        if (!answered) ssDel(SS_PLAY_ID);
-        reveal();
-      },
+      onClose: () => { reveal(); },
     });
     return true;
   }
@@ -3250,7 +3255,7 @@
     // round (no-op against the live backend).
     try { sessionStorage.removeItem('sd_mock_claimAt'); sessionStorage.removeItem('sd_mock_progress'); } catch {}
     // A new player may be next: drop the feedback identity so they are asked fresh.
-    ssDel(SS_PLAY_ID); ssDel(SS_KIRO_ASKED);
+    ssDel(SS_PLAY_ID); ssDel(SS_KIRO_ANSWER);
     location.reload();
   }
 
